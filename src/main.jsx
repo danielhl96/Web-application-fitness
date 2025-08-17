@@ -4,8 +4,9 @@ import './index.css'
 import App from './App.jsx'
 import GUI from './login.jsx'
 import CreateTrainGUI from './createtrain.jsx'
+import EditTrain from './edittrain.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <CreateTrainGUI />
+  <EditTrain />
   </StrictMode>,
 )
