@@ -63,7 +63,7 @@ const exercise = [
   const[selectedExercise,setSelectedExercise] = useState(exercisesWithRepsAndSets)
   const[showModal,setShowModal] = useState(false)
   const[savekey,setKey] = useState("")
-
+  const[addExercise,setaddExercise] = useState("")
   function WorkoutCard({exercise}){
     return(
       <div className="card w-68 sm:w-64 md:w-96 bg-gray-600 card-xs shadow-sm">
@@ -82,7 +82,7 @@ const exercise = [
     setShowModal(prev => !prev )
     setKey(exercise)
   }
-
+//Nur im Frontend
   const handeRemoveWorkout = (workoutname) => {
     console.log(workoutname)
      setSelectedExercise(prev => {
@@ -92,6 +92,7 @@ const exercise = [
   });
   }
 
+//Nur im Frontend
   const handleRemoveExercise = (exerciseToRemove) => {
   setSelectedExercise(prev => {
     const updatedCategory = prev[savekey].filter(ex => ex !== exerciseToRemove);
@@ -102,11 +103,17 @@ const exercise = [
   });
 };
 
-const handleAddExercise = (e) => {
-  console.log(e)
-  const name = e.target.value;
-  if(exercise.some(ex => ex.name == name)){
-  let newExercise = {exercise: name, reps: 12, sets: 4}
+
+const handleAddExercise2 = (e) => {
+  setaddExercise(e.target.value)
+}
+
+//Nur im Frontend
+const handleAddExercise = () => {
+  console.log(addExercise)
+  
+  if(exercise.some(ex => ex.name == addExercise)){
+  let newExercise = {exercise: addExercise, reps: 12, sets: 4}
   setSelectedExercise(prev => {
     return {
       ...prev,
@@ -118,7 +125,93 @@ const handleAddExercise = (e) => {
 }
 }
 
+//Nur im Frontend
+const handleAddSets = (e) => {
+  // Überprüfen, ob die Übung bereits existiert
+  const exerciseExists = selectedExercise[savekey].some(ex => ex.exercise === e.exercise);
+  
+  if (exerciseExists) {
+    // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
+    const updatedExercises = selectedExercise[savekey].map(ex => {
+      if (ex.exercise === e.exercise) {
+        return { ...ex, sets: ex.sets + 1 }; // Inkrementiere die sets
+      }
+      return ex;
+    });
+    
+    // Stelle sicher, dass der Zustand korrekt aktualisierst wird
+    setSelectedExercise(prevState => ({
+      ...prevState,
+      [savekey]: updatedExercises
+    }));
+  }
+};
 
+//Nur im Frontend
+const handleAddReps = (e) => {
+  // Überprüfen, ob die Übung bereits existiert
+  const exerciseExists = selectedExercise[savekey].some(ex => ex.exercise === e.exercise);
+  
+  if (exerciseExists) {
+    // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
+    const updatedExercises = selectedExercise[savekey].map(ex => {
+      if (ex.exercise === e.exercise) {
+        return { ...ex, reps: ex.reps + 1 }; // Inkrementiere die sets
+      }
+      return ex;
+    });
+    
+    // Stelle sicher, dass der Zustand korrekt aktualisierst wird
+    setSelectedExercise(prevState => ({
+      ...prevState,
+      [savekey]: updatedExercises
+    }));
+  }
+};
+
+//Nur im Frontend
+const handleReduceReps = (e) => {
+  // Überprüfen, ob die Übung bereits existiert
+  const exerciseExists = selectedExercise[savekey].some(ex => ex.exercise === e.exercise);
+  
+  if (exerciseExists) {
+    // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
+    const updatedExercises = selectedExercise[savekey].map(ex => {
+      if (ex.exercise === e.exercise && ex.reps > 1) {
+        return { ...ex, reps: ex.reps - 1 }; // Inkrementiere die sets
+      }
+      return ex;
+    });
+    
+    // Stelle sicher, dass der Zustand korrekt aktualisierst wird
+    setSelectedExercise(prevState => ({
+      ...prevState,
+      [savekey]: updatedExercises
+    }));
+  }
+};
+
+//Nur im Frontend
+const handleReduceSets = (e) => {
+  // Überprüfen, ob die Übung bereits existiert
+  const exerciseExists = selectedExercise[savekey].some(ex => ex.exercise === e.exercise);
+  
+  if (exerciseExists) {
+    // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
+    const updatedExercises = selectedExercise[savekey].map(ex => {
+      if (ex.exercise === e.exercise && ex.sets > 1) {
+        return { ...ex, sets: ex.sets - 1 }; // Inkrementiere die sets
+      }
+      return ex;
+    });
+    
+    // Stelle sicher, dass der Zustand korrekt aktualisierst wird
+    setSelectedExercise(prevState => ({
+      ...prevState,
+      [savekey]: updatedExercises
+    }));
+  }
+};
 
   function EditWorkoutModal(){
     return (
@@ -127,7 +220,7 @@ const handleAddExercise = (e) => {
                           <p>Add a new exercise:</p>
                             <div>
                               
-         <form className="space-y-4">
+      
       <div className="flex items-center space-x-2">
         <input
           type="search"
@@ -135,10 +228,10 @@ const handleAddExercise = (e) => {
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           list = "exercise-options"
           id ="input-e"
+          onChange={handleAddExercise2}
         />
-       <button onClick={() => handleAddExercise(document.getElementById('input-e'))} className = "btn btn-outline btn-primary w-15 " >Add</button>
+       <button onClick={() => handleAddExercise()} className = "btn btn-outline btn-primary w-15 " >Add</button>
       </div>
-    </form>
 </div>
         <datalist id="exercise-options">
           {exercise.map((item, index) => (
@@ -151,10 +244,10 @@ const handleAddExercise = (e) => {
                           <div key={index} className="mb-6 border-b pb-4">
                             <h2>{exercise.exercise}</h2>
                          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
-                          <button className = "btn btn-outline btn-primary w-30 " >Add sets</button>
-                          <button className = "btn btn-outline btn-primary w-30">Reduce sets</button>
-                          <button className = "btn btn-outline btn-primary w-30">Add reps</button>
-                          <button className = "btn btn-outline btn-primary w-30">Reduce reps</button>
+                          <button onClick={()=> handleAddSets(exercise)} className  = "btn btn-outline btn-primary font-light w-27 " >Add sets</button>
+                          <button onClick={() => handleReduceSets(exercise)} className = "btn btn-outline btn-primary font-light w-27">Reduce sets</button>
+                          <button onClick={() => handleAddReps(exercise)} className = "btn btn-outline btn-primary font-light w-27">Add reps</button>
+                          <button onClick={() => handleReduceReps(exercise)} className = "btn btn-outline btn-primary font-light w-27">Reduce reps</button>
                          <button onClick={() => handleRemoveExercise(exercise)} className="btn btn-outline btn-secondary w-30">Remove</button>
 
                           </div>
