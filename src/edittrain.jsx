@@ -3,8 +3,19 @@ import Header from './Header';
 import { useState } from 'react';
 
 const EditTrain = () => {
-  const exercises = {Push: ["Benchpress", "Sideraises","Dips"], Pull:["Pull-Up","High-Row"] 
+ const exercisesWithRepsAndSets = {
+    Push: [
+        {exercise: "Benchpress", reps: 12, sets: 4},
+        {exercise: "Sideraises", reps: 12, sets: 4},
+        {exercise: "Dips", reps: 12, sets: 4}
+    ],
+    Pull: [
+        {exercise: "Pull-Up", reps: 12, sets: 4},
+        {exercise: "High-Row", reps: 12, sets: 4}
+    ]
 };
+
+
 
 const exercise = [
     {
@@ -49,7 +60,7 @@ const exercise = [
 
   ];
 
-  const[selectedExercise,setSelectedExercise] = useState(exercises)
+  const[selectedExercise,setSelectedExercise] = useState(exercisesWithRepsAndSets)
   const[showModal,setShowModal] = useState(false)
   const[savekey,setKey] = useState("")
 
@@ -92,7 +103,10 @@ const exercise = [
 };
 
 const handleAddExercise = (e) => {
-  const newExercise = e.target.value;
+  console.log(e)
+  const name = e.target.value;
+  if(exercise.some(ex => ex.name == name)){
+  let newExercise = {exercise: name, reps: 12, sets: 4}
   setSelectedExercise(prev => {
     return {
       ...prev,
@@ -100,6 +114,8 @@ const handleAddExercise = (e) => {
     };
   });
   console.log(selectedExercise)
+  document.getElementById('input-e').value = '';
+}
 }
 
 
@@ -109,29 +125,31 @@ const handleAddExercise = (e) => {
     <div className="modal modal-open">
                         <div className="modal-box">
                           <p>Add a new exercise:</p>
-                          <label className="input">
                             <div>
-        <input 
+                              
+         <form className="space-y-4">
+      <div className="flex items-center space-x-2">
+        <input
           type="search"
-          onSelect={handleAddExercise}
-          list="exercise-options"
-          className="w-full"
-          id = "input_search"
-          placeholder="Select an exercise"
+          placeholder="Enter something"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          list = "exercise-options"
+          id ="input-e"
         />
+       <button onClick={() => handleAddExercise(document.getElementById('input-e'))} className = "btn btn-outline btn-primary w-15 " >Add</button>
+      </div>
+    </form>
 </div>
-
-
         <datalist id="exercise-options">
           {exercise.map((item, index) => (
             <option key={index} value={item.name} />
           ))}
         </datalist>
-      </label>
+      
       
                         {selectedExercise[savekey].map((exercise,index) => (
                           <div key={index} className="mb-6 border-b pb-4">
-                            <h2>{exercise}</h2>
+                            <h2>{exercise.exercise}</h2>
                          <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
                           <button className = "btn btn-outline btn-primary w-30 " >Add sets</button>
                           <button className = "btn btn-outline btn-primary w-30">Reduce sets</button>
@@ -141,8 +159,8 @@ const handleAddExercise = (e) => {
 
                           </div>
                           <div className="grid grid-cols-2 gap-2 px-4">
-                          <p>Sets:</p>
-                          <p>Reps:</p>
+                          <p>Sets: {exercise.sets}</p>
+                          <p>Reps: {exercise.reps}</p>
                         </div>
                       </div>
                           ))}
