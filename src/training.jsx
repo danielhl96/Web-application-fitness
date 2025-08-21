@@ -26,8 +26,6 @@ function StartTraining() {
      }
   }
 
- 
-
   return (
     <div>
       <Header />
