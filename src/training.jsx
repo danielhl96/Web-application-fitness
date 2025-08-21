@@ -32,19 +32,20 @@ function StartTraining() {
     <div>
       <Header />
       <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col space-y-6 card sm:w-64 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
+        <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
           <div>Your weight: {selectedExercise.weight} kg</div>
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>
           <div class="divider divider-primary">Sets|Reps|OldReps</div>
           {Array.from({ length: selectedExercise.sets }).map((_, index) => (
-            <div className="flex flex-row space-x-4 items-center" key={index}>
+            <div className="flex flex-row space-x-3 items-center" key={index}>
               <div>{index + 1}</div>
               <input
                 type="text"
                 placeholder="Repetitions"
                 className="input input-primary"
+                id={"input" + (index + 1)}
               />
               <div>{selectedExercise.reps}</div>
             </div>
