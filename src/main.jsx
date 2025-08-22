@@ -8,6 +8,6 @@ import EditTrain from './edittrain.jsx'
 import StartTraining from './training.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <EditTrain />
+  <StartTraining />
   </StrictMode>,
 )
