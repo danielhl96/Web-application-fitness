@@ -18,12 +18,17 @@ function StartTraining() {
       setExercise(training1[newIdx][0])
       console.log(training1)
       setInputValue([])
-    }
+      console.log(selectedExercise.set.length)
+  }
     else{
       training1[idxExercise].set = [...inputValue]
       console.log(training1)
     }
     console.log(inputValue)
+    for (let i = 0; i < selectedExercise.set.length; i++) {
+      document.getElementById('input'+(i+1)).value = '';
+      console.log("TEST")
+    }
   }
    const handleExerciseBack = () => {
      if(idxExercise > 0){
@@ -35,9 +40,25 @@ function StartTraining() {
      }
   }
 
-   const addInput = (e) => {
-     setInputValue([...inputValue, e]); 
+   const addInput = (e,index) => {
+    const newinputs = [...inputValue]
+    newinputs[index] = e
+     setInputValue(newinputs); 
   };
+
+  const increaseWeight = (index) =>{
+   const updateExercise = {
+    ...selectedExercise, weight:selectedExercise.weight+1
+   };
+   setExercise(updateExercise)
+  }
+
+  const reduceWeight = (index) =>{
+    const updateExercise = {
+      ...selectedExercise, setw[index]: setw[index]+1
+    }
+    setExercise(updateExercise)
+  }
 
    
   return (
@@ -48,26 +69,29 @@ function StartTraining() {
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>
-          <div class="divider divider-primary">Sets|Reps|OldReps</div>
+          <div class="divider divider-primary">Exercse</div>
           {Array.from({ length: selectedExercise.sets }).map((_, index) => (
             <div className="flex flex-row space-x-3 items-center" key={index}>
-              <div>{index + 1}</div>
+              <div className='flex w-18'>
               <input
                 type="text"
-                placeholder="Repetitions"
+                placeholder={"Set: " + (index+1)}
                 className="input input-primary"
                 id={"input" + (index + 1)}
-                onBlur={(e) => addInput(e.target.value,index)}
+                onBlur={(e) => addInput(parseInt(e.target.value),index)}
               />
-              <div>{selectedExercise.reps}</div>
+              </div>
+              
+          <div className='flex space-x-2 items-center justify-center'>
+          <button onClick={()=>reduceWeight()}  className='btn btn-outline btn-primary'>-</button>
+          <div>{selectedExercise.weight} kg</div>
+          <button onClick={()=>increaseWeight()} className='btn btn-outline btn-primary'>+</button>
+          </div>
             </div>
           ))}
-         <div className='flex space-x-2 items-center justify-center'>
-          <button className='btn btn-outline btn-primary'>-</button>
-          <div>Weight: {selectedExercise.weight} kg</div>
-          <button className='btn btn-outline btn-primary'>+</button>
-          </div>
+         
           <div className="flex space-x-2 items-center justify-center">
+            <button className='btn btn-outline btn-primary'>Add</button>
             <button disabled = {idxExercise == 0} onClick={() => handleExerciseBack()} className="btn btn-outline btn-primary">Back</button>
             <button  onClick={() =>handleExercise()} className="btn btn-outline btn-success"> {idxExercise == Object.keys(training).length-1 ? "Save" : "Next"}</button>
           </div>
