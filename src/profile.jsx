@@ -1,0 +1,10 @@
+import './index.css';
+import Header from './Header';
+import { useState } from 'react';
+
+function Profile()  {
+
+    return(<div></div>);
+}
+
+export default Profile;

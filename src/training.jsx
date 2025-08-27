@@ -47,20 +47,35 @@ function StartTraining() {
   };
 
   const increaseWeight = (index) =>{
-   const updateExercise = {
-    ...selectedExercise, weight:selectedExercise.weight+1
-   };
-   setExercise(updateExercise)
+   const updatedSetw = [...selectedExercise.setw];
+  updatedSetw[index] = updatedSetw[index] + 1; // Reduziere den Wert an der angegebenen Stelle
+  console.log(index)
+  // Erstelle eine Kopie von selectedExercise und ersetze das "setw"-Array
+  const updatedExercise = {
+    ...selectedExercise,
+    setw: updatedSetw
+  };
+
+  // Setze den neuen State
+  setExercise(updatedExercise);
   }
 
-  const reduceWeight = (index) =>{
-    const updateExercise = {
-      ...selectedExercise, setw[index]: setw[index]+1
-    }
-    setExercise(updateExercise)
-  }
 
-   
+  const reduceWeight = (index) => {
+  // Kopiere das "setw"-Array
+  const updatedSetw = [...selectedExercise.setw];
+  updatedSetw[index] = updatedSetw[index] - 1; // Reduziere den Wert an der angegebenen Stelle
+  console.log(index)
+  // Erstelle eine Kopie von selectedExercise und ersetze das "setw"-Array
+  const updatedExercise = {
+    ...selectedExercise,
+    setw: updatedSetw
+  };
+
+  // Setze den neuen State
+  setExercise(updatedExercise);
+};
+
   return (
     <div>
       <Header />
@@ -69,7 +84,7 @@ function StartTraining() {
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>
-          <div class="divider divider-primary">Exercse</div>
+          <div className="divider divider-primary">Exercise</div>
           {Array.from({ length: selectedExercise.sets }).map((_, index) => (
             <div className="flex flex-row space-x-3 items-center" key={index}>
               <div className='flex w-18'>
@@ -83,15 +98,13 @@ function StartTraining() {
               </div>
               
           <div className='flex space-x-2 items-center justify-center'>
-          <button onClick={()=>reduceWeight()}  className='btn btn-outline btn-primary'>-</button>
-          <div>{selectedExercise.weight} kg</div>
-          <button onClick={()=>increaseWeight()} className='btn btn-outline btn-primary'>+</button>
+          <button onClick={()=>reduceWeight(index)}  className='btn btn-outline btn-primary'>-</button>
+          <div>{selectedExercise.setw[index]} kg</div>
+          <button onClick={()=>increaseWeight(index)} className='btn btn-outline btn-primary'>+</button>
           </div>
             </div>
           ))}
-         
           <div className="flex space-x-2 items-center justify-center">
-            <button className='btn btn-outline btn-primary'>Add</button>
             <button disabled = {idxExercise == 0} onClick={() => handleExerciseBack()} className="btn btn-outline btn-primary">Back</button>
             <button  onClick={() =>handleExercise()} className="btn btn-outline btn-success"> {idxExercise == Object.keys(training).length-1 ? "Save" : "Next"}</button>
           </div>
