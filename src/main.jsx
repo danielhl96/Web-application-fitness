@@ -6,8 +6,9 @@ import GUI from './login.jsx'
 import CreateTrainGUI from './createtrain.jsx'
 import EditTrain from './edittrain.jsx'
 import StartTraining from './training.jsx'
+import Profile from './profile'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <EditTrain />
+  <Profile/>
   </StrictMode>,
 )
