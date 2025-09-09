@@ -38,15 +38,24 @@ function Profile()  {
               
                <input
                 type="text"
-                placeholder={"Avg steps: "}
+                placeholder={"Waist:"}
                 className="input input-primary"
-                id={"height"}
+                id={"waist"}
                 title="Must be a valid height"
                   pattern="^(1[0-9]{2}|2[0-4][0-9]|250)$"
               />
+
+              <input
+                type="text"
+                placeholder={"BFP:"}
+                className="input input-primary"
+                id={"bfp"}
+              />
+
               </div>
-              
+              <h1>Your gender:</h1>
               <div className='flex flex-row space-x-2 items-center justify-center'>
+                
               <button className='btn btn-outline btn-primary w-15'>Male</button>
                <button className='btn btn-outline btn-primary w-15'>Female</button>
               </div>
@@ -64,14 +73,19 @@ function Profile()  {
 
                  <select defaultValue="Activity level" className="select select-primary">
                     <option disabled={true}>Activity level</option>
-                     <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7+</option>
+                     <option>Not active</option>
+                    <option>Litte bit active</option>
+                    <option>Active</option>
+                    <option>Very Active</option>
                 </select>
+
+               <h1>Your goals:</h1>
+               <div className='flex flex-row space-x-2 items-center justify-center'>
+              <button className='btn btn-outline btn-primary w-15'>Reduce</button>
+              <button className='btn btn-outline btn-primary w-15'>Hold</button>
+              <button className='btn btn-outline btn-primary w-15'>Increase</button>
+              </div>
+
                <div className='flex flex-row space-x-2 items-center justify-center'>
               <button className='btn btn-outline btn-success w-15'>Save</button>
               <button className='btn btn-outline btn-warning w-15'>Cancel</button>
