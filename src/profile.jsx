@@ -4,6 +4,28 @@ import { useState } from 'react';
 
 function Profile()  {
 
+  const [bmi, setBmi] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [hwr, setHwr] = useState(0);
+  const [hip, setHip] = useState(0);
+  const [waist, setWaist] = useState(0);
+
+   const handleBmi = () => {
+      setBmi(weight/(height*height/100))
+   }
+
+   const handleHeight =(e) =>{
+    setHeight(e.target.value)
+    handleBmi()
+   }
+
+   const handleWeight =(e) =>{
+    setWeight(e.target.value)
+    console.log(e.target.value)
+    handleBmi()
+   }
+
     return(<div>
         <Header/>
         <div className='min-h-screen flex items-center justify-center'>
@@ -26,6 +48,7 @@ function Profile()  {
                 placeholder={"Weight: "}
                 className="input input-primary"
                 id={"weight"}
+                onChange={(e)=> handleWeight(e)}
               />
                <input
                 type="text"
@@ -34,6 +57,7 @@ function Profile()  {
                 id={"height"}
                 title="Must be a valid height"
                   pattern="^(1[0-9]{2}|2[0-4][0-9]|250)$"
+                onChange={(e)=> handleHeight(e)}
               />
               
                <input
@@ -43,6 +67,13 @@ function Profile()  {
                 id={"waist"}
                 title="Must be a valid height"
                   pattern="^(1[0-9]{2}|2[0-4][0-9]|250)$"
+              />
+
+               <input
+                type="text"
+                placeholder={"HIP:"}
+                className="input input-primary"
+                id={"hip"}
               />
 
               <input
@@ -55,11 +86,15 @@ function Profile()  {
               </div>
               <h1>Your gender:</h1>
               <div className='flex flex-row space-x-2 items-center justify-center'>
-                
               <button className='btn btn-outline btn-primary w-15'>Male</button>
-               <button className='btn btn-outline btn-primary w-15'>Female</button>
+              <button className='btn btn-outline btn-primary w-15'>Female</button>
               </div>
 
+              <div className='flex flex-col space-y-2 items-center justify-center'>
+              <h1 style={{color: bmi > 30 ? "red" : bmi > 25 ? "orange" : "green"}}>
+                Your BMI: { bmi > 30 ? "Adipoistas": bmi > 25 ? "Overweight" : "Normal"} ({Math.round(bmi)}) </h1>
+              <h1>Your HWR: { bmi > 30 ? "Adipoistas": bmi > 25 ? "Overweight" : "Normal"}</h1>
+</div>
                 <select defaultValue="Trainings frequency" className="select select-primary">
                     <option disabled={true}>Trainings frequency</option>
                      <option>1</option>
