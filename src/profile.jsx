@@ -265,8 +265,7 @@ function Profile()  {
               <h1>Your calories: {calories} kcal</h1>     
               <h1 style={{color: bmi > 30 ? "red" : bmi > 25 ? "orange" : bmi < 20 ? "yellow" : "green"}}>
                 Your BMI: { bmi > 30 ? "Adipoistas": bmi > 25 ? "Overweight" :  bmi < 20 ? "Underweight" :"Normal"} ({Math.round(bmi)}) </h1>
-              <h1 style={{color : hwr >= 0.85 ? "red": "green" }}>Your HWR: { hwr >= 0.85 ? "Risk": "Good"}</h1>
-</div>
+              <h1 style={{color : hwr >= 0.85 ? "red": "green" }}>Your HWR: { hwr >= 0.85 ? "Risk": "Good"}</h1></div>
                </div>
                <div className='flex flex-row space-x-2 items-center justify-center'>
               <button disabled = {failureHeight == true || failureHip == true || failureWeight== true || failureWaist == true || failureHip == true} className='btn btn-outline btn-success w-15'>Save</button>
