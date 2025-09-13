@@ -7,8 +7,10 @@ import CreateTrainGUI from './createtrain.jsx'
 import EditTrain from './edittrain.jsx'
 import StartTraining from './training.jsx'
 import Profile from './profile'
+import RegisterPage from './register.jsx'
+import PasswordForget from './passwordforget.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <Profile/>
-  </StrictMode>,
+    <PasswordForget/>
+  </StrictMode>
 )
