@@ -138,7 +138,7 @@ function Profile()  {
 
     return(<div>
        
-        <div className='min-h-screen flex items-center justify-center'>
+  <div className='min-h-screen flex justify-center py-8 pt-24'>
             <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
                 <div className="divider divider-neutral">Profile</div>
                 <div className='grid grid-cols-3 gap-2'>

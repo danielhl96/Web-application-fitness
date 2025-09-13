@@ -1,16 +1,14 @@
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
-import GUI from './login.jsx'
-import CreateTrainGUI from './createtrain.jsx'
-import EditTrain from './edittrain.jsx'
-import StartTraining from './training.jsx'
-import Profile from './profile'
-import RegisterPage from './register.jsx'
-import PasswordForget from './passwordforget.jsx'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PasswordForget/>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
   </StrictMode>
 )

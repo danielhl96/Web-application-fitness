@@ -1,66 +1,79 @@
-import './index.css'; 
+import './index.css';
+import { Routes, Route } from 'react-router-dom';
 import GUI from './login';
-import Header  from './Header'
+import Header from './Header';
+import CreateTrainGUI from './createtrain.jsx';
+import EditTrain from './edittrain.jsx';
+import StartTraining from './training.jsx';
+import Profile from './profile';
+import RegisterPage from './register.jsx';
+import PasswordForget from './passwordforget.jsx';
 
-
-
-function Cards() {
+function Home() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 py-16">
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-     {/* Erste Karte */}
-  <div className="card w-full sm:w-96 lg:w-96 bg-base-100 shadow-sm">
-      <div className="card-body">
-        <h2 className="card-title text-white">Training erstellen</h2>
-        <p className="text-white">Erstelle dein Training mit den Übungen deiner Wahl!</p>
-        <div className="justify-end card-actions">
-          <button className="btn btn-primary text-white">Erstellen</button>
+    <div className="flex items-center justify-center min-h-screen bg-slate-900 py-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4">
+        {/* Card 1 */}
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-emerald-400">Create Training</h2>
+            <p className="text-slate-200">Create your own training with exercises of your choice!</p>
+            <div className="justify-end card-actions">
+              <a href="/createtrain" className="btn bg-emerald-500 hover:bg-emerald-600 text-white">Create</a>
+            </div>
+          </div>
+        </div>
+        {/* Card 2 */}
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-blue-400">Start Training</h2>
+            <p className="text-slate-200">Start your training now!</p>
+            <div className="justify-end card-actions">
+              <a href="/training" className="btn bg-blue-500 hover:bg-blue-600 text-white">Start</a>
+            </div>
+          </div>
+        </div>
+        {/* Card 3 */}
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-pink-400">Set Goal</h2>
+            <p className="text-slate-200">Define your fitness goal and track your progress!</p>
+            <div className="justify-end card-actions">
+              <a href="/profile" className="btn bg-pink-500 hover:bg-pink-600 text-white">Set Goal</a>
+            </div>
+          </div>
+        </div>
+        {/* Card 4 */}
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-yellow-400">Edit training</h2>
+            <p className="text-slate-200">Edit your training!</p>
+            <div className="justify-end card-actions">
+              <a href="/edittrain" className="btn bg-yellow-500 hover:bg-yellow-600 text-white">Edit training</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-     {/* Zweite Karte */}
-    <div className="card w-full sm:w-96 lg:w-96 bg-base-100 shadow-sm">
-      <div className="card-body">
-        <h2 className="card-title text-white">Training starten</h2>
-        <p className="text-white">Starte jetzt dein Training!</p>
-        <div className="justify-end card-actions">
-          <button className="btn btn-primary text-white">Starten</button>
-        </div>
-      </div>
-    </div>
-     {/* Dritte Karte */}
-    <div className="card w-full sm:w-96 lg:w-96 bg-base-100 shadow-sm">
-      <div className="card-body">
-        <h2 className="card-title text-white">Ziel festlegen</h2>
-        <p className="text-white">Definiere dein Fitnessziel und verfolge deinen Fortschritt!</p>
-        <div className="justify-end card-actions">
-          <button className="btn btn-primary text-white">Ziel festlegen</button>
-        </div>
-      </div>
-    </div>
-  {/* Vierte Karte */}
-    <div className="card w-full sm:w-96 lg:w-96 bg-base-100 shadow-sm">
-      <div className="card-body">
-        <h2 className="card-title text-white">Vorlage wählen</h2>
-        <p className="text-white">Nutze eine vorhandene Vorlage für dein Training!</p>
-        <div className="justify-end card-actions">
-          <button className="btn btn-primary text-white">Vorlage</button>
-        </div>
-      </div>   
-    </div>
-  </div>
-</div>
   );
 }
-
-
 
 function App() {
   return (
     <div>
-    <Header />
-    <Cards/>
-  </div>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<GUI />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/createtrain" element={<CreateTrainGUI />} />
+        <Route path="/edittrain" element={<EditTrain />} />
+        <Route path="/training" element={<StartTraining />} />
+        <Route path="/passwordforget" element={<PasswordForget />} />
+      </Routes>
+    </div>
   );
 }
-export default App
+
+export default App;

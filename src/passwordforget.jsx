@@ -60,7 +60,7 @@ function PasswordForget() {
             className="btn btn-outline btn-success"
           >
             {requireCode && !password ? 'Send code' : 'Require code'}
-            {requireCode && password ? 'Send password' : 'Require code'}
+           
           </button>
       </div>
     </div>

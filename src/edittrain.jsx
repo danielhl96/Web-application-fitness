@@ -64,18 +64,18 @@ const exercise = [
   const[showModal,setShowModal] = useState(false)
   const[savekey,setKey] = useState("")
   const[addExercise,setaddExercise] = useState("")
-  function WorkoutCard({exercise}){
-    return(
-      <div className="card w-68 sm:w-64 md:w-96 bg-gray-600 card-xs shadow-sm">
-  <div className="card- text-xl items-center text-center">
-     <h2> Workout: {exercise}</h2>
-    <div class="justify-center mt-1 card-actions p-6">
-     <button  onClick={() => handleShowModal(exercise)} className="btn btn-outline btn-primary">Edit</button>
-      <button  onClick={() => handeRemoveWorkout(exercise)} className="btn btn-outline btn-secondary">Remove</button>
-    </div>
-  </div>
-</div>
-    )
+  function WorkoutCard({ exercise }) {
+    return (
+      <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
+        <div className="card-body text-xl items-center text-center">
+          <h2 className="text-blue-400 font-bold mb-2">Workout: {exercise}</h2>
+          <div className="flex flex-row justify-center gap-4 mt-2">
+            <button onClick={() => handleShowModal(exercise)} className="btn bg-blue-500 hover:bg-blue-600 text-white">Edit</button>
+            <button onClick={() => handeRemoveWorkout(exercise)} className="btn bg-pink-500 hover:bg-pink-600 text-white">Remove</button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   function handleShowModal(exercise) {
@@ -216,77 +216,62 @@ const handleReduceSets = (e) => {
   function EditWorkoutModal(){
     return (
     <div className="modal modal-open">
-                        <div className="modal-box">
-                          <p>Add a new exercise:</p>
-                            <div>
-                              
-      
-      <div className="flex items-center space-x-2">
-        <input
-          type="search"
-          placeholder="Enter something"
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          list = "exercise-options"
-          id ="input-e"
-          onChange={handleAddExercise2}
-        />
-       <button onClick={() => handleAddExercise()} className = "btn btn-outline btn-primary w-15 " >Add</button>
-      </div>
-</div>
+      <div className="modal-box bg-slate-800 border border-blue-500">
+        <p className="text-lg text-blue-400 font-bold mb-2">Add a new exercise:</p>
+        <div className="flex items-center space-x-2 mb-4">
+          <input
+            type="search"
+            placeholder="Enter exercise name"
+            className="w-full px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            list="exercise-options"
+            id="input-e"
+            onChange={handleAddExercise2}
+          />
+          <button onClick={handleAddExercise} className="btn bg-emerald-500 hover:bg-emerald-600 text-white w-20">Add</button>
+        </div>
         <datalist id="exercise-options">
           {exercise.map((item, index) => (
             <option key={index} value={item.name} />
           ))}
         </datalist>
-      
-      
-                        {selectedExercise[savekey].map((exercise,index) => (
-                          <div key={index} className="mb-6 border-b pb-4">
-                            <h2>{exercise.exercise}</h2>
-                         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
-                          <button onClick={()=> handleAddSets(exercise)} className  = "btn btn-outline btn-primary font-light w-27 " >Add sets</button>
-                          <button onClick={() => handleReduceSets(exercise)} className = "btn btn-outline btn-primary font-light w-27">Reduce sets</button>
-                          <button onClick={() => handleAddReps(exercise)} className = "btn btn-outline btn-primary font-light w-27">Add reps</button>
-                          <button onClick={() => handleReduceReps(exercise)} className = "btn btn-outline btn-primary font-light w-27">Reduce reps</button>
-                         <button onClick={() => handleRemoveExercise(exercise)} className="btn btn-outline btn-secondary w-30">Remove</button>
-
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 px-4">
-                          <p>Sets: {exercise.sets}</p>
-                          <p>Reps: {exercise.reps}</p>
-                        </div>
-                      </div>
-                          ))}
-                          <div className="modal-action">
-                            <button
-                            onClick={handleShowModal}
-                              className="btn btn-soft btn-primary"
-                            >
-                              Save
-                            </button>
-                             <button
-                            onClick={handleShowModal}
-                              className="btn btn-soft btn-error"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+        {selectedExercise[savekey].map((exercise, index) => (
+          <div key={index} className="mb-6 border-b border-slate-700 pb-4">
+            <h2 className="text-emerald-400 font-semibold">{exercise.exercise}</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
+              <button onClick={() => handleAddSets(exercise)} className="btn bg-emerald-500 hover:bg-emerald-600 text-white font-light w-27">Add sets</button>
+              <button onClick={() => handleReduceSets(exercise)} className="btn bg-emerald-700 hover:bg-emerald-800 text-white font-light w-27">Reduce sets</button>
+              <button onClick={() => handleAddReps(exercise)} className="btn bg-blue-500 hover:bg-blue-600 text-white font-light w-27">Add reps</button>
+              <button onClick={() => handleReduceReps(exercise)} className="btn bg-blue-700 hover:bg-blue-800 text-white font-light w-27">Reduce reps</button>
+              <button onClick={() => handleRemoveExercise(exercise)} className="btn bg-pink-500 hover:bg-pink-600 text-white w-30">Remove</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2 px-4">
+              <p className="text-slate-200">Sets: {exercise.sets}</p>
+              <p className="text-slate-200">Reps: {exercise.reps}</p>
+            </div>
+          </div>
+        ))}
+        <div className="modal-action flex flex-row gap-2 justify-end">
+          <button onClick={handleShowModal} className="btn bg-blue-500 hover:bg-blue-600 text-white">Save</button>
+          <button onClick={handleShowModal} className="btn bg-pink-500 hover:bg-pink-600 text-white">Cancel</button>
+        </div>
+      </div>
+    </div>
       );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-6">
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <p className="text-4xl">Edit your training:</p>
-      {Object.keys(selectedExercise).map((exercise, index) => (
-          <WorkoutCard exercise = {exercise} key =  {index} />
-      ))}
-       {showModal && (
-                  <div>{EditWorkoutModal()}</div>)}
+      <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center">
+        <div className="divider divider-primary text-2xl text-blue-400 font-bold mb-2">Edit Your Training</div>
+        <div className="w-full flex flex-col gap-4">
+          {Object.keys(selectedExercise).map((exercise, index) => (
+            <WorkoutCard exercise={exercise} key={index} />
+          ))}
+        </div>
+        {showModal && <div>{EditWorkoutModal()}</div>}
+      </div>
     </div>
-   
   );
 };
 
