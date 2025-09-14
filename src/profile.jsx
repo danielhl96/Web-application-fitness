@@ -138,9 +138,9 @@ function Profile()  {
 
     return(<div>
        
-  <div className='min-h-screen flex justify-center py-8 pt-24'>
-            <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
-                <div className="divider divider-neutral">Profile</div>
+  <div className='min-h-screen flex justify-center bg-slate-900  py-8 pt-24'>
+            <div className="space-y-4 card sm:w-64 md:w-96  bg-slate-800 shadow-sm p-6 rounded-md">
+                <div className="divider  text-amber-50 font-bold mb-2  divider-neutral">Profile</div>
                 <div className='grid grid-cols-3 gap-2'>
                <div className='flex flex-col space-y-1  h-15'>
                 <h1 style={{textDecoration:"underline"}}>Age</h1>
@@ -253,9 +253,9 @@ function Profile()  {
                 
                  <div className="divider divider-neutral">Your goals:</div>
                <div className='flex flex-row space-x-2 items-center justify-center'>
-              <button onClick={() => handleGoal(1)}  style={{color: goal === 1 ? "white" : "black", backgroundColor: goal === 1 ? "black" : "transparent",border: "1px solid black",}} className='btn btn-outline btn-primary w-15 h-9'>Reduce</button>
+              <button onClick={() => handleGoal(1)}  style={{color: goal === 1 ? "white" : "black", backgroundColor: goal === 1 ? "black" : "transparent",border: "1px solid black",}} className='btn btn-outline btn-primary w-15 h-9'>Cut</button>
               <button onClick={() => handleGoal(2)} style={{color: goal === 2 ? "white" : "black", backgroundColor: goal === 2 ? "black" : "transparent",border: "1px solid black",}}  className='btn btn-outline btn-primary w-15 h-9'>Hold</button>
-              <button onClick={() => handleGoal(3)} style={{color: goal === 3 ? "white" : "black", backgroundColor: goal === 3 ? "black" : "transparent",border: "1px solid black",}} className='btn btn-outline btn-primary w-15 h-9'>Increase</button>
+              <button onClick={() => handleGoal(3)} style={{color: goal === 3 ? "white" : "black", backgroundColor: goal === 3 ? "black" : "transparent",border: "1px solid black",}} className='btn btn-outline btn-primary w-15 h-9'>Bulk</button>
               </div>
               <div className="divider divider-neutral">Important values</div>
               <div className='flex justify-center'>

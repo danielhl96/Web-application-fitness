@@ -67,9 +67,9 @@ const exercise = [
   function WorkoutCard({ exercise }) {
     return (
       <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
-        <div className="card-body text-xl items-center text-center">
-          <h2 className="text-blue-400 font-bold mb-2">Workout: {exercise}</h2>
-          <div className="flex flex-row justify-center gap-4 mt-2">
+        <div className="card-body text-xl items-center  text-center">
+          <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
+          <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button onClick={() => handleShowModal(exercise)} className="btn bg-blue-500 hover:bg-blue-600 text-white">Edit</button>
             <button onClick={() => handeRemoveWorkout(exercise)} className="btn bg-pink-500 hover:bg-pink-600 text-white">Remove</button>
           </div>
@@ -217,7 +217,7 @@ const handleReduceSets = (e) => {
     return (
     <div className="modal modal-open">
       <div className="modal-box bg-slate-800 border border-blue-500">
-        <p className="text-lg text-blue-400 font-bold mb-2">Add a new exercise:</p>
+        <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
         <div className="flex items-center space-x-2 mb-4">
           <input
             type="search"
@@ -236,7 +236,7 @@ const handleReduceSets = (e) => {
         </datalist>
         {selectedExercise[savekey].map((exercise, index) => (
           <div key={index} className="mb-6 border-b border-slate-700 pb-4">
-            <h2 className="text-emerald-400 font-semibold">{exercise.exercise}</h2>
+            <h2 className="text-amber-50 font-bold mb-2 ">{exercise.exercise}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
               <button onClick={() => handleAddSets(exercise)} className="btn bg-emerald-500 hover:bg-emerald-600 text-white font-light w-27">Add sets</button>
               <button onClick={() => handleReduceSets(exercise)} className="btn bg-emerald-700 hover:bg-emerald-800 text-white font-light w-27">Reduce sets</button>
@@ -263,8 +263,8 @@ const handleReduceSets = (e) => {
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
       <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center">
-        <div className="divider divider-primary text-2xl text-blue-400 font-bold mb-2">Edit Your Training</div>
-        <div className="w-full flex flex-col gap-4">
+        <div className="divider divider-primary text-amber-50 font-bold mb-2">Edit Your Training</div>
+        <div className="w-full flex flex-col gap-4 items-center pt-2">
           {Object.keys(selectedExercise).map((exercise, index) => (
             <WorkoutCard exercise={exercise} key={index} />
           ))}

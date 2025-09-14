@@ -21,9 +21,9 @@ function ExerciseCard({ name, description, img, onRemove }) {
   }
 
   return (
-    <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-emerald-500">
+    <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 items-center shadow-lg border border-blue-500 mb-4">
       <div className="card-body">
-        <h2 className="card-title text-emerald-400 text-xl font-semibold">{name}</h2>
+        <h2 className="card-title  text-xl font-semibold">{name}</h2>
         <figure className="mb-4 flex justify-center">
           <img src={img} alt={name} className="rounded-md" width="60" height="60" />
         </figure>
@@ -114,14 +114,14 @@ function CreateTrainGUI() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center">
-        <div className="divider divider-primary text-2xl text-emerald-400 font-bold mb-2">Create Your Training</div>
+      <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center ">
+        <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Create your training</div>
         <div className="w-full flex flex-col gap-4 items-center pt-2">
           <label className="input">
             <input
               type="input"
               onChange={handleExerciseChange}
-              className="grow bg-slate-800 text-white border border-slate-700 rounded-md px-3 py-2"
+              className="input input-primary"
               placeholder="Name your workout"
             />
           </label>
@@ -130,7 +130,7 @@ function CreateTrainGUI() {
               type="search"
               onChange={handleExerciseChange}
               list="exercise-options"
-              className="grow bg-slate-800 text-white border border-slate-700 rounded-md px-3 py-2"
+              className="input input-primary"
               id="input_search"
               placeholder="Select your exercise"
             />
@@ -141,8 +141,9 @@ function CreateTrainGUI() {
             </datalist>
           </label>
         </div>
+         
         {/* Render selected exercises */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full justify-center items-center">
           {selectedExercise.length > 0 ? (
             selectedExercise.map((exercise, index) => (
               <ExerciseCard
@@ -156,8 +157,9 @@ function CreateTrainGUI() {
           ) : (
             <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
           )}
+        
         </div>
-        <div className="flex flex-row gap-4 mt-4">
+        <div className="flex flex-row items-center gap-4 mt-4">
           <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white">Save</button>
           <button className="btn bg-pink-500 hover:bg-pink-600 text-white">Cancel</button>
         </div>

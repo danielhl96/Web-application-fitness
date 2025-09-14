@@ -22,10 +22,10 @@ function Header() {
             </button>
           </div>
           <div className={`flex-col md:flex md:flex-row md:items-center md:static absolute top-full left-0 w-full md:w-auto bg-black md:bg-transparent z-40 transition-all duration-200 ${menuOpen ? 'flex' : 'hidden'}`}>
-            <Link to="/profile" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Profil</Link>
-            <Link to="/createtrain" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Training erstellen</Link>
-            <Link to="/edittrain" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Vorlage wählen</Link>
-            <Link to="/training" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Training starten</Link>
+            <Link to="/profile" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Profile</Link>
+            <Link to="/createtrain" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Create training</Link>
+            <Link to="/edittrain" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Edit training</Link>
+            <Link to="/training" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Start training</Link>
             <button className="btn btn-ghost text-white md:ml-4" onClick={() => setMenuOpen(false)}>Logout</button>
           </div>
         </div>

@@ -79,8 +79,8 @@ function StartTraining() {
   return (
     <div>
       <Header />
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
+      <div className="min-h-screen flex items-center bg-slate-900  justify-center">
+        <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>
