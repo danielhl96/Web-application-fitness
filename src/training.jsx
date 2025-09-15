@@ -60,7 +60,36 @@ function StartTraining() {
   setExercise(updatedExercise);
   }
 
+  const handleAddSets = () => {
+    const updatedSets = selectedExercise.sets + 1;
+    const updatedSetw = [...selectedExercise.setw, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
+    const updatedSet = [...selectedExercise.set, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
+     
+    const updatedExercise = {
+      ...selectedExercise,
+      sets: updatedSets,
+      setw: updatedSetw,
+      set: updatedSet
+    };
 
+    setExercise(updatedExercise);
+  }
+
+  const handleReduceSets = () => {
+    const updatedSets = selectedExercise.sets - 1;
+    const updatedSetw = [...selectedExercise.setw];
+    updatedSetw.pop(); // Entferne den letzten Eintrag
+    const updatedSet = [...selectedExercise.set];
+    updatedSet.pop(); // Entferne den letzten Eintrag 
+    const updatedExercise = {
+      ...selectedExercise,
+      sets: updatedSets,
+      setw: updatedSetw,
+      set: updatedSet
+    };
+    setExercise(updatedExercise);
+
+  }
   const reduceWeight = (index) => {
   // Kopiere das "setw"-Array
   const updatedSetw = [...selectedExercise.setw];
@@ -86,7 +115,7 @@ function StartTraining() {
       </figure>
           <div className="divider divider-primary">Exercise</div>
           {Array.from({ length: selectedExercise.sets }).map((_, index) => (
-            <div className="flex flex-row space-x-3 items-center" key={index}>
+            <div className="flex flex-row space-x-3 items-center justify-center" key={index}>
               <div className='flex w-18'>
               <input
                 type="text"
@@ -104,9 +133,15 @@ function StartTraining() {
           </div>
             </div>
           ))}
+          <div className="flex space-x-2 items-center justify-center">  
+          <button onClick={() => handleReduceSets()} className="btn btn-outline btn-primary">- Set</button>
+             <button onClick={() => handleAddSets()} className="btn btn-outline btn-primary">+ Set</button>
+             </div>
+          <div className="divider divider-primary"></div>
           <div className="flex space-x-2 items-center justify-center">
             <button disabled = {idxExercise == 0} onClick={() => handleExerciseBack()} className="btn btn-outline btn-primary">Back</button>
             <button  onClick={() =>handleExercise()} className="btn btn-outline btn-success"> {idxExercise == Object.keys(training).length-1 ? "Save" : "Next"}</button>
+         
           </div>
         </div>
       </div>
