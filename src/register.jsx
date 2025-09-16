@@ -1,7 +1,8 @@
 import {useState, useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom';
 
 function RegisterPage()  {
+   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -61,12 +62,13 @@ function RegisterPage()  {
 
    return(
     <div>
-     <div className='min-h-screen flex items-center justify-center'>
-      <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-700 shadow-sm p-6 rounded-md">
+     <div className='min-h-screen flex items-center bg-gray-900 justify-center'>
+      <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
       <div className='flex flex-col gap-2'>
         <h1 className='text-2xl font-bold'>Register</h1>
          <div className="divider divider-primary">Your data</div>
         <div><h1 className='text-shadow-lg font-mono'>E-Mail</h1>
+      
             <input
               type="text"
               placeholder={"E-Mail: "}
@@ -75,10 +77,11 @@ function RegisterPage()  {
               onBlur={handleEmailBlur}
               style={{ border: emailError && emailTouched ? '1px solid red' : '1px solid green' }}
             />
-          
+         
           {
             emailError && emailTouched && <span className="text-red-500 text-sm">Please enter a valid email address.</span>
           }
+          
         </div>
               <div><h1 className='text-shadow-lg font-mono'>Password</h1>
                 <input
@@ -109,7 +112,7 @@ function RegisterPage()  {
                <div className="divider divider-primary"></div>
               <div className="flex flex-row space-x-2 items-center justify-center">
               <button disabled={emailError || passwordError || confirmPasswordError} className="btn btn-outline btn-success w-15 space-y-5">Register</button>
-              <button className="btn btn-outline btn-warning w-15">Back</button>
+              <button onClick={() => navigate('/login')} className="btn btn-outline btn-warning w-15">Back</button>
               </div>
               </div>
               </div>
