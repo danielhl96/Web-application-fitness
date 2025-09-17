@@ -1,9 +1,10 @@
 import './index.css';
 import Header from './Header';
 import { act, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Profile()  {
-
+   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
@@ -139,8 +140,9 @@ function Profile()  {
     return(<div>
        
   <div className='min-h-screen flex justify-center bg-slate-900  py-8 pt-24'>
+    <Header />
             <div className="space-y-4 card sm:w-64 md:w-96  bg-slate-800 shadow-sm p-6 rounded-md">
-                <div className="divider  text-amber-50 font-bold mb-2  divider-neutral">Profile</div>
+                <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
                 <div className='grid grid-cols-3 gap-2'>
                <div className='flex flex-col space-y-1  h-15'>
                 <h1 style={{textDecoration:"underline"}}>Age</h1>
@@ -269,7 +271,7 @@ function Profile()  {
                </div>
                <div className='flex flex-row space-x-2 items-center justify-center'>
               <button disabled = {failureHeight == true || failureHip == true || failureWeight== true || failureWaist == true || failureHip == true} className='btn btn-outline btn-success w-15'>Save</button>
-              <button className='btn btn-outline btn-warning w-15'>Cancel</button>
+              <button onClick={() => navigate('/')} className='btn btn-outline btn-warning w-15'>Cancel</button>
               </div>
               </div>
               </div>

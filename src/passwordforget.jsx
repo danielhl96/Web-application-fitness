@@ -1,13 +1,29 @@
 
 import { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 function PasswordForget() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [securityCode, setSecurityCode] = useState('');
   const [message, setMessage] = useState('');
   const [requireCode, setRequireCode] = useState(false);
  const [password, setPassword] = useState(false);
+
+  function Header() {
+    return (
+      <div>
+        <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
+          <div className="flex w-full justify-between items-center px-4">
+            <button className="btn btn-ghost text-white">Fitness</button>
+    
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
   const handleCode = () => {
    setRequireCode(true)
   };
@@ -18,7 +34,8 @@ function PasswordForget() {
 
   return (
     <div className="min-h-screen flex items-center bg-gray-900 justify-center">
-      <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
+      <Header/>
+      <div className="space-y-4 flex flex-col card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
         <h1 className="text-2xl font-bold">Forgot Password</h1>
           <div>
             <h1>E-Mail</h1>
@@ -48,39 +65,34 @@ function PasswordForget() {
             {password && (
                 <>
             <h1>New password</h1>
-            <label className="input validator">
-  <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <g
-      strokeLinejoin="round"
-      strokeLinecap="round"
-      strokeWidth="2.5"
-      fill="none"
-      stroke="currentColor"
-    >
-      <path
-        d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
-      ></path>
-      <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-    </g>
-  </svg>
+
             <input
               type="text"
               placeholder={"New password: "}
               className="input input-primary"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            </label>
+            <h1>Repeat your password</h1>
+              <input
+              type="text"
+              placeholder={"Repeat password: "}
+              className="input input-primary"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+           
             </>
             )}
           </div>
+          <div className="flex space-x-2 items-center justify-start">
           <button
-            onClick={requireCode && !password ? handleCode : handlePasswordChange}
+            onClick={!requireCode && !password ? () => handleCode() : () => handlePasswordChange()}
             className="btn btn-outline btn-success"
           >
-            {requireCode && !password ? 'Send code' : 'Require code'}
-           
+            {requireCode && !password ? 'Send code' : requireCode && password ? 'Change password' : 'Require code'}
           </button>
+          <button onClick={() => navigate('/login')} className="btn btn-outline btn-error">Cancel</button>
       </div>
+    </div>
     </div>
   );
 }

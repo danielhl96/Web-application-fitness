@@ -3,11 +3,12 @@ import Header from './Header';
 import {useState } from 'react';
 
 function StartTraining() {
-  const training = { 0: [{exercise: "/benchpress.png", sets: 3,reps: 12, weight: 85, set:[12,11,10], setw: [75,74,80]}], 1:[{exercise: "/shoulderpress.png", sets: 3,reps: 12,weight:50,set:[12,11,10], setw: [75,74,80]} ]};
+  const training = { 0: [{exercise: "/benchpress.png",name:"Benchpress", sets: 3,reps: 12, weight: 85, set:[12,11,10], setw: [75,74,80]}], 1:[{exercise: "/shoulderpress.png", name:"Shoulderpress", sets: 3,reps: 12,weight:50,set:[12,11,10], setw: [75,74,80]} ]};
   const [selectedExercise,setExercise] = useState(training[0][0])
   const [idxExercise,setidx] = useState(0)
   const [inputValue, setInputValue] = useState([]);
   const [training1,setTraining] = useState(training)
+  const[selectedTrainingSite,setSelectedTrainingSite] = useState(true)
 
   const handleExercise = () => {
     if(idxExercise <  Object.keys(training).length-1){
@@ -62,7 +63,7 @@ function StartTraining() {
 
   const handleAddSets = () => {
     const updatedSets = selectedExercise.sets + 1;
-    const updatedSetw = [...selectedExercise.setw, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
+    const updatedSetw = [...selectedExercise.setw, selectedExercise.setw[selectedExercise.setw.length - 1]]; // Füge einen neuen Eintrag für das neue Set hinzu
     const updatedSet = [...selectedExercise.set, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
      
     const updatedExercise = {
@@ -105,15 +106,37 @@ function StartTraining() {
   setExercise(updatedExercise);
 };
 
+function WorkoutCard({ exercise }) {
+    return (
+      <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
+        <div className="card-body text-xl items-center  text-center">
+          <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
+          <div className="flex flex-row justify-center items-center gap-4 mt-2">
+            <button onClick={() => setSelectedTrainingSite(false)} className="btn bg-blue-500 hover:bg-blue-600 text-white">Start</button>
+           
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
-      <div className="min-h-screen flex items-center bg-slate-900  justify-center">
+      <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
+      {selectedTrainingSite ? <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-sm p-8 rounded-md flex flex-col items-center">
+        <div className="w-full flex flex-col gap-4 items-center">
+          <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Select your workout</div>
+          {Object.keys(training1).map((exercise, index) => (
+            <WorkoutCard exercise={exercise} key={index} />
+          ))}
+        </div>
+      </div> :
         <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>
-          <div className="divider divider-primary">Exercise</div>
+          <div className="divider divider-primary">{selectedExercise.name}</div>
           {Array.from({ length: selectedExercise.sets }).map((_, index) => (
             <div className="flex flex-row space-x-3 items-center justify-center" key={index}>
               <div className='flex w-18'>
@@ -134,7 +157,7 @@ function StartTraining() {
             </div>
           ))}
           <div className="flex space-x-2 items-center justify-center">  
-          <button onClick={() => handleReduceSets()} className="btn btn-outline btn-primary">- Set</button>
+          <button onClick={() => handleReduceSets()} className="btn btn-outline btn-secondary">- Set</button>
              <button onClick={() => handleAddSets()} className="btn btn-outline btn-primary">+ Set</button>
              </div>
           <div className="divider divider-primary"></div>
@@ -144,8 +167,11 @@ function StartTraining() {
          
           </div>
         </div>
+}
       </div>
     </div>
-  );
+   
+       
+);
 }
 export default StartTraining;

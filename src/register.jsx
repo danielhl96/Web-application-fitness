@@ -13,6 +13,19 @@ function RegisterPage()  {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
+  function Header() {
+    return (
+      <div>
+        <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
+          <div className="flex w-full justify-between items-center px-4">
+            <button className="btn btn-ghost text-white">Fitness</button>
+    
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
 
   const handleEmailChange = (event) => {
@@ -63,6 +76,7 @@ function RegisterPage()  {
    return(
     <div>
      <div className='min-h-screen flex items-center bg-gray-900 justify-center'>
+     < Header/>
       <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
       <div className='flex flex-col gap-2'>
         <h1 className='text-2xl font-bold'>Register</h1>

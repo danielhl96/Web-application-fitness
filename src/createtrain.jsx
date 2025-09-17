@@ -1,6 +1,7 @@
 import './index.css';
 import Header from './Header';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function ExerciseCard({ name, description, img, onRemove }) {
@@ -21,7 +22,7 @@ function ExerciseCard({ name, description, img, onRemove }) {
   }
 
   return (
-    <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 items-center shadow-lg border border-blue-500 mb-4">
+    <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 justify-items-center shadow-lg border border-blue-500 mb-4">
       <div className="card-body">
         <h2 className="card-title  text-xl font-semibold">{name}</h2>
         <figure className="mb-4 flex justify-center">
@@ -44,6 +45,7 @@ function ExerciseCard({ name, description, img, onRemove }) {
 }
 
 function CreateTrainGUI() {
+  const navigate = useNavigate();
   const exercise = [
     {
       name: "Benchpress",
@@ -116,7 +118,7 @@ function CreateTrainGUI() {
       <Header />
       <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Create your training</div>
-        <div className="w-full flex flex-col gap-4 items-center pt-2">
+        <div className="w-full flex flex-col gap-4 items-center justify-center pt-2">
           <label className="input">
             <input
               type="input"
@@ -161,7 +163,7 @@ function CreateTrainGUI() {
         </div>
         <div className="flex flex-row items-center gap-4 mt-4">
           <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white">Save</button>
-          <button className="btn bg-pink-500 hover:bg-pink-600 text-white">Cancel</button>
+          <button onClick={() => navigate('/')} className="btn bg-pink-500 hover:bg-pink-600 text-white">Cancel</button>
         </div>
       </div>
     </div>

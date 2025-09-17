@@ -8,6 +8,7 @@ import StartTraining from './training.jsx';
 import Profile from './profile';
 import RegisterPage from './register.jsx';
 import PasswordForget from './passwordforget.jsx';
+import Counter from './counter.jsx'
 
 function Home() {
   return (
@@ -61,7 +62,7 @@ function Home() {
 function App() {
   return (
     <div>
-      <Header />
+      <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<GUI />} />
@@ -71,6 +72,7 @@ function App() {
         <Route path="/edittrain" element={<EditTrain />} />
         <Route path="/training" element={<StartTraining />} />
         <Route path="/passwordforget" element={<PasswordForget />} />
+        <Route path="/counter" element={<Counter />} />
       </Routes>
     </div>
   );

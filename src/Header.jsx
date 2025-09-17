@@ -27,6 +27,7 @@ function Header() {
             <Link to="/edittrain" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Edit training</Link>
             <Link to="/training" className="btn btn-ghost text-white" onClick={() => setMenuOpen(false)}>Start training</Link>
            <Link to="/login" className="btn btn-ghost text-white md:ml-4" onClick={() => setMenuOpen(false)}>Login</Link>
+           <Link to="/counter" className="btn btn-ghost text-white md:ml-4" onClick={() => setMenuOpen(false)}>Counter</Link>
             <button className="btn btn-ghost text-white md:ml-4" onClick={() => setMenuOpen(false)}>Logout</button>
           </div>
         </div>
