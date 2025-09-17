@@ -5,16 +5,23 @@ function CounterForm() {
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
   const [hsec, setHsec] = useState(0);  
+  const [rounds,setRounds] = useState(0)
+  const [countRounds,setCountRounds] = useState(0)  
   const intervalRef = useRef(null);
  
+  useEffect(() => {
+    if (sec === 360) {
+      setCountRounds(prevRounds => prevRounds + 1);
+      setMin(prevMin => prevMin + 1);
+    }
+  }, [sec]);
+
 
  const startCounter = () => {
      intervalRef.current = setInterval(function() {
       setSec((prevSec) => (prevSec + 6) % 360); // bei 360 wieder 0
-      if(sec/6 == 59) {
-        setMin((prevMin) => (prevMin + 1));
-      }
-    }, 1000); // alle 1 ms = 0.001 Sekunde
+      console.log(sec)
+    }, 1000); // alle 1000 ms = 1 Sekunde
 
   }
 
@@ -26,19 +33,21 @@ function CounterForm() {
   }
 
    const totalRotation = -180 + sec; 
-   console.log(sec)
+
+  
+     
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
         <div className="space-y-4 items-center card sm:w-96 md:w-56 bg-gray-800 shadow-sm p-6 rounded-md">
-      <div className="relative w-40 h-40 rounded-full border-4 border-gray-400">
+      <div className="relative w-40 h-40 rounded-full border-4 border-green-400">
        {marks.map((_, index) => {
   const angle = index * 30;
   return (
     <React.Fragment key={index}>
       {/* Markierung */}
       <div
-        className="absolute left-1/2 top-1/2 w-1 bg-gray-400"
+        className="absolute left-1/2 top-1/2 w-1 bg-yellow-400 flex items-center justify-center"
         style={{
           height: `15px`,
           transform: `rotate(${angle}deg) translateY(-76px)`,
@@ -47,20 +56,24 @@ function CounterForm() {
       />
       {/* Zahl */}
       <div
-        className="absolute left-1/2 top-1/2 w-1.5 text-white text-xs"
+        className="absolute left-1/2 top-1/2 w-1 text-blue-400 text-xs flex items-center justify-center"
         style={{
-          transform: `rotate(${angle}deg) translateY(-55px)`,
+          transform: `rotate(${angle}deg) translateY(-58px)`,
           transformOrigin: "top",
+        }}
+      >
+    <div
+        style={{
+          transform: `rotate(${-angle}deg)`,
         }}
       >
         {index === 0 ? 60 : index*5}
       </div>
+      </div>
     </React.Fragment>
   );
 })}
-
-       
-        <div className="absolute left-1/2 top-1/2 w-1 bg-red-500"
+        <div className="absolute left-1/2 top-1/2 w-1 bg-red-500 flex items-center justify-center"
         style={{
           height:`50px`,
           transform: `translateX(50%) rotate(${totalRotation}deg)`,
@@ -69,10 +82,17 @@ function CounterForm() {
         ></div>
     
       </div>
-      <h1>{min} : {sec/6} s : {hsec}</h1>
+      <h1>{min} min : {sec/6} s : {hsec}</h1>
+      {<h1>Rounds completed: {countRounds}</h1>}
+      
+        <div className="flex flex-col items-center space-y-2">
+         <input type="range" defaultValue={0} min="0" max="60" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
+         <h1>Rounds: {rounds}</h1>
+        </div>
+<div className="divider divider-primary text-amber-50 font-bold mb-2"></div>
       <div className = "flex- flex row space-x-2 ">
-      <button className = "btn btn-outline btn-primary mt-4" onClick={() => startCounter()}>Start</button>
-      <button className = "btn btn-outline btn-primary mt-4" onClick={() => stopCounter()}>Reset</button>
+      <button disabled={rounds === 0}  className = "btn btn-outline btn-primary" onClick={() => startCounter()}>Start</button>
+      <button className = "btn btn-outline btn-secondary" onClick={() => stopCounter()}>Reset</button>
     </div>
     </div>
     </div>
