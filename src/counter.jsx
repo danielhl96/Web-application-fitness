@@ -8,7 +8,11 @@ function CounterForm() {
   const [hsec, setHsec] = useState(0);  
   const [rounds,setRounds] = useState(0)
   const [countRounds,setCountRounds] = useState(0)  
+  const  [breaktime,setBreaktime] = useState(0)
+  const [starttime,setStarttime] = useState(0)  
+  const [roundtime,setRoundTime] = useState(0)  
   const intervalRef = useRef(null);
+  const [showModal, setShowModal] = useState(false);
  
   useEffect(() => {
     if (sec === 360) {
@@ -34,6 +38,32 @@ function CounterForm() {
     setHsec(0)  
   }
 
+  const settingsModal = () => {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Settings</h3>
+          <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
+           <input type="range" defaultValue={0} min="0" max="100" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
+           <h1>Rounds: {rounds}</h1>
+         <input type="range" defaultValue={0} min="0" max="60" className="range range-xs" step="1" onChange={() => setStarttime(parseInt(event.target.value))} />
+         <h1> Starttime: {starttime} s </h1>
+         <input type="range" defaultValue={0} min="0" max="180" className="range range-xs" step="1" onChange={() => setBreaktime(parseInt(event.target.value))} />
+       <h1>Breaktime: {breaktime} s </h1>
+       <input type="range" defaultValue={0} min="0" max="180" className="range range-xs" step="1" onChange={() => setRoundTime(parseInt(event.target.value))} />
+         <h1>Roundtime: {roundtime} s</h1>
+         
+         
+         
+       </div>
+          <div className="modal-action">
+            <button className="btn" onClick={() => setShowModal(false)}>Close</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
    const totalRotation = -180 + sec; 
 
   
@@ -41,6 +71,7 @@ function CounterForm() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+  {showModal && settingsModal()}
         <div className="space-y-4 items-center card sm:w-96 md:w-56 bg-gray-800 shadow-sm p-6 rounded-md">
       <div className="relative w-48 h-48 rounded-full border-4 border-green-400">
        {marks.map((_, index) => {
@@ -117,19 +148,14 @@ function CounterForm() {
           transformOrigin:"center"
         }}
         >
-          
         </div>
-
         </div>
-       
-    
       </div>
       <h1>{min} min : {sec/6} s : {hsec}</h1>
-      {<h1>Rounds completed: {countRounds}</h1>}
+      {<h1>Rounds: {countRounds} / {rounds}</h1>}
       
         <div className="flex flex-col items-center space-y-2">
-         <input type="range" defaultValue={0} min="0" max="60" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
-         <h1>Rounds: {rounds}</h1>
+         <button className="btn btn-outline btn-secondary" onClick={() => setShowModal(true)}>Settings</button>
         </div>
 <div className="divider divider-primary text-amber-50 font-bold mb-2"></div>
       <div className = "flex- flex row space-x-2 ">
