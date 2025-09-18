@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect,useRef } from 'react';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
+  const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
   const [hsec, setHsec] = useState(0);  
@@ -11,15 +12,16 @@ function CounterForm() {
  
   useEffect(() => {
     if (sec === 360) {
+     setMin(prevMin => prevMin +1);
       setCountRounds(prevRounds => prevRounds + 1);
-      setMin(prevMin => prevMin + 1);
+      setSec(0)
     }
   }, [sec]);
 
 
  const startCounter = () => {
      intervalRef.current = setInterval(function() {
-      setSec((prevSec) => (prevSec + 6) % 360); // bei 360 wieder 0
+      setSec((prevSec) => (prevSec + 6)); // bei 360 wieder 0
       console.log(sec)
     }, 1000); // alle 1000 ms = 1 Sekunde
 
@@ -40,7 +42,7 @@ function CounterForm() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
         <div className="space-y-4 items-center card sm:w-96 md:w-56 bg-gray-800 shadow-sm p-6 rounded-md">
-      <div className="relative w-40 h-40 rounded-full border-4 border-green-400">
+      <div className="relative w-48 h-48 rounded-full border-4 border-green-400">
        {marks.map((_, index) => {
   const angle = index * 30;
   return (
@@ -50,10 +52,12 @@ function CounterForm() {
         className="absolute left-1/2 top-1/2 w-1 bg-yellow-400 flex items-center justify-center"
         style={{
           height: `15px`,
-          transform: `rotate(${angle}deg) translateY(-76px)`,
+          transform: `rotate(${angle}deg) translateY(-92px)`,
           transformOrigin: "top",
         }}
+        
       />
+      
       {/* Zahl */}
       <div
         className="absolute left-1/2 top-1/2 w-1 text-blue-400 text-xs flex items-center justify-center"
@@ -73,13 +77,51 @@ function CounterForm() {
     </React.Fragment>
   );
 })}
+
+{marks2.map((_, index) => {
+  const angle = index * 8 + 5;
+  return (
+    <React.Fragment key={index}>
+         <div
+        className="absolute left-1/2 top-1/2 w-0.5 bg-white flex items-center justify-center"
+        style={{
+          height: `10px`,
+          transform: `rotate(${angle}deg) translateY(-76px)`,
+          transformOrigin: "top",
+        }}
+      />
+       
+    </React.Fragment>
+  );
+})}
+       {/* Sekundenzeiger */}
         <div className="absolute left-1/2 top-1/2 w-1 bg-red-500 flex items-center justify-center"
         style={{
           height:`50px`,
           transform: `translateX(50%) rotate(${totalRotation}deg)`,
           transformOrigin:"top"
         }}
+        
+        >
+              <div className="absolute left-1/2 top-1/2 w-0 h-0 border-x-9 border-x-transparent border-b-9  border-yellow-500 flex items-center justify-center"
+        style={{
+           transform: `translateX(-50%) translateY(230%)  rotate(${180}deg)`,
+          transformOrigin:"center"
+        }}
         ></div>
+             <div className="absolute left-1/2 top-1/2 w-1 h-1 rounded-full border-4 border-purple-500 flex items-center justify-center"
+        style={{
+          height:`6px`,
+          width:`6px`,
+           transform: `translateX(-50%) translateY(-350%)  rotate(${totalRotation}deg)`,
+          transformOrigin:"center"
+        }}
+        >
+          
+        </div>
+
+        </div>
+       
     
       </div>
       <h1>{min} min : {sec/6} s : {hsec}</h1>
