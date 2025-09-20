@@ -124,7 +124,7 @@ function WorkoutCard({ exercise }) {
     <div>
       <Header />
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
-      {selectedTrainingSite ? <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-sm p-8 rounded-md flex flex-col items-center">
+      {selectedTrainingSite ? <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
         <div className="w-full flex flex-col gap-4 items-center">
           <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Select your workout</div>
           {Object.keys(training1).map((exercise, index) => (
@@ -132,7 +132,7 @@ function WorkoutCard({ exercise }) {
           ))}
         </div>
       </div> :
-        <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
+        <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border border-blue-500">
            <figure className="mb-4">
         <img src={selectedExercise.exercise} name={"Benchpress"} className="rounded-md" width="50" height="50" />
       </figure>

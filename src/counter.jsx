@@ -40,7 +40,13 @@ function CounterForm() {
   }, [sec,roundtime,countRounds,rounds,breaktime,starttime,isbreakmode]);
 
 const handlebreakMode =(e) =>{
+  if(e >0) {
   setIsBreakMode(true)
+  }
+  if(e == 0) {
+    setIsBreakMode(false)
+  }
+  console.log(breaktime)
   setBreaktime (e)
 }
 
@@ -66,22 +72,20 @@ const handlebreakMode =(e) =>{
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box">
-          <div className="divider divider-primary text-amber-50 font-bold mb-2">Settings</div>
-          <div className = "flex flex-col justify-center items-center space-y-3 text-xs">
-           <input type="range" defaultValue={0} min="0" max="100" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
+          <div className="divider divider-primary text-amber-50 font-bold mb-6">Settings</div>
+          <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
+           <input  type="range" defaultValue={rounds} min="0" max="100" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
            <h1>Rounds: {rounds}</h1>
-         <input type="range" defaultValue={0} min="0" max="60" className="range range-xs" step="1" onChange={() => setStarttime(parseInt(event.target.value))} />
+         <input type="range" defaultValue={starttime} min="0" max="60" className="range range-xs" step="1" onChange={() => setStarttime(parseInt(event.target.value))} />
          <h1> Starttime: {starttime} s </h1>
-         <input type="range" defaultValue={0} min="0" max="180" className="range range-xs" step="1" onChange={() => handlebreakMode(parseInt(event.target.value))} />
+         <input type="range" defaultValue={breaktime} min="0" max="180" className="range range-xs" step="1" onChange={() => handlebreakMode(parseInt(event.target.value))} />
        <h1>Breaktime: {breaktime} s </h1>
-       <input type="range" defaultValue={0} min="0" max="180" className="range range-xs" step="1" onChange={() => setRoundTime(parseInt(event.target.value))} />
+       <input type="range" defaultValue={roundtime} min="0" max="180" className="range range-xs" step="1" onChange={() => setRoundTime(parseInt(event.target.value))} />
          <h1>Roundtime: {roundtime} s</h1>
          
-         
-         
        </div>
-          <div className="modal-action">
-            <button className="btn" onClick={() => setShowModal(false)}>Close</button>
+          <div className="modal-action justify-center">
+            <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
           </div>
         </div>
       </div>
@@ -89,15 +93,11 @@ const handlebreakMode =(e) =>{
   }
 
    const totalRotation = -180 + sec; 
-
-  
-     
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 ">
   {showModal && settingsModal()}
-        <div className="space-y-4 items-center card sm:w-96 md:w-56 bg-gray-800 shadow-sm p-6 rounded-md">
-      <div className="relative w-48 h-48 rounded-full border-4 border-green-400">
+        <div className="space-y-4 items-center card sm:w-96 md:w-56 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
+          <div className="relative w-48 h-48 rounded-full border-4 border-green-500">
        {marks.map((_, index) => {
   const angle = index * 30;
   return (
@@ -105,14 +105,14 @@ const handlebreakMode =(e) =>{
       {/* Markierung */}
       <div
         className="absolute left-1/2 top-1/2 w-1 bg-yellow-400 flex items-center justify-center"
-        style={{
+        style={{ 
           height: `15px`,
           transform: `rotate(${angle}deg) translateY(-92px)`,
           transformOrigin: "top",
         }}
         
       />
-      
+       <h1 className={` absolute  ${roundtime-(sec/6) <= 5 && 'text-red-500'} ${isbreakmode && 'text-purple-500'}  text-xs items-center flex justify-center left-1/3  top-1/2 text font-light`}>  {String(min).padStart(2, '0')} : {String(Math.floor(sec / 6)).padStart(2, '0')} : {String(hsec).padStart(2, '0')}</h1>
       {/* Zahl */}
       <div
         className="absolute left-1/2 top-1/2 w-1 text-blue-400 text-xs flex items-center justify-center"
@@ -129,7 +129,9 @@ const handlebreakMode =(e) =>{
         {index === 0 ? 60 : index*5}
       </div>
       </div>
+      
     </React.Fragment>
+    
   );
 })}
 
@@ -175,7 +177,7 @@ const handlebreakMode =(e) =>{
         </div>
         </div>
       </div>
-      <h1 className="text font-light ">{min} min : {sec/6} s : {hsec}</h1>
+      
       {<h1 className="text font-light">Rounds: {countRounds} / {rounds}</h1>}
 
         <div className="flex flex-col items-center space-y-2">

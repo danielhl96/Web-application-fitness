@@ -47,7 +47,7 @@ function LoginForm() {
     }, [email]);
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900 py-16">
-          <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
+          <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
         <div className="flex flex-col gap-4 p-4 w-full sm:w-96 lg:w-96">
         <h1 className="text-3xl font-semibold text-white text-left mb-6">
       Login

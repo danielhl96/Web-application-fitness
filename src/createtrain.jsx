@@ -116,7 +116,7 @@ function CreateTrainGUI() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="space-y-4 card w-full max-w-2xl bg-slate-800 shadow-lg p-8 rounded-md flex flex-col items-center ">
+      <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Create your training</div>
         <div className="w-full flex flex-col gap-4 items-center justify-center pt-2">
           <label className="input">
@@ -128,6 +128,7 @@ function CreateTrainGUI() {
             />
           </label>
           <label className="input">
+            
             <input
               type="search"
               onChange={handleExerciseChange}
@@ -141,6 +142,8 @@ function CreateTrainGUI() {
                 <option key={index} value={item.name} />
               ))}
             </datalist>
+        
+        
           </label>
         </div>
          

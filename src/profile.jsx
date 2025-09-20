@@ -141,11 +141,11 @@ function Profile()  {
        
   <div className='min-h-screen flex justify-center bg-slate-900  py-8 pt-24'>
     <Header />
-            <div className="space-y-4 card sm:w-64 md:w-96  bg-slate-800 shadow-sm p-6 rounded-md">
+            <div className="space-y-4 card sm:w-64 md:w-96  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
                 <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
                 <div className='grid grid-cols-3 gap-2'>
                <div className='flex flex-col space-y-1  h-15'>
-                <h1 style={{textDecoration:"underline"}}>Age</h1>
+                <h1>Age</h1>
               <input
                 type="text"
                 placeholder={"Age: "}
@@ -156,7 +156,7 @@ function Profile()  {
               {failureAge && <h1 style={{color:"red",fontSize:8}}>Please enter a valid age</h1> }
           </div>
           <div className='flex flex-col space-y-1 h-15'>
-                <h1  style={{textDecoration:"underline"}}>Weight</h1>
+                <h1>Weight</h1>
                <input
                   type="text"
                   placeholder={"Weight: (kg) "}
@@ -167,7 +167,7 @@ function Profile()  {
              {failureWeight && <h1 style={{color:"red",fontSize:8}}>Please enter a valid weight</h1> }
               </div>
               <div className='flex flex-col space-y-1  h-15'>
-                <h1  style={{textDecoration:"underline"}}>Height</h1>
+                <h1>Height</h1>
                <input
                   type="text"
                   placeholder={"Height: (cm) "}
@@ -179,7 +179,7 @@ function Profile()  {
 
                 </div>
                <div className='flex flex-col space-y-1  h-15'>
-                <h1  style={{textDecoration:"underline"}}>Waist</h1>
+                <h1>Waist</h1>
                <input
                   type="text"
                   placeholder={"Waist: (cm)"}
@@ -190,7 +190,7 @@ function Profile()  {
               {failureWaist && <h1 style={{color:"red",fontSize:8}}>Please enter a valid waist</h1> }
               </div>
                 <div className='flex flex-col space-y-1  h-15'>
-                <h1  style={{textDecoration:"underline"}}>Hip</h1>
+                <h1>Hip</h1>
                <input
                 type="text"
                 placeholder={"Hip: (cm)"}
@@ -201,7 +201,7 @@ function Profile()  {
               {failureHip && <h1 style={{color:"red",fontSize:8}}>Please enter a valid hip</h1> }
 </div>
 <div className='flex flex-col space-y-1  h-15'>
-                <h1  style={{textDecoration:"underline"}}>BFP</h1>
+                <h1>BFP</h1>
               <input
                 type="text"
                 placeholder={"BFP: (%)"}
