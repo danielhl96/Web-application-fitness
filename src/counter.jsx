@@ -14,6 +14,8 @@ function CounterForm() {
   const intervalRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const[isbreakmode,setIsBreakMode] = useState(false)
+  const[isStartmode,setisStartMode] = useState(false)
+  const[isStopmode,setisStopMode] = useState(false)
 
   useEffect(() => {
 
@@ -25,47 +27,68 @@ function CounterForm() {
     if(sec == roundtime*6 && roundtime*6 !== 0 && !isbreakmode){
       setCountRounds(prevRounds => prevRounds + 1);
       setSec(0)
+      setIsBreakMode(true)
     }
     if(rounds !== 0 && countRounds === rounds && !isbreakmode){
       clearInterval(intervalRef.current);
+      setisStopMode(false)
+      setisStartMode(true)
     } 
 
-    if(sec == breaktime*6 && breaktime*6 !== 0 && isbreakmode){
+    if(sec == starttime*6 && starttime*6 !== 0 && isStartmode){
       setSec(0)
       setMin (0)
       setCountRounds(0)
+      setisStartMode(false)
+      
+    }
+    if(sec == breaktime*6 && breaktime*6 !== 0 && isbreakmode){
+      setSec(0)
+      setMin (0)
       setIsBreakMode(false)
     }
+  }, [sec,roundtime,countRounds,rounds,breaktime,starttime,isbreakmode,isStartmode]);
 
-  }, [sec,roundtime,countRounds,rounds,breaktime,starttime,isbreakmode]);
-
-const handlebreakMode =(e) =>{
+const handleStartMode =(e) =>{
   if(e >0) {
-  setIsBreakMode(true)
+  setisStartMode(true)
   }
   if(e == 0) {
-    setIsBreakMode(false)
+    setisStartMode(false)
   }
   console.log(breaktime)
-  setBreaktime (e)
+  setStarttime (e)
+}
+
+const handleBreakMode =(e) =>{
+  if(e >0) {
+  setIsBreakMode(true)
+  setBreaktime(e)
+  } 
 }
 
  const startCounter = () => {
      intervalRef.current = setInterval(function() {
       setSec((prevSec) => (prevSec + 6));
     }, 1000); // alle 1000 ms = 1 Sekunde
-
+  setisStopMode(true)
   }
 
   const stopCounter = () =>{
     clearInterval(intervalRef.current);
-    setSec(0)
-    setMin(0)
-    setHsec(0)  
-    setCountRounds(0)
-    setBreaktime(0)
-    setIsBreakMode(false) 
-    
+    setisStopMode(false)
+  }
+
+  const resetCounter = () => {
+    clearInterval(intervalRef.current);
+    setSec(0);
+    setMin(0);
+    setHsec(0);
+    setCountRounds(0);
+    setBreaktime(0);
+    setIsBreakMode(false);
+    setisStartMode(false);
+    setisStopMode(false);
   }
 
   const settingsModal = () => {
@@ -76,16 +99,16 @@ const handlebreakMode =(e) =>{
           <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
            <input  type="range" defaultValue={rounds} min="0" max="100" className="range range-xs" step="1" onChange={() => setRounds(parseInt(event.target.value))} />
            <h1>Rounds: {rounds}</h1>
-         <input type="range" defaultValue={starttime} min="0" max="60" className="range range-xs" step="1" onChange={() => setStarttime(parseInt(event.target.value))} />
+         <input type="range" defaultValue={starttime} min="0" max="60" className="range range-xs" step="1" onChange={() => handleStartMode(parseInt(event.target.value))} />
          <h1> Starttime: {starttime} s </h1>
-         <input type="range" defaultValue={breaktime} min="0" max="180" className="range range-xs" step="1" onChange={() => handlebreakMode(parseInt(event.target.value))} />
+         <input type="range" defaultValue={breaktime} min="0" max="180" className="range range-xs" step="1" onChange={() => handleBreakMode(parseInt(event.target.value))} />
        <h1>Breaktime: {breaktime} s </h1>
        <input type="range" defaultValue={roundtime} min="0" max="180" className="range range-xs" step="1" onChange={() => setRoundTime(parseInt(event.target.value))} />
          <h1>Roundtime: {roundtime} s</h1>
          
        </div>
           <div className="modal-action justify-center">
-            <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+            <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>Close</button>
           </div>
         </div>
       </div>
@@ -112,7 +135,7 @@ const handlebreakMode =(e) =>{
         }}
         
       />
-       <h1 className={` absolute  ${roundtime-(sec/6) <= 5 && 'text-red-500'} ${isbreakmode && 'text-purple-500'}  text-xs items-center flex justify-center left-1/3  top-1/2 text font-light`}>  {String(min).padStart(2, '0')} : {String(Math.floor(sec / 6)).padStart(2, '0')} : {String(hsec).padStart(2, '0')}</h1>
+       <h1 className={` absolute  ${roundtime-(sec/6) <= 5 && 'text-red-500'} ${isbreakmode && 'text-purple-500'}  ${isStartmode && 'text-yellow-500'}  text-xs items-center flex justify-center left-1/3  top-1/2 text font-light`}>  {String(min).padStart(2, '0')} : {String(Math.floor(sec / 6)).padStart(2, '0')} : {String(hsec).padStart(2, '0')}</h1>
       {/* Zahl */}
       <div
         className="absolute left-1/2 top-1/2 w-1 text-blue-400 text-xs flex items-center justify-center"
@@ -181,12 +204,12 @@ const handlebreakMode =(e) =>{
       {<h1 className="text font-light">Rounds: {countRounds} / {rounds}</h1>}
 
         <div className="flex flex-col items-center space-y-2">
-         <button className="btn btn-outline btn-warning" onClick={() => setShowModal(true)}>Settings</button>
+         <button className="btn btn-outline btn-warning rounded-full" onClick={() => setShowModal(true)}>Settings</button>
         </div>
 <div className="divider divider-primary text font-lightfont-bold mb-2"></div>
       <div className = "flex- flex row space-x-2 ">
-      <button disabled={rounds === 0}  className = "btn btn-outline btn-primary" onClick={() => startCounter()}>Start</button>
-      <button className = "btn btn-outline btn-secondary" onClick={() => stopCounter()}>Reset</button>
+      <button disabled={rounds === 0}  className = "btn btn-outline btn-primary rounded-full" onClick={() => isStopmode ? stopCounter() : startCounter()}>{isStopmode ? 'Stop' : 'Start'}</button>
+      <button className = "btn btn-outline btn-secondary rounded-full" onClick={() => resetCounter()}>Reset</button>
     </div>
     </div>
     </div>
