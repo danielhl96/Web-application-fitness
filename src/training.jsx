@@ -9,7 +9,9 @@ function StartTraining() {
   const [inputValue, setInputValue] = useState([]);
   const [training1,setTraining] = useState(training)
   const[selectedTrainingSite,setSelectedTrainingSite] = useState(true)
-
+  const [showModal, setShowModal] = useState(false);
+   const [selectedWeight1, setSelectedWeight1] = useState(null);
+ const [selectedWeight2, setSelectedWeight2] = useState(null);
   const handleExercise = () => {
     if(idxExercise <  Object.keys(training).length-1){
       const newIdx = idxExercise +1
@@ -106,6 +108,60 @@ function StartTraining() {
   setExercise(updatedExercise);
 };
 
+  const settingsModal = () => {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div className="modal-box">
+          <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
+            <div className ="h-32 overflow-y-scroll border border-gray-800">
+              <div className='flex flex-row justify-center items-center'>
+            <table className='min-w-2 border-collapse'>
+              <thead className='sticky top-0 bg-gray-800 '>
+                <tr>
+                  <th className='p-2'>kg</th>
+                </tr>
+              </thead>
+<tbody>
+{Array.from({ length: 1000 }, (_, i) => i).map((weight, index) => (
+  <tr key={index} 
+  onClick={() => {setSelectedWeight1(weight)}}
+  className={'bg-gray-700'}>
+    <td className={`border border-blue-500 p-2 text-center ${selectedWeight1 === weight ? 'bg-blue-600' : ''}`}>{weight}</td>
+  </tr>
+))}
+</tbody>
+            </table>
+            <div className='divider divider-horizontal'></div>
+            <table className='min-w-2 border-collapse'>
+              <thead className='sticky top-0 bg-gray-800 '>
+                <tr>
+                  <th className='p-2'>kg</th>
+                </tr>
+              </thead>
+<tbody>
+{Array.from({ length: 1000 }, (_, i) => i*0.25).map((weight, index) => (
+  <tr key={index} 
+  onClick={() => {setSelectedWeight2(weight)}}
+  className={'bg-gray-700'}>
+    <td className={`border border-blue-500 p-2 text-center ${selectedWeight2 === weight ? 'bg-blue-600' : ''}`}>{weight}</td>
+  </tr>
+))}
+</tbody>
+            </table>
+</div>
+          </div>
+          </div>
+          <div className="modal-action justify-center">
+      <button className="btn btn-primary rounded-full" onClick={() => setShowModal(false)}>Save</button>
+            <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>Close</button>
+          </div>
+        <h1>Selected weight:{selectedWeight1+selectedWeight2} kg</h1>
+      </div>
+       
+       </div>
+    );
+  }
+
 function WorkoutCard({ exercise }) {
     return (
       <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
@@ -123,6 +179,7 @@ function WorkoutCard({ exercise }) {
   return (
     <div>
       <Header />
+      {showModal && settingsModal()}
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
       {selectedTrainingSite ? <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
         <div className="w-full flex flex-col gap-4 items-center">
@@ -164,7 +221,7 @@ function WorkoutCard({ exercise }) {
           <div className="flex space-x-2 items-center justify-center">
             <button disabled = {idxExercise == 0} onClick={() => handleExerciseBack()} className="btn btn-outline btn-primary">Back</button>
             <button  onClick={() =>handleExercise()} className="btn btn-outline btn-success"> {idxExercise == Object.keys(training).length-1 ? "Save" : "Next"}</button>
-         
+          <button onClick={() => setShowModal(true)} className="btn btn-outline btn-warning">History</button>
           </div>
         </div>
 }
