@@ -10,8 +10,9 @@ function StartTraining() {
   const [training1,setTraining] = useState(training)
   const[selectedTrainingSite,setSelectedTrainingSite] = useState(true)
   const [showModal, setShowModal] = useState(false);
-   const [selectedWeight1, setSelectedWeight1] = useState(null);
- const [selectedWeight2, setSelectedWeight2] = useState(null);
+  const [selectedWeight1, setSelectedWeight1] = useState(null);
+  const [selectedWeight2, setSelectedWeight2] = useState(null);
+  const [idx, setWeightidx] = useState(0);
   const handleExercise = () => {
     if(idxExercise <  Object.keys(training).length-1){
       const newIdx = idxExercise +1
@@ -49,9 +50,11 @@ function StartTraining() {
      setInputValue(newinputs); 
   };
 
-  const increaseWeight = (index) =>{
+  const changeWeight = (weight,index,flag) =>{
    const updatedSetw = [...selectedExercise.setw];
-  updatedSetw[index] = updatedSetw[index] + 1; // Reduziere den Wert an der angegebenen Stelle
+   setSelectedWeight1(weight);
+  updatedSetw[index] = weight // Reduziere den Wert an der angegebenen Stelle
+  console.log(weight)
   console.log(index)
   // Erstelle eine Kopie von selectedExercise und ersetze das "setw"-Array
   const updatedExercise = {
@@ -61,6 +64,7 @@ function StartTraining() {
 
   // Setze den neuen State
   setExercise(updatedExercise);
+  setShowModal(flag)
   }
 
   const handleAddSets = () => {
@@ -93,25 +97,18 @@ function StartTraining() {
     setExercise(updatedExercise);
 
   }
-  const reduceWeight = (index) => {
-  // Kopiere das "setw"-Array
-  const updatedSetw = [...selectedExercise.setw];
-  updatedSetw[index] = updatedSetw[index] - 1; // Reduziere den Wert an der angegebenen Stelle
-  console.log(index)
-  // Erstelle eine Kopie von selectedExercise und ersetze das "setw"-Array
-  const updatedExercise = {
-    ...selectedExercise,
-    setw: updatedSetw
-  };
-
-  // Setze den neuen State
-  setExercise(updatedExercise);
-};
+  
+  const handleModal =(index,flag) =>{
+    console.log(index)
+    setShowModal(flag)
+    setWeightidx(index)
+    settingsModal()
+  } 
 
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box">
+        <div className="modal-box bordeer border-blue-500 bg-slate-800">
           <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
             <div className ="h-32 overflow-y-scroll border border-gray-800">
               <div className='flex flex-row justify-center items-center'>
@@ -141,9 +138,18 @@ function StartTraining() {
 <tbody>
 {Array.from({ length: 1000 }, (_, i) => i*0.25).map((weight, index) => (
   <tr key={index} 
-  onClick={() => {setSelectedWeight2(weight)}}
+ onClick={() => {
+    if (selectedWeight1 !== null) setSelectedWeight2(weight);
+  }}
   className={'bg-gray-700'}>
-    <td className={`border border-blue-500 p-2 text-center ${selectedWeight2 === weight ? 'bg-blue-600' : ''}`}>{weight}</td>
+    <td
+  
+  className={`border border-blue-500 p-2 text-center 
+    ${selectedWeight2 === weight ? 'bg-blue-600' : ''} 
+    ${selectedWeight1 === null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+>
+  {weight}
+</td>
   </tr>
 ))}
 </tbody>
@@ -151,11 +157,12 @@ function StartTraining() {
 </div>
           </div>
           </div>
+           <div className = "divider divider-primary">{selectedWeight1+selectedWeight2} kg</div>
           <div className="modal-action justify-center">
-      <button className="btn btn-primary rounded-full" onClick={() => setShowModal(false)}>Save</button>
+      <button className="btn btn-primary rounded-full" onClick={() => changeWeight(selectedWeight1+selectedWeight2,idx,false)}>Save</button>
             <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>Close</button>
           </div>
-        <h1>Selected weight:{selectedWeight1+selectedWeight2} kg</h1>
+         
       </div>
        
        </div>
@@ -207,9 +214,7 @@ function WorkoutCard({ exercise }) {
               </div>
               
           <div className='flex space-x-2 items-center justify-center'>
-          <button onClick={()=>reduceWeight(index)}  className='btn btn-outline btn-primary'>-</button>
-          <div>{selectedExercise.setw[index]} kg</div>
-          <button onClick={()=>increaseWeight(index)} className='btn btn-outline btn-primary'>+</button>
+            <button onClick={() => handleModal(index,true)} className="btn btn-outline btn-warning">Weight: {selectedExercise.setw[index]} kg</button>
           </div>
             </div>
           ))}
@@ -221,7 +226,6 @@ function WorkoutCard({ exercise }) {
           <div className="flex space-x-2 items-center justify-center">
             <button disabled = {idxExercise == 0} onClick={() => handleExerciseBack()} className="btn btn-outline btn-primary">Back</button>
             <button  onClick={() =>handleExercise()} className="btn btn-outline btn-success"> {idxExercise == Object.keys(training).length-1 ? "Save" : "Next"}</button>
-          <button onClick={() => setShowModal(true)} className="btn btn-outline btn-warning">History</button>
           </div>
         </div>
 }
