@@ -13,6 +13,7 @@ function StartTraining() {
   const [selectedWeight1, setSelectedWeight1] = useState(null);
   const [selectedWeight2, setSelectedWeight2] = useState(null);
   const [idx, setWeightidx] = useState(0);
+  
   const handleExercise = () => {
     if(idxExercise <  Object.keys(training).length-1){
       const newIdx = idxExercise +1
@@ -109,51 +110,43 @@ function StartTraining() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box bordeer border-blue-500 bg-slate-800">
-          <div className = "flex flex-col justify-center items-center space-y-4 text-xs">
-            <div className ="h-32 overflow-y-scroll border border-gray-800">
+          <div className = "flex flex-row justify-center items-center  text-xs">
+            <div className ="h-24 overflow-y-scroll border border-gray-800">
               <div className='flex flex-row justify-center items-center'>
             <table className='min-w-2 border-collapse'>
-              <thead className='sticky top-0 bg-gray-800 '>
-                <tr>
-                  <th className='p-2'>kg</th>
-                </tr>
-              </thead>
 <tbody>
 {Array.from({ length: 1000 }, (_, i) => i).map((weight, index) => (
   <tr key={index} 
   onClick={() => {setSelectedWeight1(weight)}}
   className={'bg-gray-700'}>
-    <td className={`border border-blue-500 p-2 text-center ${selectedWeight1 === weight ? 'bg-blue-600' : ''}`}>{weight}</td>
+    <td className={`border border-gray-800 p-2 text-center ${selectedWeight1 === weight ? 'bg-blue-600' : ''}`}>{weight + ' kg'}</td>
   </tr>
 ))}
 </tbody>
             </table>
-            <div className='divider divider-horizontal'></div>
+            </div>
+            </div>
+            <div className ="h-24 overflow-y-scroll border border-gray-800">
+              <div className='flex flex-row justify-center items-center'>
             <table className='min-w-2 border-collapse'>
-              <thead className='sticky top-0 bg-gray-800 '>
-                <tr>
-                  <th className='p-2'>kg</th>
-                </tr>
-              </thead>
 <tbody>
-{Array.from({ length: 1000 }, (_, i) => i*0.25).map((weight, index) => (
+{Array.from({ length: 4 }, (_, i) => i*0.25).map((weight, index) => (
   <tr key={index} 
  onClick={() => {
     if (selectedWeight1 !== null) setSelectedWeight2(weight);
   }}
   className={'bg-gray-700'}>
     <td
-  
-  className={`border border-blue-500 p-2 text-center 
+  className={`border border-gray-800 p-2 text-center 
     ${selectedWeight2 === weight ? 'bg-blue-600' : ''} 
     ${selectedWeight1 === null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
 >
-  {weight}
+  {weight + ' kg'}
 </td>
   </tr>
 ))}
 </tbody>
-            </table>
+</table>
 </div>
           </div>
           </div>
