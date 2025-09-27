@@ -1,8 +1,7 @@
-import './index.css';
-import Header from './Header';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import "./index.css";
+import Header from "./Header";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ExerciseCard({ name, description, img, onRemove }) {
   const [sets, setSets] = useState(0);
@@ -26,19 +25,50 @@ function ExerciseCard({ name, description, img, onRemove }) {
       <div className="card-body">
         <h2 className="card-title  text-xl font-semibold">{name}</h2>
         <figure className="mb-4 flex justify-center">
-          <img src={img} alt={name} className="rounded-md" width="60" height="60" />
+          <img
+            src={img}
+            alt={name}
+            className="rounded-md"
+            width="60"
+            height="60"
+          />
         </figure>
         <p className="text-sm text-slate-200 mb-2">{description}</p>
         <div className="card-actions flex flex-wrap gap-2 justify-start mt-2">
-          <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white" onClick={addSet}>Add set</button>
-          <button className="btn bg-emerald-700 hover:bg-emerald-800 text-white" onClick={reduceSet}>Reduce set</button>
-          <button className="btn bg-blue-500 hover:bg-blue-600 text-white" onClick={addReps}>Add reps</button>
-          <button className="btn bg-blue-700 hover:bg-blue-800 text-white" onClick={reduceReps}>Reduce reps</button>
+          <button
+            className="btn bg-emerald-500 hover:bg-emerald-600 text-white"
+            onClick={addSet}
+          >
+            Add set
+          </button>
+          <button
+            className="btn bg-emerald-700 hover:bg-emerald-800 text-white"
+            onClick={reduceSet}
+          >
+            Reduce set
+          </button>
+          <button
+            className="btn bg-blue-500 hover:bg-blue-600 text-white"
+            onClick={addReps}
+          >
+            Add reps
+          </button>
+          <button
+            className="btn bg-blue-700 hover:bg-blue-800 text-white"
+            onClick={reduceReps}
+          >
+            Reduce reps
+          </button>
         </div>
         <div className="divider divider-primary my-2">Settings</div>
         <p className="mt-0 text-xs text-slate-300">Sets: {sets}</p>
         <p className="mt-0 text-xs text-slate-300">Repetitions: {reps}</p>
-        <button className="btn bg-pink-500 hover:bg-pink-600 text-white mt-2" onClick={onRemove}>Remove</button>
+        <button
+          className="btn bg-pink-500 hover:bg-pink-600 text-white mt-2"
+          onClick={onRemove}
+        >
+          Remove
+        </button>
       </div>
     </div>
   );
@@ -64,18 +94,18 @@ function CreateTrainGUI() {
       img: "./sideraises.png",
     },
 
-     {
+    {
       name: "Butterfly-Maschine",
       description: "An exercise to train the chest and the shoulder",
       img: "./butterflymaschine.png",
     },
 
-      {
+    {
       name: "Triceps-Maschine",
       description: "An exercise to train triceps",
       img: "./tricepsmaschine.png",
     },
-      {
+    {
       name: "Dips",
       description: "An exercise to train triceps, chest and shoulder",
       img: "./dips.png",
@@ -85,28 +115,25 @@ function CreateTrainGUI() {
       description: "An exercise to train the triceps",
       img: "./frenchpress.png",
     },
-
-
   ];
 
   const [selectedExercise, setSelectedExercise] = useState([]);
 
   function handleExerciseChange(e) {
     const selectedName = e.target.value;
-   
 
     const found = exercise.find((item) => item.name === selectedName);
     if (found) {
       // Add the found exercise to the selectedExercise state
       setSelectedExercise((prev) => {
         // Check if the exercise is already in the list before adding
-        if (!prev.some(item => item.name === found.name)) {
+        if (!prev.some((item) => item.name === found.name)) {
           return [...prev, found];
         }
         return prev; // Don't add if already in the list
       });
     }
-     document.getElementById('input_search').value = '';
+    document.getElementById("input_search").value = "";
   }
 
   const handleRemoveExercise = (name) => {
@@ -117,7 +144,9 @@ function CreateTrainGUI() {
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
       <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center ">
-        <div className="divider divider-primary text-amber-50 font-bold mb-2 ">Create your training</div>
+        <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
+          Create your training
+        </div>
         <div className="w-full flex flex-col gap-4 items-center justify-center pt-2">
           <label className="input">
             <input
@@ -128,7 +157,6 @@ function CreateTrainGUI() {
             />
           </label>
           <label className="input">
-            
             <input
               type="search"
               onChange={handleExerciseChange}
@@ -142,11 +170,9 @@ function CreateTrainGUI() {
                 <option key={index} value={item.name} />
               ))}
             </datalist>
-        
-        
           </label>
         </div>
-         
+
         {/* Render selected exercises */}
         <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full justify-center items-center">
           {selectedExercise.length > 0 ? (
@@ -160,13 +186,21 @@ function CreateTrainGUI() {
               />
             ))
           ) : (
-            <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
+            <p className="text-slate-400 flex justify-center">
+              No exercises selected yet.
+            </p>
           )}
-        
         </div>
         <div className="flex flex-row items-center gap-4 mt-4">
-          <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white">Save</button>
-          <button onClick={() => navigate('/')} className="btn bg-pink-500 hover:bg-pink-600 text-white">Cancel</button>
+          <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+            Save
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="btn bg-pink-500 hover:bg-pink-600 text-white"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
