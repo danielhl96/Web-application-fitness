@@ -111,6 +111,7 @@ function StartTraining() {
       ...selectedExercise.setw,
       selectedExercise.setw[selectedExercise.setw.length - 1],
     ]; // Füge einen neuen Eintrag für das neue Set hinzu
+    console.log(updatedSetw);
     const updatedSet = [...selectedExercise.set, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
 
     const updatedExercise = {
@@ -119,7 +120,7 @@ function StartTraining() {
       setw: updatedSetw,
       set: updatedSet,
     };
-
+    console.log(updatedExercise);
     setExercise(updatedExercise);
   };
 
@@ -190,8 +191,22 @@ function StartTraining() {
   };
 
   useEffect(() => {
-    setSelectedWeight1(Array(selectedExercise.sets).fill(null));
-    setSelectedWeight2(Array(selectedExercise.sets).fill(null));
+    setSelectedWeight1((prev) => {
+      const arr = [...prev];
+      // Falls Sätze hinzugefügt wurden, fülle mit null auf
+      while (arr.length < selectedExercise.sets) arr.push(null);
+      // Falls Sätze entfernt wurden, kürze das Array
+      if (arr.length > selectedExercise.sets)
+        arr.length = selectedExercise.sets;
+      return arr;
+    });
+    setSelectedWeight2((prev) => {
+      const arr = [...prev];
+      while (arr.length < selectedExercise.sets) arr.push(null);
+      if (arr.length > selectedExercise.sets)
+        arr.length = selectedExercise.sets;
+      return arr;
+    });
   }, [selectedExercise.sets]);
 
   useEffect(() => {
