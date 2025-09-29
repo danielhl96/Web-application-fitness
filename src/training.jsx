@@ -1,6 +1,6 @@
 import "./index.css";
 import Header from "./Header";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function StartTraining() {
   const training = {
@@ -33,9 +33,17 @@ function StartTraining() {
   const [training1, setTraining] = useState(training);
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [selectedWeight1, setSelectedWeight1] = useState(null);
-  const [selectedWeight2, setSelectedWeight2] = useState(null);
+  const [selectedWeight1, setSelectedWeight1] = useState(
+    Array(selectedExercise.sets).fill(null)
+  );
+  const [selectedWeight2, setSelectedWeight2] = useState(
+    Array(selectedExercise.sets).fill(null)
+  );
   const [idx, setWeightidx] = useState(0);
+  const [saveY, setSaveY] = useState([]);
+  const [saveY2, setSaveY2] = useState([]);
+  const scrollRef = useRef(null);
+  const scrollRef2 = useRef(null);
 
   const handleExercise = () => {
     if (idxExercise < Object.keys(training).length - 1) {
@@ -73,19 +81,26 @@ function StartTraining() {
     setInputValue(newinputs);
   };
 
-  const changeWeight = (weight, index, flag) => {
+  const changeWeight = (index, flag) => {
+    const totalWeight =
+      (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
+    setSelectedWeight1((prev) => {
+      const updated = [...prev];
+      updated[index] = selectedWeight1[index];
+      return updated;
+    });
+
+    setSelectedWeight2((prev) => {
+      const updated = [...prev];
+      updated[index] = selectedWeight2[index];
+      return updated;
+    });
     const updatedSetw = [...selectedExercise.setw];
-    setSelectedWeight1(weight);
-    updatedSetw[index] = weight; // Reduziere den Wert an der angegebenen Stelle
-    console.log(weight);
-    console.log(index);
-    // Erstelle eine Kopie von selectedExercise und ersetze das "setw"-Array
+    updatedSetw[index] = totalWeight;
     const updatedExercise = {
       ...selectedExercise,
       setw: updatedSetw,
     };
-
-    // Setze den neuen State
     setExercise(updatedExercise);
     setShowModal(flag);
   };
@@ -130,12 +145,77 @@ function StartTraining() {
     settingsModal();
   };
 
+  // Gewicht für das aktuelle Set wählen
+  const handleWeightSelect = (weight) => {
+    setSelectedWeight1((prev) => {
+      const updated = [...prev];
+      updated[idx] = weight;
+      return updated;
+    });
+    // Scroll-Position speichern wie gehabt
+    if (scrollRef.current) {
+      const selectedRow = scrollRef.current.querySelector(
+        `tr[data-weight="${weight}"]`
+      );
+      if (selectedRow) {
+        setSaveY((prev) => {
+          const updated = [...prev];
+          updated[idx] = selectedRow.offsetTop;
+          return updated;
+        });
+      }
+    }
+  };
+
+  const handleWeightSelect2 = (weight) => {
+    if (selectedWeight1[idx] !== null) {
+      setSelectedWeight2((prev) => {
+        const updated = [...prev];
+        updated[idx] = weight;
+        return updated;
+      });
+    }
+    if (scrollRef2.current) {
+      const selectedRow = scrollRef2.current.querySelector(
+        `tr[data-weight2="${weight}"]`
+      );
+      if (selectedRow) {
+        setSaveY2((prev) => {
+          const updated = [...prev];
+          updated[idx] = selectedRow.offsetTop;
+          return updated;
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    setSelectedWeight1(Array(selectedExercise.sets).fill(null));
+    setSelectedWeight2(Array(selectedExercise.sets).fill(null));
+  }, [selectedExercise.sets]);
+
+  useEffect(() => {
+    if (showModal && scrollRef.current) {
+      if (saveY[idx] !== undefined) {
+        scrollRef.current.scrollTop = saveY[idx];
+      }
+    }
+    if (showModal && scrollRef2.current) {
+      if (saveY2[idx] !== undefined) {
+        scrollRef2.current.scrollTop = saveY2[idx];
+      }
+    }
+  }, [showModal]);
+
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box border border-blue-500 bg-slate-800">
           <div className="flex flex-row justify-center items-center  text-xs">
-            <div className="h-24 overflow-y-scroll border border-gray-800">
+            <div
+              ref={scrollRef}
+              className="h-24 overflow-y-scroll border border-gray-800"
+            >
               <div className="flex flex-row justify-center items-center">
                 <table className="min-w-2 border-collapse">
                   <tbody>
@@ -143,14 +223,15 @@ function StartTraining() {
                       (weight, index) => (
                         <tr
                           key={index}
-                          onClick={() => {
-                            setSelectedWeight1(weight);
-                          }}
+                          data-weight={weight}
+                          onClick={() => handleWeightSelect(weight)}
                           className={"bg-gray-700"}
                         >
                           <td
                             className={`border border-gray-800 p-2 text-center ${
-                              selectedWeight1 === weight ? "bg-blue-600" : ""
+                              selectedWeight1[idx] === weight
+                                ? "bg-blue-600"
+                                : ""
                             }`}
                           >
                             {weight + " kg"}
@@ -162,7 +243,10 @@ function StartTraining() {
                 </table>
               </div>
             </div>
-            <div className="h-24 overflow-y-scroll border border-gray-800">
+            <div
+              ref={scrollRef2}
+              className="h-24 overflow-y-scroll border border-gray-800"
+            >
               <div className="flex flex-row justify-center items-center">
                 <table className="min-w-2 border-collapse">
                   <tbody>
@@ -170,20 +254,18 @@ function StartTraining() {
                       (weight, index) => (
                         <tr
                           key={index}
-                          onClick={() => {
-                            if (selectedWeight1 !== null)
-                              setSelectedWeight2(weight);
-                          }}
+                          data-weight2={weight}
+                          onClick={() => handleWeightSelect2(weight)}
                           className={"bg-gray-700"}
                         >
                           <td
                             className={`border border-gray-800 p-2 text-center 
-    ${selectedWeight2 === weight ? "bg-blue-600" : ""} 
-    ${
-      selectedWeight1 === null
-        ? "opacity-50 cursor-not-allowed"
-        : "cursor-pointer"
-    }`}
+      ${selectedWeight2[idx] === weight ? "bg-blue-600" : ""} 
+      ${
+        selectedWeight1[idx] === null
+          ? "opacity-50 cursor-not-allowed"
+          : "cursor-pointer"
+      }`}
                           >
                             {weight + " kg"}
                           </td>
@@ -196,14 +278,12 @@ function StartTraining() {
             </div>
           </div>
           <div className="divider divider-primary">
-            {selectedWeight1 + selectedWeight2} kg
+            {selectedWeight1[idx] + selectedWeight2[idx]} kg
           </div>
           <div className="modal-action justify-center">
             <button
               className="btn btn-primary rounded-full"
-              onClick={() =>
-                changeWeight(selectedWeight1 + selectedWeight2, idx, false)
-              }
+              onClick={() => changeWeight(idx, false)}
             >
               Save
             </button>
