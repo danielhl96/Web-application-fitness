@@ -4,21 +4,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ExerciseCard({ name, description, img, onRemove }) {
-  const [sets, setSets] = useState(0);
-  const [reps, setReps] = useState(0);
+  const [selectedSets, setSelectedSets] = useState(null);
+  const [selectedReps, setSelectedReps] = useState(null);
 
-  function addSet() {
-    setSets(sets + 1);
-  }
-  function reduceSet() {
-    if (sets > 0) setSets(sets - 1);
-  }
-  function addReps() {
-    setReps(reps + 1);
-  }
-  function reduceReps() {
-    if (reps > 0) setReps(reps - 1);
-  }
+  const handleSets = (e) => {
+    console.log(e);
+    setSelectedSets(e);
+  };
+  const handleReps = (e) => {
+    console.log(e);
+    setSelectedReps(e);
+  };
 
   return (
     <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 justify-items-center shadow-lg border border-blue-500 mb-4">
@@ -34,39 +30,52 @@ function ExerciseCard({ name, description, img, onRemove }) {
           />
         </figure>
         <p className="text-sm text-slate-200 mb-2">{description}</p>
-        <div className="card-actions flex flex-wrap gap-2 justify-start mt-2">
-          <button
-            className="btn bg-emerald-500 hover:bg-emerald-600 text-white"
-            onClick={addSet}
-          >
-            Add set
-          </button>
-          <button
-            className="btn bg-emerald-700 hover:bg-emerald-800 text-white"
-            onClick={reduceSet}
-          >
-            Reduce set
-          </button>
-          <button
-            className="btn bg-blue-500 hover:bg-blue-600 text-white"
-            onClick={addReps}
-          >
-            Add reps
-          </button>
-          <button
-            className="btn bg-blue-700 hover:bg-blue-800 text-white"
-            onClick={reduceReps}
-          >
-            Reduce reps
-          </button>
+        <div className="card-actions flex flex-wrap gap-2 justify-center mt-2">
+          <div className="flex flex-row justify-center items-center">
+            <div className="h-20 overflow-y-scroll border border-gray-800">
+              <table className="min-w-2 border-collapse">
+                <tbody>
+                  {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                    (set, index) => (
+                      <tr key={index} data-set={set} className={"bg-gray-700"}>
+                        <td
+                          onClick={() => handleSets(set)}
+                          className={`border border-gray-800 p-2 text-center cursor-pointer ${
+                            selectedSets === set ? "bg-blue-600" : ""
+                          }`}
+                        >
+                          {"Set: " + set}
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="h-20 overflow-y-scroll border border-gray-800">
+              <table className="min-w-2 border-collapse">
+                <tbody>
+                  {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                    (reps, index) => (
+                      <tr key={index} data-set={reps} className={"bg-gray-700"}>
+                        <td
+                          onClick={() => handleReps(reps)}
+                          className={`border border-gray-800 p-2 text-center cursor-pointer ${
+                            selectedReps === reps ? "bg-blue-600" : ""
+                          }`}
+                        >
+                          {"Reps: " + reps}
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div className="divider divider-primary my-2">Settings</div>
-        <p className="mt-0 text-xs text-slate-300">Sets: {sets}</p>
-        <p className="mt-0 text-xs text-slate-300">Repetitions: {reps}</p>
-        <button
-          className="btn bg-pink-500 hover:bg-pink-600 text-white mt-2"
-          onClick={onRemove}
-        >
+        <button className="btn btn-outline btn-warning" onClick={onRemove}>
           Remove
         </button>
       </div>
@@ -192,12 +201,10 @@ function CreateTrainGUI() {
           )}
         </div>
         <div className="flex flex-row items-center gap-4 mt-4">
-          <button className="btn bg-emerald-500 hover:bg-emerald-600 text-white">
-            Save
-          </button>
+          <button className="btn btn-outline btn-primary">Save</button>
           <button
             onClick={() => navigate("/")}
-            className="btn bg-pink-500 hover:bg-pink-600 text-white"
+            className="btn btn-outline btn-error"
           >
             Cancel
           </button>

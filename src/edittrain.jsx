@@ -70,13 +70,13 @@ const EditTrain = () => {
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => handleShowModal(exercise)}
-              className="btn bg-blue-500 hover:bg-blue-600 text-white"
+              className="btn btn-outline btn-primary"
             >
               Edit
             </button>
             <button
               onClick={() => handeRemoveWorkout(exercise)}
-              className="btn bg-pink-500 hover:bg-pink-600 text-white"
+              className="btn btn-outline btn-error"
             >
               Remove
             </button>
@@ -246,7 +246,7 @@ const EditTrain = () => {
             />
             <button
               onClick={handleAddExercise}
-              className="btn bg-emerald-500 hover:bg-emerald-600 text-white w-20"
+              className="btn btn-outline btn-primary"
             >
               Add
             </button>
@@ -263,30 +263,6 @@ const EditTrain = () => {
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
                 <button
-                  onClick={() => handleAddSets(exercise)}
-                  className="btn bg-emerald-500 hover:bg-emerald-600 text-white font-light w-27"
-                >
-                  Add sets
-                </button>
-                <button
-                  onClick={() => handleReduceSets(exercise)}
-                  className="btn bg-emerald-700 hover:bg-emerald-800 text-white font-light w-27"
-                >
-                  Reduce sets
-                </button>
-                <button
-                  onClick={() => handleAddReps(exercise)}
-                  className="btn bg-blue-500 hover:bg-blue-600 text-white font-light w-27"
-                >
-                  Add reps
-                </button>
-                <button
-                  onClick={() => handleReduceReps(exercise)}
-                  className="btn bg-blue-700 hover:bg-blue-800 text-white font-light w-27"
-                >
-                  Reduce reps
-                </button>
-                <button
                   onClick={() => handleRemoveExercise(exercise)}
                   className="btn bg-pink-500 hover:bg-pink-600 text-white w-30"
                 >
@@ -302,13 +278,13 @@ const EditTrain = () => {
           <div className="modal-action flex flex-row gap-2 justify-end">
             <button
               onClick={handleShowModal}
-              className="btn bg-blue-500 hover:bg-blue-600 text-white"
+              className="btn btn-outline btn-primary"
             >
               Save
             </button>
             <button
               onClick={handleShowModal}
-              className="btn bg-pink-500 hover:bg-pink-600 text-white"
+              className="btn btn-outline btn-error"
             >
               Cancel
             </button>

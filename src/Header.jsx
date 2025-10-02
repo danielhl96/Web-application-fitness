@@ -78,7 +78,7 @@ function Header() {
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => setMenuOpen(false)}
             >
-              Counter
+              Timer
             </Link>
             <button
               className="btn btn-ghost text-white md:ml-4"
