@@ -233,13 +233,13 @@ const EditTrain = () => {
   function EditWorkoutModal() {
     return (
       <div className="modal modal-open">
-        <div className="modal-box bg-slate-800 border border-blue-500">
+        <div className="modal-box bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-3">
           <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
           <div className="flex items-center space-x-2 mb-4">
             <input
               type="search"
               placeholder="Enter exercise name"
-              className="w-full px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-64 px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               list="exercise-options"
               id="input-e"
               onChange={handleAddExercise2}
@@ -257,22 +257,96 @@ const EditTrain = () => {
             ))}
           </datalist>
           {selectedExercise[savekey].map((exercise, index) => (
-            <div key={index} className="mb-6 border-b border-slate-700 pb-4">
+            <div
+              key={index}
+              className="card w-64  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+            >
               <h2 className="text-amber-50 font-bold mb-2 ">
                 {exercise.exercise}
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 p-4">
-                <button
-                  onClick={() => handleRemoveExercise(exercise)}
-                  className="btn bg-pink-500 hover:bg-pink-600 text-white w-30"
-                >
-                  Remove
-                </button>
+              <div className="flex flex-row justify-start text-xs space-y-2">
+                <div className="h-24 overflow-y-scroll border border-gray-800">
+                  <table className=" min-w-2 border-collapse">
+                    <tbody>
+                      {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                        (setIndex) => (
+                          <tr
+                            key={setIndex}
+                            className={"bg-gray-700"}
+                            onClick={() => {
+                              setSelectedExercise((prev) => {
+                                const updated = { ...prev };
+                                updated[savekey] = updated[savekey].map(
+                                  (ex, i) =>
+                                    i === index ? { ...ex, sets: setIndex } : ex
+                                );
+                                console.log(selectedExercise[savekey][index]);
+                                return updated;
+                              });
+                            }}
+                          >
+                            <td
+                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                                setIndex ===
+                                selectedExercise[savekey][index].sets
+                                  ? "bg-blue-500"
+                                  : ""
+                              }`}
+                            >
+                              Sets: {setIndex}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="h-24 overflow-y-scroll border border-gray-800">
+                  <table className=" min-w-2 border-collapse">
+                    <tbody>
+                      {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                        (repsIndex) => (
+                          <tr
+                            key={repsIndex}
+                            className={"bg-gray-700"}
+                            onClick={() => {
+                              setSelectedExercise((prev) => {
+                                const updated = { ...prev };
+                                updated[savekey] = updated[savekey].map(
+                                  (ex, i) =>
+                                    i === index
+                                      ? { ...ex, reps: repsIndex }
+                                      : ex
+                                );
+                                console.log(selectedExercise[savekey][index]);
+                                return updated;
+                              });
+                            }}
+                          >
+                            <td
+                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                                repsIndex ===
+                                selectedExercise[savekey][index].reps
+                                  ? "bg-blue-500"
+                                  : ""
+                              }`}
+                            >
+                              Reps: {repsIndex}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 px-4">
-                <p className="text-slate-200">Sets: {exercise.sets}</p>
-                <p className="text-slate-200">Reps: {exercise.reps}</p>
-              </div>
+              <button
+                onClick={() => handleRemoveExercise(exercise)}
+                className="btn btn-outline btn-error "
+              >
+                Remove
+              </button>
             </div>
           ))}
           <div className="modal-action flex flex-row gap-2 justify-end">
@@ -301,7 +375,7 @@ const EditTrain = () => {
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
           Edit Your Training
         </div>
-        <div className="w-full flex flex-col gap-4 items-center pt-2">
+        <div className="w-full flex flex-col  gap-4 items-center pt-2">
           {Object.keys(selectedExercise).map((exercise, index) => (
             <WorkoutCard exercise={exercise} key={index} />
           ))}
