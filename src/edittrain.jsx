@@ -233,135 +233,159 @@ const EditTrain = () => {
   function EditWorkoutModal() {
     return (
       <div className="modal modal-open">
-        <div className="modal-box bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-3">
-          <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
-          <div className="flex items-center space-x-2 mb-4">
-            <input
-              type="search"
-              placeholder="Enter exercise name"
-              className="w-64 px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              list="exercise-options"
-              id="input-e"
-              onChange={handleAddExercise2}
-            />
-            <button
-              onClick={handleAddExercise}
-              className="btn btn-outline btn-primary"
-            >
-              Add
-            </button>
-          </div>
-          <datalist id="exercise-options">
-            {exercise.map((item, index) => (
-              <option key={index} value={item.name} />
-            ))}
-          </datalist>
-          {selectedExercise[savekey].map((exercise, index) => (
-            <div
-              key={index}
-              className="card w-64  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
-            >
-              <h2 className="text-amber-50 font-bold mb-2 ">
-                {exercise.exercise}
-              </h2>
-              <div className="flex flex-row justify-start text-xs space-y-2">
-                <div className="h-24 overflow-y-scroll border border-gray-800">
-                  <table className=" min-w-2 border-collapse">
-                    <tbody>
-                      {Array.from({ length: 25 }, (_, i) => i + 1).map(
-                        (setIndex) => (
-                          <tr
-                            key={setIndex}
-                            className={"bg-gray-700"}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map(
-                                  (ex, i) =>
-                                    i === index ? { ...ex, sets: setIndex } : ex
-                                );
-                                console.log(selectedExercise[savekey][index]);
-                                return updated;
-                              });
-                            }}
-                          >
-                            <td
-                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                                setIndex ===
-                                selectedExercise[savekey][index].sets
-                                  ? "bg-blue-500"
-                                  : ""
-                              }`}
-                            >
-                              Sets: {setIndex}
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="h-24 overflow-y-scroll border border-gray-800">
-                  <table className=" min-w-2 border-collapse">
-                    <tbody>
-                      {Array.from({ length: 25 }, (_, i) => i + 1).map(
-                        (repsIndex) => (
-                          <tr
-                            key={repsIndex}
-                            className={"bg-gray-700"}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map(
-                                  (ex, i) =>
-                                    i === index
-                                      ? { ...ex, reps: repsIndex }
-                                      : ex
-                                );
-                                console.log(selectedExercise[savekey][index]);
-                                return updated;
-                              });
-                            }}
-                          >
-                            <td
-                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                                repsIndex ===
-                                selectedExercise[savekey][index].reps
-                                  ? "bg-blue-500"
-                                  : ""
-                              }`}
-                            >
-                              Reps: {repsIndex}
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+        <div className="modal-box w-auto h-auto bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
+          <div className="overflow-y-scroll flex flex-col items-center space-y-3">
+            <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
+            <div className="flex items-center space-x-2 mb-4">
+              <input
+                type="search"
+                placeholder="Enter exercise name"
+                className="w-64 px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                list="exercise-options"
+                id="input-e"
+                onChange={handleAddExercise2}
+              />
               <button
-                onClick={() => handleRemoveExercise(exercise)}
-                className="btn btn-outline btn-error "
+                onClick={handleAddExercise}
+                className="btn btn-outline btn-primary"
               >
-                Remove
+                Add
               </button>
             </div>
-          ))}
-          <div className="modal-action flex flex-row gap-2 justify-end">
-            <button
-              onClick={handleShowModal}
-              className="btn btn-outline btn-primary"
-            >
-              Save
-            </button>
-            <button
-              onClick={handleShowModal}
-              className="btn btn-outline btn-error"
-            >
-              Cancel
-            </button>
+            <datalist id="exercise-options">
+              {exercise
+                .filter(
+                  (item) =>
+                    !selectedExercise[savekey].some(
+                      (ex) => ex.exercise === item.name
+                    )
+                )
+                .map((item, index) => (
+                  <option key={index} value={item.name} />
+                ))}
+            </datalist>
+            {selectedExercise[savekey].map((ex, index) => (
+              <div
+                key={index}
+                className="card w-64  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+              >
+                <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
+                <figure className="w-12 h-12 mb-2">
+                  <img
+                    src={
+                      exercise.find((item) => item.name === ex.exercise)?.img
+                    }
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </figure>
+
+                <h1 className="text-amber-50 font-light mb-2 text-center ">
+                  {
+                    exercise.find((item) => item.name === ex.exercise)
+                      ?.description
+                  }{" "}
+                </h1>
+                <div className="flex flex-row justify-start text-xs space-y-2">
+                  <div className="h-24 overflow-y-scroll border border-gray-800">
+                    <table className=" min-w-2 border-collapse">
+                      <tbody>
+                        {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                          (setIndex) => (
+                            <tr
+                              key={setIndex}
+                              className={"bg-gray-700"}
+                              onClick={() => {
+                                setSelectedExercise((prev) => {
+                                  const updated = { ...prev };
+                                  updated[savekey] = updated[savekey].map(
+                                    (ex, i) =>
+                                      i === index
+                                        ? { ...ex, sets: setIndex }
+                                        : ex
+                                  );
+                                  console.log(selectedExercise[savekey][index]);
+                                  return updated;
+                                });
+                              }}
+                            >
+                              <td
+                                className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                                  setIndex ===
+                                  selectedExercise[savekey][index].sets
+                                    ? "bg-blue-500"
+                                    : ""
+                                }`}
+                              >
+                                Sets: {setIndex}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="h-24 overflow-y-scroll border border-gray-800">
+                    <table className=" min-w-2 border-collapse">
+                      <tbody>
+                        {Array.from({ length: 25 }, (_, i) => i + 1).map(
+                          (repsIndex) => (
+                            <tr
+                              key={repsIndex}
+                              className={"bg-gray-700"}
+                              onClick={() => {
+                                setSelectedExercise((prev) => {
+                                  const updated = { ...prev };
+                                  updated[savekey] = updated[savekey].map(
+                                    (ex, i) =>
+                                      i === index
+                                        ? { ...ex, reps: repsIndex }
+                                        : ex
+                                  );
+                                  console.log(selectedExercise[savekey][index]);
+                                  return updated;
+                                });
+                              }}
+                            >
+                              <td
+                                className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                                  repsIndex ===
+                                  selectedExercise[savekey][index].reps
+                                    ? "bg-blue-500"
+                                    : ""
+                                }`}
+                              >
+                                Reps: {repsIndex}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleRemoveExercise(ex)}
+                  className="btn btn-outline btn-error "
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <div className="modal-action flex flex-row gap-2 justify-end">
+              <button
+                onClick={handleShowModal}
+                className="btn btn-outline btn-primary"
+              >
+                Save
+              </button>
+              <button
+                onClick={handleShowModal}
+                className="btn btn-outline btn-error"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

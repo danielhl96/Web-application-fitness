@@ -17,17 +17,11 @@ function ExerciseCard({ name, description, img, onRemove }) {
   };
 
   return (
-    <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 justify-items-center shadow-lg border border-blue-500 mb-4">
+    <div className="card w-64  bg-slate-800 justify-items-center shadow-lg border border-blue-500 mb-4">
       <div className="card-body">
         <h2 className="card-title  text-xl font-semibold">{name}</h2>
-        <figure className="mb-4 flex justify-center">
-          <img
-            src={img}
-            alt={name}
-            className="rounded-md"
-            width="60"
-            height="60"
-          />
+        <figure className="flex justify-center items-center w-12 h-12 mb-2">
+          <img src={img} alt={name} className="rounded-md" />
         </figure>
         <p className="text-sm text-slate-200 mb-2">{description}</p>
         <div className="card-actions flex flex-wrap gap-2 justify-center mt-2">
@@ -183,7 +177,7 @@ function CreateTrainGUI() {
         </div>
 
         {/* Render selected exercises */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full justify-center items-center">
+        <div className="flex flex-col items-center space-y-3">
           {selectedExercise.length > 0 ? (
             selectedExercise.map((exercise, index) => (
               <ExerciseCard
