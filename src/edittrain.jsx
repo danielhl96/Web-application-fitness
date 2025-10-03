@@ -1,6 +1,6 @@
 import "./index.css";
 import Header from "./Header";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const EditTrain = () => {
   const exercisesWithRepsAndSets = {
@@ -62,6 +62,12 @@ const EditTrain = () => {
   const [showModal, setShowModal] = useState(false);
   const [savekey, setKey] = useState("");
   const [addExercise, setaddExercise] = useState("");
+  const [exerciseExists, setExerciseExists] = useState(exercise);
+
+  const setRef = useRef([]);
+  const repsRef = useRef([]);
+  const [saveY, setSaveY] = useState([]);
+  const [saveY2, setSaveY2] = useState([]);
   function WorkoutCard({ exercise }) {
     return (
       <div className="card w-full sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
@@ -114,15 +120,16 @@ const EditTrain = () => {
   };
 
   const handleAddExercise2 = (e) => {
+    console.log(e.target.value);
     setaddExercise(e.target.value);
   };
 
   //Nur im Frontend
-  const handleAddExercise = () => {
-    console.log(addExercise);
+  const handleAddExercise = (elem) => {
+    console.log(selectedExercise[savekey]);
 
-    if (exercise.some((ex) => ex.name == addExercise)) {
-      let newExercise = { exercise: addExercise, reps: 12, sets: 4 };
+    if (exercise.some((ex) => ex.name == elem)) {
+      let newExercise = { exercise: elem, reps: 12, sets: 4 };
       setSelectedExercise((prev) => {
         return {
           ...prev,
@@ -131,139 +138,84 @@ const EditTrain = () => {
       });
       console.log(selectedExercise);
       document.getElementById("input-e").value = "";
+      setaddExercise("");
     }
   };
-
-  //Nur im Frontend
-  const handleAddSets = (e) => {
-    // Überprüfen, ob die Übung bereits existiert
-    const exerciseExists = selectedExercise[savekey].some(
-      (ex) => ex.exercise === e.exercise
-    );
-
-    if (exerciseExists) {
-      // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
-      const updatedExercises = selectedExercise[savekey].map((ex) => {
-        if (ex.exercise === e.exercise) {
-          return { ...ex, sets: ex.sets + 1 }; // Inkrementiere die sets
-        }
-        return ex;
-      });
-
-      // Stelle sicher, dass der Zustand korrekt aktualisierst wird
-      setSelectedExercise((prevState) => ({
-        ...prevState,
-        [savekey]: updatedExercises,
-      }));
+  useEffect(() => {
+    for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
+      console.log(i);
+      if (setRef.current[i] != null) {
+        setRef.current[i].scrollTop = saveY[i];
+        console.log(saveY);
+      }
+      if (repsRef.current[i] != null) {
+        repsRef.current[i].scrollTop = saveY2[i];
+        console.log(saveY2);
+      }
     }
-  };
-
-  //Nur im Frontend
-  const handleAddReps = (e) => {
-    // Überprüfen, ob die Übung bereits existiert
-    const exerciseExists = selectedExercise[savekey].some(
-      (ex) => ex.exercise === e.exercise
-    );
-
-    if (exerciseExists) {
-      // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
-      const updatedExercises = selectedExercise[savekey].map((ex) => {
-        if (ex.exercise === e.exercise) {
-          return { ...ex, reps: ex.reps + 1 }; // Inkrementiere die sets
-        }
-        return ex;
-      });
-
-      // Stelle sicher, dass der Zustand korrekt aktualisierst wird
-      setSelectedExercise((prevState) => ({
-        ...prevState,
-        [savekey]: updatedExercises,
-      }));
-    }
-  };
-
-  //Nur im Frontend
-  const handleReduceReps = (e) => {
-    // Überprüfen, ob die Übung bereits existiert
-    const exerciseExists = selectedExercise[savekey].some(
-      (ex) => ex.exercise === e.exercise
-    );
-
-    if (exerciseExists) {
-      // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
-      const updatedExercises = selectedExercise[savekey].map((ex) => {
-        if (ex.exercise === e.exercise && ex.reps > 1) {
-          return { ...ex, reps: ex.reps - 1 }; // Inkrementiere die sets
-        }
-        return ex;
-      });
-
-      // Stelle sicher, dass der Zustand korrekt aktualisierst wird
-      setSelectedExercise((prevState) => ({
-        ...prevState,
-        [savekey]: updatedExercises,
-      }));
-    }
-  };
-
-  //Nur im Frontend
-  const handleReduceSets = (e) => {
-    // Überprüfen, ob die Übung bereits existiert
-    const exerciseExists = selectedExercise[savekey].some(
-      (ex) => ex.exercise === e.exercise
-    );
-
-    if (exerciseExists) {
-      // Wenn die Übung existiert, eine neue Version des Objekts erstellen, um den Zustand zu ändern
-      const updatedExercises = selectedExercise[savekey].map((ex) => {
-        if (ex.exercise === e.exercise && ex.sets > 1) {
-          return { ...ex, sets: ex.sets - 1 }; // Inkrementiere die sets
-        }
-        return ex;
-      });
-
-      // Stelle sicher, dass der Zustand korrekt aktualisierst wird
-      setSelectedExercise((prevState) => ({
-        ...prevState,
-        [savekey]: updatedExercises,
-      }));
-    }
-  };
+  }, [showModal]);
 
   function EditWorkoutModal() {
     return (
       <div className="modal modal-open">
         <div className="modal-box w-auto h-auto bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
-          <div className="overflow-y-scroll flex flex-col items-center space-y-3">
+          <div className="overflow-y-scroll flex flex-col items-center space-y-1">
             <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
-            <div className="flex items-center space-x-2 mb-4">
+
+            <div className="flex flex-col items-center space-y-4">
               <input
                 type="search"
-                placeholder="Enter exercise name"
-                className="w-64 px-4 py-2 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                list="exercise-options"
+                placeholder="Enter an exercise name"
+                className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 id="input-e"
                 onChange={handleAddExercise2}
               />
-              <button
-                onClick={handleAddExercise}
-                className="btn btn-outline btn-primary"
+
+              <div
+                className={`h-32 overflow-y-scroll border border-gray-800 ${
+                  exerciseExists.some((ex) =>
+                    ex.name.toLowerCase().includes(addExercise.toLowerCase())
+                  ) && addExercise.length > 0
+                    ? "block"
+                    : "hidden"
+                }`}
               >
-                Add
-              </button>
+                {exerciseExists
+                  .filter(
+                    (prev) =>
+                      prev.name
+                        .toLowerCase()
+                        .includes(addExercise.toLowerCase()) &&
+                      !selectedExercise[savekey].some(
+                        (ex) => ex.exercise === prev.name
+                      )
+                  )
+                  .map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center cursor-pointer"
+                    >
+                      <div
+                        onClick={() => handleAddExercise(item.name)}
+                        className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2"
+                      >
+                        <h2 className="text-amber-50 font-bold mb-2">
+                          {item.name}
+                        </h2>
+                        <figure className="w-6 h-6 mb-2">
+                          <img
+                            src={item.img}
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                        </figure>
+                        <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
+                          {item.description}
+                        </h1>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
-            <datalist id="exercise-options">
-              {exercise
-                .filter(
-                  (item) =>
-                    !selectedExercise[savekey].some(
-                      (ex) => ex.exercise === item.name
-                    )
-                )
-                .map((item, index) => (
-                  <option key={index} value={item.name} />
-                ))}
-            </datalist>
             {selectedExercise[savekey].map((ex, index) => (
               <div
                 key={index}
@@ -286,16 +238,35 @@ const EditTrain = () => {
                   }{" "}
                 </h1>
                 <div className="flex flex-row justify-start text-xs space-y-2">
-                  <div className="h-24 overflow-y-scroll border border-gray-800">
+                  <div
+                    ref={(el) => (setRef.current[index] = el)}
+                    className="h-24 overflow-y-scroll border border-gray-800"
+                  >
                     <table className=" min-w-2 border-collapse">
                       <tbody>
                         {Array.from({ length: 25 }, (_, i) => i + 1).map(
                           (setIndex) => (
                             <tr
                               key={setIndex}
+                              data-set-index={setIndex}
                               className={"bg-gray-700"}
                               onClick={() => {
                                 setSelectedExercise((prev) => {
+                                  if (setRef.current[index]) {
+                                    const scrollid = setRef.current[
+                                      index
+                                    ].querySelector(
+                                      `tr[data-set-index="${setIndex}"]`
+                                    );
+                                    console.log(scrollid.offsetTop);
+                                    if (scrollid) {
+                                      setSaveY((prev) => {
+                                        const updated = [...prev];
+                                        updated[index] = scrollid.offsetTop;
+                                        return updated;
+                                      });
+                                    }
+                                  }
                                   const updated = { ...prev };
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
@@ -303,7 +274,7 @@ const EditTrain = () => {
                                         ? { ...ex, sets: setIndex }
                                         : ex
                                   );
-                                  console.log(selectedExercise[savekey][index]);
+
                                   return updated;
                                 });
                               }}
@@ -325,16 +296,35 @@ const EditTrain = () => {
                     </table>
                   </div>
 
-                  <div className="h-24 overflow-y-scroll border border-gray-800">
+                  <div
+                    ref={(el) => (repsRef.current[index] = el)}
+                    className="h-24 overflow-y-scroll border border-gray-800"
+                  >
                     <table className=" min-w-2 border-collapse">
                       <tbody>
                         {Array.from({ length: 25 }, (_, i) => i + 1).map(
                           (repsIndex) => (
                             <tr
                               key={repsIndex}
+                              data-reps-index={repsIndex}
                               className={"bg-gray-700"}
                               onClick={() => {
                                 setSelectedExercise((prev) => {
+                                  if (repsRef.current[index]) {
+                                    const scrollid = repsRef.current[
+                                      index
+                                    ].querySelector(
+                                      `tr[data-reps-index="${repsIndex}"]`
+                                    );
+                                    if (scrollid) {
+                                      setSaveY2((prev) => {
+                                        const updated = [...prev];
+                                        updated[index] = scrollid.offsetTop;
+                                        return updated;
+                                      });
+                                    }
+                                  }
+
                                   const updated = { ...prev };
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
