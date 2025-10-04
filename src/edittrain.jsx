@@ -133,7 +133,7 @@ const EditTrain = () => {
       setSelectedExercise((prev) => {
         return {
           ...prev,
-          [savekey]: [...prev[savekey], newExercise],
+          [savekey]: [newExercise, ...prev[savekey]],
         };
       });
       console.log(selectedExercise);
