@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 import smtplib
 import sqlalchemy
 import jwt
@@ -12,6 +12,8 @@ from email.message import EmailMessage
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yYv1Qc9V0ZJwkpM8e8X0SFDfV9NQWzgnTwIhNQkDfU4'
+app.config['JWT_ALGORITHM'] = 'HS256'
 CORS(app)
 engine = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432/postgres',echo=True)
 Base = sqlalchemy.orm.declarative_base()
@@ -23,10 +25,10 @@ EXPECTED_ISSUER = "fitness_app"
 
 
 def createToken(user_id):
-    SECRET_KEY = "your_secret_key"
-    now = datetime.utcnow()
+    SECRET_KEY = app.config['SECRET_KEY']
+    now = datetime.now(UTC)
     payload = {
-        "sub": user_id,
+        "sub": str(user_id),
         "iss": "fitness_app",
         "aud": "user",
         "exp": int((now + timedelta(minutes=20)).timestamp()),
@@ -34,34 +36,36 @@ def createToken(user_id):
         "nbf": int(now.timestamp()),
         "jti": str(uuid.uuid4())
     }
-    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    token = jwt.encode(payload, SECRET_KEY, algorithm=app.config['JWT_ALGORITHM'])
     return token
 
 def revokeToken(token):
     jti = token['jti']
     exp = token['exp']
-    now = datetime.utcnow()
-    ttl = exp - int(now.time().timestamp())
+    now = datetime.now(UTC)
+    ttl = exp - int(now.timestamp())
     if ttl > 0:
         redis_client.setex(jti, ttl, '1')
     
 
 def verifyToken(token):
-    SECRET_KEY = "your_secret_key"
-    print("TIME")
-    print(float(datetime.utcnow().timestamp()))
+    SECRET_KEY = app.config['SECRET_KEY']
+    print(token)
+    print(float(datetime.now(UTC).timestamp()))
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"], audience=EXPECTED_AUDIENCE, issuer=EXPECTED_ISSUER)
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[app.config['JWT_ALGORITHM']], audience=EXPECTED_AUDIENCE, issuer=EXPECTED_ISSUER)
         if redis_client.get(payload['jti']):
             return {"error": "Token has been revoked"}  
-    except jwt.ExpiredSignatureError:
-        return {"error": "Token has expired"}
+        
     except jwt.InvalidTokenError:
         return {"error": "Invalid token"}
+    except jwt.ExpiredSignatureError:
+        return {"error": "Token has expired"}
     except jwt.InvalidAudienceError:
         return {"error": "Invalid audience"}
     except jwt.InvalidIssuerError:
         return {"error": "Invalid issuer"}
+    
     except Exception as e:
         return {"error": str(e)}
     return payload
@@ -151,6 +155,7 @@ def login_user():
 def update_profile():
     # Token aus Header extrahieren
     auth_header = request.headers.get("Authorization", "")
+
     if not auth_header.startswith("Bearer "):
         return jsonify({"message": "Missing or invalid Authorization header"}), 401
 
@@ -182,8 +187,6 @@ def update_profile():
     session.commit()
 
     return jsonify({"message": "Profile updated successfully!"}), 200
-
-
 
 
 @app.route('/api/logout', methods=['post'])
@@ -234,7 +237,16 @@ def password_reset():
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():
-    if(verifyToken(request.headers.get("Authorization")).get("error")):
+
+    # Token aus Header extrahieren
+    auth_header = request.headers.get("Authorization", "")
+
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+
+    token = auth_header.replace("Bearer ", "")
+
+    if(verifyToken(token).get("error")):
         return jsonify({"message": "Invalid or expired token!"}), 401
     data = request.json
     user_id = data.get("user_id")
@@ -252,7 +264,16 @@ def create_workout_plan():
 
 @app.route('/api/get_workout_plans', methods=['get'])
 def get_workout_plans():
-    if(verifyToken(request.headers.get("Authorization")).get("error")):
+
+    # Token aus Header extrahieren
+    auth_header = request.headers.get("Authorization", "")
+
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+
+    token = auth_header.replace("Bearer ", "")
+
+    if(verifyToken(token).get("error")):
         return jsonify({"message": "Invalid or expired token!"}), 401
     user_id = request.args.get("user_id")
     workout_plans = session.query(WorkoutPlan).filter_by(user_id=user_id).all()
@@ -273,7 +294,5 @@ def get_workout_plans():
         })
     return jsonify(result), 200
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-   
