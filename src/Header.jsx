@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handlelogout = () => {
+    localStorage.removeItem("token");
+    setMenuOpen(false);
+    navigate("/login");
+  };
 
   return (
     <div>
@@ -66,13 +73,7 @@ function Header() {
             >
               Start training
             </Link>
-            <Link
-              to="/login"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login
-            </Link>
+
             <Link
               to="/counter"
               className="btn btn-ghost text-white md:ml-4"
@@ -82,7 +83,7 @@ function Header() {
             </Link>
             <button
               className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
+              onClick={() => handlelogout()}
             >
               Logout
             </button>

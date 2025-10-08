@@ -125,7 +125,14 @@ function App() {
           }
         />
         <Route path="/passwordforget" element={<PasswordForget />} />
-        <Route path="/counter" element={<Counter />} />
+        <Route
+          path="/counter"
+          element={
+            <ProtectedRoute>
+              <Counter />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
