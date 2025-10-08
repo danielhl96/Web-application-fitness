@@ -17,7 +17,7 @@ function ExerciseCard({ name, description, img, onRemove }) {
   };
 
   return (
-    <div className="card w-auto sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
+    <div className="card  sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
       <div className="card-body  items-center  text-center">
         <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
         <figure className="flex justify-center items-center w-6 h-6 mb-2">
@@ -152,7 +152,7 @@ function CreateTrainGUI() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="card w-full h-full  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center ">
+      <div className="card w-auto h-auto  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
           Create your training
         </div>

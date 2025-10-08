@@ -1,6 +1,7 @@
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import axios from "axios";
 
 function Header() {
   return (
@@ -38,6 +39,23 @@ function LoginForm() {
     return emailRegex.test(email);
   };
 
+  async function handleLogin() {
+    try {
+      const response = await axios.get("http://localhost:5000/api/login", {
+        params: {
+          email,
+          password,
+        },
+      });
+      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      // Handle login error (e.g., show error message)
+    }
+  }
+
   useEffect(() => {
     setEmailError(!checkEmail(email));
   }, [email]);
@@ -55,7 +73,7 @@ function LoginForm() {
               type="text"
               placeholder={"E-Mail: "}
               className="input input-primary"
-              onChange={handleEmailChange}
+              onChange={(e) => handleEmailChange(e)}
               onBlur={handleEmailBlur}
               style={{
                 border:
@@ -78,7 +96,7 @@ function LoginForm() {
               type="password"
               placeholder={"Password: "}
               className="input input-primary"
-              onChange={handlePasswordChange}
+              onChange={(e) => handlePasswordChange(e)}
             />
           </div>
 
@@ -89,7 +107,12 @@ function LoginForm() {
             Are you new here?
           </button>
 
-          <button className="btn btn-active btn-primary w-80 ">Login</button>
+          <button
+            onClick={() => handleLogin()}
+            className="btn btn-active btn-primary w-80 "
+          >
+            Login
+          </button>
           <button
             onClick={() => navigate("/passwordforget")}
             className="btn btn-link w-80 text-white"

@@ -237,19 +237,17 @@ def password_reset():
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():
-
-    # Token aus Header extrahieren
     auth_header = request.headers.get("Authorization", "")
-
     if not auth_header.startswith("Bearer "):
         return jsonify({"message": "Missing or invalid Authorization header"}), 401
 
     token = auth_header.replace("Bearer ", "")
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
 
-    if(verifyToken(token).get("error")):
-        return jsonify({"message": "Invalid or expired token!"}), 401
+    user_id = verification.get("sub")
     data = request.json
-    user_id = data.get("user_id")
     exercises = [
         Exercise(**exercise) for exercise in data.get("exercises", [])
     ]
@@ -262,20 +260,42 @@ def create_workout_plan():
     session.commit()
     return jsonify({"message": "Workout plan created successfully!"}), 201
 
-@app.route('/api/get_workout_plans', methods=['get'])
-def get_workout_plans():
-
-    # Token aus Header extrahieren
+@app.route('/api/edit_workout_plan', methods=['put'])
+def edit_workout_plan():
     auth_header = request.headers.get("Authorization", "")
-
     if not auth_header.startswith("Bearer "):
         return jsonify({"message": "Missing or invalid Authorization header"}), 401
 
     token = auth_header.replace("Bearer ", "")
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
 
-    if(verifyToken(token).get("error")):
-        return jsonify({"message": "Invalid or expired token!"}), 401
-    user_id = request.args.get("user_id")
+    data = request.json
+    workout_plan_id = data.get("id")
+    workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id).first()
+    if not workout_plan:
+        return jsonify({"message": "Workout plan not found!"}), 404
+    workout_plan.name = data.get("name", workout_plan.name)
+    workout_plan.exercises = [
+        Exercise(**exercise) for exercise in data.get("exercises", [])
+    ]
+    session.commit()
+    return jsonify({"message": "Workout plan updated successfully!"}), 200
+
+
+@app.route('/api/get_workout_plans', methods=['get'])
+def get_workout_plans():
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+
+    token = auth_header.replace("Bearer ", "")
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
     workout_plans = session.query(WorkoutPlan).filter_by(user_id=user_id).all()
     result = []
     for plan in workout_plans:
@@ -292,6 +312,7 @@ def get_workout_plans():
             "name": plan.name,
             "exercises": exercises
         })
+    print(result)
     return jsonify(result), 200
 
 if __name__ == '__main__':

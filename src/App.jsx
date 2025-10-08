@@ -9,6 +9,7 @@ import Profile from "./profile";
 import RegisterPage from "./register.jsx";
 import PasswordForget from "./passwordforget.jsx";
 import Counter from "./counter.jsx";
+import ProtectedRoute from "./ProtectedRoute";
 
 function Home() {
   return (
@@ -91,10 +92,38 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<GUI />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/createtrain" element={<CreateTrainGUI />} />
-        <Route path="/edittrain" element={<EditTrain />} />
-        <Route path="/training" element={<StartTraining />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createtrain"
+          element={
+            <ProtectedRoute>
+              <CreateTrainGUI />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edittrain"
+          element={
+            <ProtectedRoute>
+              <EditTrain />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/training"
+          element={
+            <ProtectedRoute>
+              <StartTraining />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/passwordforget" element={<PasswordForget />} />
         <Route path="/counter" element={<Counter />} />
       </Routes>
