@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +25,16 @@ function RegisterPage() {
       </div>
     );
   }
+
+  const handleRegister = () => {
+    axios
+      .post("http://localhost:5000/api/register", {
+        email,
+        password,
+      })
+      .then(() => navigate("/login"))
+      .catch((err) => console.log(err));
+  };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -148,6 +159,7 @@ function RegisterPage() {
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <button
+                onClick={() => handleRegister()}
                 disabled={emailError || passwordError || confirmPasswordError}
                 className="btn btn-outline btn-success w-15 space-y-5"
               >

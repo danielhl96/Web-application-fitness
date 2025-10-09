@@ -46,9 +46,10 @@ function LoginForm() {
           email,
           password,
         },
+        withCredentials: true, // <-- wichtig für Cookies!
       });
       console.log(response.data);
-      localStorage.setItem("token", response.data.token);
+      // Kein localStorage.setItem("token", ...) mehr nötig!
       navigate("/");
     } catch (error) {
       console.error(error);

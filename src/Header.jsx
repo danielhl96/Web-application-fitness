@@ -1,14 +1,17 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handlelogout = () => {
-    localStorage.removeItem("token");
+    axios
+      .post("http://localhost:5000/api/logout", {}, { withCredentials: true })
+      .then(() => navigate("/login"));
+
     setMenuOpen(false);
-    navigate("/login");
   };
 
   return (

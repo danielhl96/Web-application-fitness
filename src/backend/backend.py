@@ -14,7 +14,7 @@ from email.message import EmailMessage
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yYv1Qc9V0ZJwkpM8e8X0SFDfV9NQWzgnTwIhNQkDfU4'
 app.config['JWT_ALGORITHM'] = 'HS256'
-CORS(app)
+CORS(app, supports_credentials=True)
 engine = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432/postgres',echo=True)
 Base = sqlalchemy.orm.declarative_base()
 Session = sessionmaker(bind=engine)
@@ -50,22 +50,19 @@ def revokeToken(token):
 
 def verifyToken(token):
     SECRET_KEY = app.config['SECRET_KEY']
-    print(token)
-    print(float(datetime.now(UTC).timestamp()))
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[app.config['JWT_ALGORITHM']], audience=EXPECTED_AUDIENCE, issuer=EXPECTED_ISSUER)
         if redis_client.get(payload['jti']):
             return {"error": "Token has been revoked"}  
         
-    except jwt.InvalidTokenError:
-        return {"error": "Invalid token"}
     except jwt.ExpiredSignatureError:
         return {"error": "Token has expired"}
+    except jwt.InvalidTokenError:
+        return {"error": "Invalid token"}
     except jwt.InvalidAudienceError:
         return {"error": "Invalid audience"}
     except jwt.InvalidIssuerError:
         return {"error": "Invalid issuer"}
-    
     except Exception as e:
         return {"error": str(e)}
     return payload
@@ -144,36 +141,43 @@ def login_user():
     email = request.args.get("email")
     password = request.args.get("password")
     user = session.query(User).filter_by(email=email, password=password).first()
-    if(user):
-        token = createToken(user.id)    
-        print(token)
-        return jsonify({"message": "Login successful!", "token": token}), 200
+    if user:
+        token = createToken(user.id)
+        resp = jsonify({"message": "Login successful!"})
+        resp.set_cookie(
+            "access_token",
+            token,
+            httponly=True,
+            secure=False,  # Setze auf True bei HTTPS!
+            samesite="Lax",
+            max_age=60*20  # 20 Minuten
+        )
+        return resp, 200
     else:
         return jsonify({"message": "Invalid email or password!"}), 401
 
+def get_token_from_cookie():
+    token = request.cookies.get("access_token")
+    if not token:
+        return None
+    return token
+
 @app.route('/api/profile', methods=['PUT'])
 def update_profile():
-    # Token aus Header extrahieren
-    auth_header = request.headers.get("Authorization", "")
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
-    if not auth_header.startswith("Bearer "):
-        return jsonify({"message": "Missing or invalid Authorization header"}), 401
-
-    token = auth_header.replace("Bearer ", "")
     verification = verifyToken(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
-    # User aus Token-Sub holen
     user_id = verification.get("sub")
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
         return jsonify({"message": "User not found!"}), 404
 
-    # Daten aus dem Request
     data = request.get_json()
-
-    # Felder aktualisieren (nur wenn sie vorhanden sind)
     user.height = data.get("height", user.height)
     user.weight = data.get("weight", user.weight)
     user.age = data.get("age", user.age)
@@ -185,16 +189,19 @@ def update_profile():
     user.goal = data.get("goal", user.goal)
 
     session.commit()
-
     return jsonify({"message": "Profile updated successfully!"}), 200
-
 
 @app.route('/api/logout', methods=['post'])
 def logout_user():
-    token = request.headers.get("Authorization")
+    token = get_token_from_cookie()
     if token:
-        revokeToken(token)
-        return jsonify({"message": "Logout successful!"}), 200
+        payload = verifyToken(token)
+        if payload.get("error"):
+            return jsonify({"message": payload["error"]}), 401
+        revokeToken(payload)
+        resp = jsonify({"message": "Logout successful!"})
+        resp.set_cookie("access_token", "", expires=0)
+        return resp, 200
     return jsonify({"message": "No token provided!"}), 400
 
 @app.route('/api/password_forget', methods=['post'])
@@ -204,7 +211,7 @@ def password_forget():
     if user:
         safety_code = str(uuid.uuid4())
         redis_client.setex(f"safety_code:{email}", 300, safety_code)  # Expires in 5 minutes
-        send_email(email, safety_code)  # Placeholder function
+        send_email(email, safety_code)
         return jsonify({"message": "Password reset email sent!"}), 200
     return jsonify({"message": "User not found!"}), 404
 
@@ -234,14 +241,12 @@ def password_reset():
         return jsonify({"message": "Password reset successful!"}), 200
     return jsonify({"message": "User not found or invalid password!"}), 404
 
-
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
-    token = auth_header.replace("Bearer ", "")
     verification = verifyToken(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
@@ -262,11 +267,10 @@ def create_workout_plan():
 
 @app.route('/api/edit_workout_plan', methods=['put'])
 def edit_workout_plan():
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
-    token = auth_header.replace("Bearer ", "")
     verification = verifyToken(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
@@ -283,14 +287,12 @@ def edit_workout_plan():
     session.commit()
     return jsonify({"message": "Workout plan updated successfully!"}), 200
 
-
 @app.route('/api/get_workout_plans', methods=['get'])
 def get_workout_plans():
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.startswith("Bearer "):
-        return jsonify({"message": "Missing or invalid Authorization header"}), 401
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
-    token = auth_header.replace("Bearer ", "")
     verification = verifyToken(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
@@ -314,6 +316,42 @@ def get_workout_plans():
         })
     print(result)
     return jsonify(result), 200
+
+@app.route('/api/check_auth', methods=['get'])
+def check_auth():
+    token = request.cookies.get("access_token")
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    return jsonify({"message": "Authenticated"}), 200
+
+@app.route('/api/refresh_token', methods=['post'])
+def refresh_token():
+    token = request.cookies.get("access_token")
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    # Erzeuge neuen Token
+    user_id = verification.get("sub")
+    new_token = createToken(user_id)
+    resp = jsonify({"message": "Token refreshed"})
+    resp.set_cookie(
+        "access_token",
+        new_token,
+        httponly=True,
+        secure=False,  # Setze auf True bei HTTPS!
+        samesite="Lax",
+        max_age=60*20  # 20 Minuten
+    )
+    return resp, 200
 
 if __name__ == '__main__':
     app.run(debug=True)

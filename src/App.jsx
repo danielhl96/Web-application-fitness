@@ -1,5 +1,5 @@
 import "./index.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import GUI from "./login";
 import Header from "./Header";
 import CreateTrainGUI from "./createtrain.jsx";
@@ -23,12 +23,12 @@ function Home() {
               Create your own training with exercises of your choice!
             </p>
             <div className="justify-end card-actions">
-              <a
-                href="/createtrain"
+              <Link
+                to="/createtrain"
                 className="btn bg-emerald-500 hover:bg-emerald-600 text-white"
               >
                 Create
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -38,12 +38,12 @@ function Home() {
             <h2 className="card-title text-blue-400">Start Training</h2>
             <p className="text-slate-200">Start your training now!</p>
             <div className="justify-end card-actions">
-              <a
-                href="/training"
+              <Link
+                to="/training"
                 className="btn bg-blue-500 hover:bg-blue-600 text-white"
               >
                 Start
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -55,12 +55,12 @@ function Home() {
               Define your fitness goal and track your progress!
             </p>
             <div className="justify-end card-actions">
-              <a
-                href="/profile"
+              <Link
+                to="/profile"
                 className="btn bg-pink-500 hover:bg-pink-600 text-white"
               >
                 Set Goal
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -70,12 +70,12 @@ function Home() {
             <h2 className="card-title text-yellow-400">Edit training</h2>
             <p className="text-slate-200">Edit your training!</p>
             <div className="justify-end card-actions">
-              <a
-                href="/edittrain"
+              <Link
+                to="/edittrain"
                 className="btn bg-yellow-500 hover:bg-yellow-600 text-white"
               >
                 Edit training
-              </a>
+              </Link>
             </div>
           </div>
         </div>
