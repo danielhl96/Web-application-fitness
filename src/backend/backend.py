@@ -148,7 +148,7 @@ def login_user():
             "access_token",
             token,
             httponly=True,
-            secure=False,  # Setze auf True bei HTTPS!
+            secure=False, 
             samesite="Lax",
             max_age=60*20  # 20 Minuten
         )
@@ -339,7 +339,7 @@ def refresh_token():
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
-    # Erzeuge neuen Token
+   
     user_id = verification.get("sub")
     new_token = createToken(user_id)
     resp = jsonify({"message": "Token refreshed"})

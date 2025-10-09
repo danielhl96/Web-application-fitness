@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 
-function ProtectedRoute({ page }) {
+function ProtectedRoute({ children }) {
   const [isAuth, setIsAuth] = useState(null);
 
   useEffect(() => {
-    // Authentifizierung prüfen
     axios
       .get("http://localhost:5000/api/check_auth", { withCredentials: true })
       .then(() => setIsAuth(true))
@@ -39,7 +38,7 @@ function ProtectedRoute({ page }) {
     return <Navigate to="/login" replace />;
   }
 
-  return page;
+  return children;
 }
 
 export default ProtectedRoute;
