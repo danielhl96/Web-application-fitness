@@ -72,12 +72,12 @@ def send_email(to_email, safety_code):
     msg = EmailMessage()
     msg.set_content(f"Your password reset code is: {safety_code}")
     msg['Subject'] = 'Password Reset Code'  
-    msg['From'] = "mail_admin"
+    msg['From'] = "daniel.hennies@googlemail.com"
     msg['To'] = to_email
 
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
-    smtp_user= ''
+    smtp_user= 'daniel.hennies@googlemail.com'
     smtp_password= ''
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -215,35 +215,29 @@ def password_forget():
     if user:
         safety_code = str(uuid.uuid4())
         redis_client.setex(f"safety_code:{email}", 300, safety_code)  # Expires in 5 minutes
-        send_email(email, safety_code)
+        print(redis_client.get(f"safety_code:{email}"))
+        #send_email(email, safety_code)
         return jsonify({"message": "Password reset email sent!"}), 200
     return jsonify({"message": "User not found!"}), 404
 
 @app.route('/api/check_safety_code', methods=['post'])
 def check_safety_code():
     email = request.json.get("email")
+    new_password = request.json.get("password")
     safety_code = request.json.get("safety_code")
+    print(email, new_password, safety_code)
     user = session.query(User).filter_by(email=email).first()
     if user and safety_code:
         stored_code = redis_client.get(f"safety_code:{email}")
         if stored_code and stored_code.decode("utf-8") == safety_code:
-            return jsonify({"message": "Safety code is valid!"}), 200
+            if user and new_password == user.password:
+                return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+            if user:
+                user.password = hash_password(new_password)
+                session.commit()
+                return jsonify({"message": "Password reset successful!"}), 200
+            else: return jsonify({"message": "User not found or invalid password!"}), 404
     return jsonify({"message": "Invalid safety code!"}), 400
-
-@app.route('/api/password_reset', methods=['post'])
-def password_reset():
-    email = request.json.get("email")
-    new_password = request.json.get("new_password")
-    user = session.query(User).filter_by(email=email).first()
-
-    if user and new_password == user.password:
-        return jsonify({"message": "New password cannot be the same as the old password!"}), 400
-    
-    if user:
-        user.password = new_password
-        session.commit()
-        return jsonify({"message": "Password reset successful!"}), 200
-    return jsonify({"message": "User not found or invalid password!"}), 404
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():

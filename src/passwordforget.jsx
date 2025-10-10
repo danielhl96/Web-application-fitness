@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function PasswordForget() {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ function PasswordForget() {
   const [message, setMessage] = useState("");
   const [requireCode, setRequireCode] = useState(false);
   const [password, setPassword] = useState(false);
+  const [successfully, setSuccessfully] = useState(false);
 
   function Header() {
     return (
@@ -23,15 +25,42 @@ function PasswordForget() {
 
   const handleCode = () => {
     setRequireCode(true);
-  };
-  const handlePasswordChange = () => {
     setPassword(true);
+    axios
+      .post("http://localhost:5000/api/password_forget", { email })
+      .then(() => {
+        setMessage("Check your email for the security code.");
+      })
+      .catch(() => {
+        setMessage("Error sending code. Please try again.");
+      });
+  };
+
+  const checkCode = () => {
+    axios
+      .post("http://localhost:5000/api/check_safety_code", {
+        email: email,
+        password: password,
+        safety_code: securityCode,
+      })
+      .then(() => {
+        setMessage("Password changed successfully.");
+        setPassword(true);
+        setSuccessfully(true);
+      })
+      .catch(() => {
+        setMessage("Invalid security code. Please try again.");
+      });
+  };
+
+  const handlePasswordChange = () => {
+    checkCode();
   };
 
   return (
     <div className="min-h-screen flex items-center bg-gray-900 justify-center">
       <Header />
-      <div className="space-y-4 flex flex-col card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
+      <div className="space-y-4 flex flex-col card sm:w-64 md:w-96 bg-gray-800  border border-blue-500 shadow-sm p-6 rounded-md">
         <h1 className="text-2xl font-bold">Forgot Password</h1>
         <div>
           <h1>E-Mail</h1>
@@ -40,6 +69,7 @@ function PasswordForget() {
             type="text"
             placeholder={"E-Mail: "}
             className="input input-primary"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div>
@@ -62,14 +92,14 @@ function PasswordForget() {
               <h1>New password</h1>
 
               <input
-                type="text"
+                type="password"
                 placeholder={"New password: "}
                 className="input input-primary"
                 onChange={(e) => setPassword(e.target.value)}
               />
               <h1>Repeat your password</h1>
               <input
-                type="text"
+                type="password"
                 placeholder={"Repeat password: "}
                 className="input input-primary"
                 onChange={(e) => setPassword(e.target.value)}
@@ -92,6 +122,7 @@ function PasswordForget() {
               ? "Change password"
               : "Require code"}
           </button>
+
           <button
             onClick={() => navigate("/login")}
             className="btn btn-outline btn-error"
@@ -99,6 +130,7 @@ function PasswordForget() {
             Cancel
           </button>
         </div>
+        {message && <h1 className="text-green-500">{message}</h1>}
       </div>
     </div>
   );
