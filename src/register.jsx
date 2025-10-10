@@ -13,6 +13,7 @@ function RegisterPage() {
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+  const [message, setMessage] = useState("");
 
   function Header() {
     return (
@@ -33,7 +34,10 @@ function RegisterPage() {
         password,
       })
       .then(() => navigate("/login"))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setMessage("Registration failed. Please try again.");
+      });
   };
 
   const handleEmailChange = (event) => {
@@ -85,8 +89,8 @@ function RegisterPage() {
     <div>
       <div className="min-h-screen flex items-center bg-gray-900 justify-center">
         <Header />
-        <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md">
-          <div className="flex flex-col gap-2">
+        <div className="space-y-4 card sm:w-96 md:w-96 border border-blue-500 bg-gray-800 shadow-sm p-6 rounded-md">
+          <div className="flex flex-col space-y-2 ">
             <h1 className="text-2xl font-bold">Register</h1>
             <div className="divider divider-primary">Your data</div>
             <div>
@@ -154,6 +158,9 @@ function RegisterPage() {
                 <span className="text-red-500 text-sm">
                   Passwords do not match.
                 </span>
+              )}
+              {message && (
+                <span className="text-red-500 text-sm">{message}</span>
               )}
             </div>
             <div className="divider divider-primary"></div>

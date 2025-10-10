@@ -1,6 +1,6 @@
 import "./index.css";
 import { Routes, Route, Link } from "react-router-dom";
-import GUI from "./login";
+import LoginForm from "./login";
 import Header from "./Header";
 import CreateTrainGUI from "./createtrain.jsx";
 import EditTrain from "./edittrain.jsx";
@@ -97,7 +97,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<GUI />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/profile"

@@ -127,7 +127,7 @@ function PasswordForget() {
             onClick={() => navigate("/login")}
             className="btn btn-outline btn-error"
           >
-            Cancel
+            {successfully ? "Go to Login" : "Cancel"}
           </button>
         </div>
         {message && <h1 className="text-green-500">{message}</h1>}

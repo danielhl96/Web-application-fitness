@@ -20,6 +20,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [emailTouched, setEmailTouched] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
@@ -53,7 +54,7 @@ function LoginForm() {
       navigate("/");
     } catch (error) {
       console.error(error);
-      // Handle login error (e.g., show error message)
+      setMessage("Login failed. Please check your credentials.");
     }
   }
 
@@ -61,13 +62,14 @@ function LoginForm() {
     setEmailError(!checkEmail(email));
   }, [email]);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 py-16">
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 ">
+      <Header />
       <div className="space-y-4 card sm:w-96 md:w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
-        <div className="flex flex-col gap-4 p-4 w-full sm:w-96 lg:w-96">
-          <h1 className="text-3xl font-semibold text-white text-left mb-6">
+        <div className="flex flex-col space-y-2 ">
+          <h1 className="text-2xl font-semibold text-white text-left mb-6">
             Login
           </h1>
-
+          <div className="divider divider-primary"></div>
           <div>
             <h1 className="text-shadow-lg font-mono">E-Mail</h1>
             <input
@@ -100,19 +102,19 @@ function LoginForm() {
               onChange={(e) => handlePasswordChange(e)}
             />
           </div>
-
-          <button
-            onClick={() => navigate("/register")}
-            className="btn btn-link w-80 text-white"
-          >
-            Are you new here?
-          </button>
+          <h1 className="text-red-500 text-sm ">{message}</h1>
 
           <button
             onClick={() => handleLogin()}
             className="btn btn-active btn-primary w-80 "
           >
             Login
+          </button>
+          <button
+            onClick={() => navigate("/register")}
+            className="btn btn-link w-80 text-white"
+          >
+            Are you new here?
           </button>
           <button
             onClick={() => navigate("/passwordforget")}
@@ -126,13 +128,4 @@ function LoginForm() {
   );
 }
 
-function GUI() {
-  return (
-    <div>
-      <Header />
-      <LoginForm />
-    </div>
-  );
-}
-
-export default GUI;
+export default LoginForm;
