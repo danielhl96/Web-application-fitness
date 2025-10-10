@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from flask import Flask, request, jsonify
 from flask_cors import CORS 
 from email.message import EmailMessage
+from argon2 import PasswordHasher
 
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ session = Session()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 EXPECTED_AUDIENCE = "user"
 EXPECTED_ISSUER = "fitness_app"
-
+argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
 
 def createToken(user_id):
     SECRET_KEY = app.config['SECRET_KEY']
@@ -122,12 +123,15 @@ class WorkoutPlan(Base):
 
 Base.metadata.create_all(engine)
 
+def hash_password(password):
+    return argon2.hash(password)
+
 @app.route('/api/register', methods=['post'])
 def register_user():
     data = request.json
     new_user = User(
         email=data.get("email"),
-        password=data.get("password"),
+        password=hash_password(data.get("password")),
     )
     query = session.query(User).filter_by(email=new_user.email).first()
     if query:
@@ -140,8 +144,8 @@ def register_user():
 def login_user():
     email = request.args.get("email")
     password = request.args.get("password")
-    user = session.query(User).filter_by(email=email, password=password).first()
-    if user:
+    user = session.query(User).filter_by(email=email).first()
+    if user and argon2.verify(user.password, password):
         token = createToken(user.id)
         resp = jsonify({"message": "Login successful!"})
         resp.set_cookie(
