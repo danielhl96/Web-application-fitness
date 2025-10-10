@@ -99,6 +99,8 @@ class User(Base):
     bfp = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     activity_level = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     goal = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    bmi = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    calories = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
 class Exercise(Base):
     __tablename__ = 'exercises'
@@ -191,9 +193,43 @@ def update_profile():
     user.bfp = data.get("bfp", user.bfp)
     user.activity_level = data.get("activity_level", user.activity_level)
     user.goal = data.get("goal", user.goal)
+    user.bmi = data.get("bmi", user.bmi)
+    user.calories = data.get("calories", user.calories)
 
     session.commit()
     return jsonify({"message": "Profile updated successfully!"}), 200
+
+@app.route('/api/get_profile', methods=['get'])
+def get_profile():
+    token = get_token_from_cookie()
+    print("Token:", token)
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    user = session.query(User).filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "User not found!"}), 404
+
+    user_data = {
+        "email": user.email,
+        "height": user.height,
+        "weight": user.weight,
+        "age": user.age,
+        "gender": user.gender,
+        "waist": user.waist,
+        "hip": user.hip,
+        "bfp": user.bfp,
+        "activity_level": user.activity_level,
+        "goal": user.goal,
+        "bmi": user.bmi,
+        "calories": user.calories
+    }
+    return jsonify(user_data), 200
 
 @app.route('/api/logout', methods=['post'])
 def logout_user():

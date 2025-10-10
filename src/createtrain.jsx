@@ -123,7 +123,9 @@ function CreateTrainGUI() {
   const [addExercise, setaddExercise] = useState("");
   const [exerciseExists, setExerciseExists] = useState(exercise);
 
-  function handleExerciseChange(e) {
+  console.log(selectedExercise);
+
+  function handleExerciseChange(e, sets, reps) {
     const selectedName = e;
     console.log(selectedName);
     const found = exercise.find((item) => item.name === selectedName);
@@ -137,9 +139,17 @@ function CreateTrainGUI() {
         return prev; // Don't add if already in the list
       });
     }
+    if (found) {
+      // Update the sets and reps for the found exercise
+      const updatedExercise = { ...found, sets: sets, reps: reps };
+      setSelectedExercise((prev) =>
+        prev.map((item) => (item.name === e ? updatedExercise : item))
+      );
+    }
     document.getElementById("input-e").value = "";
     setaddExercise("");
   }
+
   const handleAddExercise2 = (e) => {
     console.log(e.target.value);
     setaddExercise(e.target.value);
