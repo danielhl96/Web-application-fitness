@@ -110,9 +110,9 @@ class Exercise(Base):
     user = relationship("User", backref="exercises")
     date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    sets = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Integer), nullable=False)
+    sets = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     reps = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Integer), nullable=False)
-    weights = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Float), nullable=True)
+    weights = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Float), nullable=True)  
 
 class WorkoutPlan(Base):
     __tablename__ = 'workout_plans'
@@ -287,9 +287,29 @@ def create_workout_plan():
 
     user_id = verification.get("sub")
     data = request.json
-    exercises = [
-        Exercise(**exercise) for exercise in data.get("exercises", [])
-    ]
+    print(data)
+ 
+    exercises = []
+    for elem in data.get("exercises", []):
+        name = elem.get("name")
+        sets = elem.get("sets")
+        reps = elem.get("reps")
+        weights = elem.get("weights")
+        
+        exercises.append(Exercise(
+            user_id=user_id,
+            name=name,
+            sets=sets,
+            reps=reps,
+            weights=weights,
+            date= datetime.now()
+        ))
+
+    print("Exercises to be added:")
+    for ex in exercises:
+        print(f"Name: {ex.name}, Sets: {ex.sets}, Reps: {ex.reps}, Weights: {ex.weights}, Date: {ex.date}")
+    
+
     workout_plan = WorkoutPlan(
         user_id=user_id,
         exercises=exercises,

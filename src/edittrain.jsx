@@ -1,8 +1,32 @@
 import "./index.css";
 import Header from "./Header";
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
 const EditTrain = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/get_workout_plans", {
+        withCredentials: true, // <-- wichtig für Cookies!
+      })
+      .then((response) => {
+        setData(response.data);
+      });
+  }, []);
+
+  const exercisesWithRepsAndSets = data.reduce((acc, plan) => {
+    acc[plan.name] = plan.exercises.map((exercise) => ({
+      exercise: exercise.name,
+      reps: exercise.reps,
+      sets: exercise.sets,
+    }));
+    return acc;
+  }, {});
+
+  console.log(exercisesWithRepsAndSets);
+  /*
   const exercisesWithRepsAndSets = {
     Push: [
       { exercise: "Benchpress", reps: 12, sets: 4 },
@@ -14,6 +38,7 @@ const EditTrain = () => {
       { exercise: "High-Row", reps: 12, sets: 4 },
     ],
   };
+  */
 
   const exercise = [
     {

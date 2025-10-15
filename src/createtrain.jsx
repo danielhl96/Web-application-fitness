@@ -2,18 +2,29 @@ import "./index.css";
 import Header from "./Header";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function ExerciseCard({ name, description, img, onRemove }) {
-  const [selectedSets, setSelectedSets] = useState(null);
-  const [selectedReps, setSelectedReps] = useState(null);
+function ExerciseCard({
+  name,
+  description,
+  img,
+  onRemove,
+  onRepsChange,
+  onSetsChange,
+}) {
+  const [selectedSets, setSelectedSets] = useState([]);
+  const [selectedReps, setSelectedReps] = useState([]);
 
   const handleSets = (e) => {
     console.log(e);
     setSelectedSets(e);
+    ExerciseCard.sets = e;
+    if (onSetsChange) onSetsChange(e);
   };
   const handleReps = (e) => {
-    console.log(e);
     setSelectedReps(e);
+    // 3. Callback aufrufen
+    if (onRepsChange) onRepsChange(e);
   };
 
   return (
@@ -27,7 +38,7 @@ function ExerciseCard({ name, description, img, onRemove }) {
 
         <div className="flex flex-row justify-center items-center">
           <div className="h-20 overflow-y-scroll border border-gray-800">
-            <table className="min-w-2 border-collapse">
+            <table id="sets-table" className="min-w-2 border-collapse">
               <tbody>
                 {Array.from({ length: 25 }, (_, i) => i + 1).map(
                   (set, index) => (
@@ -78,6 +89,38 @@ function ExerciseCard({ name, description, img, onRemove }) {
 
 function CreateTrainGUI() {
   const navigate = useNavigate();
+
+  const handleSaveTraining = async () => {
+    const trainingName = document.getElementById("training-input").value;
+    const selectedExercises = selectedExercise.map((exercise) => ({
+      name: exercise.name,
+      sets: exercise.sets,
+      reps: exercise.reps,
+      weights: Array.isArray(exercise.weights)
+        ? exercise.weights
+        : Array(exercise.sets || 3).fill(0),
+    }));
+
+    await axios
+      .post(
+        "http://localhost:5000/api/create_workout_plan",
+
+        {
+          name: trainingName,
+          exercises: selectedExercises,
+        },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        setMessage("Training saved successfully!");
+        console.log("Training saved:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error saving training:", error);
+        setMessage("Error saving training.");
+      });
+  };
+
   const exercise = [
     {
       name: "Benchpress",
@@ -122,10 +165,11 @@ function CreateTrainGUI() {
   const [selectedExercise, setSelectedExercise] = useState([]);
   const [addExercise, setaddExercise] = useState("");
   const [exerciseExists, setExerciseExists] = useState(exercise);
+  const [Message, setMessage] = useState("");
 
   console.log(selectedExercise);
 
-  function handleExerciseChange(e, sets, reps) {
+  function handleExerciseChange(e) {
     const selectedName = e;
     console.log(selectedName);
     const found = exercise.find((item) => item.name === selectedName);
@@ -141,11 +185,19 @@ function CreateTrainGUI() {
     }
     if (found) {
       // Update the sets and reps for the found exercise
-      const updatedExercise = { ...found, sets: sets, reps: reps };
+      const updatedExercise = {
+        ...found,
+        sets: document.getElementById("sets-table").getElementsByTagName("tr")
+          .length,
+        reps: [8, 8, 8],
+        weights: [0, 0, 0],
+        date: new Date().toISOString().split("T")[0],
+      };
       setSelectedExercise((prev) =>
         prev.map((item) => (item.name === e ? updatedExercise : item))
       );
     }
+    console.log(selectedExercise);
     document.getElementById("input-e").value = "";
     setaddExercise("");
   }
@@ -157,6 +209,36 @@ function CreateTrainGUI() {
 
   const handleRemoveExercise = (name) => {
     setSelectedExercise((prev) => prev.filter((item) => item.name !== name));
+  };
+
+  // 1. Funktion in CreateTrainGUI definieren
+  const handleRepsChange = (exerciseName, reps) => {
+    setSelectedExercise((prev) =>
+      prev.map((item) =>
+        item.name === exerciseName
+          ? { ...item, reps: Array.from({ length: item.sets }, () => reps) }
+          : item
+      )
+    );
+    console.log(selectedExercise);
+  };
+  const handleSetsChange = (exerciseName, sets) => {
+    setSelectedExercise((prev) =>
+      prev.map((item) =>
+        item.name === exerciseName
+          ? {
+              ...item,
+              sets,
+              reps: Array.isArray(item.reps)
+                ? Array.from({ length: sets }, (_, i) => item.reps[i] || 8)
+                : Array(sets).fill(8),
+              weights: Array.isArray(item.weights)
+                ? Array.from({ length: sets }, (_, i) => item.weights[i] || 0)
+                : Array(sets).fill(0),
+            }
+          : item
+      )
+    );
   };
 
   return (
@@ -180,7 +262,6 @@ function CreateTrainGUI() {
             id="input-e"
             onChange={handleAddExercise2}
           />
-
           <div
             className={`h-32 overflow-y-scroll border border-gray-800 ${
               exerciseExists.some((ex) =>
@@ -221,7 +302,6 @@ function CreateTrainGUI() {
                 </div>
               ))}
           </div>
-
           {/* Render selected exercises */}
           <div className="flex flex-col items-center space-y-3">
             {selectedExercise.length > 0 ? (
@@ -232,6 +312,9 @@ function CreateTrainGUI() {
                   description={exercise.description}
                   img={exercise.img}
                   onRemove={() => handleRemoveExercise(exercise.name)}
+                  // 2. Callback als Prop übergeben
+                  onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
+                  onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
                 />
               ))
             ) : (
@@ -241,14 +324,31 @@ function CreateTrainGUI() {
             )}
           </div>
           <div className="flex flex-row items-center gap-4 mt-4">
-            <button className="btn btn-outline btn-primary">Save</button>
+            <button
+              onClick={() => handleSaveTraining()}
+              className="btn btn-outline btn-primary"
+            >
+              Save
+            </button>
             <button
               onClick={() => navigate("/")}
               className="btn btn-outline btn-error"
             >
-              Cancel
+              {Message === "Training saved successfully!"
+                ? "Back to Home"
+                : "Cancel"}
             </button>
           </div>
+          {Message === "Training saved successfully!" && (
+            <div className="mt-4">
+              <p className="text-green-500">{Message}</p>
+            </div>
+          )}{" "}
+          {Message === "Error saving training." && (
+            <div className="mt-4">
+              <p className="text-red-500">{Message}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
