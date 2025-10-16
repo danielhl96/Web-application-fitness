@@ -9,36 +9,35 @@ const EditTrain = () => {
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/get_workout_plans", {
-        withCredentials: true, // <-- wichtig für Cookies!
+        withCredentials: true,
       })
       .then((response) => {
         setData(response.data);
       });
   }, []);
 
-  const exercisesWithRepsAndSets = data.reduce((acc, plan) => {
-    acc[plan.name] = plan.exercises.map((exercise) => ({
-      exercise: exercise.name,
-      reps: exercise.reps,
-      sets: exercise.sets,
-    }));
-    return acc;
-  }, {});
+  // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
+  const mapPlans = (plans) =>
+    plans.reduce((acc, plan) => {
+      acc[plan.name] = plan.exercises.map((exercise) => ({
+        exercise: exercise.name,
+        reps: exercise.reps,
+        sets: exercise.sets,
+      }));
+      return acc;
+    }, {});
 
-  console.log(exercisesWithRepsAndSets);
-  /*
-  const exercisesWithRepsAndSets = {
-    Push: [
-      { exercise: "Benchpress", reps: 12, sets: 4 },
-      { exercise: "Sideraises", reps: 12, sets: 4 },
-      { exercise: "Dips", reps: 12, sets: 4 },
-    ],
-    Pull: [
-      { exercise: "Pull-Up", reps: 12, sets: 4 },
-      { exercise: "High-Row", reps: 12, sets: 4 },
-    ],
-  };
-  */
+  // keep the selected state separate and initialize as empty object
+  const [selectedExercise, setSelectedExercise] = useState({});
+
+  // whenever `data` (from backend) changes, compute the desired shape and set state
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setSelectedExercise(mapPlans(data));
+    } else {
+      setSelectedExercise({});
+    }
+  }, [data]);
 
   const exercise = [
     {
@@ -79,11 +78,33 @@ const EditTrain = () => {
       description: "An exercise to train the triceps",
       img: "./frenchpress.png",
     },
+    {
+      name: "Pull-Up",
+      description: "An exercise to train the back and biceps",
+      img: "./pullup.png",
+    },
+    {
+      name: "High-Row",
+      description: "An exercise to train the back and biceps",
+      img: "./highrow.png",
+    },
+    {
+      name: "Deadlift",
+      description: "An exercise to train the back, glutes, and hamstrings",
+      img: "./deadlift.png",
+    },
+    {
+      name: "Biceps-Curl",
+      description: "An exercise to train the biceps",
+      img: "./bicepscurl.png",
+    },
+    {
+      name: "Butterfly reverse",
+      description: "An exercise to train the rear delts and upper back",
+      img: "./butterflyreverse.png",
+    },
   ];
 
-  const [selectedExercise, setSelectedExercise] = useState(
-    exercisesWithRepsAndSets
-  );
   const [showModal, setShowModal] = useState(false);
   const [savekey, setKey] = useState("");
   const [addExercise, setaddExercise] = useState("");
@@ -170,12 +191,12 @@ const EditTrain = () => {
     for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
       console.log(i);
       if (setRef.current[i] != null) {
-        setRef.current[i].scrollTop = saveY[i];
-        console.log(saveY);
+        setRef.current[i].scrollTop = selectedExercise[savekey][i].sets[i];
+        console.log(selectedExercise[savekey][i].sets);
       }
       if (repsRef.current[i] != null) {
-        repsRef.current[i].scrollTop = saveY2[i];
-        console.log(saveY2);
+        repsRef.current[i].scrollTop = selectedExercise[savekey][i].reps[0];
+        console.log(selectedExercise[savekey][i].reps[0]);
       }
     }
   }, [showModal]);
@@ -299,7 +320,7 @@ const EditTrain = () => {
                                         ? { ...ex, sets: setIndex }
                                         : ex
                                   );
-
+                                  console.log(selectedExercise[savekey][index]);
                                   return updated;
                                 });
                               }}
@@ -365,7 +386,7 @@ const EditTrain = () => {
                               <td
                                 className={`border  border-gray-800 cursor-pointer p-2 text-center ${
                                   repsIndex ===
-                                  selectedExercise[savekey][index].reps
+                                  selectedExercise[savekey][index].reps[0]
                                     ? "bg-blue-500"
                                     : ""
                                 }`}
