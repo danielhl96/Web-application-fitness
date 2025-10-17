@@ -41,17 +41,16 @@ const EditTrain = () => {
     }
   }, [data]);
 
-  function handleEditWorkout() {
+  function handleEditWorkout(index) {
+    console.log(selectedExercise[index]);
     const payload = {
-      workout_plans: Object.entries(selectedExercise).map(
-        ([name, exercises]) => ({
-          name,
-          plan_id: selectedExercise[name][0]?.plan_id || null,
-          exercises: exercises.map(({ exercise, reps, sets }) => ({
-            name: exercise,
-            reps,
-            sets,
-          })),
+      plan_id: selectedExercise[index][0]?.plan_id || null,
+      exercises: selectedExercise[index]?.map(
+        ({ exercise, reps, sets, weights }) => ({
+          name: exercise,
+          reps,
+          sets,
+          weights: weights || 0,
         })
       ),
     };
@@ -532,7 +531,7 @@ const EditTrain = () => {
             <div className="modal-action flex flex-row gap-2 justify-end">
               <button
                 onClick={() => {
-                  handleEditWorkout();
+                  handleEditWorkout(savekey);
                   handleShowModal();
                 }}
                 className="btn btn-outline btn-primary"
