@@ -330,13 +330,35 @@ def edit_workout_plan():
         return jsonify({"message": verification["error"]}), 401
 
     data = request.json
-    workout_plan_id = data.get("id")
+    print(data)
+    workout_plan_id = data.get("plan_id")
+    print("Workout Plan ID to edit:")
+    print(workout_plan_id)
+    user_id = verification.get("sub")
     workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id).first()
+    print("Editing workout plan:")
+    print(workout_plan)
     if not workout_plan:
         return jsonify({"message": "Workout plan not found!"}), 404
     workout_plan.name = data.get("name", workout_plan.name)
+    
+    exercises = []
+    for elem in data.get("exercises", []):
+        name = elem.get("name")
+        sets = elem.get("sets")
+        reps = elem.get("reps")
+        weights = elem.get("weights")
+        exercises.append(Exercise(
+            user_id=user_id,
+            name=name,
+            sets=sets,
+            reps=reps,
+            weights=weights,
+            date= datetime.now()
+        ))
+
     workout_plan.exercises = [
-        Exercise(**exercise) for exercise in data.get("exercises", [])
+        exercises
     ]
     session.commit()
     return jsonify({"message": "Workout plan updated successfully!"}), 200

@@ -23,6 +23,8 @@ const EditTrain = () => {
         exercise: exercise.name,
         reps: exercise.reps,
         sets: exercise.sets,
+        weight: exercise.weight,
+        plan_id: plan.id,
       }));
       return acc;
     }, {});
@@ -38,6 +40,32 @@ const EditTrain = () => {
       setSelectedExercise({});
     }
   }, [data]);
+
+  function handleEditWorkout() {
+    const payload = {
+      workout_plans: Object.entries(selectedExercise).map(
+        ([name, exercises]) => ({
+          name,
+          plan_id: selectedExercise[name][0]?.plan_id || null,
+          exercises: exercises.map(({ exercise, reps, sets }) => ({
+            name: exercise,
+            reps,
+            sets,
+          })),
+        })
+      ),
+    };
+    axios
+      .put("http://localhost:5000/api/edit_workout_plan", payload, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log("Workout plans updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating workout plans:", error);
+      });
+  }
 
   const exercise = [
     {
@@ -102,6 +130,94 @@ const EditTrain = () => {
       name: "Butterfly reverse",
       description: "An exercise to train the rear delts and upper back",
       img: "./butterflyreverse.png",
+    },
+    {
+      name: "Seated-Row",
+      description: "An exercise to train the back, lat and biceps",
+      img: "./seatedrow.png",
+    },
+    {
+      name: "Lat Pulldown",
+      description: "An exercise to train the back, lat and biceps",
+      img: "./latpulldown.png",
+    },
+    {
+      name: "Squats",
+      description: "An exercise to train the quads, glutes, and hamstrings",
+      img: "./squats.png",
+    },
+    {
+      name: "Lunges",
+      description: "An exercise to train the quads, glutes, and hamstrings",
+      img: "./lunges.png",
+    },
+    {
+      name: "Leg Press",
+      description: "An exercise to train the quads, glutes, and hamstrings",
+      img: "./legpress.png",
+    },
+    {
+      name: "Leg Curl",
+      description: "An exercise to train the hamstrings",
+      img: "./legcurl.png",
+    },
+    {
+      name: "Calf Raises",
+      description: "An exercise to train the calves",
+      img: "./calfraises.png",
+    },
+    {
+      name: "Leg Extension",
+      description: "An exercise to train the quads",
+      img: "./legextension.png",
+    },
+    {
+      name: "Crunches",
+      description: "An exercise to train the abdominal muscles",
+      img: "./crunches.png",
+    },
+    {
+      name: "Plank",
+      description: "An exercise to train the core muscles",
+      img: "./plank.png",
+    },
+    {
+      name: "Russian Twists",
+      description: "An exercise to train the obliques and core muscles",
+      img: "./russiantwists.png",
+    },
+    {
+      name: "Hanging Leg Raises",
+      description: "An exercise to train the lower abdominal muscles",
+      img: "./hanginglegraises.png",
+    },
+    {
+      name: "Mountain Climbers",
+      description:
+        "An exercise to train the core muscles and improve cardiovascular fitness",
+      img: "./mountainclimbers.png",
+    },
+    {
+      name: "Burpees",
+      description:
+        "A full-body exercise that improves cardiovascular fitness and strength",
+      img: "./burpees.png",
+    },
+    {
+      name: "Leg Raises",
+      description: "An exercise to train the lower abdominal muscles",
+      img: "./legraises.png",
+    },
+    {
+      name: "Sit-Ups",
+      description: "An exercise to train the abdominal muscles",
+      img: "./situps.png",
+    },
+    {
+      name: "Muscle-Up",
+      description:
+        "An advanced exercise that combines a pull-up and a dip to train the upper body muscles",
+      img: "./muscleup.png",
     },
   ];
 
@@ -175,7 +291,12 @@ const EditTrain = () => {
     console.log(selectedExercise[savekey]);
 
     if (exercise.some((ex) => ex.name == elem)) {
-      let newExercise = { exercise: elem, reps: 12, sets: 4 };
+      let newExercise = {
+        exercise: elem,
+        reps: 12,
+        sets: 4,
+        plan_id: selectedExercise[savekey][0]?.plan_id || null,
+      };
       setSelectedExercise((prev) => {
         return {
           ...prev,
@@ -410,7 +531,10 @@ const EditTrain = () => {
             ))}
             <div className="modal-action flex flex-row gap-2 justify-end">
               <button
-                onClick={handleShowModal}
+                onClick={() => {
+                  handleEditWorkout();
+                  handleShowModal();
+                }}
                 className="btn btn-outline btn-primary"
               >
                 Save
