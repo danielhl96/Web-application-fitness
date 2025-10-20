@@ -46,14 +46,16 @@ const EditTrain = () => {
     const payload = {
       plan_id: selectedExercise[index][0]?.plan_id || null,
       exercises: selectedExercise[index]?.map(
-        ({ exercise, reps, sets, weights }) => ({
+        ({ exercise, reps, sets, weights, plan_id }) => ({
           name: exercise,
-          reps,
+          reps: Array(sets).fill(reps),
           sets,
-          weights: weights || 0,
+          weights: weights || Array(sets).fill(0),
+          plan_id: plan_id || null,
         })
       ),
     };
+    console.log(payload);
     axios
       .put("http://localhost:5000/api/edit_workout_plan", payload, {
         withCredentials: true,

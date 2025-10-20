@@ -31,7 +31,11 @@ function ProtectedRoute({ children }) {
   }, []);
 
   if (isAuth === null) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <span className="loading loading-bars loading-xl"></span>
+      </div>
+    );
   }
 
   if (!isAuth) {

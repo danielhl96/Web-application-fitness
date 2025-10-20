@@ -335,13 +335,14 @@ def edit_workout_plan():
     print("Workout Plan ID to edit:")
     print(workout_plan_id)
     user_id = verification.get("sub")
+    print("User ID:", user_id)
     workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id).first()
     print("Editing workout plan:")
-    print(workout_plan)
+    print(workout_plan.__dict__)
     if not workout_plan:
         return jsonify({"message": "Workout plan not found!"}), 404
     workout_plan.name = data.get("name", workout_plan.name)
-    
+    session.query(Exercise).filter_by(workout_plan_id=workout_plan.id).delete(synchronize_session=False)
     exercises = []
     for elem in data.get("exercises", []):
         name = elem.get("name")
@@ -350,6 +351,7 @@ def edit_workout_plan():
         weights = elem.get("weights")
         exercises.append(Exercise(
             user_id=user_id,
+            workout_plan_id=workout_plan.id,
             name=name,
             sets=sets,
             reps=reps,
@@ -357,9 +359,7 @@ def edit_workout_plan():
             date= datetime.now()
         ))
 
-    workout_plan.exercises = [
-        exercises
-    ]
+    session.add_all(exercises)
     session.commit()
     return jsonify({"message": "Workout plan updated successfully!"}), 200
 
