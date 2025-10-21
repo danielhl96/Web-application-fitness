@@ -22,9 +22,10 @@ function StartTraining() {
         exercise: exercise.name,
         reps: exercise.reps,
         sets: exercise.sets,
-        weight: exercise.weight,
+        weight: exercise.weights,
         plan_id: plan.id,
       }));
+      console.log(acc);
       return acc;
     }, {});
 
@@ -41,34 +42,9 @@ function StartTraining() {
     }
   }, [data]);
 
-  const training = {
-    0: [
-      {
-        exercise: "/benchpress.png",
-        name: "Benchpress",
-        sets: 3,
-        reps: 12,
-        weight: 85,
-        set: [12, 11, 10],
-        setw: [75, 74, 80],
-      },
-    ],
-    1: [
-      {
-        exercise: "/shoulderpress.png",
-        name: "Shoulderpress",
-        sets: 3,
-        reps: 12,
-        weight: 50,
-        set: [12, 11, 10],
-        setw: [75, 74, 80],
-      },
-    ],
-  };
-
   const [idxExercise, setidx] = useState(0);
   const [inputValue, setInputValue] = useState([]);
-  const [training1, setTraining] = useState(data);
+  const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState(
@@ -84,7 +60,7 @@ function StartTraining() {
   const scrollRef2 = useRef(null);
 
   const handleExercise = () => {
-    if (idxExercise < Object.keys(training).length - 1) {
+    if (idxExercise < Object.keys(training1).length - 1) {
       const newIdx = idxExercise + 1;
       training1[idxExercise].set = [...inputValue];
       setTraining(training1);
@@ -352,17 +328,18 @@ function StartTraining() {
     );
   };
 
-  function WorkoutCard({ exercise }) {
-    console.log(exercise);
+  function WorkoutCard({ planName }) {
     return (
       <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
-          <h2 className="text-amber-50 font-bold mb-2">
-            Workout: {exercise.name}
-          </h2>
+          <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
-              onClick={() => setSelectedTrainingSite(false)}
+              onClick={() => {
+                console.log(selectedExercise[planName][0]);
+                setTraining(selectedExercise[planName][0]);
+                setSelectedTrainingSite(false);
+              }}
               className="btn bg-blue-500 hover:bg-blue-600 text-white"
             >
               Start
@@ -384,26 +361,27 @@ function StartTraining() {
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              {Object.keys(selectedExercise).map((name, index) => (
-                <WorkoutCard exercise={selectedExercise[name]} key={index} />
-              ))}
+              {Object.keys(selectedExercise).map(
+                (name, index) => (
+                  console.log(selectedExercise),
+                  (<WorkoutCard planName={name} key={index} />)
+                )
+              )}
             </div>
           </div>
         ) : (
           <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border border-blue-500">
             <figure className="mb-4">
               <img
-                src={selectedExercise.exercise}
+                src={"./" + training1.exercise.toLowerCase() + ".png"}
                 name={"Benchpress"}
                 className="rounded-md"
                 width="50"
                 height="50"
               />
             </figure>
-            <div className="divider divider-primary">
-              {selectedExercise.name}
-            </div>
-            {Array.from({ length: selectedExercise.sets }).map((_, index) => (
+            <div className="divider divider-primary">{training1.exercise}</div>
+            {Array.from({ length: training1.sets }).map((_, index) => (
               <div
                 className="flex flex-row space-x-3 items-center justify-center"
                 key={index}
@@ -423,7 +401,7 @@ function StartTraining() {
                     onClick={() => handleModal(index, true)}
                     className="btn btn-outline btn-warning"
                   >
-                    Weight: {selectedExercise.setw[index]} kg
+                    Weight: {training1.weight[index]} kg
                   </button>
                 </div>
               </div>
@@ -456,7 +434,7 @@ function StartTraining() {
                 className="btn btn-outline btn-success"
               >
                 {" "}
-                {idxExercise == Object.keys(training).length - 1
+                {idxExercise == Object.keys(training1).length - 1
                   ? "Save"
                   : "Next"}
               </button>
