@@ -1,6 +1,6 @@
 import "./index.css";
 import Header from "./Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -268,16 +268,20 @@ function CreateTrainGUI() {
       img: "./situps.png",
     },
     {
-      Name: "Muscle-Up",
+      name: "Muscle-Up",
       description:
         "An advanced exercise that combines a pull-up and a dip to train the upper body muscles",
       img: "./muscleup.png",
     },
   ];
 
+  useEffect(() => {
+    setExerciseExists(exercise);
+  }, []);
+
   const [selectedExercise, setSelectedExercise] = useState([]);
   const [addExercise, setaddExercise] = useState("");
-  const [exerciseExists, setExerciseExists] = useState(exercise);
+  const [exerciseExists, setExerciseExists] = useState([]);
   const [Message, setMessage] = useState("");
 
   console.log(selectedExercise);

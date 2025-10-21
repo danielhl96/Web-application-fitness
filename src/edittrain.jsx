@@ -5,21 +5,27 @@ import axios from "axios";
 
 const EditTrain = () => {
   const [data, setData] = useState([]);
+  const [requestId, setRequestId] = useState(0);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/get_workout_plans", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setData(response.data);
-      });
-  }, []);
+  useEffect(
+    () => {
+      axios
+        .get("http://localhost:5000/api/get_workout_plans", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setData(response.data);
+          console.log(response.data);
+        });
+    },
+    [],
+    [requestId]
+  );
 
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
-      acc[plan.name] = plan.exercises.map((exercise) => ({
+      acc[plan.name] = plan.templates.map((exercise) => ({
         exercise: exercise.name,
         reps: exercise.reps,
         sets: exercise.sets,
@@ -42,13 +48,12 @@ const EditTrain = () => {
   }, [data]);
 
   function handleEditWorkout(index) {
-    console.log(selectedExercise[index]);
     const payload = {
       plan_id: selectedExercise[index][0]?.plan_id || null,
       exercises: selectedExercise[index]?.map(
         ({ exercise, reps, sets, weights, plan_id }) => ({
           name: exercise,
-          reps: Array(sets).fill(reps),
+          reps: Array.isArray(reps) ? reps : Array(sets).fill(reps),
           sets,
           weights: weights || Array(sets).fill(0),
           plan_id: plan_id || null,
@@ -62,6 +67,7 @@ const EditTrain = () => {
       })
       .then((response) => {
         console.log("Workout plans updated successfully:", response.data);
+        setRequestId((requestId) => requestId + 1); // Trigger data refresh
       })
       .catch((error) => {
         console.error("Error updating workout plans:", error);
@@ -301,7 +307,7 @@ const EditTrain = () => {
       setSelectedExercise((prev) => {
         return {
           ...prev,
-          [savekey]: [newExercise, ...prev[savekey]],
+          [savekey]: [...prev[savekey], newExercise],
         };
       });
       console.log(selectedExercise);

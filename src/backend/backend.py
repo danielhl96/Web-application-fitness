@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS 
 from email.message import EmailMessage
 from argon2 import PasswordHasher
+from sqlalchemy.orm import joinedload
 
 
 app = Flask(__name__)
@@ -114,6 +115,16 @@ class Exercise(Base):
     reps = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Integer), nullable=False)
     weights = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Float), nullable=True)  
 
+class PlanExerciseTemplate(Base):
+    __tablename__ = 'plan_exercise_templates'
+    id = sqlalchemy.Column(sqlalchemy.Integer, autoincrement=True, primary_key=True)
+    workout_plan_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('workout_plans.id'), nullable=False)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    sets = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    reps_template = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Integer), nullable=True)
+    weights_template = sqlalchemy.Column(sqlalchemy.ARRAY(sqlalchemy.Float), nullable=True)
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
+
 class WorkoutPlan(Base):
     __tablename__ = 'workout_plans'
     id = sqlalchemy.Column(sqlalchemy.Integer, autoincrement=True, primary_key=True)
@@ -121,6 +132,7 @@ class WorkoutPlan(Base):
     user = relationship("User", backref="workout_plans")
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     exercises = relationship("Exercise", backref="workout_plan", lazy=True)
+    templates = relationship("PlanExerciseTemplate", backref="workout_plan", lazy=True)
 
 
 Base.metadata.create_all(engine)
@@ -288,31 +300,25 @@ def create_workout_plan():
     user_id = verification.get("sub")
     data = request.json
     print(data)
- 
-    exercises = []
+
+    new_templates = []
     for elem in data.get("exercises", []):
         name = elem.get("name")
         sets = elem.get("sets")
         reps = elem.get("reps")
         weights = elem.get("weights")
-        
-        exercises.append(Exercise(
-            user_id=user_id,
+
+        new_templates.append(PlanExerciseTemplate(
             name=name,
             sets=sets,
-            reps=reps,
-            weights=weights,
-            date= datetime.now()
+            reps_template=reps,
+            weights_template=weights,
+            date= datetime.now().date()
         ))
-
-    print("Exercises to be added:")
-    for ex in exercises:
-        print(f"Name: {ex.name}, Sets: {ex.sets}, Reps: {ex.reps}, Weights: {ex.weights}, Date: {ex.date}")
-    
 
     workout_plan = WorkoutPlan(
         user_id=user_id,
-        exercises=exercises,
+        templates=new_templates,
         name=data.get("name")
     )
     session.add(workout_plan)
@@ -342,26 +348,27 @@ def edit_workout_plan():
     if not workout_plan:
         return jsonify({"message": "Workout plan not found!"}), 404
     workout_plan.name = data.get("name", workout_plan.name)
-    session.query(Exercise).filter_by(workout_plan_id=workout_plan.id).delete(synchronize_session=False)
-    exercises = []
+    session.query(PlanExerciseTemplate).filter_by(workout_plan_id=workout_plan.id).delete(synchronize_session=False)
+
+    new_templates = []
     for elem in data.get("exercises", []):
         name = elem.get("name")
         sets = elem.get("sets")
         reps = elem.get("reps")
         weights = elem.get("weights")
-        exercises.append(Exercise(
-            user_id=user_id,
+
+        new_templates.append(PlanExerciseTemplate(
             workout_plan_id=workout_plan.id,
             name=name,
             sets=sets,
-            reps=reps,
-            weights=weights,
+            reps_template=reps,
+            weights_template=weights,
             date= datetime.now()
         ))
 
-    session.add_all(exercises)
+    session.add_all(new_templates)
     session.commit()
-    return jsonify({"message": "Workout plan updated successfully!"}), 200
+    return jsonify({"message": "Workout plan updated successfully!"}, 200)
 
 @app.route('/api/get_workout_plans', methods=['get'])
 def get_workout_plans():
@@ -374,23 +381,37 @@ def get_workout_plans():
         return jsonify({"message": verification["error"]}), 401
 
     user_id = verification.get("sub")
-    workout_plans = session.query(WorkoutPlan).filter_by(user_id=user_id).all()
+
+    plans = session.query(WorkoutPlan).options(
+        joinedload(WorkoutPlan.templates),
+        joinedload(WorkoutPlan.exercises)
+    ).filter_by(user_id=user_id).all()
+
     result = []
-    for plan in workout_plans:
-        exercises = [{
-            "id": ex.id,
-            "name": ex.name,
-            "sets": ex.sets,
-            "reps": ex.reps,
-            "weights": ex.weights,
-            "date": ex.date.isoformat()
-        } for ex in plan.exercises]
+    for plan in plans:
         result.append({
             "id": plan.id,
             "name": plan.name,
-            "exercises": exercises
+            "templates": [
+                {
+                    "id": t.id,
+                    "name": t.name,
+                    "sets": t.sets,
+                    "reps": t.reps_template,
+                    "weights": t.weights_template
+                } for t in plan.templates
+            ],
+            "exercises": [
+                {
+                    "id": e.id,
+                    "name": e.name,
+                    "sets": e.sets,
+                    "reps": e.reps,
+                    "weights": e.weights,
+                    "date": e.date.isoformat()
+                } for e in plan.exercises
+            ]
         })
-    print(result)
     return jsonify(result), 200
 
 @app.route('/api/check_auth', methods=['get'])

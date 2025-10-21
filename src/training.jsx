@@ -1,8 +1,46 @@
 import "./index.css";
 import Header from "./Header";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
+import axios from "axios";
 
 function StartTraining() {
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/get_workout_plans", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      });
+  }, []);
+
+  // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
+  const mapPlans = (plans) =>
+    plans.reduce((acc, plan) => {
+      acc[plan.name] = plan.templates.map((exercise) => ({
+        exercise: exercise.name,
+        reps: exercise.reps,
+        sets: exercise.sets,
+        weight: exercise.weight,
+        plan_id: plan.id,
+      }));
+      return acc;
+    }, {});
+
+  // keep the selected state separate and initialize as empty object
+  const [selectedExercise, setExercise] = useState({});
+  const [data, setData] = useState([]);
+
+  // whenever `data` (from backend) changes, compute the desired shape and set state
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setExercise(mapPlans(data));
+    } else {
+      setExercise({});
+    }
+  }, [data]);
+
   const training = {
     0: [
       {
@@ -27,10 +65,10 @@ function StartTraining() {
       },
     ],
   };
-  const [selectedExercise, setExercise] = useState(training[0][0]);
+
   const [idxExercise, setidx] = useState(0);
   const [inputValue, setInputValue] = useState([]);
-  const [training1, setTraining] = useState(training);
+  const [training1, setTraining] = useState(data);
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState(
@@ -315,10 +353,13 @@ function StartTraining() {
   };
 
   function WorkoutCard({ exercise }) {
+    console.log(exercise);
     return (
       <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
-          <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
+          <h2 className="text-amber-50 font-bold mb-2">
+            Workout: {exercise.name}
+          </h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => setSelectedTrainingSite(false)}
@@ -343,8 +384,8 @@ function StartTraining() {
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              {Object.keys(training1).map((exercise, index) => (
-                <WorkoutCard exercise={exercise} key={index} />
+              {Object.keys(selectedExercise).map((name, index) => (
+                <WorkoutCard exercise={selectedExercise[name]} key={index} />
               ))}
             </div>
           </div>
