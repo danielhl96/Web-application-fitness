@@ -11,7 +11,6 @@ function StartTraining() {
       })
       .then((response) => {
         setData(response.data);
-        console.log(response.data);
       });
   }, []);
 
@@ -47,12 +46,9 @@ function StartTraining() {
   const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [selectedWeight1, setSelectedWeight1] = useState(
-    Array(selectedExercise.sets).fill(null)
-  );
-  const [selectedWeight2, setSelectedWeight2] = useState(
-    Array(selectedExercise.sets).fill(null)
-  );
+  const [selectedWeight1, setSelectedWeight1] = useState([3]);
+
+  const [selectedWeight2, setSelectedWeight2] = useState([3]);
   const [idx, setWeightidx] = useState(0);
   const [saveY, setSaveY] = useState([]);
   const [saveY2, setSaveY2] = useState([]);
@@ -60,30 +56,28 @@ function StartTraining() {
   const scrollRef2 = useRef(null);
 
   const handleExercise = () => {
-    if (idxExercise < Object.keys(training1).length - 1) {
+    if (idxExercise < selectedExercise.length - 1) {
       const newIdx = idxExercise + 1;
-      training1[idxExercise].set = [...inputValue];
-      setTraining(training1);
       setidx(newIdx);
-      setExercise(training1[newIdx][0]);
-      console.log(training1);
-      setInputValue([]);
-      console.log(selectedExercise.set.length);
+      console.log(selectedExercise[idxExercise]);
+      setTraining(selectedExercise[newIdx]);
+      setExercise(selectedExercise);
+      console.log(selectedExercise[newIdx]);
     } else {
-      training1[idxExercise].set = [...inputValue];
-      console.log(training1);
+      //selectedExercise[idxExercise].sets = inputValue;
+      console.log(selectedExercise);
     }
-    console.log(inputValue);
-    for (let i = 0; i < selectedExercise.set.length; i++) {
+
+    for (let i = 0; i < selectedExercise.sets; i++) {
       document.getElementById("input" + (i + 1)).value = "";
-      console.log("TEST");
     }
   };
   const handleExerciseBack = () => {
     if (idxExercise > 0) {
       const newIdx = idxExercise - 1;
       setidx(newIdx);
-      setExercise(training1[newIdx][0]);
+      setTraining(selectedExercise[newIdx]);
+
       console.log(idxExercise);
       setInputValue([]);
     }
@@ -338,6 +332,7 @@ function StartTraining() {
               onClick={() => {
                 console.log(selectedExercise[planName][0]);
                 setTraining(selectedExercise[planName][0]);
+                setExercise(selectedExercise[planName]);
                 setSelectedTrainingSite(false);
               }}
               className="btn bg-blue-500 hover:bg-blue-600 text-white"
@@ -361,12 +356,9 @@ function StartTraining() {
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              {Object.keys(selectedExercise).map(
-                (name, index) => (
-                  console.log(selectedExercise),
-                  (<WorkoutCard planName={name} key={index} />)
-                )
-              )}
+              {Object.keys(selectedExercise).map((name, index) => (
+                <WorkoutCard planName={name} key={index} />
+              ))}
             </div>
           </div>
         ) : (

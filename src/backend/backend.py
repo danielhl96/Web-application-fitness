@@ -412,6 +412,7 @@ def get_workout_plans():
                 } for e in plan.exercises
             ]
         })
+    print(result)
     return jsonify(result), 200
 
 @app.route('/api/check_auth', methods=['get'])
