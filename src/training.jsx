@@ -77,6 +77,7 @@ function StartTraining() {
       const newIdx = idxExercise - 1;
       setidx(newIdx);
       setTraining(selectedExercise[newIdx]);
+      setExercise(selectedExercise);
 
       console.log(idxExercise);
       setInputValue([]);
@@ -114,37 +115,31 @@ function StartTraining() {
   };
 
   const handleAddSets = () => {
-    const updatedSets = selectedExercise.sets + 1;
-    const updatedSetw = [
-      ...selectedExercise.setw,
-      selectedExercise.setw[selectedExercise.setw.length - 1],
-    ]; // Füge einen neuen Eintrag für das neue Set hinzu
-    console.log(updatedSetw);
-    const updatedSet = [...selectedExercise.set, 0]; // Füge einen neuen Eintrag für das neue Set hinzu
+    const updatedSets = training1.sets + 1;
+    const weightArray = [...training1.weight];
+    weightArray.push(0);
+
+    // Füge einen neuen Eintrag für das neue Set hinzu
 
     const updatedExercise = {
-      ...selectedExercise,
+      ...training1,
       sets: updatedSets,
-      setw: updatedSetw,
-      set: updatedSet,
+      weight: weightArray,
     };
     console.log(updatedExercise);
-    setExercise(updatedExercise);
+
+    setTraining(updatedExercise);
   };
 
   const handleReduceSets = () => {
-    const updatedSets = selectedExercise.sets - 1;
-    const updatedSetw = [...selectedExercise.setw];
-    updatedSetw.pop(); // Entferne den letzten Eintrag
-    const updatedSet = [...selectedExercise.set];
-    updatedSet.pop(); // Entferne den letzten Eintrag
+    const updatedSets = training1.sets - 1;
+
     const updatedExercise = {
-      ...selectedExercise,
+      ...training1,
       sets: updatedSets,
-      setw: updatedSetw,
-      set: updatedSet,
     };
-    setExercise(updatedExercise);
+    console.log(updatedExercise);
+    setTraining(updatedExercise);
   };
 
   const handleModal = (index, flag) => {
@@ -330,7 +325,6 @@ function StartTraining() {
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => {
-                console.log(selectedExercise[planName][0]);
                 setTraining(selectedExercise[planName][0]);
                 setExercise(selectedExercise[planName]);
                 setSelectedTrainingSite(false);
@@ -365,7 +359,14 @@ function StartTraining() {
           <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border border-blue-500">
             <figure className="mb-4">
               <img
-                src={"./" + training1.exercise.toLowerCase() + ".png"}
+                src={
+                  "./" +
+                  training1.exercise
+                    .toLowerCase()
+                    .replace("-", "")
+                    .replace(" ", "") +
+                  ".png"
+                }
                 name={"Benchpress"}
                 className="rounded-md"
                 width="50"
@@ -426,7 +427,7 @@ function StartTraining() {
                 className="btn btn-outline btn-success"
               >
                 {" "}
-                {idxExercise == Object.keys(training1).length - 1
+                {idxExercise == Object.keys(selectedExercise).length - 1
                   ? "Save"
                   : "Next"}
               </button>
