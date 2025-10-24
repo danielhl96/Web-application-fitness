@@ -55,8 +55,31 @@ function StartTraining() {
   const scrollRef = useRef(null);
   const scrollRef2 = useRef(null);
 
+  const postData = () => {
+    axios
+      .post(
+        "http://localhost:5000/api/create_exercise",
+        {
+          workout_plan_id: selectedExercise[idxExercise].plan_id,
+          name: selectedExercise[idxExercise].exercise,
+          sets: selectedExercise[idxExercise].sets,
+          reps: selectedExercise[idxExercise].reps,
+          weights: selectedExercise[idxExercise].weight,
+        },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleExercise = () => {
+    postData();
     if (idxExercise < selectedExercise.length - 1) {
+      selectedExercise[idxExercise].reps = inputValue;
       const newIdx = idxExercise + 1;
       setidx(newIdx);
       console.log(selectedExercise[idxExercise]);
@@ -68,8 +91,9 @@ function StartTraining() {
       console.log(selectedExercise);
     }
 
-    for (let i = 0; i < selectedExercise.sets; i++) {
+    for (let i = 0; i < selectedExercise[idxExercise].sets; i++) {
       document.getElementById("input" + (i + 1)).value = "";
+      console.log("TEST");
     }
   };
   const handleExerciseBack = () => {
@@ -91,6 +115,8 @@ function StartTraining() {
   };
 
   const changeWeight = (index, flag) => {
+    console.log(idxExercise);
+    console.log(selectedExercise);
     const totalWeight =
       (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
     setSelectedWeight1((prev) => {
@@ -104,13 +130,14 @@ function StartTraining() {
       updated[index] = selectedWeight2[index];
       return updated;
     });
-    const updatedSetw = [...selectedExercise.setw];
+    const updatedSetw = [...selectedExercise[idxExercise].weight];
     updatedSetw[index] = totalWeight;
     const updatedExercise = {
-      ...selectedExercise,
-      setw: updatedSetw,
+      ...selectedExercise[idxExercise],
+      weight: updatedSetw,
     };
-    setExercise(updatedExercise);
+
+    setTraining(selectedExercise);
     setShowModal(flag);
   };
 

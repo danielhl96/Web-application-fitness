@@ -415,6 +415,32 @@ def get_workout_plans():
     print(result)
     return jsonify(result), 200
 
+@app.route('/api/create_exercise', methods=['post'])
+def create_exercise():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    data = request.json
+
+    new_exercise = Exercise(
+        user_id=user_id,
+        workout_plan_id=data.get("plan_id"),
+        date=datetime.now(),
+        name=data.get("name"),
+        sets=data.get("sets"),
+        reps=data.get("reps"),
+        weights=data.get("weights")
+    )
+    session.add(new_exercise)
+    session.commit()
+    return jsonify({"message": "Exercise logged successfully!"}), 201
+
 @app.route('/api/check_auth', methods=['get'])
 def check_auth():
     token = request.cookies.get("access_token")
