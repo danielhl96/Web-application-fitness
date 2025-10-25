@@ -5,9 +5,9 @@ import jwt
 import uuid
 import redis
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from flask import Flask, request, jsonify
-from flask_cors import CORS 
+from flask_cors import CORS
 from email.message import EmailMessage
 from argon2 import PasswordHasher
 from sqlalchemy.orm import joinedload
@@ -16,11 +16,28 @@ from sqlalchemy.orm import joinedload
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yYv1Qc9V0ZJwkpM8e8X0SFDfV9NQWzgnTwIhNQkDfU4'
 app.config['JWT_ALGORITHM'] = 'HS256'
-CORS(app, supports_credentials=True)
+# erlaubte Origins (nicht '*' wenn withCredentials genutzt wird)
+ALLOWED_ORIGINS = ["http://localhost:5173"]
+
+# initialisiere flask-cors für alle /api/* Routen
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
+
+# stelle sicher, dass auch Fehler-Responses die richtigen CORS-Header erhalten
+@app.after_request
+def add_cors_headers(response):
+    origin = request.headers.get("Origin")
+    if origin and origin in ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+        response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
+    return response
+
 engine = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432/postgres',echo=True)
 Base = sqlalchemy.orm.declarative_base()
-Session = sessionmaker(bind=engine)
-session = Session()
+SessionFactory = sessionmaker(bind=engine)
+# optional: scoped_session if you keep a module-global `session = SessionFactory()` pattern
+session = scoped_session(SessionFactory)
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 EXPECTED_AUDIENCE = "user"
 EXPECTED_ISSUER = "fitness_app"
@@ -33,7 +50,7 @@ def createToken(user_id):
         "sub": str(user_id),
         "iss": "fitness_app",
         "aud": "user",
-        "exp": int((now + timedelta(minutes=20)).timestamp()),
+        "exp": int((now + timedelta(minutes=1)).timestamp()),
         "iat": int(now.timestamp()),
         "nbf": int(now.timestamp()),
         "jti": str(uuid.uuid4())
@@ -455,16 +472,27 @@ def check_auth():
 
 @app.route('/api/refresh_token', methods=['post'])
 def refresh_token():
+    print("Incoming request cookies:", request.cookies)   # <-- Debug: was wird gesendet?   
     token = request.cookies.get("access_token")
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
+    
+    try:
+        payload = jwt.decode(
+                    token,
+                    app.config['SECRET_KEY'],
+                    algorithms=[app.config['JWT_ALGORITHM']],
+                    audience=EXPECTED_AUDIENCE,
+                    issuer=EXPECTED_ISSUER,
+                    options={"verify_exp": False},
+                )
+    except Exception as e:
+                print(e)
+                return jsonify({"message": "Failed to decode token"}), 401
+    if redis_client.get(payload['jti']):
+        return jsonify({"message": "Token has been revoked"}), 401
 
-    verification = verifyToken(token)
-    if verification.get("error"):
-        return jsonify({"message": verification["error"]}), 401
-
-   
-    user_id = verification.get("sub")
+    user_id = payload.get("sub")
     new_token = createToken(user_id)
     resp = jsonify({"message": "Token refreshed"})
     resp.set_cookie(
@@ -473,9 +501,18 @@ def refresh_token():
         httponly=True,
         secure=False,  # Setze auf True bei HTTPS!
         samesite="Lax",
-        max_age=60*20  # 20 Minuten
+        max_age=60  # 1 Minute
     )
     return resp, 200
+
+@app.teardown_appcontext
+def remove_session(exception=None):
+    # rollback if an exception occurred, and remove/close session
+    try:
+        if exception:
+            session.rollback()
+    finally:
+        session.remove()
 
 if __name__ == '__main__':
     app.run(debug=True)

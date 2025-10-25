@@ -2,7 +2,7 @@ import "./index.css";
 import Header from "./Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./api";
 
 function ExerciseCard({
   name,
@@ -101,16 +101,11 @@ function CreateTrainGUI() {
         : Array(exercise.sets || 3).fill(0),
     }));
 
-    await axios
-      .post(
-        "http://localhost:5000/api/create_workout_plan",
-
-        {
-          name: trainingName,
-          exercises: selectedExercises,
-        },
-        { withCredentials: true }
-      )
+    await api
+      .post("/create_workout_plan", {
+        name: trainingName,
+        exercises: selectedExercises,
+      })
       .then((response) => {
         setMessage("Training saved successfully!");
         console.log("Training saved:", response.data);

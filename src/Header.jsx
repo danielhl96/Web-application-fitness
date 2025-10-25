@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./api";
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handlelogout = () => {
-    axios
-      .post("http://localhost:5000/api/logout", {}, { withCredentials: true })
+    api
+      .post("/logout", {}, { withCredentials: true })
       .then(() => navigate("/login"));
 
     setMenuOpen(false);

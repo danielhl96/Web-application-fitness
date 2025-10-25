@@ -11,6 +11,8 @@ import PasswordForget from "./passwordforget.jsx";
 import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import { useNavigate } from "react-router-dom";
+import { AuthProvider } from "./AuthProvider.jsx";
+
 function Home() {
   const navigate = useNavigate();
   return (
@@ -89,56 +91,71 @@ function App() {
   return (
     <div>
       <Header />
+
       <Routes>
         <Route
           path="/"
           element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
+
         <Route path="/login" element={<LoginForm />} />
+
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
         <Route
           path="/createtrain"
           element={
-            <ProtectedRoute>
-              <CreateTrainGUI />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <CreateTrainGUI />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
         <Route
           path="/edittrain"
           element={
-            <ProtectedRoute>
-              <EditTrain />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <EditTrain />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
         <Route
           path="/training"
           element={
-            <ProtectedRoute>
-              <StartTraining />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <StartTraining />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
         <Route path="/passwordforget" element={<PasswordForget />} />
         <Route
           path="/counter"
           element={
-            <ProtectedRoute>
-              <Counter />
-            </ProtectedRoute>
+            <AuthProvider>
+              <ProtectedRoute>
+                <Counter />
+              </ProtectedRoute>
+            </AuthProvider>
           }
         />
       </Routes>

@@ -1,8 +1,8 @@
 import "./index.css";
 import Header from "./Header";
-import { act, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./api";
 
 function Profile() {
   const navigate = useNavigate();
@@ -27,8 +27,8 @@ function Profile() {
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/get_profile", { withCredentials: true })
+    api
+      .get("/get_profile")
       .then((response) => {
         const data = response.data;
         setBmi(data.bmi);
@@ -50,25 +50,21 @@ function Profile() {
   }, []);
 
   const handleEdit = () => {
-    axios
-      .put(
-        "http://localhost:5000/api/profile",
-        {
-          bmi,
-          height,
-          weight,
-          hwr,
-          hip,
-          waist,
-          goal,
-          bfp,
-          gender,
-          age,
-          calories,
-          activity,
-        },
-        { withCredentials: true }
-      )
+    api
+      .put("/profile", {
+        bmi,
+        height,
+        weight,
+        hwr,
+        hip,
+        waist,
+        goal,
+        bfp,
+        gender,
+        age,
+        calories,
+        activity,
+      })
       .then((response) => {
         console.log("Profile updated successfully:", response.data);
         setEdit(false);

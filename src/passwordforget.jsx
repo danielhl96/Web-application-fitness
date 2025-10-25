@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "./api";
 
 function PasswordForget() {
   const navigate = useNavigate();
@@ -26,8 +26,8 @@ function PasswordForget() {
   const handleCode = () => {
     setRequireCode(true);
     setPassword(true);
-    axios
-      .post("http://localhost:5000/api/password_forget", { email })
+    api
+      .post("/password_forget", { email })
       .then(() => {
         setMessage("Check your email for the security code.");
       })
@@ -37,8 +37,8 @@ function PasswordForget() {
   };
 
   const checkCode = () => {
-    axios
-      .post("http://localhost:5000/api/check_safety_code", {
+    api
+      .post("/check_safety_code", {
         email: email,
         password: password,
         safety_code: securityCode,

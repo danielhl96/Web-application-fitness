@@ -1,7 +1,8 @@
 import "./index.css";
 import Header from "./Header";
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+
+import api from "./api";
 
 const EditTrain = () => {
   const [data, setData] = useState([]);
@@ -9,14 +10,10 @@ const EditTrain = () => {
 
   useEffect(
     () => {
-      axios
-        .get("http://localhost:5000/api/get_workout_plans", {
-          withCredentials: true,
-        })
-        .then((response) => {
-          setData(response.data);
-          console.log(response.data);
-        });
+      api.get("/get_workout_plans").then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      });
     },
     [],
     [requestId]
@@ -61,10 +58,8 @@ const EditTrain = () => {
       ),
     };
     console.log(payload);
-    axios
-      .put("http://localhost:5000/api/edit_workout_plan", payload, {
-        withCredentials: true,
-      })
+    api
+      .put("/edit_workout_plan", payload, {})
       .then((response) => {
         console.log("Workout plans updated successfully:", response.data);
         setRequestId((requestId) => requestId + 1); // Trigger data refresh

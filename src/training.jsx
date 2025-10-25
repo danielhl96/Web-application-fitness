@@ -1,17 +1,15 @@
 import "./index.css";
 import Header from "./Header";
-import { useEffect, useState, useRef, use } from "react";
-import axios from "axios";
+import { useEffect, useState, useRef } from "react";
+
+import api from "./api";
 
 function StartTraining() {
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/get_workout_plans", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setData(response.data);
-      });
+    api.get("/get_workout_plans").then((response) => {
+      console.log(response.data);
+      setData(response.data);
+    });
   }, []);
 
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
@@ -56,18 +54,14 @@ function StartTraining() {
   const scrollRef2 = useRef(null);
 
   const postData = () => {
-    axios
-      .post(
-        "http://localhost:5000/api/create_exercise",
-        {
-          workout_plan_id: selectedExercise[idxExercise].plan_id,
-          name: selectedExercise[idxExercise].exercise,
-          sets: selectedExercise[idxExercise].sets,
-          reps: selectedExercise[idxExercise].reps,
-          weights: selectedExercise[idxExercise].weight,
-        },
-        { withCredentials: true }
-      )
+    api
+      .post("/create_exercise", {
+        workout_plan_id: selectedExercise[idxExercise].plan_id,
+        name: selectedExercise[idxExercise].exercise,
+        sets: selectedExercise[idxExercise].sets,
+        reps: selectedExercise[idxExercise].reps,
+        weights: selectedExercise[idxExercise].weight,
+      })
       .then((response) => {
         console.log(response.data);
       })

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "./api";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -28,8 +28,8 @@ function RegisterPage() {
   }
 
   const handleRegister = () => {
-    axios
-      .post("http://localhost:5000/api/register", {
+    api
+      .post("/register", {
         email,
         password,
       })

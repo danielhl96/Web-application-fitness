@@ -1,7 +1,7 @@
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, use } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import api from "./api";
 
 function Header() {
   return (
@@ -42,15 +42,14 @@ function LoginForm() {
 
   async function handleLogin() {
     try {
-      const response = await axios.get("http://localhost:5000/api/login", {
+      const response = await api.get("/login", {
         params: {
           email,
           password,
         },
-        withCredentials: true, // <-- wichtig für Cookies!
       });
       console.log(response.data);
-      // Kein localStorage.setItem("token", ...) mehr nötig!
+
       navigate("/");
     } catch (error) {
       console.error(error);
