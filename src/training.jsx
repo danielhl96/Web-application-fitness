@@ -115,8 +115,6 @@ function StartTraining() {
   };
 
   const changeWeight = (index, flag) => {
-    console.log(idxExercise);
-    console.log(selectedExercise);
     const totalWeight =
       (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
     setSelectedWeight1((prev) => {
@@ -131,13 +129,21 @@ function StartTraining() {
       return updated;
     });
     const updatedSetw = [...selectedExercise[idxExercise].weight];
+
     updatedSetw[index] = totalWeight;
+
     const updatedExercise = {
       ...selectedExercise[idxExercise],
       weight: updatedSetw,
     };
 
-    setTraining(selectedExercise);
+    setTraining(updatedExercise);
+    setExercise((prev) => {
+      const updatedExercises = [...prev];
+      updatedExercises[idxExercise] = updatedExercise;
+      return updatedExercises;
+    });
+
     setShowModal(flag);
   };
 

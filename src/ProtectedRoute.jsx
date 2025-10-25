@@ -20,6 +20,7 @@ function ProtectedRoute({ children }) {
             await axios.get("http://localhost:5000/api/check_auth", {
               withCredentials: true,
             });
+            console.log("Token refreshed successfully");
             setIsAuth(true);
           } catch {
             setIsAuth(false);
