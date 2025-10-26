@@ -59,7 +59,7 @@ const EditTrain = () => {
     };
     console.log(payload);
     api
-      .put("/edit_workout_plan", payload, {})
+      .put("/edit_workout_plan", payload)
       .then((response) => {
         console.log("Workout plans updated successfully:", response.data);
         setRequestId((requestId) => requestId + 1); // Trigger data refresh

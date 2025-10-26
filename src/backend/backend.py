@@ -50,7 +50,7 @@ def createToken(user_id):
         "sub": str(user_id),
         "iss": "fitness_app",
         "aud": "user",
-        "exp": int((now + timedelta(minutes=1)).timestamp()),
+        "exp": int((now + timedelta(minutes=15)).timestamp()),
         "iat": int(now.timestamp()),
         "nbf": int(now.timestamp()),
         "jti": str(uuid.uuid4())
@@ -183,9 +183,9 @@ def login_user():
             "access_token",
             token,
             httponly=True,
-            secure=False, 
+            secure=False,
             samesite="Lax",
-            max_age=60*20  # 20 Minuten
+            max_age=60*60*4  # 4 Stunden
         )
         return resp, 200
     else:
@@ -501,7 +501,7 @@ def refresh_token():
         httponly=True,
         secure=False,  # Setze auf True bei HTTPS!
         samesite="Lax",
-        max_age=60  # 1 Minute
+        max_age=60*60*4  # 2 Minuten
     )
     return resp, 200
 
