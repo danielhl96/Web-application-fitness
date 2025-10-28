@@ -21,6 +21,7 @@ function StartTraining() {
         sets: exercise.sets,
         weight: exercise.weights,
         plan_id: plan.id,
+        isFinished: false,
       }));
       console.log(acc);
       return acc;
@@ -45,6 +46,7 @@ function StartTraining() {
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState([3]);
+  const [exerciseList, setExerciseList] = useState(false);
 
   const [selectedWeight2, setSelectedWeight2] = useState([3]);
   const [idx, setWeightidx] = useState(0);
@@ -53,14 +55,14 @@ function StartTraining() {
   const scrollRef = useRef(null);
   const scrollRef2 = useRef(null);
 
-  const postData = () => {
+  const postData = (updatedCurrent) => {
     api
       .post("/create_exercise", {
-        workout_plan_id: selectedExercise[idxExercise].plan_id,
-        name: selectedExercise[idxExercise].exercise,
-        sets: selectedExercise[idxExercise].sets,
-        reps: selectedExercise[idxExercise].reps,
-        weights: selectedExercise[idxExercise].weight,
+        workout_plan_id: updatedCurrent.plan_id,
+        name: updatedCurrent.exercise,
+        sets: updatedCurrent.sets,
+        reps: updatedCurrent.reps,
+        weights: updatedCurrent.weight,
       })
       .then((response) => {
         console.log(response.data);
@@ -71,23 +73,33 @@ function StartTraining() {
   };
 
   const handleExercise = () => {
-    postData();
-    if (idxExercise < selectedExercise.length - 1) {
-      selectedExercise[idxExercise].reps = inputValue;
+    if (idxExercise < Object.keys(selectedExercise).length - 1) {
+      // Erstelle Kopie des aktuellen Exercises und aktualisiere reps
+      const updatedCurrent = {
+        ...selectedExercise[idxExercise],
+        reps: inputValue,
+      };
+      if (!updatedCurrent.isFinished) {
+        postData(updatedCurrent);
+      }
+      // Markiere als fertig und aktualisiere State
+      const finishedCurrent = { ...updatedCurrent, isFinished: true };
+      const updatedExercises = { ...selectedExercise };
+      updatedExercises[idxExercise] = finishedCurrent;
+      setExercise(updatedExercises);
+
       const newIdx = idxExercise + 1;
       setidx(newIdx);
-      console.log(selectedExercise[idxExercise]);
-      setTraining(selectedExercise[newIdx]);
-      setExercise(selectedExercise);
-      console.log(selectedExercise[newIdx]);
+      setTraining(updatedExercises[newIdx]);
+      console.log(finishedCurrent, updatedExercises[newIdx]);
     } else {
-      //selectedExercise[idxExercise].sets = inputValue;
       console.log(selectedExercise);
     }
 
+    // Leere Inputs (besser: State verwenden statt DOM)
     for (let i = 0; i < selectedExercise[idxExercise].sets; i++) {
-      document.getElementById("input" + (i + 1)).value = "";
-      console.log("TEST");
+      const input = document.getElementById("input" + (i + 1));
+      if (input) input.value = "";
     }
   };
   const handleExerciseBack = () => {
@@ -154,7 +166,11 @@ function StartTraining() {
       weight: weightArray,
     };
     console.log(updatedExercise);
-
+    setExercise((prev) => {
+      const updatedExercises = [...prev];
+      updatedExercises[idxExercise] = updatedExercise;
+      return updatedExercises;
+    });
     setTraining(updatedExercise);
   };
 
@@ -166,6 +182,11 @@ function StartTraining() {
       sets: updatedSets,
     };
     console.log(updatedExercise);
+    setExercise((prev) => {
+      const updatedExercises = [...prev];
+      updatedExercises[idxExercise] = updatedExercise;
+      return updatedExercises;
+    });
     setTraining(updatedExercise);
   };
 
@@ -366,10 +387,76 @@ function StartTraining() {
     );
   }
 
+  function ExerciseList() {
+    console.log(selectedExercise);
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div className="modal-box border border-blue-500 bg-slate-800">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button
+              onClick={() => setExerciseList(false)}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
+          <div className="flex flex-col justify-center items-center mt-4 text-xs">
+            {Object.values(selectedExercise).map(
+              (item, index) => (
+                console.log(item),
+                (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center cursor-pointer"
+                    onClick={() => {
+                      setTraining(selectedExercise[index]);
+                      setExerciseList(false);
+                    }}
+                  >
+                    <div
+                      className={`card w-40 h-20 ${
+                        selectedExercise[index].isFinished
+                          ? "bg-green-500"
+                          : "bg-slate-800"
+                      } ${
+                        training1.exercise == selectedExercise[index].exercise
+                          ? "border-2 border-green-500"
+                          : "border-2 border-blue-500"
+                      }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
+                    >
+                      <h2 className="text-amber-50 font-bold mb-2">
+                        {item.exercise}
+                      </h2>
+                      <figure className="w-9 h-9 mb-2">
+                        <img
+                          src={
+                            "./" +
+                            item.exercise
+                              .toLowerCase()
+                              .replace("-", "")
+                              .replace(" ", "") +
+                            ".png"
+                          }
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </figure>
+                    </div>
+                  </div>
+                )
+              )
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
       {showModal && settingsModal()}
+      {exerciseList && ExerciseList()}
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
         {selectedTrainingSite ? (
           <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
@@ -383,7 +470,27 @@ function StartTraining() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div
+            className={`space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border ${
+              training1.isFinished ? "border-green-500" : "border-blue-500"
+            }`}
+          >
+            <div className="flex flex-top justify-start"></div>
+
+            {!training1.isFinished ? null : (
+              <div className="flex flex-top justify-end">
+                <button
+                  onClick={() => {
+                    const updatedTraining = { ...training1, isFinished: false };
+                    setTraining(updatedTraining);
+                    console.log(updatedTraining);
+                  }}
+                  className="btn btn-outline btn-secondary btn-sm mr-2"
+                >
+                  Edit
+                </button>
+              </div>
+            )}
             <figure className="mb-4">
               <img
                 src={
@@ -406,18 +513,19 @@ function StartTraining() {
                 className="flex flex-row space-x-3 items-center justify-center"
                 key={index}
               >
-                <div className="flex w-18">
+                <div className="flex w-20">
                   <input
+                    disabled={training1.isFinished}
                     type="text"
-                    placeholder={"Set: " + (index + 1)}
+                    placeholder={"Reps: " + training1.reps[index]}
                     className="input input-primary"
                     id={"input" + (index + 1)}
                     onBlur={(e) => addInput(parseInt(e.target.value), index)}
                   />
                 </div>
-
                 <div className="flex space-x-2 items-center justify-center">
                   <button
+                    disabled={training1.isFinished}
                     onClick={() => handleModal(index, true)}
                     className="btn btn-outline btn-warning"
                   >
@@ -428,12 +536,14 @@ function StartTraining() {
             ))}
             <div className="flex space-x-2 items-center justify-center">
               <button
+                disabled={training1.isFinished}
                 onClick={() => handleReduceSets()}
                 className="btn btn-outline btn-secondary"
               >
                 - Set
               </button>
               <button
+                disabled={training1.isFinished}
                 onClick={() => handleAddSets()}
                 className="btn btn-outline btn-primary"
               >
@@ -442,6 +552,14 @@ function StartTraining() {
             </div>
             <div className="divider divider-primary"></div>
             <div className="flex space-x-2 items-center justify-center">
+              <button
+                onClick={() => {
+                  setSelectedTrainingSite(true);
+                }}
+                className="btn btn-outline btn-primary btn-primary"
+              >
+                Close
+              </button>
               <button
                 disabled={idxExercise == 0}
                 onClick={() => handleExerciseBack()}
@@ -457,6 +575,14 @@ function StartTraining() {
                 {idxExercise == Object.keys(selectedExercise).length - 1
                   ? "Save"
                   : "Next"}
+              </button>
+              <button
+                onClick={() => {
+                  setExerciseList(true);
+                }}
+                className="btn btn-outline btn-success"
+              >
+                List
               </button>
             </div>
           </div>
