@@ -79,7 +79,9 @@ function StartTraining() {
         ...selectedExercise[idxExercise],
         reps: inputValue,
       };
+      console.log("Updated Current Exercise:", updatedCurrent);
       if (!updatedCurrent.isFinished) {
+        console.log("Posting data:", updatedCurrent);
         postData(updatedCurrent);
       }
       // Markiere als fertig und aktualisiere State
@@ -393,7 +395,6 @@ function StartTraining() {
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box border border-blue-500 bg-slate-800">
           <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
             <button
               onClick={() => setExerciseList(false)}
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -483,6 +484,17 @@ function StartTraining() {
                   onClick={() => {
                     const updatedTraining = { ...training1, isFinished: false };
                     setTraining(updatedTraining);
+
+                    // Aktualisiere auch selectedExercise, damit isFinished konsistent ist
+                    setExercise((prev) => {
+                      const updatedExercises = { ...prev };
+                      updatedExercises[idxExercise] = {
+                        ...updatedExercises[idxExercise],
+                        isFinished: false,
+                      };
+                      return updatedExercises;
+                    });
+
                     console.log(updatedTraining);
                   }}
                   className="btn btn-outline btn-secondary btn-sm mr-2"

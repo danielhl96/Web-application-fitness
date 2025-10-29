@@ -4,7 +4,7 @@ import sqlalchemy
 import jwt
 import uuid
 import redis
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -189,7 +189,7 @@ def login_user():
         )
         return resp, 200
     else:
-        return jsonify({"message": "Invalid email or password!"}), 401
+        return jsonify({"message": "Invalid email or password!"}, 401)
 
 def get_token_from_cookie():
     token = request.cookies.get("access_token")
@@ -399,10 +399,28 @@ def get_workout_plans():
 
     user_id = verification.get("sub")
 
+    # Subquery für max_date pro Plan
+    subq = session.query(
+        Exercise.workout_plan_id,
+        func.max(Exercise.date).label('max_date')
+    ).group_by(Exercise.workout_plan_id).subquery()
+
+    # Lade Pläne mit Templates
     plans = session.query(WorkoutPlan).options(
-        joinedload(WorkoutPlan.templates),
-        joinedload(WorkoutPlan.exercises)
+        joinedload(WorkoutPlan.templates)
     ).filter_by(user_id=user_id).all()
+
+    # Lade gefilterte Exercises separat
+    exercises = session.query(Exercise).join(
+        subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.date == subq.c.max_date)
+    ).filter(Exercise.user_id == user_id).all()
+
+    print("Fetched exercises:", exercises)
+    # Weise Exercises den Plänen zu
+    plan_dict = {p.id: p for p in plans}
+    for e in exercises:
+        if e.workout_plan_id in plan_dict:
+            plan_dict[e.workout_plan_id].exercises.append(e)
 
     result = []
     for plan in plans:
@@ -444,19 +462,35 @@ def create_exercise():
 
     user_id = verification.get("sub")
     data = request.json
-
-    new_exercise = Exercise(
+    print(data)
+    find_exercise = session.query(Exercise).filter_by(
         user_id=user_id,
-        workout_plan_id=data.get("plan_id"),
-        date=datetime.now(),
-        name=data.get("name"),
-        sets=data.get("sets"),
-        reps=data.get("reps"),
-        weights=data.get("weights")
-    )
-    session.add(new_exercise)
-    session.commit()
-    return jsonify({"message": "Exercise logged successfully!"}), 201
+        workout_plan_id=data.get("workout_plan_id"),
+        date=datetime.now().date(),
+        name=data.get("name")
+    ).first()
+
+    if find_exercise:
+        # Update das bestehende Exercise statt löschen
+        find_exercise.sets = data.get("sets")
+        find_exercise.reps = data.get("reps")
+        find_exercise.weights = data.get("weights")
+        session.commit()
+        return jsonify({"message": "Exercise updated successfully!"}), 200
+    else:
+        # Erstelle neues Exercise, falls nicht vorhanden
+        new_exercise = Exercise(
+            user_id=user_id,
+            workout_plan_id=data.get("workout_plan_id"),
+            date=datetime.now(),
+            name=data.get("name"),
+            sets=data.get("sets"),
+            reps=data.get("reps"),
+            weights=data.get("weights")
+        )
+        session.add(new_exercise)
+        session.commit()
+        return jsonify({"message": "Exercise logged successfully!"}), 201
 
 @app.route('/api/check_auth', methods=['get'])
 def check_auth():
