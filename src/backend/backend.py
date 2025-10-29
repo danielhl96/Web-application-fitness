@@ -415,12 +415,7 @@ def get_workout_plans():
         subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.date == subq.c.max_date)
     ).filter(Exercise.user_id == user_id).all()
 
-    print("Fetched exercises:", exercises)
-    # Weise Exercises den Plänen zu
-    plan_dict = {p.id: p for p in plans}
-    for e in exercises:
-        if e.workout_plan_id in plan_dict:
-            plan_dict[e.workout_plan_id].exercises.append(e)
+
 
     result = []
     for plan in plans:

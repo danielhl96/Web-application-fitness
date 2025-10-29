@@ -23,6 +23,14 @@ function StartTraining() {
         plan_id: plan.id,
         isFinished: false,
       }));
+      //hier zusätzlich daten aus exercises für weights ladnen
+      const exercises = plan.exercises.map((e) => ({
+        exercise: e.name,
+        reps: e.reps,
+        sets: e.sets,
+        weight: e.weights,
+      }));
+      acc[plan.name].exercises = exercises;
       console.log(acc);
       return acc;
     }, {});
@@ -38,6 +46,8 @@ function StartTraining() {
     } else {
       setExercise({});
     }
+
+    handleWeightSelect();
   }, [data]);
 
   const [idxExercise, setidx] = useState(0);
@@ -104,6 +114,7 @@ function StartTraining() {
       if (input) input.value = "";
     }
   };
+
   const handleExerciseBack = () => {
     if (idxExercise > 0) {
       const newIdx = idxExercise - 1;
