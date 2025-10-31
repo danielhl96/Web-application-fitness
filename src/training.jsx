@@ -60,6 +60,7 @@ function StartTraining() {
   const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showTrainingEndModal, setShowTrainingEndModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState([3]);
   const [exerciseList, setExerciseList] = useState(false);
 
@@ -100,6 +101,7 @@ function StartTraining() {
       const updatedExercises = [...currentExercises];
       updatedExercises[idxExercise] = finishedCurrent;
       setCurrentExercises(updatedExercises);
+      setShowTrainingEndModal(true);
     }
 
     if (idxExercise < currentExercises.length - 1) {
@@ -394,6 +396,33 @@ function StartTraining() {
     );
   };
 
+  function TrainingEndModal() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div className="modal-box border border-blue-500 bg-slate-800">
+          <div className="flex flex-col justify-center items-center  text-xs">
+            <h2 className="text-amber-50 font-bold mb-2">Workout Complete!</h2>
+            <div className="flex flex-row justify-center items-center gap-4 mt-2">
+              <button
+                onClick={() => {
+                  setSelectedTrainingSite(true);
+                  setShowTrainingEndModal(false);
+                  setCurrentExercises([]);
+                  setCurrentPlan(null);
+                  setTraining(null);
+                  setidx(0);
+                }}
+                className="btn bg-blue-500 hover:bg-blue-600 text-white"
+              >
+                ok
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function WorkoutCard({ planName }) {
     return (
       <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
@@ -488,6 +517,7 @@ function StartTraining() {
     <div>
       <Header />
       {showModal && settingsModal()}
+      {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
         {selectedTrainingSite ? (
@@ -564,32 +594,34 @@ function StartTraining() {
               />
             </figure>
             <div className="divider divider-primary">{training1.exercise}</div>
-            {Array.from({ length: training1.sets }).map((_, index) => (
-              <div
-                className="flex flex-row space-x-3 items-center justify-center overflow-y-auto"
-                key={index}
-              >
-                <div className="flex w-20">
-                  <input
-                    disabled={training1.isFinished}
-                    type="text"
-                    placeholder={"Reps: " + training1.reps[index]}
-                    className="input input-primary"
-                    id={"input" + (index + 1)}
-                    onBlur={(e) => addInput(parseInt(e.target.value), index)}
-                  />
+            <div className="overflow-y-auto max-h-40 space-y-2">
+              {Array.from({ length: training1.sets }).map((_, index) => (
+                <div
+                  className="flex flex-row space-x-3 items-center justify-center"
+                  key={index}
+                >
+                  <div className="flex w-20">
+                    <input
+                      disabled={training1.isFinished}
+                      type="text"
+                      placeholder={"Reps: " + training1.reps[index]}
+                      className="input input-primary"
+                      id={"input" + (index + 1)}
+                      onBlur={(e) => addInput(parseInt(e.target.value), index)}
+                    />
+                  </div>
+                  <div className="flex space-x-2 items-center justify-center">
+                    <button
+                      disabled={training1.isFinished}
+                      onClick={() => handleModal(index, true)}
+                      className="btn btn-outline btn-warning"
+                    >
+                      Weight: {training1.weights[index]} kg
+                    </button>
+                  </div>
                 </div>
-                <div className="flex space-x-2 items-center justify-center">
-                  <button
-                    disabled={training1.isFinished}
-                    onClick={() => handleModal(index, true)}
-                    className="btn btn-outline btn-warning"
-                  >
-                    Weight: {training1.weights[index]} kg
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <div className="flex space-x-2 items-center justify-center">
               <button
                 disabled={training1.isFinished}
