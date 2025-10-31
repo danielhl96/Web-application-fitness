@@ -88,35 +88,47 @@ function StartTraining() {
   };
 
   const handleExercise = () => {
-    if (idxExercise < Object.keys(selectedExercise).length - 1) {
-      // Erstelle Kopie des aktuellen Exercises und aktualisiere reps
+    if (idxExercise == currentExercises.length - 1) {
       const updatedCurrent = {
-        ...selectedExercise[idxExercise],
+        ...currentExercises[idxExercise],
         reps: inputValue,
       };
-      console.log("Updated Current Exercise:", updatedCurrent);
       if (!updatedCurrent.isFinished) {
-        console.log("Posting data:", updatedCurrent);
         postData(updatedCurrent);
       }
-      // Markiere als fertig und aktualisiere State
       const finishedCurrent = { ...updatedCurrent, isFinished: true };
-      const updatedExercises = { ...selectedExercise };
+      const updatedExercises = [...currentExercises];
       updatedExercises[idxExercise] = finishedCurrent;
-      setExercise(updatedExercises);
+      setCurrentExercises(updatedExercises);
+    }
+
+    if (idxExercise < currentExercises.length - 1) {
+      const updatedCurrent = {
+        ...currentExercises[idxExercise],
+        reps: inputValue,
+      };
+      if (!updatedCurrent.isFinished) {
+        postData(updatedCurrent);
+      }
+      const finishedCurrent = { ...updatedCurrent, isFinished: true };
+      const updatedExercises = [...currentExercises];
+      updatedExercises[idxExercise] = finishedCurrent;
+      setCurrentExercises(updatedExercises);
+
+      // Aktualisiere Objekt
+      setExercise((prev) => {
+        const updated = { ...prev };
+        updated[currentPlan] = updatedExercises;
+        return updated;
+      });
 
       const newIdx = idxExercise + 1;
       setidx(newIdx);
       setTraining(updatedExercises[newIdx]);
-      console.log(finishedCurrent, updatedExercises[newIdx]);
-    } else {
-      console.log(selectedExercise);
-    }
 
-    // Leere Inputs (besser: State verwenden statt DOM)
-    for (let i = 0; i < selectedExercise[idxExercise].sets; i++) {
-      const input = document.getElementById("input" + (i + 1));
-      if (input) input.value = "";
+      for (var i = 0; i < training1.sets; i++) {
+        document.getElementById("input" + (i + 1)).value = "";
+      }
     }
   };
 
@@ -124,8 +136,8 @@ function StartTraining() {
     if (idxExercise > 0) {
       const newIdx = idxExercise - 1;
       setidx(newIdx);
-      setTraining(selectedExercise[newIdx]);
-      setExercise(selectedExercise);
+      setTraining(currentExercises[newIdx]);
+      setCurrentExercises(currentExercises);
 
       console.log(idxExercise);
       setInputValue([]);
@@ -136,37 +148,35 @@ function StartTraining() {
     const newinputs = [...inputValue];
     newinputs[index] = e;
     setInputValue(newinputs);
+    console.log(training1);
   };
 
   const changeWeight = (index, flag) => {
     const totalWeight =
       (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
-    setSelectedWeight1((prev) => {
-      const updated = [...prev];
-      updated[index] = selectedWeight1[index];
-      return updated;
-    });
-
-    setSelectedWeight2((prev) => {
-      const updated = [...prev];
-      updated[index] = selectedWeight2[index];
-      return updated;
-    });
-    console.log("SELECTED:", selectedExercise[idxExercise]);
-    const updatedSetw = [...selectedExercise[idxExercise].weights];
-    console.log("Aktuelles Gewicht:", updatedSetw);
+    console.log("SELECTED:", currentExercises[idxExercise]);
+    const updatedSetw = [...currentExercises[idxExercise].weights];
     updatedSetw[index] = totalWeight;
 
     const updatedExercise = {
-      ...selectedExercise[idxExercise],
+      ...currentExercises[idxExercise],
       weights: updatedSetw,
     };
 
     setTraining(updatedExercise);
+    setCurrentExercises((prev) => {
+      const updated = [...prev];
+      updated[idxExercise] = updatedExercise;
+      return updated;
+    });
+
+    // Aktualisiere auch das Objekt
     setExercise((prev) => {
-      const updatedExercises = [...prev];
-      updatedExercises[idxExercise] = updatedExercise;
-      return updatedExercises;
+      const updated = { ...prev };
+      updated[currentPlan] = currentExercises.map((ex, i) =>
+        i === idxExercise ? updatedExercise : ex
+      );
+      return updated;
     });
 
     setShowModal(flag);
@@ -174,7 +184,7 @@ function StartTraining() {
 
   const handleAddSets = () => {
     const updatedSets = training1.sets + 1;
-    const weightArray = [...training1.weight];
+    const weightArray = [...training1.weights];
     weightArray.push(0);
 
     // Füge einen neuen Eintrag für das neue Set hinzu
@@ -185,7 +195,7 @@ function StartTraining() {
       weight: weightArray,
     };
     console.log(updatedExercise);
-    setExercise((prev) => {
+    setCurrentExercises((prev) => {
       const updatedExercises = [...prev];
       updatedExercises[idxExercise] = updatedExercise;
       return updatedExercises;
@@ -201,7 +211,7 @@ function StartTraining() {
       sets: updatedSets,
     };
     console.log(updatedExercise);
-    setExercise((prev) => {
+    setCurrentExercises((prev) => {
       const updatedExercises = [...prev];
       updatedExercises[idxExercise] = updatedExercise;
       return updatedExercises;
@@ -392,8 +402,9 @@ function StartTraining() {
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => {
+                setCurrentExercises(selectedExercise[planName]);
+                setCurrentPlan(planName);
                 setTraining(selectedExercise[planName][0]);
-                setExercise(selectedExercise[planName]);
                 setSelectedTrainingSite(false);
               }}
               className="btn bg-blue-500 hover:bg-blue-600 text-white"
@@ -407,7 +418,7 @@ function StartTraining() {
   }
 
   function ExerciseList() {
-    console.log(selectedExercise);
+    console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box border border-blue-500 bg-slate-800">
@@ -420,7 +431,7 @@ function StartTraining() {
             </button>
           </form>
           <div className="flex flex-col justify-center items-center mt-4 text-xs">
-            {Object.values(selectedExercise).map(
+            {Object.values(currentExercises).map(
               (item, index) => (
                 console.log(item),
                 (
@@ -428,17 +439,17 @@ function StartTraining() {
                     key={index}
                     className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
-                      setTraining(selectedExercise[index]);
+                      setTraining(currentExercises[index]);
                       setExerciseList(false);
                     }}
                   >
                     <div
                       className={`card w-40 h-20 ${
-                        selectedExercise[index].isFinished
+                        currentExercises[index].isFinished
                           ? "bg-green-500"
                           : "bg-slate-800"
                       } ${
-                        training1.exercise == selectedExercise[index].exercise
+                        training1.exercise == currentExercises[index].exercise
                           ? "border-2 border-green-500"
                           : "border-2 border-blue-500"
                       }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
@@ -470,6 +481,9 @@ function StartTraining() {
     );
   }
 
+  const [currentExercises, setCurrentExercises] = useState([]);
+  const [currentPlan, setCurrentPlan] = useState(null);
+
   return (
     <div>
       <Header />
@@ -489,7 +503,7 @@ function StartTraining() {
           </div>
         ) : (
           <div
-            className={`space-y-4 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 rounded-md border ${
+            className={`space-y-2 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
               training1.isFinished ? "border-green-500" : "border-blue-500"
             }`}
           >
@@ -514,9 +528,22 @@ function StartTraining() {
 
                     console.log(updatedTraining);
                   }}
-                  className="btn btn-outline btn-secondary btn-sm mr-2"
+                  className="btn btn-outline btn-primary btn-sm mr-2"
                 >
-                  Edit
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
                 </button>
               </div>
             )}
@@ -539,7 +566,7 @@ function StartTraining() {
             <div className="divider divider-primary">{training1.exercise}</div>
             {Array.from({ length: training1.sets }).map((_, index) => (
               <div
-                className="flex flex-row space-x-3 items-center justify-center"
+                className="flex flex-row space-x-3 items-center justify-center overflow-y-auto"
                 key={index}
               >
                 <div className="flex w-20">
@@ -587,31 +614,98 @@ function StartTraining() {
                 }}
                 className="btn btn-outline btn-primary btn-primary"
               >
-                Close
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
               <button
                 disabled={idxExercise == 0}
                 onClick={() => handleExerciseBack()}
                 className="btn btn-outline btn-primary"
               >
-                Back
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 transform scale-x-[-1]" // <-- Hier hinzugefügt: scale-x-[-1] spiegelt horizontal
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    d
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12H9m6 0l-3-3m3 3l-3 3"
+                  />
+                </svg>
               </button>
               <button
                 onClick={() => handleExercise()}
-                className="btn btn-outline btn-success"
+                className="btn btn-outline btn-primary"
               >
-                {" "}
-                {idxExercise == Object.keys(selectedExercise).length - 1
-                  ? "Save"
-                  : "Next"}
+                {idxExercise == Object.keys(currentExercises).length - 1 ? (
+                  <svg // success icon
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12H9m6 0l-3-3m3 3l-3 3"
+                    />
+                  </svg>
+                )}
               </button>
               <button
                 onClick={() => {
                   setExerciseList(true);
                 }}
-                className="btn btn-outline btn-success"
+                className="btn btn-outline btn-primary btn-primary"
               >
-                List
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 12h18M3 6h18M3 18h18"
+                  />
+                </svg>
               </button>
             </div>
           </div>
