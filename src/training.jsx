@@ -25,9 +25,9 @@ function StartTraining() {
           reps: exercise.reps,
           sets: exercise.sets,
           weights:
-            matchingExercise && matchingExercise.weights === undefined
-              ? { weight: matchingExercise.weights }
-              : { weight: Array(exercise.sets).fill(0) },
+            matchingExercise && matchingExercise.weights !== undefined
+              ? matchingExercise.weights
+              : Array(exercise.sets).fill(0),
           plan_id: plan.id,
           isFinished: false,
         };
@@ -152,9 +152,9 @@ function StartTraining() {
       updated[index] = selectedWeight2[index];
       return updated;
     });
-
+    console.log("SELECTED:", selectedExercise[idxExercise]);
     const updatedSetw = [...selectedExercise[idxExercise].weights];
-
+    console.log("Aktuelles Gewicht:", updatedSetw);
     updatedSetw[index] = totalWeight;
 
     const updatedExercise = {
