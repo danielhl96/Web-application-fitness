@@ -84,6 +84,13 @@ function Header() {
             >
               Timer
             </Link>
+            <Link
+              to="/statistic"
+              className="btn btn-ghost text-white md:ml-4"
+              onClick={() => setMenuOpen(false)}
+            >
+              Statistics
+            </Link>
             <button
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => handlelogout()}

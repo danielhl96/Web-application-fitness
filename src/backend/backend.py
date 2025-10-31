@@ -445,6 +445,34 @@ def get_workout_plans():
     print(result)
     return jsonify(result), 200
 
+@app.route('/api/statistics', methods=['get'])
+def get_statistics():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+
+    stats = session.query(
+        Exercise.name,
+       func.max(Exercise.weights).label('max_weight'),
+       func.min(Exercise.weights).label('min_weight'),
+    ).filter(Exercise.user_id == user_id).group_by(Exercise.name).all()
+
+    result = []
+    for stat in stats:
+        result.append({
+            "exercise_name": stat.name,
+            "max_weight": stat.max_weight,
+            "min_weight": stat.min_weight
+        })
+
+    return jsonify(result), 200
+
 @app.route('/api/create_exercise', methods=['post'])
 def create_exercise():
     token = get_token_from_cookie()

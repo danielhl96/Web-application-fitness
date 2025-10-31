@@ -526,9 +526,11 @@ function StartTraining() {
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              {Object.keys(selectedExercise).map((name, index) => (
-                <WorkoutCard planName={name} key={index} />
-              ))}
+              <div className="overflow-y-auto max-h-80 ">
+                {Object.keys(selectedExercise).map((name, index) => (
+                  <WorkoutCard planName={name} key={index} />
+                ))}
+              </div>
             </div>
           </div>
         ) : (

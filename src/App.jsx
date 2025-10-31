@@ -12,6 +12,7 @@ import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
+import Statistic from "./statistic.jsx";
 
 function Home() {
   const navigate = useNavigate();
@@ -78,6 +79,34 @@ function Home() {
                 className="btn btn-outline btn-primary"
               >
                 Edit
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-blue-400">Timer</h2>
+            <p className="text-slate-200">Create a timer for your workouts!</p>
+            <div className="justify-end card-actions">
+              <button
+                onClick={() => navigate("/timer")}
+                className="btn btn-outline btn-primary"
+              >
+                Start
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
+          <div className="card-body">
+            <h2 className="card-title text-blue-400">Statistic</h2>
+            <p className="text-slate-200">View your workout statistics!</p>
+            <div className="justify-end card-actions">
+              <button
+                onClick={() => navigate("/statistic")}
+                className="btn btn-outline btn-primary"
+              >
+                Start
               </button>
             </div>
           </div>
@@ -154,6 +183,16 @@ function App() {
             <AuthProvider>
               <ProtectedRoute>
                 <Counter />
+              </ProtectedRoute>
+            </AuthProvider>
+          }
+        />
+        <Route
+          path="/statistic"
+          element={
+            <AuthProvider>
+              <ProtectedRoute>
+                <Statistic />
               </ProtectedRoute>
             </AuthProvider>
           }
