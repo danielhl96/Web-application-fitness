@@ -15,22 +15,25 @@ function StartTraining() {
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
-      acc[plan.name] = plan.templates.map((exercise) => ({
-        exercise: exercise.name,
-        reps: exercise.reps,
-        sets: exercise.sets,
-        weight: exercise.weights,
-        plan_id: plan.id,
-        isFinished: false,
-      }));
+      acc[plan.name] = plan.templates.map((exercise) => {
+        // Finde das passende Exercise per name (da exercises gefiltert ist)
+        const matchingExercise = plan.exercises.find(
+          (e) => e.name === exercise.name
+        );
+        return {
+          exercise: exercise.name,
+          reps: exercise.reps,
+          sets: exercise.sets,
+          weights:
+            matchingExercise && matchingExercise.weights === undefined
+              ? { weight: matchingExercise.weights }
+              : { weight: Array(exercise.sets).fill(0) },
+          plan_id: plan.id,
+          isFinished: false,
+        };
+      });
       //hier zusätzlich daten aus exercises für weights ladnen
-      const exercises = plan.exercises.map((e) => ({
-        exercise: e.name,
-        reps: e.reps,
-        sets: e.sets,
-        weight: e.weights,
-      }));
-      acc[plan.name].exercises = exercises;
+
       console.log(acc);
       return acc;
     }, {});
@@ -42,7 +45,9 @@ function StartTraining() {
   // whenever `data` (from backend) changes, compute the desired shape and set state
   useEffect(() => {
     if (data && data.length > 0) {
-      setExercise(mapPlans(data));
+      const mapped = mapPlans(data);
+      setExercise(mapped);
+      setTraining(mapped[0]);
     } else {
       setExercise({});
     }
@@ -72,7 +77,7 @@ function StartTraining() {
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,
         reps: updatedCurrent.reps,
-        weights: updatedCurrent.weight,
+        weights: updatedCurrent.weights,
       })
       .then((response) => {
         console.log(response.data);
@@ -147,13 +152,14 @@ function StartTraining() {
       updated[index] = selectedWeight2[index];
       return updated;
     });
-    const updatedSetw = [...selectedExercise[idxExercise].weight];
+
+    const updatedSetw = [...selectedExercise[idxExercise].weights];
 
     updatedSetw[index] = totalWeight;
 
     const updatedExercise = {
       ...selectedExercise[idxExercise],
-      weight: updatedSetw,
+      weights: updatedSetw,
     };
 
     setTraining(updatedExercise);
@@ -552,7 +558,7 @@ function StartTraining() {
                     onClick={() => handleModal(index, true)}
                     className="btn btn-outline btn-warning"
                   >
-                    Weight: {training1.weight[index]} kg
+                    Weight: {training1.weights[index]} kg
                   </button>
                 </div>
               </div>
