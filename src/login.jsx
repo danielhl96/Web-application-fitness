@@ -91,9 +91,9 @@ function LoginForm() {
               </span>
             )}
           </div>
+          <h1 className="text-shadow-lg font-mono">Password</h1>
 
           <div>
-            <h1 className="text-shadow-lg font-mono">Password</h1>
             <input
               type="password"
               placeholder={"Password: "}
@@ -102,10 +102,9 @@ function LoginForm() {
             />
           </div>
           <h1 className="text-red-500 text-sm ">{message}</h1>
-
           <button
             onClick={() => handleLogin()}
-            className="btn btn-active btn-primary w-80 "
+            className="btn btn-outline btn-success w-80 "
           >
             Login
           </button>

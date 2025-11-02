@@ -18,8 +18,16 @@ function Header() {
     <div>
       <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
         <div className="flex w-full justify-between items-center px-4">
-          <Link to="/" className="btn btn-ghost text-white text-lg font-bold">
-            Fitness
+          <Link
+            to="/"
+            className="btn btn-ghost text-white text-lg font-bold flex items-center"
+          >
+            <figure className="w-9 h-9 mb-2">
+              <img
+                src={"./squats.png"}
+                className="w-full h-full object-cover rounded-md filter brightness-0 invert" // <-- Filter hinzugefügt: brightness-0 invert (weiß)
+              />
+            </figure>
           </Link>
           <div className="md:hidden">
             <button
@@ -53,6 +61,20 @@ function Header() {
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 text-amber-50"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
               Profile
             </Link>
             <Link
@@ -60,6 +82,20 @@ function Header() {
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-amber-50" // <-- Klasse für Größe und Farbe hinzugefügt
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
               Create training
             </Link>
             <Link
@@ -67,6 +103,20 @@ function Header() {
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-amber-50" // <-- Klasse für Größe und Farbe hinzugefügt
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
               Edit training
             </Link>
             <Link
@@ -74,6 +124,10 @@ function Header() {
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
             >
+              <img
+                src={"./pullup.png"}
+                className="w-6 h-6 mr-1 filter brightness-0 invert"
+              />
               Start training
             </Link>
 
@@ -82,6 +136,20 @@ function Header() {
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => setMenuOpen(false)}
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-amber-50" // <-- Klasse hinzugefügt für Größe und Farbe (amber-50 für Konsistenz)
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
               Timer
             </Link>
             <Link
@@ -89,12 +157,43 @@ function Header() {
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => setMenuOpen(false)}
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-amber-50" // <-- Klasse hinzugefügt für Größe und Farbe (amber-50 für Konsistenz)
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
               Statistics
             </Link>
             <button
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => handlelogout()}
             >
+              <svg
+                icon
+                für
+                logout
+                className="h-6 w-6 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
               Logout
             </button>
           </div>

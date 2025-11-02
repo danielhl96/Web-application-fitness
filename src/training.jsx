@@ -412,7 +412,7 @@ function StartTraining() {
                   setTraining(null);
                   setidx(0);
                 }}
-                className="btn bg-blue-500 hover:bg-blue-600 text-white"
+                className="btn btn-outline btn-primary hover:bg-blue-600 text-white"
               >
                 ok
               </button>
@@ -425,7 +425,7 @@ function StartTraining() {
 
   function WorkoutCard({ planName }) {
     return (
-      <div className="card w-full sm:w-80 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
+      <div className="card sm:w-200 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
@@ -436,7 +436,7 @@ function StartTraining() {
                 setTraining(selectedExercise[planName][0]);
                 setSelectedTrainingSite(false);
               }}
-              className="btn bg-blue-500 hover:bg-blue-600 text-white"
+              className="btn btn-outline btn-primary text-white"
             >
               Start
             </button>
@@ -535,7 +535,7 @@ function StartTraining() {
           </div>
         ) : (
           <div
-            className={`space-y-2 card sm:w-64 md:w-96 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
+            className={`space-y-2 card sm:w-100 md:w-100 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
               training1.isFinished ? "border-green-500" : "border-blue-500"
             }`}
           >
@@ -612,7 +612,7 @@ function StartTraining() {
                       onBlur={(e) => addInput(parseInt(e.target.value), index)}
                     />
                   </div>
-                  <div className="flex space-x-2 items-center justify-center">
+                  <div className="flex space-x-2 items-center justify-center ">
                     <button
                       disabled={training1.isFinished}
                       onClick={() => handleModal(index, true)}
@@ -630,14 +630,40 @@ function StartTraining() {
                 onClick={() => handleReduceSets()}
                 className="btn btn-outline btn-secondary"
               >
-                - Set
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
               </button>
               <button
                 disabled={training1.isFinished}
                 onClick={() => handleAddSets()}
-                className="btn btn-outline btn-primary"
+                className="btn btn-outline btn-success"
               >
-                + Set
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1" // <-- Klasse für Größe und Abstand hinzugefügt
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
               </button>
             </div>
             <div className="divider divider-primary"></div>

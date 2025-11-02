@@ -342,6 +342,27 @@ def create_workout_plan():
     session.commit()
     return jsonify({"message": "Workout plan created successfully!"}), 201
 
+@app.route('/api/delete_workout_plan', methods=['delete'])
+def delete_workout_plan():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401   
+    verification = verifyToken(token)
+    if verification.get("error"):   
+        return jsonify({"message": verification["error"]}), 401
+    data = request.json
+    workout_plan_id = data.get("plan_id")
+    if not workout_plan_id:
+        return jsonify({"message": "Missing workout plan ID!"}), 400
+    user_id = verification.get("sub")
+    workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id, user_id=user_id).first()
+    if not workout_plan:
+        return jsonify({"message": "Workout plan not found!"}), 404
+    session.delete(workout_plan)
+    session.commit()
+    return jsonify({"message": "Workout plan deleted successfully!"}), 200
+
+
 @app.route('/api/edit_workout_plan', methods=['put'])
 def edit_workout_plan():
     token = get_token_from_cookie()
@@ -463,15 +484,27 @@ def get_statistics():
        func.min(Exercise.weights).label('min_weight'),
     ).filter(Exercise.user_id == user_id).group_by(Exercise.name).all()
 
+    more_stats = session.query(Exercise.name,Exercise.weights,Exercise.date).filter(Exercise.user_id == user_id).all()
+
     result = []
     for stat in stats:
         result.append({
             "exercise_name": stat.name,
             "max_weight": stat.max_weight,
-            "min_weight": stat.min_weight
+            "min_weight": stat.min_weight,
+
+        })
+    history = []
+    for stat in more_stats:
+        history.append({
+            "exercise_name": stat.name,
+            "weights": stat.weights,
+            "date": stat.date.isoformat()
         })
 
-    return jsonify(result), 200
+  
+
+    return jsonify(result,history), 200
 
 @app.route('/api/create_exercise', methods=['post'])
 def create_exercise():
@@ -572,4 +605,4 @@ def remove_session(exception=None):
         session.remove()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host="0.0.0.0",port=5000)

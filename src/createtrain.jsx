@@ -89,9 +89,10 @@ function ExerciseCard({
 
 function CreateTrainGUI() {
   const navigate = useNavigate();
-
+  const [WorkoutName, setWorkoutName] = useState("");
   const handleSaveTraining = async () => {
-    const trainingName = document.getElementById("training-input").value;
+    const trainingName =
+      WorkoutName || document.getElementById("training-input").value;
     const selectedExercises = selectedExercise.map((exercise) => ({
       name: exercise.name,
       sets: exercise.sets,
@@ -366,6 +367,7 @@ function CreateTrainGUI() {
             placeholder="Your trainings name:"
             className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="training-input"
+            onChange={(e) => setWorkoutName(e.target.value)}
           />
           <input
             type="search"
@@ -437,6 +439,7 @@ function CreateTrainGUI() {
           </div>
           <div className="flex flex-row items-center gap-4 mt-4">
             <button
+              disabled={WorkoutName === ""}
               onClick={() => handleSaveTraining()}
               className="btn btn-outline btn-primary"
             >

@@ -272,6 +272,13 @@ const EditTrain = () => {
 
   //Nur im Frontend
   const handleRemoveExercise = (exerciseToRemove) => {
+    api
+      .delete(`/delete_workout_plan`, {
+        data: { plan_id: exerciseToRemove.plan_id },
+      })
+      .then(() => {
+        console.log("Workout plan deleted");
+      });
     setSelectedExercise((prev) => {
       const updatedCategory = prev[savekey].filter(
         (ex) => ex !== exerciseToRemove
@@ -561,7 +568,7 @@ const EditTrain = () => {
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
           Edit Your Training
         </div>
-        <div className="w-full flex flex-col  gap-4 items-center pt-2">
+        <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-130">
           {Object.keys(selectedExercise).map((exercise, index) => (
             <WorkoutCard exercise={exercise} key={index} />
           ))}
