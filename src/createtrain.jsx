@@ -357,7 +357,7 @@ function CreateTrainGUI() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="card w-auto h-auto  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center ">
+      <div className="card w-auto h-auto  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center  ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
           Create your training
         </div>
@@ -418,24 +418,30 @@ function CreateTrainGUI() {
           </div>
           {/* Render selected exercises */}
           <div className="flex flex-col items-center space-y-3">
-            {selectedExercise.length > 0 ? (
-              selectedExercise.map((exercise, index) => (
-                <ExerciseCard
-                  key={index}
-                  name={exercise.name}
-                  description={exercise.description}
-                  img={exercise.img}
-                  onRemove={() => handleRemoveExercise(exercise.name)}
-                  // 2. Callback als Prop übergeben
-                  onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
-                  onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
-                />
-              ))
-            ) : (
-              <p className="text-slate-400 flex justify-center">
-                No exercises selected yet.
-              </p>
-            )}
+            <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
+              {selectedExercise.length > 0 ? (
+                selectedExercise.map((exercise, index) => (
+                  <ExerciseCard
+                    key={index}
+                    name={exercise.name}
+                    description={exercise.description}
+                    img={exercise.img}
+                    onRemove={() => handleRemoveExercise(exercise.name)}
+                    // 2. Callback als Prop übergeben
+                    onRepsChange={(reps) =>
+                      handleRepsChange(exercise.name, reps)
+                    }
+                    onSetsChange={(sets) =>
+                      handleSetsChange(exercise.name, sets)
+                    }
+                  />
+                ))
+              ) : (
+                <p className="text-slate-400 flex justify-center">
+                  No exercises selected yet.
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex flex-row items-center gap-4 mt-4">
             <button

@@ -568,7 +568,7 @@ const EditTrain = () => {
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
           Edit Your Training
         </div>
-        <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-130">
+        <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
           {Object.keys(selectedExercise).map((exercise, index) => (
             <WorkoutCard exercise={exercise} key={index} />
           ))}

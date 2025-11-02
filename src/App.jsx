@@ -17,8 +17,8 @@ import Statistic from "./statistic.jsx";
 function Home() {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900 py-16">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-slate-900 py-16 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 ">
         {/* Card 1 */}
         <div className="card w-full sm:w-96 lg:w-96 bg-slate-800 shadow-lg border border-slate-700">
           <div className="card-body">
