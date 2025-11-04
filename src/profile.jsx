@@ -25,6 +25,7 @@ function Profile() {
   const [failureAge, setFailureAge] = useState(false);
   const [failureBFP, setFailureBFP] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [bri, setBri] = useState(0);
 
   useEffect(() => {
     api
@@ -91,12 +92,19 @@ function Profile() {
     setActivity(activity);
   };
 
+  const handleBri = () => {
+    if (height === 0 || waist === 0) return; // Vermeide Division durch 0
+    setBri(
+      364.2 - 365.5 * Math.sqrt(1 - Math.pow(waist / Math.PI / height, 2))
+    );
+  };
+
   const handleHeight = (e) => {
     const value = parseFloat(e.target.value);
     if (value < 100 || isNaN(value)) {
       setFailureHeight(true);
     } else {
-      setHeight(e.target.value);
+      setHeight(value);
       setFailureHeight(false);
     }
   };
@@ -106,8 +114,8 @@ function Profile() {
     if (value < 20 || isNaN(value)) {
       setFailureWeight(true);
     } else {
-      setWeight(e.target.value);
-      console.log(e.target.value);
+      setWeight(value);
+      console.log(value);
       setFailureWeight(false);
     }
   };
@@ -121,7 +129,7 @@ function Profile() {
     if (value < 50 || isNaN(value)) {
       setFailureHip(true);
     } else {
-      setHip(e.target.value);
+      setHip(value);
       handleHwr();
       setFailureHip(false);
     }
@@ -132,7 +140,7 @@ function Profile() {
     if (value < 20 || isNaN(value)) {
       setFailureWaist(true);
     } else {
-      setWaist(e.target.value);
+      setWaist(value);
       handleHwr();
       setFailureWaist(false);
     }
@@ -151,7 +159,7 @@ function Profile() {
     if (value <= 0 || isNaN(value)) {
       setFailureBFP(true);
     } else {
-      setBFP(e.target.value);
+      setBFP(value);
       setFailureBFP(false);
     }
   };
@@ -173,7 +181,8 @@ function Profile() {
 
   useEffect(() => {
     calcCalories();
-  }, [gender, weight, height, age, activity, goal]);
+    handleBri();
+  }, [gender, weight, height, age, activity, goal, calories]);
 
   useEffect(() => {
     handleBmi();
@@ -187,7 +196,7 @@ function Profile() {
       <div className="min-h-screen flex justify-center bg-slate-900  py-8 pt-24">
         <Header />
         {edit ? (
-          <div className="space-y-4 card sm:w-64 md:w-96  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div className="card sm:w-64 md:w-96 bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500 overflow-auto">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +453,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className=" card sm:w-64 md:w-96 sm:h-65 md:h-95 bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div className=" card sm:w-64 md:w-96 sm:h-65 md:h-120 bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg
@@ -488,6 +497,8 @@ function Profile() {
                     </svg>
                   )}
                 </div>
+                <h1>Hip: {Math.round(hip)} cm</h1>
+                <h1>Waist: {Math.round(waist)} cm</h1>
                 <h1
                   style={{
                     color:
@@ -500,12 +511,30 @@ function Profile() {
                         : "green",
                   }}
                 >
-                  BMI: {Math.round(bmi)}
+                  BMI: {Math.round(bmi)}{" "}
+                  {bmi > 30
+                    ? "(Adipoistas)"
+                    : bmi > 25
+                    ? "(Overweight)"
+                    : bmi < 20
+                    ? "(Underweight)"
+                    : "(Normal)"}
                 </h1>
-                <h1>Calories: {Math.round(calories)} kcal</h1>
+                <h1
+                  style={{
+                    color: bri > 4.5 ? "red" : bri > 3 ? "orange" : "green",
+                  }}
+                >
+                  BRI: {bri.toFixed(2)}
+                </h1>
+                <h1 style={{ color: hwr >= 0.85 ? "red" : "green" }}>
+                  HWR: {(hwr || 0).toFixed(2)}{" "}
+                  {hwr >= 0.85 ? "(Risk)" : "(Good)"}
+                </h1>
                 <h1 style={{ color: bfp > 25 ? "red" : "green" }}>
                   BFP: {Math.round(bfp)} %
                 </h1>
+                <h1>Calories: {Math.round(calories)} kcal</h1>
 
                 <h1>Goal: {goal == 1 ? "Cut" : goal == 2 ? "Hold" : "Bulk"}</h1>
                 <h1

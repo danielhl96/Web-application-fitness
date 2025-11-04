@@ -335,10 +335,10 @@ const EditTrain = () => {
     return (
       <div className="modal modal-open">
         <div className="modal-box w-auto h-auto bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
-          <div className="overflow-y-scroll flex flex-col items-center space-y-1">
+          <div className="flex flex-col items-center space-y-1 overflow-auto max-h-120">
             <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
 
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col  items-center space-y-4 ">
               <input
                 type="search"
                 placeholder="Enter an exercise name"
@@ -373,7 +373,7 @@ const EditTrain = () => {
                     >
                       <div
                         onClick={() => handleAddExercise(item.name)}
-                        className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2"
+                        className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
                       >
                         <h2 className="text-amber-50 font-bold mb-2">
                           {item.name}
@@ -395,7 +395,7 @@ const EditTrain = () => {
             {selectedExercise[savekey].map((ex, index) => (
               <div
                 key={index}
-                className="card w-64  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+                className="card w-64   bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
               >
                 <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
                 <figure className="w-12 h-12 mb-2">

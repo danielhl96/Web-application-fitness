@@ -1,4 +1,3 @@
-import react from "react";
 import api from "./api";
 import { useState, useEffect } from "react";
 function Statistic() {

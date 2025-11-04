@@ -89,7 +89,7 @@ function Home() {
             <p className="text-slate-200">Create a timer for your workouts!</p>
             <div className="justify-end card-actions">
               <button
-                onClick={() => navigate("/timer")}
+                onClick={() => navigate("/counter")}
                 className="btn btn-outline btn-primary"
               >
                 Start
