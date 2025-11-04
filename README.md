@@ -1,12 +1,9 @@
-# React + Vite
+Icon made by gravisio from www.flaticon.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+https://www.flaticon.com/de/kostenloses-icon/klimmzuge_17642073?term=klimmzug&page=1&position=25&origin=search&related_id=17642073
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+Icon made by Leremy from www.flaticon.com
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+https://www.flaticon.com/de/kostenloses-icon/gewichtheben_9992319?term=kniebeuge&page=1&position=4&origin=search&related_id=9992319
