@@ -42,19 +42,17 @@ function Statistic() {
                 <div className="flex flex-row space-x-4">
                   <p className="text-slate-300 text-xs">
                     Progress:{" "}
-                    {item.max_weight[0] && item.min_weight[0]
-                      ? (
-                          (item.max_weight[0] / item.min_weight[0]) *
-                          100
-                        ).toFixed(1)
+                    {item.max_weight && item.min_weight
+                      ? ((item.max_weight / item.min_weight) * 100).toFixed(1) -
+                        100
                       : 0}{" "}
                     %
                   </p>
                   <p className="text-slate-300 text-xs">
-                    Max: {item.max_weight[0] || 0} kg
+                    Max: {item.max_weight || 0} kg
                   </p>
                   <p className="text-slate-300 text-xs">
-                    Min: {item.min_weight[0] || 0} kg
+                    Min: {item.min_weight || 0} kg
                   </p>
                 </div>
               </div>
@@ -151,26 +149,12 @@ function Statistic() {
     useEffect(() => {
       if (!exercise) return;
 
-      // Daten aus entries extrahieren (z.B. max weight pro Datum)
       console.log("Rendering chart for exercise:", exercise);
-      //const dates = exercise.map((e) => e.date);
+      const dates = exercise.entries.map((e) => e.date);
+      console.log(dates);
 
-      //const weights = exercise.max_weight.map((e) => Math.max(...e.weights)); // Max weight pro Eintrag
+      const weights = exercise.entries.map((e) => Math.max(...e.weights));
 
-      const weights = [20, 25, 30, 35, 40, 45, 50, 55, 60, 60, 70]; // Beispielwerte
-      const dates = [
-        "2024-01-01",
-        "2024-01-05",
-        "2024-01-10",
-        "2024-01-15",
-        "2024-01-20",
-        "2024-01-25",
-        "2024-01-30",
-        "2024-02-04",
-        "2024-02-10",
-        "2024-02-15",
-        "2024-02-20",
-      ]; // Beispielwerte
       console.log("Weights:", weights);
       const options = {
         series: [
@@ -228,7 +212,7 @@ function Statistic() {
 
   useEffect(() => {
     api.get("/statistics").then((response) => {
-      setData(response.data[0]); // <-- Korrigiert: Ohne [0]
+      setData(response.data); // <-- Korrigiert: Ohne [0]
       console.log("Fetched statistics data:", response.data);
     });
   }, []);

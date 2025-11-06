@@ -478,33 +478,35 @@ def get_statistics():
 
     user_id = verification.get("sub")
 
-    stats = session.query(
-        Exercise.name,
-       func.max(Exercise.weights).label('max_weight'),
-       func.min(Exercise.weights).label('min_weight'),
-    ).filter(Exercise.user_id == user_id).group_by(Exercise.name).all()
+    # Lade alle Exercises für den User
+    exercises = session.query(Exercise).filter(Exercise.user_id == user_id).all()
 
-    more_stats = session.query(Exercise.name,Exercise.weights,Exercise.date).filter(Exercise.user_id == user_id).all()
-
-    result = []
-    for stat in stats:
-        result.append({
-            "exercise_name": stat.name,
-            "max_weight": stat.max_weight,
-            "min_weight": stat.min_weight,
-
+    # Gruppiere nach exercise_name und sammle max/min/entries
+    exercise_dict = {}
+    for ex in exercises:
+        if ex.name not in exercise_dict:
+            exercise_dict[ex.name] = {
+                "exercise_name": ex.name,
+                "max_weight": max(ex.weights) if ex.weights else 0,
+                "min_weight": min(ex.weights) if ex.weights else 0,
+                "entries": []
+            }
+        exercise_dict[ex.name]["entries"].append({
+            "date": ex.date.isoformat(),
+            "weights": ex.weights
         })
-    history = []
-    for stat in more_stats:
-        history.append({
-            "exercise_name": stat.name,
-            "weights": stat.weights,
-            "date": stat.date.isoformat()
-        })
+        # Update max/min basierend auf allen weights
+        if ex.weights:
+            exercise_dict[ex.name]["max_weight"] = max(exercise_dict[ex.name]["max_weight"], max(ex.weights))
+            exercise_dict[ex.name]["min_weight"] = min(exercise_dict[ex.name]["min_weight"], min(ex.weights))
 
-  
+    # Sortiere entries nach Datum
+    for ex in exercise_dict.values():
+        ex["entries"].sort(key=lambda x: x["date"])
 
-    return jsonify(result,history), 200
+    result = list(exercise_dict.values())
+    print(result)
+    return jsonify(result), 200
 
 @app.route('/api/create_exercise', methods=['post'])
 def create_exercise():
@@ -546,7 +548,7 @@ def create_exercise():
         )
         session.add(new_exercise)
         session.commit()
-        return jsonify({"message": "Exercise logged successfully!"}), 201
+        return jsonify({"message": "Exercise logged successfully!"}, 201)
 
 @app.route('/api/check_auth', methods=['get'])
 def check_auth():
