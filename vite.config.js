@@ -7,12 +7,44 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt", "apple-touch-icon.png"],
+      includeAssets: [
+        "favicon.ico",
+        "robots.txt",
+        "apple-touch-icon.png",
+        "offline.html",
+      ],
+      devOptions: { enabled: true },
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        navigateFallback: "/offline.html",
+        globPatterns: ["**/*.{js,css,html,png,svg,ico,json}"],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) =>
+              request.destination === "script" ||
+              request.destination === "style" ||
+              request.destination === "image",
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-cache",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
+        ],
+      },
       manifest: {
         name: "Fitness App",
         short_name: "Fitness",
         description: "Fitness App to record and create your workouts",
         theme_color: "#ffffff",
+        background_color: "#000000",
+        display: "standalone",
+        start_url: "/",
+        scope: "/",
         icons: [
           {
             src: "./squats.png",
@@ -24,18 +56,22 @@ export default defineConfig({
             sizes: "512x512",
             type: "image/png",
           },
+          {
+            src: "./squats.png",
+            sizes: "180x180",
+            type: "image/png",
+            purpose: "apple-touch-icon",
+          },
         ],
       },
     }),
   ],
   server: {
-    host: "0.0.0.0", // <-- Neu: Erlaubt Zugriff über Netzwerk (nicht nur localhost)
-    port: 5173,
     proxy: {
       "/api": {
-        target: "http://192.168.2.36:5000", // <-- Ändere zu deiner PC-IP-Adresse (siehe Schritt 2)
+        target: "https://web-application-fitness-backend.vercel.app",
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },

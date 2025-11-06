@@ -4,6 +4,7 @@ import sqlalchemy
 import jwt
 import uuid
 import redis
+import os
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from flask import Flask, request, jsonify
@@ -11,12 +12,32 @@ from flask_cors import CORS
 from email.message import EmailMessage
 from argon2 import PasswordHasher
 from sqlalchemy.orm import joinedload
+from dotenv import load_dotenv
 
+load_dotenv()  # lädt .env in os.environ
 
+# Konfiguration aus ENV
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yYv1Qc9V0ZJwkpM8e8X0SFDfV9NQWzgnTwIhNQkDfU4'
-app.config['JWT_ALGORITHM'] = 'HS256'
-# erlaubte Origins (nicht '*' wenn withCredentials genutzt wird)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret')
+app.config['JWT_ALGORITHM'] = os.getenv('JWT_ALGORITHM', 'HS256')
+ENV = os.getenv('FLASK_ENV', 'development')
+
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql+psycopg2://postgres:1234@localhost:5432/postgres')
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+REDIS_DB = int(os.getenv('REDIS_DB', 0))
+
+ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
+
+# engine/session/redis
+engine = create_engine(DATABASE_URL, echo=(ENV != 'production'))
+SessionFactory = sessionmaker(bind=engine)
+session = scoped_session(SessionFactory)
+Base = sqlalchemy.orm.declarative_base()
+redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+
+
+
 ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 # initialisiere flask-cors für alle /api/* Routen
@@ -33,12 +54,6 @@ def add_cors_headers(response):
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     return response
 
-engine = create_engine('postgresql+psycopg2://postgres:1234@localhost:5432/postgres',echo=True)
-Base = sqlalchemy.orm.declarative_base()
-SessionFactory = sessionmaker(bind=engine)
-# optional: scoped_session if you keep a module-global `session = SessionFactory()` pattern
-session = scoped_session(SessionFactory)
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 EXPECTED_AUDIENCE = "user"
 EXPECTED_ISSUER = "fitness_app"
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
@@ -93,10 +108,10 @@ def send_email(to_email, safety_code):
     msg['From'] = "daniel.hennies@googlemail.com"
     msg['To'] = to_email
 
-    smtp_server = 'smtp.gmail.com'
+    smtp_server = 'your_smtp_server'
     smtp_port = 587
-    smtp_user= 'daniel.hennies@googlemail.com'
-    smtp_password= ''
+    smtp_user= 'your_smtp_user'
+    smtp_password= 'your_smtp_password'
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
         server.starttls()
@@ -183,7 +198,7 @@ def login_user():
             "access_token",
             token,
             httponly=True,
-            secure=False,
+            secure=True,
             samesite="Lax",
             max_age=60*60*4  # 4 Stunden
         )
