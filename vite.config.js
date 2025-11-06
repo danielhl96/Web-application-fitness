@@ -66,13 +66,4 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://web-application-fitness-backend.vercel.app",
-        changeOrigin: true,
-        secure: true,
-      },
-    },
-  },
 });
