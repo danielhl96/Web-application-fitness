@@ -1,8 +1,9 @@
 import axios from "axios";
-
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 const api = axios.create({
-  baseURL: "/api", // relativ, damit Vite-Proxy greift
-  withCredentials: true,
+  baseURL,
+  withCredentials: true, // falls cookies verwendet werden
+  headers: { "Content-Type": "application/json" },
 });
 
 let isRefreshing = false;
