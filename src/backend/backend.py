@@ -186,7 +186,7 @@ def register_user():
     session.commit()
     return jsonify({"message": "User registered successfully!"}), 201
 
-@app.route('/api/login', methods=['get'])
+@app.route('/api/login', methods=['GET'])
 def login_user():
     email = request.args.get("email")
     password = request.args.get("password")
