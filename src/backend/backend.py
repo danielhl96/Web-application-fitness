@@ -38,7 +38,7 @@ redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 
 
-ALLOWED_ORIGINS = ["http://localhost:5173"]
+ALLOWED_ORIGINS = ["http://localhost:5173","http://localhost:4173"]
 
 # initialisiere flask-cors für alle /api/* Routen
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
