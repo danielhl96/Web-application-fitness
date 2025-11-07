@@ -202,8 +202,9 @@ def login_user():
             "access_token",
             token,
             httponly=True,
-            secure=True,
+            secure=True,  # Bleibt True für HTTPS
             samesite="None",
+            partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
             max_age=60*60*4  # 4 Stunden
         )
         return resp, 200
@@ -610,9 +611,11 @@ def refresh_token():
         "access_token",
         new_token,
         httponly=True,
-        secure=False,  # Setze auf True bei HTTPS!
+        secure=True,  # Ändere von False zu True für Konsistenz und Sicherheit (setze auf False nur für lokale Dev ohne HTTPS)
         samesite="None",
+        partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
         max_age=60*60*4  # 2 Minuten
+      
     )
     return resp, 200
 
