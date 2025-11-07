@@ -172,6 +172,10 @@ Base.metadata.create_all(engine)
 def hash_password(password):
     return argon2.hash(password)
 
+@app.route("/")
+def hello_world():
+    return {"message": "Hello, World!"}
+
 @app.route('/api/register', methods=['post'])
 def register_user():
     data = request.json
