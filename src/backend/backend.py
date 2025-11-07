@@ -172,7 +172,7 @@ Base.metadata.create_all(engine)
 def hash_password(password):
     return argon2.hash(password)
 
-@app.route("/")
+@app.route("/api")
 def hello_world():
     return {"message": "Hello, World!"}
 
