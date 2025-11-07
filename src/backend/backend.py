@@ -203,7 +203,7 @@ def login_user():
             token,
             httponly=True,
             secure=True,
-            samesite="Lax",
+            samesite="None",
             max_age=60*60*4  # 4 Stunden
         )
         return resp, 200
@@ -611,7 +611,7 @@ def refresh_token():
         new_token,
         httponly=True,
         secure=False,  # Setze auf True bei HTTPS!
-        samesite="Lax",
+        samesite="None",
         max_age=60*60*4  # 2 Minuten
     )
     return resp, 200
