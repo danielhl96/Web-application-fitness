@@ -54,8 +54,8 @@ def add_cors_headers(response):
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     return response
 
-EXPECTED_AUDIENCE = "user"
-EXPECTED_ISSUER = "fitness_app"
+EXPECTED_AUDIENCE = os.getenv('JWT_AUDIENCE', 'user')
+EXPECTED_ISSUER = os.getenv('JWT_ISSUER', 'fitness_app')
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
 
 def createToken(user_id):
@@ -63,8 +63,8 @@ def createToken(user_id):
     now = datetime.now(UTC)
     payload = {
         "sub": str(user_id),
-        "iss": "fitness_app",
-        "aud": "user",
+        "iss": EXPECTED_ISSUER,
+        "aud": EXPECTED_AUDIENCE,
         "exp": int((now + timedelta(minutes=15)).timestamp()),
         "iat": int(now.timestamp()),
         "nbf": int(now.timestamp()),
