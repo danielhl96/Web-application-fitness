@@ -43,6 +43,7 @@ redis_client = redis.from_url(REDIS_HOST)
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
 # stelle sicher, dass auch Fehler-Responses die richtigen CORS-Header erhalten
+"""
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get("Origin")
@@ -52,7 +53,7 @@ def add_cors_headers(response):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     return response
-
+"""
 EXPECTED_AUDIENCE = os.getenv('JWT_AUDIENCE', 'user')
 EXPECTED_ISSUER = os.getenv('JWT_ISSUER', 'fitness_app')
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
@@ -203,7 +204,7 @@ def login_user():
             httponly=True,
             secure=True,  # Bleibt True für HTTPS
             samesite="None",
-            partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
+            #partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
             max_age=60*60*4  # 4 Stunden
         )
         return resp, 200
@@ -612,7 +613,7 @@ def refresh_token():
         httponly=True,
         secure=True,  # Ändere von False zu True für Konsistenz und Sicherheit (setze auf False nur für lokale Dev ohne HTTPS)
         samesite="None",
-        partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
+        #partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
         max_age=60*60*4  # 2 Minuten
       
     )
