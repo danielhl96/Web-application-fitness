@@ -34,6 +34,10 @@ export default defineConfig({
               },
             },
           },
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+            handler: "NetworkOnly", // Kein Caching für API
+          },
         ],
       },
       manifest: {

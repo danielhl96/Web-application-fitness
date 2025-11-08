@@ -48,7 +48,7 @@ function LoginForm() {
           password,
         },
       });
-      console.log(response.data);
+      console.log(response[0]);
 
       navigate("/");
     } catch (error) {

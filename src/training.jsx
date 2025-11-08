@@ -450,7 +450,7 @@ function StartTraining() {
     console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div className="modal-box border border-blue-500 bg-slate-800 max-w-auto max-h-auto overflow-y-auto">
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
@@ -459,51 +459,44 @@ function StartTraining() {
               ✕
             </button>
           </form>
-          <div className="flex flex-col justify-center items-center mt-4 text-xs">
-            {Object.values(currentExercises).map(
-              (item, index) => (
-                console.log(item),
-                (
-                  <div
-                    key={index}
-                    className="flex flex-col items-center cursor-pointer"
-                    onClick={() => {
-                      setTraining(currentExercises[index]);
-                      setExerciseList(false);
-                    }}
-                  >
-                    <div
-                      className={`card w-40 h-20 ${
-                        currentExercises[index].isFinished
-                          ? "bg-green-500"
-                          : "bg-slate-800"
-                      } ${
-                        training1.exercise == currentExercises[index].exercise
-                          ? "border-2 border-green-500"
-                          : "border-2 border-blue-500"
-                      }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
-                    >
-                      <h2 className="text-amber-50 font-bold mb-2">
-                        {item.exercise}
-                      </h2>
-                      <figure className="w-9 h-9 mb-2">
-                        <img
-                          src={
-                            "./" +
-                            item.exercise
-                              .toLowerCase()
-                              .replace("-", "")
-                              .replace(" ", "") +
-                            ".png"
-                          }
-                          className="w-full h-full object-cover rounded-md"
-                        />
-                      </figure>
-                    </div>
-                  </div>
-                )
-              )
-            )}
+          <div className="grid grid-cols-1 mt-3">
+            {Object.values(currentExercises).map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center cursor-pointer"
+                onClick={() => {
+                  setTraining(currentExercises[index]);
+                  setExerciseList(false);
+                }}
+              >
+                <div
+                  className={`card w-40 h-20 ${
+                    currentExercises[index].isFinished
+                      ? "bg-green-500"
+                      : "bg-slate-800"
+                  } ${
+                    training1.exercise == currentExercises[index].exercise
+                      ? "border-2 border-green-500"
+                      : "border-2 border-blue-800"
+                  }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
+                >
+                  <h2 className="text-amber-50 text-sm">{item.exercise}</h2>
+                  <figure className="w-9 h-9 mb-2">
+                    <img
+                      src={
+                        "./" +
+                        item.exercise
+                          .toLowerCase()
+                          .replace("-", "")
+                          .replace(" ", "") +
+                        ".png"
+                      }
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </figure>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -522,7 +515,7 @@ function StartTraining() {
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
         {selectedTrainingSite ? (
           <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
-            <div className="w-full flex flex-col gap-4 items-center">
+            <div className="w-full flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
@@ -536,7 +529,7 @@ function StartTraining() {
         ) : (
           <div
             className={`space-y-2 card sm:w-100 md:w-100 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
-              training1.isFinished ? "border-green-500" : "border-blue-500"
+              training1.isFinished ? "border-green-500" : "border-blue-800"
             }`}
           >
             <div className="flex flex-top justify-start"></div>

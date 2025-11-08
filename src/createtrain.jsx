@@ -90,6 +90,7 @@ function ExerciseCard({
 function CreateTrainGUI() {
   const navigate = useNavigate();
   const [WorkoutName, setWorkoutName] = useState("");
+  const [WorkoutNameSet, setWorkoutNameSet] = useState(false);
   const handleSaveTraining = async () => {
     const trainingName =
       WorkoutName || document.getElementById("training-input").value;
@@ -362,20 +363,74 @@ function CreateTrainGUI() {
           Create your training
         </div>
         <div className="flex flex-col items-center space-y-4">
-          <input
-            type="input"
-            placeholder="Your trainings name:"
-            className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="training-input"
-            onChange={(e) => setWorkoutName(e.target.value)}
-          />
-          <input
-            type="search"
-            placeholder="Enter an exercise name"
-            className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="input-e"
-            onChange={handleAddExercise2}
-          />
+          <h1 className="text-slate-400">Your workout need an name:</h1>
+          <div className="flex flex-row">
+            <input
+              disabled={WorkoutNameSet}
+              type="input"
+              placeholder="Workout name"
+              className={`w-54 h-10 ${
+                WorkoutNameSet
+                  ? "bg-gray-900 border border-green-500"
+                  : "bg-gray-900"
+              } text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              id="training-input"
+              onChange={(e) => setWorkoutName(e.target.value)}
+            />
+            <button
+              onClick={() => setWorkoutNameSet((prev) => !prev)}
+              className="btn btn-outline btn-primary"
+            >
+              {WorkoutNameSet ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+          {WorkoutNameSet === true && (
+            <div className="flex flex-col items-center space-y-2">
+              <h1 className="text-slate-400">Search your exercise:</h1>
+              <div className="form-control">
+                <input
+                  type="search"
+                  placeholder="Enter an exercise name"
+                  className="input input-bordered w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="input-e"
+                  onChange={handleAddExercise2}
+                />
+              </div>
+              <span className="text-slate-300 text-sm">
+                Your workout name: {WorkoutName}
+              </span>
+            </div>
+          )}
           <div
             className={`h-32 overflow-y-scroll border border-gray-800 ${
               exerciseExists.some((ex) =>
