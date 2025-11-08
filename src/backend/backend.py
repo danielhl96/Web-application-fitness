@@ -34,7 +34,8 @@ engine = create_engine(DATABASE_URL, echo=(ENV != 'production'))
 SessionFactory = sessionmaker(bind=engine)
 session = scoped_session(SessionFactory)
 Base = sqlalchemy.orm.declarative_base()
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+#redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+redis_client = redis.from_url(REDIS_HOST)
 
 
 
