@@ -41,7 +41,7 @@ redis_client = redis.from_url(REDIS_HOST)
 
 # initialisiere flask-cors für alle /api/* Routen
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
-"""
+
 # stelle sicher, dass auch Fehler-Responses die richtigen CORS-Header erhalten
 @app.after_request
 def add_cors_headers(response):
@@ -52,7 +52,7 @@ def add_cors_headers(response):
         response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     return response
-"""
+
 EXPECTED_AUDIENCE = os.getenv('JWT_AUDIENCE', 'user')
 EXPECTED_ISSUER = os.getenv('JWT_ISSUER', 'fitness_app')
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
