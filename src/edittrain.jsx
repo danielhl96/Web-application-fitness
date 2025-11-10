@@ -221,6 +221,18 @@ const EditTrain = () => {
         "An advanced exercise that combines a pull-up and a dip to train the upper body muscles",
       img: "./muscleup.png",
     },
+    {
+      name: "Incline Benchpress",
+      description:
+        "An exercise to train the upper chest, shoulder, and triceps",
+      img: "./inclinebenchpress.png",
+    },
+    {
+      name: "Push-Ups",
+      description:
+        "A bodyweight exercise to train the chest, shoulders, and triceps",
+      img: "./pushups.png",
+    },
   ];
 
   const [showModal, setShowModal] = useState(false);
