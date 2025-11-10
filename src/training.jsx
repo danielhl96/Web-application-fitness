@@ -425,7 +425,7 @@ function StartTraining() {
 
   function WorkoutCard({ planName }) {
     return (
-      <div className="card sm:w-200 md:w-[450px]  bg-slate-800 shadow-lg border border-blue-500 mb-4">
+      <div className="card  w-75  md:w-90 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
@@ -514,7 +514,7 @@ function StartTraining() {
       {exerciseList && ExerciseList()}
       <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
         {selectedTrainingSite ? (
-          <div className="space-y-4 card w-full max-w-2xl bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
+          <div className=" card  w-85  md:w-100 bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
             <div className="w-full flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout

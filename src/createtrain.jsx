@@ -28,7 +28,7 @@ function ExerciseCard({
   };
 
   return (
-    <div className="card  sm:w-80 md:w-[450px] bg-slate-800 shadow-lg border border-blue-500 mb-4">
+    <div className="card  w-65 sm:w-40 md:w-60 bg-slate-800 shadow-lg border border-blue-500 mb-4">
       <div className="card-body  items-center  text-center">
         <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
         <figure className="flex justify-center items-center w-6 h-6 mb-2">
@@ -358,9 +358,9 @@ function CreateTrainGUI() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="card w-auto h-auto  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center  ">
+      <div className="card w-85 h-auto md:w-100 sm:w-85  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center  ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
-          Create your training
+          Create your workout
         </div>
         <div className="flex flex-col items-center space-y-4">
           <h1 className="text-slate-400">Your workout need an name:</h1>
@@ -387,7 +387,7 @@ function CreateTrainGUI() {
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  className="w-4 h-4"
+                  className="w-3 h-3"
                 >
                   <path
                     strokeLinecap="round"
@@ -426,9 +426,9 @@ function CreateTrainGUI() {
                   onChange={handleAddExercise2}
                 />
               </div>
-              <span className="text-slate-300 text-sm">
-                Your workout name: {WorkoutName}
-              </span>
+              <div className="divider divider-primary text-amber-50 font-bold mb-2">
+                {WorkoutName}
+              </div>
             </div>
           )}
           <div
@@ -472,47 +472,94 @@ function CreateTrainGUI() {
               ))}
           </div>
           {/* Render selected exercises */}
-          <div className="flex flex-col items-center space-y-3">
-            <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
-              {selectedExercise.length > 0 ? (
-                selectedExercise.map((exercise, index) => (
-                  <ExerciseCard
-                    key={index}
-                    name={exercise.name}
-                    description={exercise.description}
-                    img={exercise.img}
-                    onRemove={() => handleRemoveExercise(exercise.name)}
-                    // 2. Callback als Prop übergeben
-                    onRepsChange={(reps) =>
-                      handleRepsChange(exercise.name, reps)
-                    }
-                    onSetsChange={(sets) =>
-                      handleSetsChange(exercise.name, sets)
-                    }
-                  />
-                ))
-              ) : (
-                <p className="text-slate-400 flex justify-center">
-                  No exercises selected yet.
-                </p>
-              )}
+          {WorkoutNameSet ? (
+            <div className="flex flex-col items-center space-y-3">
+              <div className="w-100 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
+                {selectedExercise.length > 0 ? (
+                  selectedExercise.map((exercise, index) => (
+                    <ExerciseCard
+                      key={index}
+                      name={exercise.name}
+                      description={exercise.description}
+                      img={exercise.img}
+                      onRemove={() => handleRemoveExercise(exercise.name)}
+                      // 2. Callback als Prop übergeben
+                      onRepsChange={(reps) =>
+                        handleRepsChange(exercise.name, reps)
+                      }
+                      onSetsChange={(sets) =>
+                        handleSetsChange(exercise.name, sets)
+                      }
+                    />
+                  ))
+                ) : (
+                  <p className="text-slate-400 flex justify-center">
+                    No exercises selected yet.
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
           <div className="flex flex-row items-center gap-4 mt-4">
             <button
-              disabled={WorkoutName === ""}
+              disabled={WorkoutName === "" || selectedExercise.length === 0}
               onClick={() => handleSaveTraining()}
               className="btn btn-outline btn-primary"
             >
-              Save
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
             </button>
             <button
               onClick={() => navigate("/")}
               className="btn btn-outline btn-error"
             >
-              {Message === "Training saved successfully!"
-                ? "Back to Home"
-                : "Cancel"}
+              {Message === "Training saved successfully!" ? (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    />
+                  </svg>
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </>
+              )}
             </button>
           </div>
           {Message === "Training saved successfully!" && (
