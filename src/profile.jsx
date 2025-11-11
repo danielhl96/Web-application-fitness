@@ -48,7 +48,7 @@ function Profile() {
       .catch((error) => {
         console.error("Error fetching profile data:", error);
       });
-  }, []);
+  }, [edit]);
 
   const handleEdit = () => {
     api
@@ -180,9 +180,11 @@ function Profile() {
   };
 
   useEffect(() => {
-    calcCalories();
+    if (edit) {
+      calcCalories();
+    }
     handleBri();
-  }, [gender, weight, height, age, activity, goal, calories]);
+  }, [gender, weight, height, age, activity, goal]);
 
   useEffect(() => {
     handleBmi();
@@ -477,7 +479,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className=" card h-120 sm:w-64 md:w-96 sm:h-65 md:h-120 bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div className=" card w-85 h-120  md:w-100 md:h-140  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg
