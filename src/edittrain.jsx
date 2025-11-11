@@ -310,6 +310,7 @@ const EditTrain = () => {
 
   //Nur im Frontend
   const handeRemoveWorkoutAPI = (exerciseToRemove) => {
+    console.log(exerciseToRemove);
     console.log(selectedExercise[exerciseToRemove][0]?.plan_id);
     api
       .delete(`/delete_workout_plan`, {

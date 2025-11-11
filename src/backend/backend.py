@@ -375,9 +375,9 @@ def delete_workout_plan():
     if not workout_plan_id:
         return jsonify({"message": "Missing workout plan ID!"}), 400
     user_id = verification.get("sub")
-    session.query(PlanExerciseTemplate).filter_by(id=workout_plan_id, user_id=user_id).delete(synchronize_session=False)
+    session.query(PlanExerciseTemplate).filter_by(workout_plan_id=workout_plan_id).delete(synchronize_session=False)
     session.query(Exercise).filter_by(workout_plan_id=workout_plan_id).delete(synchronize_session=False)
-    session.query(WorkoutPlan).filter_by(id=workout_plan_id, user_id=user_id).delete(synchronize_session=False)
+    session.query(WorkoutPlan).filter_by(id=workout_plan_id).delete(synchronize_session=False)
  
     session.commit()
     return jsonify({"message": "Workout plan deleted successfully!"}), 200
