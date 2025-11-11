@@ -512,14 +512,14 @@ function StartTraining() {
       {showModal && settingsModal()}
       {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
-      <div className="min-h-screen flex items-center bg-slate-900  justify-center pb-8">
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
         {selectedTrainingSite ? (
-          <div className=" card  w-85  md:w-100 bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
-            <div className="w-full flex flex-col gap-2 items-center">
+          <div className="space-y-4 card w-85  md:w-120 md:h-140 bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
+            <div className="w-65 md:w-95 flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              <div className="overflow-y-auto max-h-80 ">
+              <div className="overflow-y-auto max-md:h-100 ">
                 {Object.keys(selectedExercise).map((name, index) => (
                   <WorkoutCard planName={name} key={index} />
                 ))}

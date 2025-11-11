@@ -244,7 +244,7 @@ const EditTrain = () => {
   const repsRef = useRef([]);
   const [saveY, setSaveY] = useState([]);
   const [saveY2, setSaveY2] = useState([]);
-  function WorkoutCard({ exercise }) {
+  function WorkoutCard({ exercise, index }) {
     return (
       <div className="card w-full sm:w-80 md:w-75 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
@@ -270,7 +270,7 @@ const EditTrain = () => {
               </svg>
             </button>
             <button
-              onClick={() => handeRemoveWorkout(exercise)}
+              onClick={() => handeRemoveWorkoutAPI(exercise)}
               className="btn btn-outline btn-error"
             >
               <svg
@@ -309,13 +309,17 @@ const EditTrain = () => {
   };
 
   //Nur im Frontend
-  const handleRemoveExercise = (exerciseToRemove) => {
+  const handeRemoveWorkoutAPI = (exerciseToRemove) => {
+    console.log(selectedExercise[exerciseToRemove][0]?.plan_id);
     api
       .delete(`/delete_workout_plan`, {
-        data: { plan_id: exerciseToRemove.plan_id },
+        data: { plan_id: selectedExercise[exerciseToRemove][0]?.plan_id }, // Korrigiert
       })
       .then(() => {
         console.log("Workout plan deleted");
+      })
+      .catch((error) => {
+        console.error("Error deleting workout plan:", error);
       });
     setSelectedExercise((prev) => {
       const updatedCategory = prev[savekey].filter(
@@ -569,7 +573,7 @@ const EditTrain = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleRemoveExercise(ex)}
+                  onClick={() => handeRemoveWorkout(ex)}
                   className="btn btn-outline btn-error "
                 >
                   <svg
@@ -641,11 +645,11 @@ const EditTrain = () => {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
       <Header />
-      <div className="space-y-4 card w-85  md:w-100 bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
+      <div className="space-y-4 card w-85  md:w-120 md:h-140 bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
           Edit Your Training
         </div>
-        <div className="w-full flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
+        <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-100">
           {Object.keys(selectedExercise).map((exercise, index) => (
             <WorkoutCard exercise={exercise} key={index} />
           ))}
