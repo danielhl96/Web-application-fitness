@@ -360,8 +360,8 @@ const EditTrain = () => {
     }
   };
   useEffect(() => {
+    console.log(selectedExercise);
     for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
-      console.log(i);
       if (setRef.current[i] != null) {
         setRef.current[i].scrollTop = selectedExercise[savekey][i].sets[i];
         console.log(selectedExercise[savekey][i].sets);
@@ -534,6 +534,7 @@ const EditTrain = () => {
                                     ].querySelector(
                                       `tr[data-reps-index="${repsIndex}"]`
                                     );
+                                    console.log(scrollid.offsetTop);
                                     if (scrollid) {
                                       setSaveY2((prev) => {
                                         const updated = [...prev];
@@ -544,13 +545,14 @@ const EditTrain = () => {
                                   }
 
                                   const updated = { ...prev };
+                                  console.log(updated);
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
                                       i === index
                                         ? { ...ex, reps: repsIndex }
                                         : ex
                                   );
-                                  console.log(selectedExercise[savekey][index]);
+                                  console.log(updated);
                                   return updated;
                                 });
                               }}
@@ -558,7 +560,7 @@ const EditTrain = () => {
                               <td
                                 className={`border  border-gray-800 cursor-pointer p-2 text-center ${
                                   repsIndex ===
-                                  selectedExercise[savekey][index].reps[0]
+                                  selectedExercise[savekey][index].reps
                                     ? "bg-blue-500"
                                     : ""
                                 }`}
