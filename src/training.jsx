@@ -436,11 +436,11 @@ function StartTraining() {
                 setTraining(selectedExercise[planName][0]);
                 setSelectedTrainingSite(false);
               }}
-              className="btn btn-outline btn-primary text-white"
+              className="btn btn-outline btn-primary text-white flex items-center justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 mr-2"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
