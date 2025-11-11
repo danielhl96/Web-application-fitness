@@ -376,6 +376,9 @@ def delete_workout_plan():
         return jsonify({"message": "Missing workout plan ID!"}), 400
     user_id = verification.get("sub")
     workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id, user_id=user_id).first()
+    exercise = session.query(Exercise).filter_by(workout_plan_id=workout_plan_id).first()
+    if exercise:
+        session.query(Exercise).filter_by(workout_plan_id=workout_plan_id).delete(synchronize_session=False)
     if not workout_plan:
         return jsonify({"message": "Workout plan not found!"}), 404
     session.delete(workout_plan)
