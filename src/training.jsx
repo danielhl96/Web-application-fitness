@@ -425,7 +425,7 @@ function StartTraining() {
 
   function WorkoutCard({ planName }) {
     return (
-      <div className="card  w-75  md:w-90 bg-slate-800 shadow-lg border border-blue-500 mb-4">
+      <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
@@ -438,7 +438,26 @@ function StartTraining() {
               }}
               className="btn btn-outline btn-primary text-white"
             >
-              Start
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -450,7 +469,7 @@ function StartTraining() {
     console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800 max-w-auto max-h-auto overflow-y-auto">
+        <div className="modal-box border border-blue-500 bg-slate-800 max-w-auto max-h-auto overflow-y-auto max-h-40">
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
@@ -514,12 +533,12 @@ function StartTraining() {
       {exerciseList && ExerciseList()}
       <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
         {selectedTrainingSite ? (
-          <div className="space-y-4 card w-85  md:w-120 md:h-140 bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
+          <div className="space-y-4 card w-85  md:w-100 md:h-140  bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
             <div className="w-65 md:w-95 flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              <div className="overflow-y-auto max-md:h-100 ">
+              <div className="overflow-y-auto max-md:h-100 max-h-120 gap-4">
                 {Object.keys(selectedExercise).map((name, index) => (
                   <WorkoutCard planName={name} key={index} />
                 ))}

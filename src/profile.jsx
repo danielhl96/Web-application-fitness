@@ -383,7 +383,7 @@ function Profile() {
                 }}
                 className="btn btn-outline btn-primary w-15 h-9"
               >
-                Hold
+                Maintain
               </button>
               <button
                 onClick={() => handleGoal(3)}
@@ -438,15 +438,41 @@ function Profile() {
                   failureWaist == true ||
                   failureHip == true
                 }
-                className="btn btn-outline btn-success w-15"
+                className="btn btn-outline btn-success w-15 flex items-center justify-center"
               >
-                Save
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
               </button>
               <button
                 onClick={() => setEdit(false)}
-                className="btn btn-outline btn-warning w-15"
+                className="btn btn-outline btn-warning w-15 flex items-center justify-center"
               >
-                Cancel
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
           </div>
@@ -556,15 +582,41 @@ function Profile() {
               <div className="flex flex-row space-x-2 items-center justify-center">
                 <button
                   onClick={() => setEdit(true)}
-                  className="btn btn-outline btn-success "
+                  className="btn btn-outline btn-success flex items-center justify-center"
                 >
-                  Edit
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
                 </button>
                 <button
                   onClick={() => navigate("/")}
-                  className="btn btn-outline btn-warning "
+                  className="btn btn-outline btn-warning flex items-center justify-center"
                 >
-                  Cancel
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
