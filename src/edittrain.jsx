@@ -354,19 +354,19 @@ const EditTrain = () => {
     for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
       if (setRef.current[i] != null) {
         const selectedSetRow = setRef.current[i].querySelector(
-          `tr[data-set-index="${selectedExercise[savekey][i].sets}"]` // Korrigiert: sets ohne [i]
+          `tr[data-set-index="${selectedExercise[savekey][i].sets}"]`
         );
         if (selectedSetRow) {
-          setRef.current[i].scrollTop = selectedSetRow.offsetTop; // Korrigiert: offsetTop für Pixel
+          setRef.current[i].scrollTop = selectedSetRow.offsetTop;
         }
         console.log(selectedExercise[savekey][i].sets);
       }
       if (repsRef.current[i] != null) {
         const selectedRepsRow = repsRef.current[i].querySelector(
-          `tr[data-reps-index="${selectedExercise[savekey][i].reps[0]}"]` // Korrigiert: reps ohne [0]
+          `tr[data-reps-index="${selectedExercise[savekey][i].reps[0]}"]`
         );
         if (selectedRepsRow) {
-          repsRef.current[i].scrollTop = selectedRepsRow.offsetTop; // Korrigiert: offsetTop für Pixel
+          repsRef.current[i].scrollTop = selectedRepsRow.offsetTop;
         }
         console.log(selectedExercise[savekey][i].reps);
       }

@@ -33,7 +33,18 @@ function RegisterPage() {
         email,
         password,
       })
-      .then(() => navigate("/login"))
+      .then(
+        () => setMessage("Registration successful! You can now log in."),
+        (document.getElementById("email").value = ""),
+        (document.getElementById("password").value = ""),
+        (document.getElementById("password repeat").value = ""),
+        setConfirmPassword(""),
+        setEmail(""),
+        setPassword(""),
+        setEmailError(false),
+        setPasswordError(false),
+        setConfirmPasswordError(false)
+      )
       .catch((err) => {
         console.log(err);
         setMessage("Registration failed. Please try again.");
@@ -72,6 +83,7 @@ function RegisterPage() {
   }, [email]);
 
   useEffect(() => {
+    if (message === "Registration successful! You can now log in.") return;
     setPasswordError(
       password.length < 8 ||
         !/[A-Z]/.test(password) ||
@@ -89,7 +101,7 @@ function RegisterPage() {
     <div>
       <div className="min-h-screen flex items-center bg-gray-900 justify-center">
         <Header />
-        <div className="space-y-4 card sm:w-96 md:w-96 border border-blue-500 bg-gray-800 shadow-sm p-6 rounded-md">
+        <div className="space-y-4 card w-96 sm:w-96 md:w-96 border border-blue-500 bg-gray-800 shadow-sm p-6 rounded-md">
           <div className="flex flex-col space-y-2 ">
             <h1 className="text-2xl font-bold">Register</h1>
             <div className="divider divider-primary">Your data</div>
@@ -98,6 +110,7 @@ function RegisterPage() {
 
               <input
                 type="text"
+                id="email"
                 placeholder={"E-Mail: "}
                 className="input input-primary"
                 onChange={handleEmailChange}
@@ -120,6 +133,7 @@ function RegisterPage() {
               <h1 className="text-shadow-lg font-mono">Password</h1>
               <input
                 type="password"
+                id="password"
                 placeholder={"Password: "}
                 className="input input-primary"
                 onChange={handlePasswordChange}
@@ -142,11 +156,11 @@ function RegisterPage() {
               <h1 className="text-shadow-lg font-mono">Repat password</h1>
               <input
                 type="password"
+                id="password repeat"
                 placeholder={"Repeat your password: "}
                 className="input input-primary"
                 onChange={handleConfirmPasswordChange}
                 onBlur={handleConfirmPasswordBlur}
-                id={"password repeat"}
                 style={{
                   border:
                     confirmPasswordError && confirmPasswordTouched
@@ -160,14 +174,30 @@ function RegisterPage() {
                 </span>
               )}
               {message && (
-                <span className="text-red-500 text-sm">{message}</span>
+                <span
+                  className={`${
+                    message === "Registration successful! You can now log in."
+                      ? "text-green-500"
+                      : "text-red-500"
+                  } text-sm`}
+                >
+                  {message}
+                </span>
               )}
             </div>
+
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <button
                 onClick={() => handleRegister()}
-                disabled={emailError || passwordError || confirmPasswordError}
+                disabled={
+                  emailError ||
+                  passwordError ||
+                  confirmPasswordError ||
+                  email.length === 0 ||
+                  password.length === 0 ||
+                  confirmPassword.length === 0
+                }
                 className="btn btn-outline btn-success w-15 space-y-5"
               >
                 Register
