@@ -242,11 +242,10 @@ const EditTrain = () => {
 
   const setRef = useRef([]);
   const repsRef = useRef([]);
-  const [saveY, setSaveY] = useState([]);
-  const [saveY2, setSaveY2] = useState([]);
-  function WorkoutCard({ exercise, index }) {
+
+  function WorkoutCard({ exercise }) {
     return (
-      <div className="card w-full sm:w-80 md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
+      <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
@@ -354,12 +353,22 @@ const EditTrain = () => {
     console.log(selectedExercise);
     for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
       if (setRef.current[i] != null) {
-        setRef.current[i].scrollTop = selectedExercise[savekey][i].sets[i];
+        const selectedSetRow = setRef.current[i].querySelector(
+          `tr[data-set-index="${selectedExercise[savekey][i].sets}"]` // Korrigiert: sets ohne [i]
+        );
+        if (selectedSetRow) {
+          setRef.current[i].scrollTop = selectedSetRow.offsetTop; // Korrigiert: offsetTop für Pixel
+        }
         console.log(selectedExercise[savekey][i].sets);
       }
       if (repsRef.current[i] != null) {
-        repsRef.current[i].scrollTop = selectedExercise[savekey][i].reps[0];
-        console.log(selectedExercise[savekey][i].reps[0]);
+        const selectedRepsRow = repsRef.current[i].querySelector(
+          `tr[data-reps-index="${selectedExercise[savekey][i].reps[0]}"]` // Korrigiert: reps ohne [0]
+        );
+        if (selectedRepsRow) {
+          repsRef.current[i].scrollTop = selectedRepsRow.offsetTop; // Korrigiert: offsetTop für Pixel
+        }
+        console.log(selectedExercise[savekey][i].reps);
       }
     }
   }, [showModal]);
@@ -367,11 +376,11 @@ const EditTrain = () => {
   function EditWorkoutModal() {
     return (
       <div className="modal modal-open">
-        <div className="modal-box w-auto h-auto bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
+        <div className="modal-box md:w-100 md:h-140 bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
           <div className="flex flex-col items-center space-y-1 overflow-auto max-h-120">
             <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
 
-            <div className="flex flex-col  items-center space-y-4 ">
+            <div className="flex flex-col w-100 md:w-80  items-center space-y-4 ">
               <input
                 type="search"
                 placeholder="Enter an exercise name"
@@ -406,7 +415,7 @@ const EditTrain = () => {
                     >
                       <div
                         onClick={() => handleAddExercise(item.name)}
-                        className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
+                        className="card w-65 sm:w-40 md:w-60  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
                       >
                         <h2 className="text-amber-50 font-bold mb-2">
                           {item.name}
@@ -428,7 +437,7 @@ const EditTrain = () => {
             {selectedExercise[savekey].map((ex, index) => (
               <div
                 key={index}
-                className="card w-64   bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+                className="card w-64 md:w-50  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
               >
                 <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
                 <figure className="w-12 h-12 mb-2">
@@ -461,21 +470,6 @@ const EditTrain = () => {
                               className={"bg-gray-700"}
                               onClick={() => {
                                 setSelectedExercise((prev) => {
-                                  if (setRef.current[index]) {
-                                    const scrollid = setRef.current[
-                                      index
-                                    ].querySelector(
-                                      `tr[data-set-index="${setIndex}"]`
-                                    );
-                                    console.log(scrollid.offsetTop);
-                                    if (scrollid) {
-                                      setSaveY((prev) => {
-                                        const updated = [...prev];
-                                        updated[index] = scrollid.offsetTop;
-                                        return updated;
-                                      });
-                                    }
-                                  }
                                   const updated = { ...prev };
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
@@ -519,31 +513,20 @@ const EditTrain = () => {
                               className={"bg-gray-700"}
                               onClick={() => {
                                 setSelectedExercise((prev) => {
-                                  if (repsRef.current[index]) {
-                                    const scrollid = repsRef.current[
-                                      index
-                                    ].querySelector(
-                                      `tr[data-reps-index="${repsIndex}"]`
-                                    );
-                                    console.log(scrollid.offsetTop);
-                                    if (scrollid) {
-                                      setSaveY2((prev) => {
-                                        const updated = [...prev];
-                                        updated[index] = scrollid.offsetTop;
-                                        return updated;
-                                      });
-                                    }
-                                  }
-
                                   const updated = { ...prev };
                                   console.log(updated);
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
                                       i === index
-                                        ? { ...ex, reps: repsIndex }
+                                        ? {
+                                            ...ex,
+                                            reps: Array(ex.sets).fill(
+                                              repsIndex
+                                            ),
+                                          }
                                         : ex
                                   );
-                                  console.log(updated);
+
                                   return updated;
                                 });
                               }}
@@ -551,7 +534,9 @@ const EditTrain = () => {
                               <td
                                 className={`border  border-gray-800 cursor-pointer p-2 text-center ${
                                   repsIndex ===
-                                  selectedExercise[savekey][index].reps
+                                  Number(
+                                    selectedExercise[savekey][index].reps[0]
+                                  )
                                     ? "bg-blue-500"
                                     : ""
                                 }`}
@@ -586,6 +571,7 @@ const EditTrain = () => {
                 </button>
               </div>
             ))}
+            <div className="divider divider-primary"></div>
             <div className="modal-action flex flex-row gap-2 justify-end">
               <button
                 onClick={() => {

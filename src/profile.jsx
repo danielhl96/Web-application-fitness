@@ -198,7 +198,7 @@ function Profile() {
       <div className="min-h-screen flex justify-center bg-slate-900  py-8 pt-24">
         <Header />
         {edit ? (
-          <div className="card sm:w-64 md:w-96 bg-slate-800 shadow-sm p-6 rounded-md border space-y-2 border-blue-500 overflow-auto">
+          <div className="card md:w-96 bg-slate-800 shadow-sm p-6 rounded-md border space-y-2 border-blue-500 overflow-auto">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -479,7 +479,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className=" card w-85 h-120  md:w-100 md:h-140  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div className=" card w-85 h-120  md:w-100 md:h-120  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg

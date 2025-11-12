@@ -469,7 +469,7 @@ function StartTraining() {
     console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800 max-w-auto max-h-auto overflow-y-auto max-h-40">
+        <div className="modal-box border border-blue-500 bg-slate-800  overflow-y-auto max-h-120">
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
