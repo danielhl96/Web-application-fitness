@@ -626,7 +626,7 @@ const EditTrain = () => {
       <Header />
       <div className="space-y-4 card w-85  md:w-100 md:h-140 bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
-          Edit Your Training
+          Edit your workout
         </div>
         <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-100 max-h-120">
           {Object.keys(selectedExercise).map((exercise, index) => (
