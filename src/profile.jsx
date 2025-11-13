@@ -32,10 +32,11 @@ function Profile() {
       .get("/get_profile")
       .then((response) => {
         const data = response.data;
+        console.log("Fetched profile data:", data);
         setBmi(data.bmi);
         setHeight(data.height);
         setWeight(data.weight);
-        setHwr(data.hwr);
+        setHwr(data.waist / data.hip);
         setHip(data.hip);
         setWaist(data.waist);
         setGoal(data.goal);
@@ -190,7 +191,9 @@ function Profile() {
     handleBmi();
   }, [height, weight]);
   useEffect(() => {
-    handleHwr();
+    if (edit) {
+      handleHwr();
+    }
   }, [hip, waist]);
 
   return (

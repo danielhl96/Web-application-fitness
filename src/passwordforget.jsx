@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
 
@@ -10,6 +10,8 @@ function PasswordForget() {
   const [requireCode, setRequireCode] = useState(false);
   const [password, setPassword] = useState(false);
   const [successfully, setSuccessfully] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   function Header() {
     return (
@@ -22,6 +24,25 @@ function PasswordForget() {
       </div>
     );
   }
+
+  const checkEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  useEffect(() => {
+    setEmailError(!checkEmail(email));
+  }, [email]);
+
+  useEffect(() => {
+    setPasswordError(
+      password.length < 8 ||
+        !/[A-Z]/.test(password) ||
+        !/[a-z]/.test(password) ||
+        !/\d/.test(password) ||
+        !/[!@#$%^&*]/.test(password)
+    );
+  }, [password]);
 
   const handleCode = () => {
     setRequireCode(true);
@@ -71,6 +92,9 @@ function PasswordForget() {
             className="input input-primary"
             onChange={(e) => setEmail(e.target.value)}
           />
+          {emailError && (
+            <p className="text-red-500">Please enter a valid email address.</p>
+          )}
         </div>
         <div>
           {requireCode && (
@@ -97,6 +121,13 @@ function PasswordForget() {
                 className="input input-primary"
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {passwordError && (
+                <p className="text-red-500">
+                  Password must be at least 8 characters long and include
+                  uppercase letters, lowercase letters, numbers, and special
+                  characters.
+                </p>
+              )}
               <h1>Repeat your password</h1>
               <input
                 type="password"
@@ -109,6 +140,7 @@ function PasswordForget() {
         </div>
         <div className="flex space-x-2 items-center justify-start">
           <button
+            disabled={emailError}
             onClick={
               !requireCode && !password
                 ? () => handleCode()
