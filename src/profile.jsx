@@ -429,7 +429,7 @@ function Profile() {
                   ({Math.round(bmi)}){" "}
                 </h1>
                 <h1 style={{ color: hwr >= 0.85 ? "red" : "green" }}>
-                  Your HWR: {hwr >= 0.85 ? "Risk" : "Good"}
+                  Your WHR: {hwr >= 0.85 ? "Risk" : "Good"}
                 </h1>
               </div>
             </div>
