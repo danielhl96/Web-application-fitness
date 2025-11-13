@@ -557,7 +557,7 @@ function Profile() {
                   BRI: {bri.toFixed(2)}
                 </h1>
                 <h1 style={{ color: hwr >= 0.85 ? "red" : "green" }}>
-                  HWR: {(hwr || 0).toFixed(2)}{" "}
+                  WHR: {(hwr || 0).toFixed(2)}{" "}
                   {hwr >= 0.85 ? "(Risk)" : "(Good)"}
                 </h1>
                 <h1 style={{ color: bfp > 25 ? "red" : "green" }}>

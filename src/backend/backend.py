@@ -302,7 +302,7 @@ def password_forget():
         safety_code = str(uuid.uuid4())
         redis_client.setex(f"safety_code:{email}", 300, safety_code)  # Expires in 5 minutes
         print(redis_client.get(f"safety_code:{email}"))
-        #send_email(email, safety_code)
+        send_email(email, safety_code)
         return jsonify({"message": "Password reset email sent!"}), 200
     return jsonify({"message": "User not found!"}), 404
 
