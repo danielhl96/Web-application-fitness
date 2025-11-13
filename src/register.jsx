@@ -34,13 +34,13 @@ function RegisterPage() {
         email,
         password,
       })
-      .then(
-        () => setMessage("Registration successful! You can now log in."),
-        setSuccesRegister(true)
-      )
+      .then(() => {
+        setMessage("Registration successful! You can now log in.");
+        setSuccesRegister(true);
+      })
       .catch((err) => {
         console.log(err);
-        setMessage("Registration failed. Please try again.");
+        setMessage(err.response.data.message);
       });
   };
 

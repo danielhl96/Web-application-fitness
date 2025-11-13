@@ -46,7 +46,7 @@ function PasswordForget() {
       .then(() => {
         setMessage("Password changed successfully.");
         setPassword(true);
-        setSuccessfully(true);
+        setSuccessfully(false);
       })
       .catch(() => {
         setMessage("Invalid security code. Please try again.");
@@ -63,7 +63,7 @@ function PasswordForget() {
       <div className="space-y-4 flex flex-col card sm:w-64 md:w-96 bg-gray-800  border border-blue-500 shadow-sm p-6 rounded-md">
         <h1 className="text-2xl font-bold">Forgot Password</h1>
         <div>
-          <h1>E-Mail</h1>
+          <h1 className="text-shadow-lg font-mono">E-Mail</h1>
 
           <input
             type="text"
@@ -75,7 +75,7 @@ function PasswordForget() {
         <div>
           {requireCode && (
             <>
-              <h1>Security-Code</h1>
+              <h1 className="text-shadow-lg font-mono">Security-Code</h1>
               <input
                 type="text"
                 placeholder={"Security-Code: "}
@@ -89,7 +89,7 @@ function PasswordForget() {
         <div>
           {password && (
             <>
-              <h1>New password</h1>
+              <h1 className="text-shadow-lg font-mono">New password</h1>
 
               <input
                 type="password"
