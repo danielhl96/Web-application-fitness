@@ -180,7 +180,7 @@ def hello_world():
 def register_user():
     data = request.json
     new_user = User(
-        email=data.get("email"),
+        email=data.get("email").lower(),
         password=hash_password(data.get("password")),
     )
     query = session.query(User).filter_by(email=new_user.email).first()
@@ -192,7 +192,9 @@ def register_user():
 
 @app.route('/api/login', methods=['GET'])
 def login_user():
-    email = request.args.get("email")
+    if( not request.args.get("email") or not request.args.get("password")):
+        return jsonify({"message": "Email and password are required!"}), 400
+    email = request.args.get("email").lower()
     password = request.args.get("password")
     user = session.query(User).filter_by(email=email).first()
     if user and argon2.verify(user.password, password):

@@ -14,6 +14,7 @@ function RegisterPage() {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
   const [message, setMessage] = useState("");
+  const [succesRegister, setSuccesRegister] = useState(false);
 
   function Header() {
     return (
@@ -35,15 +36,7 @@ function RegisterPage() {
       })
       .then(
         () => setMessage("Registration successful! You can now log in."),
-        (document.getElementById("email").value = ""),
-        (document.getElementById("password").value = ""),
-        (document.getElementById("password repeat").value = ""),
-        setConfirmPassword(""),
-        setEmail(""),
-        setPassword(""),
-        setEmailError(false),
-        setPasswordError(false),
-        setConfirmPasswordError(false)
+        setSuccesRegister(true)
       )
       .catch((err) => {
         console.log(err);
@@ -110,6 +103,7 @@ function RegisterPage() {
 
               <input
                 type="text"
+                disabled={succesRegister}
                 id="email"
                 placeholder={"E-Mail: "}
                 className="input input-primary"
@@ -134,6 +128,7 @@ function RegisterPage() {
               <input
                 type="password"
                 id="password"
+                disabled={succesRegister}
                 placeholder={"Password: "}
                 className="input input-primary"
                 onChange={handlePasswordChange}
@@ -157,6 +152,7 @@ function RegisterPage() {
               <input
                 type="password"
                 id="password repeat"
+                disabled={succesRegister}
                 placeholder={"Repeat your password: "}
                 className="input input-primary"
                 onChange={handleConfirmPasswordChange}
@@ -196,7 +192,8 @@ function RegisterPage() {
                   confirmPasswordError ||
                   email.length === 0 ||
                   password.length === 0 ||
-                  confirmPassword.length === 0
+                  confirmPassword.length === 0 ||
+                  succesRegister
                 }
                 className="btn btn-outline btn-success w-15 space-y-5"
               >
