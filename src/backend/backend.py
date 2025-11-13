@@ -105,16 +105,16 @@ def send_email(to_email, safety_code):
     msg = EmailMessage()
     msg.set_content(f"Your password reset code is: {safety_code}")
     msg['Subject'] = 'Password Reset Code'  
-    msg['From'] = ENV.get('SMTP_USER', '')
+    msg['From'] = os.getenv('SMTP_USER', '')
     msg['To'] = to_email
 
-    smtp_server = ENV.get('SMTP_HOST', 'smtp.example.com')
-    smtp_port = ENV.get('SMTP_PORT', 587)
-    smtp_password= ENV.get('SMTP_PASS', '')
+    smtp_server = os.getenv('SMTP_HOST', 'smtp.example.com')
+    smtp_port = os.getenv('SMTP_PORT', 587)
+    smtp_password= os.getenv('SMTP_PASS', '')
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
         server.starttls()
-        server.login(ENV.get('SMTP_USER', ''), smtp_password)
+        server.login(os.getenv('SMTP_USER', ''), smtp_password)
         server.send_message(msg)
 
 class User(Base):
