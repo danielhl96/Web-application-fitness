@@ -102,20 +102,24 @@ def verifyToken(token):
     return payload
 
 def send_email(to_email, safety_code):
-    msg = EmailMessage()
-    msg.set_content(f"Your password reset code is: {safety_code}")
-    msg['Subject'] = 'Password Reset Code'  
-    msg['From'] = os.getenv('SMTP_USER', '')
-    msg['To'] = to_email
+    try:
+        msg = EmailMessage()
+        msg.set_content(f"Your password reset code is: {safety_code}")
+        msg['Subject'] = 'Password Reset Code'  
+        msg['From'] = os.getenv('SMTP_USER', '')
+        msg['To'] = to_email
 
-    smtp_server = os.getenv('SMTP_HOST', 'smtp.example.com')
-    smtp_port = os.getenv('SMTP_PORT', 587)
-    smtp_password= os.getenv('SMTP_PASS', '')
+        smtp_server = os.getenv('SMTP_HOST', 'smtp.example.com')
+        smtp_port = os.getenv('SMTP_PORT', 587)
+        smtp_password= os.getenv('SMTP_PASS', '')
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(os.getenv('SMTP_USER', ''), smtp_password)
-        server.send_message(msg)
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(os.getenv('SMTP_USER', ''), smtp_password)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return jsonify({"message": "Failed to send email"}), 500
 
 class User(Base):
     __tablename__ = 'users'
