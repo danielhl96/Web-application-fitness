@@ -69,8 +69,8 @@ function PasswordForget() {
         setPassword(true);
         setSuccessfully(false);
       })
-      .catch(() => {
-        setMessage("Invalid security code. Please try again.");
+      .catch((e) => {
+        setMessage(e.response.data.message || "Error changing password.");
       });
   };
 

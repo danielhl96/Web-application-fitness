@@ -486,6 +486,7 @@ function StartTraining() {
                 onClick={() => {
                   setTraining(currentExercises[index]);
                   setExerciseList(false);
+                  setidx(index);
                 }}
               >
                 <div
