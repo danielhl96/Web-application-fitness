@@ -320,13 +320,14 @@ def check_safety_code():
     if user and safety_code:
         stored_code = redis_client.get(f"safety_code:{email}")
         if stored_code and stored_code.decode("utf-8") == safety_code:
-            if user and new_password == user.password:
+            # Prüfe, ob das neue Passwort dem alten entspricht
+            if argon2.verify(user.password, new_password):
                 return jsonify({"message": "New password cannot be the same as the old password!"}), 400
-            if user:
-                user.password = hash_password(new_password)
-                session.commit()
-                return jsonify({"message": "Password reset successful!"}), 200
-            else: return jsonify({"message": "User not found or invalid password!"}), 404
+            # Setze das neue Passwort
+            user.password = hash_password(new_password)
+            session.commit()
+            return jsonify({"message": "Password reset successful!"}), 200
+        return jsonify({"message": "Invalid safety code!"}), 400
     return jsonify({"message": "Invalid safety code!"}), 400
 
 @app.route('/api/create_workout_plan', methods=['post'])
@@ -342,7 +343,8 @@ def create_workout_plan():
     user_id = verification.get("sub")
     data = request.json
     print(data)
-
+    if data.get("name") in [plan.name for plan in session.query(WorkoutPlan).filter_by(user_id=user_id).all()]:
+        return jsonify({"message": "Workout plan with this name already exists!"}), 400
     new_templates = []
     for elem in data.get("exercises", []):
         name = elem.get("name")
@@ -559,7 +561,7 @@ def create_exercise():
         find_exercise.reps = data.get("reps")
         find_exercise.weights = data.get("weights")
         session.commit()
-        return jsonify({"message": "Exercise updated successfully!"}), 200
+        return jsonify({"message": "Exercise updated successfully!"}, 200)
     else:
         # Erstelle neues Exercise, falls nicht vorhanden
         new_exercise = Exercise(

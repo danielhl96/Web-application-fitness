@@ -133,7 +133,7 @@ function CreateTrainGUI() {
     {
       name: "Side raise",
       description: "An exercise to train shoulder (deltas)",
-      img: "./sideraises.png",
+      img: "./sideraise.png",
     },
 
     {

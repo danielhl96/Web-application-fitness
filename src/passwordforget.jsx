@@ -8,10 +8,14 @@ function PasswordForget() {
   const [securityCode, setSecurityCode] = useState("");
   const [message, setMessage] = useState("");
   const [requireCode, setRequireCode] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordRepeat, setPasswordRepeat] = useState("");
   const [successfully, setSuccessfully] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [emailinputtouch, setemailinputtouch] = useState(false);
+  const [passwordinputtouch, setpasswordinputtouch] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
 
   function Header() {
     return (
@@ -32,7 +36,17 @@ function PasswordForget() {
 
   useEffect(() => {
     setEmailError(!checkEmail(email));
+    console.log(emailError);
+    console.log(email);
+    console.log(passwordError);
+    console.log(passwordMatchError);
   }, [email]);
+
+  useEffect(() => {
+    setPasswordMatchError(() => {
+      return password !== passwordRepeat;
+    });
+  }, [password, passwordRepeat]);
 
   useEffect(() => {
     setPasswordError(
@@ -45,12 +59,11 @@ function PasswordForget() {
   }, [password]);
 
   const handleCode = () => {
-    setRequireCode(true);
-    setPassword(true);
     api
       .post("/password_forget", { email })
       .then(() => {
         setMessage("Check your email for the security code.");
+        setRequireCode(true);
       })
       .catch(() => {
         setMessage("Error sending code. Please try again.");
@@ -66,7 +79,7 @@ function PasswordForget() {
       })
       .then(() => {
         setMessage("Password changed successfully.");
-        setPassword(true);
+
         setSuccessfully(false);
       })
       .catch((e) => {
@@ -91,8 +104,9 @@ function PasswordForget() {
             placeholder={"E-Mail: "}
             className="input input-primary"
             onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setemailinputtouch(true)}
           />
-          {emailError && (
+          {emailError && emailinputtouch && (
             <p className="text-red-500">Please enter a valid email address.</p>
           )}
         </div>
@@ -111,7 +125,7 @@ function PasswordForget() {
           )}
         </div>
         <div>
-          {password && (
+          {requireCode && (
             <>
               <h1 className="text-shadow-lg font-mono">New password</h1>
 
@@ -120,9 +134,10 @@ function PasswordForget() {
                 placeholder={"New password: "}
                 className="input input-primary"
                 onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => setpasswordinputtouch(true)}
               />
-              {passwordError && (
-                <p className="text-red-500">
+              {passwordError && passwordinputtouch && (
+                <p className="text-red-500 text-sm">
                   Password must be at least 8 characters long and include
                   uppercase letters, lowercase letters, numbers, and special
                   characters.
@@ -133,26 +148,29 @@ function PasswordForget() {
                 type="password"
                 placeholder={"Repeat password: "}
                 className="input input-primary"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPasswordRepeat(e.target.value)}
               />
+              {passwordMatchError && passwordinputtouch && (
+                <p className="text-red-500 text-sm">Passwords do not match.</p>
+              )}
             </>
           )}
         </div>
         <div className="flex space-x-2 items-center justify-start">
           <button
-            disabled={emailError}
+            disabled={
+              emailError ||
+              (requireCode &&
+                (securityCode.length === 0 ||
+                  passwordError ||
+                  passwordMatchError))
+            }
             onClick={
-              !requireCode && !password
-                ? () => handleCode()
-                : () => handlePasswordChange()
+              !requireCode ? () => handleCode() : () => handlePasswordChange()
             }
             className="btn btn-outline btn-success"
           >
-            {requireCode && !password
-              ? "Send code"
-              : requireCode && password
-              ? "Change password"
-              : "Require code"}
+            {requireCode ? "Change password" : "Require code"}
           </button>
 
           <button
