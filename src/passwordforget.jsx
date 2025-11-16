@@ -94,7 +94,7 @@ function PasswordForget() {
   return (
     <div className="min-h-screen flex items-center bg-gray-900 justify-center">
       <Header />
-      <div className="space-y-4 flex flex-col card sm:w-64 md:w-96 bg-gray-800  border border-blue-500 shadow-sm p-6 rounded-md">
+      <div className="space-y-4 flex flex-col card w-96 sm:w-64 md:w-96 bg-gray-800  border border-blue-500 shadow-sm p-6 rounded-md">
         <h1 className="text-2xl font-bold">Forgot Password</h1>
         <div>
           <h1 className="text-shadow-lg font-mono">E-Mail</h1>
