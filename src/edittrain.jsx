@@ -233,6 +233,11 @@ const EditTrain = () => {
         "A bodyweight exercise to train the chest, shoulders, and triceps",
       img: "./pushups.png",
     },
+    {
+      name: "Hammer Curls",
+      description: "An exercise to train the biceps and forearms",
+      img: "./hammercurls.png",
+    },
   ];
 
   const [showModal, setShowModal] = useState(false);

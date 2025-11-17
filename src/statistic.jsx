@@ -8,8 +8,11 @@ function Statistic() {
 
   function ExerciseCards() {
     return showOverview ? (
-      <div className="lg:mt-0 sm:pt-2 sm:w-auto lg:max-w-2xl bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
-        <h1 className="font-bold text-left">Your statistics:</h1>
+      <div className="lg:mt-0 justify-top bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
+        <div className="divider divider-primary  text-amber-50 font-bold mb-2">
+          Your statistics
+        </div>
+
         <div className="grid sm:grid grid-cols-1 lg:grid-cols-3 space-x-2 justify-center items-center mt-4 text-xs overflow-y-auto max-h-130">
           {data.map((item, index) => (
             <div

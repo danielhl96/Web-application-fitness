@@ -25,22 +25,16 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Create Training</h2>
+            <h2 className="card-title text-blue-400 text-sm">
+              Create Training
+            </h2>
             <div className="flex justify-center my-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <img
+                src="/plan.png"
+                className="h-8 w-8 object-cover rounded-md"
+                alt="Create Training Icon"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
               Create your own training program
@@ -54,7 +48,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Start Training</h2>
+            <h2 className="card-title text-blue-400 text-sm">Start Training</h2>
             <div className="flex justify-center my-4">
               <img
                 src="/pullup.png"
@@ -64,7 +58,7 @@ function Home() {
               />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
-              Start your training with pull-ups
+              Start your training
             </p>
           </div>
         </div>
@@ -75,7 +69,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Profile</h2>
+            <h2 className="card-title text-blue-400 text-sm">Profile</h2>
             <div className="flex justify-center my-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +98,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Edit training</h2>
+            <h2 className="card-title text-blue-400 text-sm">Edit training</h2>
             <div className="flex justify-center my-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +127,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Timer</h2>
+            <h2 className="card-title text-blue-400 text-sm">Timer</h2>
             <div className="flex justify-center my-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -162,22 +156,14 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400">Statistic</h2>
+            <h2 className="card-title text-blue-400 text-sm">Statistic</h2>
             <div className="flex justify-center my-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
+              <img
+                src="/statistic.png"
+                className="h-8 w-8 object-cover rounded-md"
+                alt="Statistic Icon"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
               View your statistics
