@@ -11,6 +11,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from email.message import EmailMessage
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError  # Import hinzufügen
 from sqlalchemy.orm import joinedload
 from dotenv import load_dotenv
 
@@ -312,11 +313,19 @@ def change_password():
     if not user:
         return jsonify({"message": "User not found!"}), 404
     
-    if not argon2.verify(user.password, data.get("old_password")):
+   
+    try:
+        if not argon2.verify(user.password, data.get("old_password")):
+            return jsonify({"message": "Old password is incorrect!"}), 400
+    except VerifyMismatchError:
         return jsonify({"message": "Old password is incorrect!"}), 400
     
-    if argon2.verify(user.password, data.get("new_password")):
-        return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+    
+    try:
+        if argon2.verify(user.password, data.get("new_password")):
+            return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+    except VerifyMismatchError:
+        pass  
     
     user.password = hash_password(data.get("new_password"))
     session.commit()
@@ -351,7 +360,7 @@ def check_safety_code():
             # Setze das neue Passwort
             user.password = hash_password(new_password)
             session.commit()
-            return jsonify({"message": "Password reset successful!"}), 200
+            return jsonify({"message": "Password reset successful!"}, 200)
         return jsonify({"message": "Invalid safety code!"}, 400)
     return jsonify({"message": "Invalid safety code!"}, 400)
 

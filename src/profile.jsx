@@ -204,7 +204,9 @@ function Profile() {
       .catch((error) => {
         console.error("Error changing password:", error);
         setMessage(
-          <span className="text-red-500 text-xs">Error changing password</span>
+          <span className="text-red-500 text-xs text-center">
+            Error changing password
+          </span>
         );
       });
   };
@@ -261,7 +263,12 @@ function Profile() {
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <button
-                disabled={passwordError || newPassword !== confirmNewPassword}
+                onClick={() => handleChangePassword()}
+                disabled={
+                  passwordError ||
+                  newPassword !== confirmNewPassword ||
+                  message === "Password changed successfully!"
+                }
                 className="btn btn-outline btn-success  flex items-center justify-center"
               >
                 <svg
@@ -298,8 +305,8 @@ function Profile() {
                   />
                 </svg>
               </button>
-              {message}
             </div>
+            {message}
           </div>
         </div>
       </div>
