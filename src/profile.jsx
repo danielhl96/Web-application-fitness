@@ -26,6 +26,13 @@ function Profile() {
   const [failureBFP, setFailureBFP] = useState(false);
   const [edit, setEdit] = useState(false);
   const [bri, setBri] = useState(0);
+  const [modalPassword, setModalPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [inputTouched, setInputTouched] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     api
@@ -178,6 +185,125 @@ function Profile() {
     } else if (gender == "female") {
       setCalories((weight * 10 + 6.25 * height - 5 * age - 161) * activity + l);
     }
+  };
+
+  const handleChangePassword = () => {
+    api
+      .put("/change_password", {
+        old_password: password,
+        new_password: newPassword,
+      })
+      .then((response) => {
+        console.log("Password changed successfully:", response.data);
+        setMessage(
+          <span className="text-green-500 text-xs">
+            Password changed successfully!
+          </span>
+        );
+      })
+      .catch((error) => {
+        console.error("Error changing password:", error);
+        setMessage(
+          <span className="text-red-500 text-xs">Error changing password</span>
+        );
+      });
+  };
+
+  useEffect(() => {
+    setPasswordError(
+      newPassword.length < 8 ||
+        newPassword.length < 8 ||
+        !/[A-Z]/.test(newPassword) ||
+        !/[a-z]/.test(newPassword) ||
+        !/\d/.test(newPassword) ||
+        !/[!@#$%^&*]/.test(newPassword)
+    );
+  }, [password, newPassword, confirmNewPassword]);
+  const handleModalforPassword = () => {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div className="modal-box border border-blue-500 bg-slate-800">
+          <div className="flex flex-row justify-center items-center  text-xs"></div>
+          <h3 className="font-bold text-lg text-amber-50">
+            Change your password
+          </h3>
+          <div className="flex flex-col space-y-2 mt-2">
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              className="input input-primary"
+              type="password"
+              placeholder="Current password"
+            />
+            <input
+              onChange={(e) => setNewPassword(e.target.value)}
+              onBlur={() => setInputTouched(true)}
+              className="input input-primary"
+              type="password"
+              placeholder="New password"
+            />
+            {passwordError && inputTouched && (
+              <span className="text-red-500 text-xs">
+                Password must be at least 8 characters uppercase, lowercase,
+                number, and special character.
+              </span>
+            )}
+            <input
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              className="input input-primary"
+              type="password"
+              placeholder="Confirm new password"
+            />
+            {newPassword !== confirmNewPassword && (
+              <span className="text-red-500 text-xs">
+                Passwords do not match.
+              </span>
+            )}
+            <div className="divider divider-primary"></div>
+            <div className="flex flex-row space-x-2 items-center justify-center">
+              <button
+                disabled={passwordError || newPassword !== confirmNewPassword}
+                className="btn btn-outline btn-success  flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => setModalPassword(false)}
+                className="btn btn-outline btn-warning  flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              {message}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -482,7 +608,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className=" card w-85 h-120  md:w-100 md:h-120  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          <div className=" card w-85 h-140  md:w-100 md:h-140  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg
@@ -622,6 +748,67 @@ function Profile() {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
+                </button>
+              </div>
+              {modalPassword && handleModalforPassword()}
+              <div className="divider  text-amber-50 font-light mb-2  divider-primary">
+                Change your credentials
+              </div>
+              <div className="flex flex-row space-x-2 items-center justify-center">
+                <button
+                  onClick={() => setModalPassword(true)}
+                  className="btn btn-ghost btn-primary"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                  Password
+                </button>
+                <button className="btn btn-ghost btn-primary">
+                  {" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Email
+                </button>
+                <button className="btn btn-ghost btn-secondary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Account
                 </button>
               </div>
             </div>

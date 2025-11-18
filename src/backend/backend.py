@@ -298,6 +298,31 @@ def logout_user():
         return resp, 200
     return jsonify({"message": "No token provided!"}), 400
 
+@app.route('/api/change_password', methods=['put'])
+def change_password():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    user_id = verification.get("sub")
+    data = request.json
+    user = session.query(User).filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "User not found!"}), 404
+    
+    if not argon2.verify(user.password, data.get("old_password")):
+        return jsonify({"message": "Old password is incorrect!"}), 400
+    
+    if argon2.verify(user.password, data.get("new_password")):
+        return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+    
+    user.password = hash_password(data.get("new_password"))
+    session.commit()
+    return jsonify({"message": "Password changed successfully!"}), 200
+    
+
 @app.route('/api/password_forget', methods=['post'])
 def password_forget():
     email = request.json.get("email")
@@ -327,8 +352,8 @@ def check_safety_code():
             user.password = hash_password(new_password)
             session.commit()
             return jsonify({"message": "Password reset successful!"}), 200
-        return jsonify({"message": "Invalid safety code!"}), 400
-    return jsonify({"message": "Invalid safety code!"}), 400
+        return jsonify({"message": "Invalid safety code!"}, 400)
+    return jsonify({"message": "Invalid safety code!"}, 400)
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():
