@@ -27,12 +27,16 @@ function Profile() {
   const [edit, setEdit] = useState(false);
   const [bri, setBri] = useState(0);
   const [modalPassword, setModalPassword] = useState(false);
+  const [emailModal, setEmailModal] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [inputTouched, setInputTouched] = useState(false);
   const [message, setMessage] = useState("");
+  const [errorEmailMessage, setErrorEmailMessage] = useState("");
+  const [errorEmailMessageAPI, setErrorEmailMessageAPI] = useState("");
 
   useEffect(() => {
     api
@@ -199,9 +203,29 @@ function Profile() {
       })
       .catch((error) => {
         console.error("Error changing password:", error);
-        setMessage(
+        setErrorEmailMessageAPI(
           <span className="text-red-500 text-xs text-center">
             Error changing password
+          </span>
+        );
+      });
+  };
+
+  const handleChangeEmail = () => {
+    api
+      .put("/change_email", {
+        new_email: newEmail,
+        password: password,
+      })
+      .then((response) => {
+        console.log("Email changed successfully:", response.data);
+        setEmailModal(false);
+      })
+      .catch((error) => {
+        console.error("Error changing email:", error);
+        setMessage(
+          <span className="text-red-500 text-xs text-center">
+            Error changing email
           </span>
         );
       });
@@ -217,6 +241,90 @@ function Profile() {
         !/[!@#$%^&*]/.test(newPassword)
     );
   }, [password, newPassword, confirmNewPassword]);
+
+  useEffect(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (newEmail && !emailRegex.test(newEmail)) {
+      setErrorEmailMessage(
+        <span className="text-red-500 text-xs text-center">
+          Please enter a valid email address.
+        </span>
+      );
+    } else {
+      setErrorEmailMessage(null);
+    }
+  }, [newEmail]);
+
+  const handleEmailModal = () => {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div className="modal-box border border-blue-500 bg-slate-800">
+          <div className="flex flex-row justify-center items-center  text-xs"></div>
+          <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
+          <div className="flex flex-col space-y-2 mt-2">
+            <input
+              onChange={(e) => setNewEmail(e.target.value)}
+              className="input input-primary"
+              type="email"
+              placeholder="New email"
+            />
+            {errorEmailMessage}
+
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              className="input input-primary"
+              type="password"
+              placeholder="Current password"
+            />
+            <div className="divider divider-primary"></div>
+            <div className="flex flex-row space-x-2 items-center justify-center">
+              <button
+                onClick={() => handleChangeEmail()}
+                disabled={!!errorEmailMessage || password.length === 0}
+                className="btn btn-outline btn-success  flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => setEmailModal(false)}
+                className="btn btn-outline btn-warning  flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            {errorEmailMessageAPI}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const handleModalforPassword = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -708,7 +816,9 @@ function Profile() {
                     : "Very active"}{" "}
                 </h1>
               </div>
-              <div className="divider  text-amber-50 font-bold mb-2  divider-primary"></div>
+              <div className="divider  text-amber-50 font-light mb-2  divider-primary">
+                Change your personal information
+              </div>
               <div className="flex flex-row space-x-2 items-center justify-center">
                 <button
                   onClick={() => setEdit(true)}
@@ -750,6 +860,7 @@ function Profile() {
                 </button>
               </div>
               {modalPassword && handleModalforPassword()}
+              {emailModal && handleEmailModal()}
               <div className="divider  text-amber-50 font-light mb-2  divider-primary">
                 Change your credentials
               </div>
@@ -774,7 +885,10 @@ function Profile() {
                   </svg>
                   Password
                 </button>
-                <button className="btn btn-ghost btn-primary">
+                <button
+                  onClick={() => setEmailModal(true)}
+                  className="btn btn-ghost btn-primary"
+                >
                   {" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
