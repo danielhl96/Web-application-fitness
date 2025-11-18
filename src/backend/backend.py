@@ -312,7 +312,10 @@ def change_email():
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
         return jsonify({"message": "User not found!"}), 404
-    if not argon2.verify(user.password, data.get("password")):
+    try:
+        if not argon2.verify(user.password, data.get("password")):
+            return jsonify({"message": "Password is incorrect!"}), 400
+    except VerifyMismatchError:
         return jsonify({"message": "Password is incorrect!"}), 400
     
     user.email = data.get("new_email").lower()
