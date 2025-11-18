@@ -299,6 +299,46 @@ def logout_user():
         return resp, 200
     return jsonify({"message": "No token provided!"}), 400
 
+@app.route('/api/change_email', methods=['put'])
+def change_email():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    user_id = verification.get("sub")   
+    data = request.json
+    user = session.query(User).filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "User not found!"}), 404
+    user.email = data.get("new_email").lower()
+    session.commit()
+    return jsonify({"message": "Email changed successfully!"}), 200
+
+@app.route('/api/delete_account', methods=['delete'])
+def delete_account():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    user_id = verification.get("sub")
+    user = session.query(User).filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "User not found!"}), 404
+    session.query(Exercise).filter_by(user_id=user_id).delete(synchronize_session=False)
+    session.query(PlanExerciseTemplate).filter(PlanExerciseTemplate.workout_plan_id.in_(
+        session.query(WorkoutPlan.id).filter_by(user_id=user_id)
+    )).delete(synchronize_session=False)
+    session.query(WorkoutPlan).filter_by(user_id=user_id).delete(synchronize_session=False)
+
+
+    session.delete(user)
+    session.commit()
+    return jsonify({"message": "Account deleted successfully!"}), 200
+
 @app.route('/api/change_password', methods=['put'])
 def change_password():
     token = get_token_from_cookie()

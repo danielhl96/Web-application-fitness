@@ -195,11 +195,7 @@ function Profile() {
       })
       .then((response) => {
         console.log("Password changed successfully:", response.data);
-        setMessage(
-          <span className="text-green-500 text-xs">
-            Password changed successfully!
-          </span>
-        );
+        setModalPassword(false);
       })
       .catch((error) => {
         console.error("Error changing password:", error);
@@ -264,11 +260,7 @@ function Profile() {
             <div className="flex flex-row space-x-2 items-center justify-center">
               <button
                 onClick={() => handleChangePassword()}
-                disabled={
-                  passwordError ||
-                  newPassword !== confirmNewPassword ||
-                  message === "Password changed successfully!"
-                }
+                disabled={passwordError || newPassword !== confirmNewPassword}
                 className="btn btn-outline btn-success  flex items-center justify-center"
               >
                 <svg
