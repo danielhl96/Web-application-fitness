@@ -72,12 +72,18 @@ function StartTraining() {
   const scrollRef2 = useRef(null);
 
   const postData = (updatedCurrent) => {
+    console.log(training1.reps);
     api
       .post("/create_exercise", {
         workout_plan_id: updatedCurrent.plan_id,
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,
-        reps: updatedCurrent.reps,
+        reps:
+          updatedCurrent.reps &&
+          updatedCurrent.reps.length == updatedCurrent.sets &&
+          updatedCurrent.reps.every((rep) => rep != null)
+            ? updatedCurrent.reps
+            : Array(updatedCurrent.sets).fill(0),
         weights: updatedCurrent.weights,
       })
       .then((response) => {
@@ -127,6 +133,7 @@ function StartTraining() {
       const newIdx = idxExercise + 1;
       setidx(newIdx);
       setTraining(updatedExercises[newIdx]);
+      setInputValue([]);
 
       for (var i = 0; i < training1.sets; i++) {
         document.getElementById("input" + (i + 1)).value = "";
@@ -195,6 +202,7 @@ function StartTraining() {
       ...training1,
       sets: updatedSets,
       weight: weightArray,
+      reps: [...training1.reps, 0],
     };
     console.log(updatedExercise);
     setCurrentExercises((prev) => {
@@ -292,17 +300,24 @@ function StartTraining() {
   }, [selectedExercise.sets]);
 
   useEffect(() => {
-    if (showModal && scrollRef.current) {
-      if (saveY[idx] !== undefined) {
-        scrollRef.current.scrollTop = saveY[idx];
-      }
+    if (showModal && scrollRef.current && training1 != null) {
+      let wholePart = Math.floor(training1.weights[idx]); // z. B. 10
+      if (isNaN(wholePart)) wholePart = 0;
+      const selectedRow = scrollRef.current.querySelector(
+        `tr[data-weight="${wholePart}"]`
+      );
+      scrollRef.current.scrollTop = selectedRow.offsetTop;
     }
-    if (showModal && scrollRef2.current) {
-      if (saveY2[idx] !== undefined) {
-        scrollRef2.current.scrollTop = saveY2[idx];
-      }
+
+    if (showModal && scrollRef2.current && training1 != null) {
+      let decimalPart = training1.weights[idx] % 1;
+      if (isNaN(decimalPart)) decimalPart = 0;
+      const selectedRow2 = scrollRef2.current.querySelector(
+        `tr[data-weight2="${decimalPart}"]`
+      );
+      scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
-  }, [showModal]);
+  }, [showModal, idx]);
 
   const settingsModal = () => {
     return (
@@ -548,8 +563,8 @@ function StartTraining() {
           </div>
         ) : (
           <div
-            className={`space-y-2 card sm:w-100 md:w-100 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
-              training1.isFinished ? "border-green-500" : "border-blue-800"
+            className={`space-y-2 card sm:w-100 md:w-100 w-85 h-140 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
+              training1.isFinished ? "border-green-500" : "border-blue-500"
             }`}
           >
             <div className="flex flex-top justify-start"></div>

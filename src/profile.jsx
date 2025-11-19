@@ -498,7 +498,8 @@ function Profile() {
             </div>
             <div className="divider divider-primary"></div>
             <p className="text-amber-50 mt-2 text-center text-xs">
-              Hint: This process will not be returnable
+              Hint: This process will not be returnable. You will be logged out
+              immediately.
             </p>
           </div>
         </div>
