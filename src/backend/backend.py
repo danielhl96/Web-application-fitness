@@ -7,7 +7,7 @@ import redis
 import os
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
-from flask import Flask, request, jsonify
+from flask import Flask, make_response, request, jsonify
 from flask_cors import CORS
 from email.message import EmailMessage
 from argon2 import PasswordHasher
@@ -343,7 +343,11 @@ def delete_account():
 
     session.delete(user)
     session.commit()
-    return jsonify({"message": "Account deleted successfully!"}), 200
+    response = make_response(jsonify({"message": "Account deleted successfully!"}), 200)
+    response.set_cookie('token', '', expires=0, httponly=True, secure=True, samesite='None')  # Cookie löschen
+
+    
+    return response
 
 @app.route('/api/change_password', methods=['put'])
 def change_password():
