@@ -343,11 +343,7 @@ def delete_account():
 
     session.delete(user)
     session.commit()
-    response = make_response(jsonify({"message": "Account deleted successfully!"}), 200)
-    response.set_cookie('token', '', expires=0, httponly=True, secure=True, samesite='None')  # Cookie löschen
-
-    
-    return response
+    return jsonify({"message": "Account deleted successfully!"})
 
 @app.route('/api/change_password', methods=['put'])
 def change_password():

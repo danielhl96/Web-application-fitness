@@ -233,6 +233,12 @@ function Profile() {
       });
   };
 
+  const handlelogout = () => {
+    api
+      .post("/logout", {}, { withCredentials: true })
+      .then(() => navigate("/login"));
+  };
+
   const handleDeleteAccount = () => {
     api
       .delete("/delete_account", {
@@ -240,7 +246,7 @@ function Profile() {
       })
       .then((response) => {
         console.log("Account deleted successfully:", response.data);
-        navigate("/login");
+        handlelogout();
       })
       .catch((error) => {
         console.error("Error deleting account:", error);
