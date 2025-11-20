@@ -16,7 +16,6 @@ function StartTraining() {
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
       acc[plan.name] = plan.templates.map((exercise) => {
-        // Finde das passende Exercise per name (da exercises gefiltert ist)
         const matchingExercise = plan.exercises.find(
           (e) => e.name === exercise.name
         );
@@ -56,6 +55,7 @@ function StartTraining() {
   }, [data]);
 
   const [idxExercise, setidx] = useState(0);
+  const [idxTraining, setidxTraining] = useState(0);
   const [inputValue, setInputValue] = useState([]);
   const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
@@ -66,8 +66,7 @@ function StartTraining() {
 
   const [selectedWeight2, setSelectedWeight2] = useState([3]);
   const [idx, setWeightidx] = useState(0);
-  const [saveY, setSaveY] = useState([]);
-  const [saveY2, setSaveY2] = useState([]);
+
   const scrollRef = useRef(null);
   const scrollRef2 = useRef(null);
 
@@ -107,6 +106,12 @@ function StartTraining() {
       const updatedExercises = [...currentExercises];
       updatedExercises[idxExercise] = finishedCurrent;
       setCurrentExercises(updatedExercises);
+    }
+    if (
+      Object.keys(currentExercises).every(
+        (ex) => currentExercises[ex].isFinished
+      )
+    ) {
       setShowTrainingEndModal(true);
     }
 
@@ -319,6 +324,7 @@ function StartTraining() {
     }
   }, [showModal, idx]);
 
+  //Modal for the weight selection
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -411,6 +417,7 @@ function StartTraining() {
     );
   };
 
+  //Modal for the end of training
   function TrainingEndModal() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -438,7 +445,7 @@ function StartTraining() {
     );
   }
 
-  function WorkoutCard({ planName }) {
+  function WorkoutCard({ planName, index }) {
     return (
       <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
@@ -450,6 +457,7 @@ function StartTraining() {
                 setCurrentPlan(planName);
                 setTraining(selectedExercise[planName][0]);
                 setSelectedTrainingSite(false);
+                setidxTraining(index);
               }}
               className="btn btn-outline btn-primary text-white flex items-center justify-center"
             >
@@ -480,6 +488,7 @@ function StartTraining() {
     );
   }
 
+  //Show the list of exercises in the current plan
   function ExerciseList() {
     console.log(currentExercises);
     return (
@@ -742,7 +751,9 @@ function StartTraining() {
                 onClick={() => handleExercise()}
                 className="btn btn-outline btn-primary"
               >
-                {idxExercise == Object.keys(currentExercises).length - 1 ? (
+                {Object.keys(currentExercises).every(
+                  (ex) => currentExercises[ex].isFinished
+                ) ? (
                   <svg // success icon
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"

@@ -11,6 +11,7 @@ function CounterForm() {
   const [breaktime, setBreaktime] = useState(0);
   const [starttime, setStarttime] = useState(0);
   const [roundtime, setRoundTime] = useState(0);
+  const [totaltime, setTotalTime] = useState(0);
   const intervalRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [isbreakmode, setIsBreakMode] = useState(false);
@@ -18,14 +19,17 @@ function CounterForm() {
   const [isStopmode, setisStopMode] = useState(false);
 
   useEffect(() => {
+    const totalSeconds = min * 60 + Math.floor(sec / 6); // Gesamtzeit in Sekunden
+    setTotalTime(totalSeconds);
+    console.log("Total Seconds:", totalSeconds);
     if (sec == 360) {
       setMin((prevMin) => prevMin + 1);
-     // setCountRounds((prevRounds) => prevRounds + 1);
-     // setSec(0);
+      setSec(0);
     }
-    if (sec == roundtime * 6 && roundtime * 6 !== 0 && !isbreakmode) {
+    if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode) {
       setCountRounds((prevRounds) => prevRounds + 1);
       setSec(0);
+      setMin(0); // Reset für nächste Runde
       setIsBreakMode(true);
     }
     if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
@@ -34,13 +38,13 @@ function CounterForm() {
       setisStartMode(true);
     }
 
-    if (sec == starttime * 6 && starttime * 6 !== 0 && isStartmode) {
+    if (totalSeconds == starttime && starttime !== 0 && isStartmode) {
       setSec(0);
       setMin(0);
       setCountRounds(0);
       setisStartMode(false);
     }
-    if (sec == breaktime * 6 && breaktime * 6 !== 0 && isbreakmode) {
+    if (totalSeconds == breaktime && breaktime !== 0 && isbreakmode) {
       setSec(0);
       setMin(0);
       setIsBreakMode(false);
@@ -50,6 +54,7 @@ function CounterForm() {
     roundtime,
     countRounds,
     rounds,
+    min,
     breaktime,
     starttime,
     isbreakmode,
@@ -69,7 +74,7 @@ function CounterForm() {
 
   const handleBreakMode = (e) => {
     if (e > 0) {
-      setIsBreakMode(true);
+      //setIsBreakMode(true);
       setBreaktime(e);
     }
   };
@@ -164,7 +169,7 @@ function CounterForm() {
   return (
     <div className="flex flex-col items-center justify-start  min-h-screen bg-gray-900 ">
       {showModal && settingsModal()}
-      <div className="items-center card sm:w-96 md:w-85 w-85 h-120 bg-gray-800 border border-blue-500 shadow-sm p-6 mt-20 rounded-md">
+      <div className="items-center card sm:w-96 md:w-85 w-85 h-120 bg-gray-800 border border-blue-500 shadow-sm p-6 mt-25 rounded-md">
         <div className="relative w-60 h-60  rounded-full border-4 border-green-500">
           {marks.map((_, index) => {
             const angle = index * 30;
@@ -181,7 +186,7 @@ function CounterForm() {
                 />
                 <h1
                   className={`absolute left-1/2 top-2/3 transform -translate-x-1/2 -translate-y-1/1 ${
-                    roundtime - sec / 6 <= 5 && "text-red-500"
+                    roundtime - totaltime <= 5 && "text-red-500"
                   } ${isbreakmode && "text-purple-500"} ${
                     isStartmode && "text-yellow-500"
                   } text-xs text-center items-center font-light`}
@@ -255,7 +260,7 @@ function CounterForm() {
 
         <div className="flex flex-col items-center space-y-2">
           <button
-            className="btn btn-outline btn-warning rounded-full mt-2 btn-lg flex flex-col items-center"
+            className="btn btn-outline btn-warning rounded-full mt-2 btn-sm flex flex-col items-center"
             onClick={() => setShowModal(true)}
           >
             <svg
@@ -284,13 +289,13 @@ function CounterForm() {
         <div className="flex- flex row space-x-2 ">
           <button
             disabled={rounds === 0}
-            className="btn btn-outline btn-primary rounded-full btn-lg flex flex-col items-center"
+            className="btn btn-outline btn-primary rounded-full btn-sm flex flex-col items-center"
             onClick={() => (isStopmode ? stopCounter() : startCounter())}
           >
             {isStopmode ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 mr-2"
+                className="h-6 w-6 mb-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -311,7 +316,7 @@ function CounterForm() {
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 mr-2"
+                className="h-6 w-6 mb-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -332,12 +337,12 @@ function CounterForm() {
             )}
           </button>
           <button
-            className="btn btn-outline btn-secondary rounded-full btn-lg"
+            className="btn btn-outline btn-secondary rounded-full btn-sm flex flex-col items-center"
             onClick={() => resetCounter()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
+              className="h-6 w-6 mb-1"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
