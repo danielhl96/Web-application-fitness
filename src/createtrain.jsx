@@ -500,7 +500,7 @@ function CreateTrainGUI() {
                       description={exercise.description}
                       img={exercise.img}
                       onRemove={() => handleRemoveExercise(exercise.name)}
-                      // 2. Callback als Prop übergeben
+                      // Callback for Prop passed
                       onRepsChange={(reps) =>
                         handleRepsChange(exercise.name, reps)
                       }

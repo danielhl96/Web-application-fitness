@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const isCheckingRef = useRef(false);
 
   const checkAuth = async () => {
-    if (isCheckingRef.current) return; // Verhindert parallele Aufrufe
+    if (isCheckingRef.current) return; // Prevent concurrent checks
     isCheckingRef.current = true;
     try {
       console.log("Checking authentication...");

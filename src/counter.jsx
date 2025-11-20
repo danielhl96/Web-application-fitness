@@ -5,7 +5,6 @@ function CounterForm() {
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
   const [sec, setSec] = useState(0);
   const [min, setMin] = useState(0);
-  const [hsec, setHsec] = useState(0);
   const [rounds, setRounds] = useState(0);
   const [countRounds, setCountRounds] = useState(0);
   const [breaktime, setBreaktime] = useState(0);
@@ -19,17 +18,17 @@ function CounterForm() {
   const [isStopmode, setisStopMode] = useState(false);
 
   useEffect(() => {
-    const totalSeconds = min * 60 + Math.floor(sec / 6); // Gesamtzeit in Sekunden
+    const totalSeconds = min * 60 + Math.floor(sec / 6); //Whole time in seconds
     setTotalTime(totalSeconds);
-    console.log("Total Seconds:", totalSeconds);
     if (sec == 360) {
       setMin((prevMin) => prevMin + 1);
       setSec(0);
     }
     if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode) {
       setCountRounds((prevRounds) => prevRounds + 1);
+      // Reset for next round
       setSec(0);
-      setMin(0); // Reset für nächste Runde
+      setMin(0);
       setIsBreakMode(true);
     }
     if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
@@ -74,7 +73,6 @@ function CounterForm() {
 
   const handleBreakMode = (e) => {
     if (e > 0) {
-      //setIsBreakMode(true);
       setBreaktime(e);
     }
   };
@@ -82,7 +80,7 @@ function CounterForm() {
   const startCounter = () => {
     intervalRef.current = setInterval(function () {
       setSec((prevSec) => prevSec + 6);
-    }, 1000); // alle 1000 ms = 1 Sekunde
+    }, 1000); // every 1000 ms = 1 second
     setisStopMode(true);
   };
 
@@ -95,7 +93,7 @@ function CounterForm() {
     clearInterval(intervalRef.current);
     setSec(0);
     setMin(0);
-    setHsec(0);
+
     setCountRounds(0);
     setBreaktime(0);
     setIsBreakMode(false);
@@ -175,7 +173,7 @@ function CounterForm() {
             const angle = index * 30;
             return (
               <React.Fragment key={index}>
-                {/* Markierung */}
+                {/* Marker */}
                 <div
                   className="absolute left-1/2 top-1/2 w-1 bg-yellow-400 flex items-center justify-center"
                   style={{
@@ -194,7 +192,7 @@ function CounterForm() {
                   {String(min).padStart(2, "0")} :{" "}
                   {String(Math.floor(sec / 6)).padStart(2, "0")}
                 </h1>
-                {/* Zahl */}
+                {/* Number */}
                 <div
                   className="absolute left-1/2 top-1/2 w-1 text-blue-400 text-xs flex items-center justify-center"
                   style={{
@@ -204,7 +202,7 @@ function CounterForm() {
                 >
                   <div
                     style={{
-                      transform: `rotate(${-angle}deg)`,
+                      transform: `rotate(${-angle}deg)`, //The numbers should not be rotated
                     }}
                   >
                     {index === 0 ? 60 : index * 5}
@@ -229,7 +227,7 @@ function CounterForm() {
               </React.Fragment>
             );
           })}
-          {/* Sekundenzeiger */}
+          {/* Secondspointer */}
           <div
             className={`absolute left-1/2 top-1/2 w-1 ${
               isbreakmode ? "bg-purple-500" : "bg-red-500"
@@ -240,6 +238,7 @@ function CounterForm() {
               transformOrigin: "top",
             }}
           >
+            {/* Pointer Circle */}
             <div
               className="absolute left-1/2 top-1/2 w-1 h-1 rounded-full border-4 border-yellow-500 flex items-center justify-center"
               style={{

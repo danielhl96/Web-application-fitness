@@ -132,7 +132,7 @@ function Header() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-amber-50" // <-- Klasse hinzugefügt für Größe und Farbe (amber-50 für Konsistenz)
+                className="h-6 w-6 text-amber-50"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -154,7 +154,7 @@ function Header() {
               <figure className="w-5 h-5 mb-2">
                 <img
                   src={"./statistic.png"}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert" // <-- Filter hinzugefügt: brightness-0 invert (weiß)
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
                 />
               </figure>
               Statistics

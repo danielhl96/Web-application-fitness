@@ -174,7 +174,7 @@ function Home() {
     </div>
   );
 }
-
+//Routes with ProtectedRoute to protect routes for the application
 function App() {
   return (
     <div>

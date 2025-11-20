@@ -316,7 +316,7 @@ const EditTrain = () => {
   const handeRemoveWorkoutAPI = (workoutname) => {
     api
       .delete(`/delete_workout_plan`, {
-        data: { plan_id: selectedExercise[workoutname][0]?.plan_id }, // Korrigiert
+        data: { plan_id: selectedExercise[workoutname][0]?.plan_id },
       })
       .then(() => {
         console.log("Workout plan deleted");

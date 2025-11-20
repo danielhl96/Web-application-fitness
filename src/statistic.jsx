@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 function Statistic() {
   const [showOverview, setShowOverview] = useState(true);
-  const [selectedExercise, setSelectedExercise] = useState(null); // <-- Neu: Für ausgewähltes Exercise
+  const [selectedExercise, setSelectedExercise] = useState(null);
 
   function ExerciseCards() {
     return showOverview ? (
@@ -19,7 +19,7 @@ function Statistic() {
               key={index}
               className="items-center cursor-pointer"
               onClick={() => {
-                setSelectedExercise(item); // <-- Neu: Setze ausgewähltes Exercise
+                setSelectedExercise(item);
                 setShowOverview(false);
               }}
             >
@@ -71,7 +71,7 @@ function Statistic() {
         <div className="flex flex-row justify-between w-full">
           <button
             onClick={() => setShowOverview(true)}
-            className="btn btn-outline btn-secondary btn-sm" // <-- Neu: btn-sm für kleinere Größe
+            className="btn btn-outline btn-secondary btn-sm"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ function Statistic() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 transform scale-x-[-1]" // <-- Hier hinzugefügt: scale-x-[-1] spiegelt horizontal
+                className="h-4 w-4 transform scale-x-[-1]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -190,32 +190,32 @@ function Statistic() {
         yaxis: {
           labels: {
             style: { colors: "#FFFFFF" },
-            formatter: (value) => value + " kg", // <-- Neu: Einheiten "kg" anzeigen
+            formatter: (value) => value + " kg",
           },
         },
         tooltip: {
-          theme: "dark", // <-- Geändert: Dark-Theme für schwarzen Text auf hellem Hintergrund
+          theme: "dark",
           style: {
             fontSize: "12px",
-            color: "#000000", // <-- Text explizit schwarz
+            color: "#000000",
           },
         },
       };
 
-      const chart = new ApexCharts(document.querySelector("#chart"), options); // <-- Korrigiert: "#chart"
+      const chart = new ApexCharts(document.querySelector("#chart"), options);
       chart.render();
 
       return () => chart.destroy();
     }, [exercise]);
 
-    return null; // Kein JSX, nur Side-Effect
+    return null;
   }
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
     api.get("/statistics").then((response) => {
-      setData(response.data); // <-- Korrigiert: Ohne [0]
+      setData(response.data);
       console.log("Fetched statistics data:", response.data);
     });
   }, []);

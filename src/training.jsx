@@ -31,9 +31,7 @@ function StartTraining() {
           isFinished: false,
         };
       });
-      //hier zusätzlich daten aus exercises für weights ladnen
 
-      console.log(acc);
       return acc;
     }, {});
 
@@ -184,7 +182,7 @@ function StartTraining() {
       return updated;
     });
 
-    // Aktualisiere auch das Objekt
+    // update selectedExercise accordingly
     setExercise((prev) => {
       const updated = { ...prev };
       updated[currentPlan] = currentExercises.map((ex, i) =>
@@ -196,12 +194,11 @@ function StartTraining() {
     setShowModal(flag);
   };
 
+  // Add a new sets entry initialized to 0
   const handleAddSets = () => {
     const updatedSets = training1.sets + 1;
     const weightArray = [...training1.weights];
     weightArray.push(0);
-
-    // Füge einen neuen Eintrag für das neue Set hinzu
 
     const updatedExercise = {
       ...training1,
@@ -241,26 +238,13 @@ function StartTraining() {
     settingsModal();
   };
 
-  // Gewicht für das aktuelle Set wählen
+  // Weight selection handlers
   const handleWeightSelect = (weight) => {
     setSelectedWeight1((prev) => {
       const updated = [...prev];
       updated[idx] = weight;
       return updated;
     });
-    // Scroll-Position speichern wie gehabt
-    if (scrollRef.current) {
-      const selectedRow = scrollRef.current.querySelector(
-        `tr[data-weight="${weight}"]`
-      );
-      if (selectedRow) {
-        setSaveY((prev) => {
-          const updated = [...prev];
-          updated[idx] = selectedRow.offsetTop;
-          return updated;
-        });
-      }
-    }
   };
 
   const handleWeightSelect2 = (weight) => {
@@ -271,26 +255,14 @@ function StartTraining() {
         return updated;
       });
     }
-    if (scrollRef2.current) {
-      const selectedRow = scrollRef2.current.querySelector(
-        `tr[data-weight2="${weight}"]`
-      );
-      if (selectedRow) {
-        setSaveY2((prev) => {
-          const updated = [...prev];
-          updated[idx] = selectedRow.offsetTop;
-          return updated;
-        });
-      }
-    }
   };
 
   useEffect(() => {
     setSelectedWeight1((prev) => {
       const arr = [...prev];
-      // Falls Sätze hinzugefügt wurden, fülle mit null auf
+      // If sets have been added, fill with null
       while (arr.length < selectedExercise.sets) arr.push(null);
-      // Falls Sätze entfernt wurden, kürze das Array
+      // If sets have been removed, shorten the array
       if (arr.length > selectedExercise.sets)
         arr.length = selectedExercise.sets;
       return arr;
@@ -306,7 +278,7 @@ function StartTraining() {
 
   useEffect(() => {
     if (showModal && scrollRef.current && training1 != null) {
-      let wholePart = Math.floor(training1.weights[idx]); // z. B. 10
+      let wholePart = Math.floor(training1.weights[idx]);
       if (isNaN(wholePart)) wholePart = 0;
       const selectedRow = scrollRef.current.querySelector(
         `tr[data-weight="${wholePart}"]`
@@ -584,8 +556,6 @@ function StartTraining() {
                   onClick={() => {
                     const updatedTraining = { ...training1, isFinished: false };
                     setTraining(updatedTraining);
-
-                    // Aktualisiere auch selectedExercise, damit isFinished konsistent ist
                     setExercise((prev) => {
                       const updatedExercises = { ...prev };
                       updatedExercises[idxExercise] = {
@@ -689,7 +659,7 @@ function StartTraining() {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-1" // <-- Klasse für Größe und Abstand hinzugefügt
+                  className="h-4 w-4 mr-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -733,7 +703,7 @@ function StartTraining() {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 transform scale-x-[-1]" // <-- Hier hinzugefügt: scale-x-[-1] spiegelt horizontal
+                  className="h-4 w-4 transform scale-x-[-1]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
