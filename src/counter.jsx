@@ -21,7 +21,7 @@ function CounterForm() {
     if (sec == 360) {
       setMin((prevMin) => prevMin + 1);
      // setCountRounds((prevRounds) => prevRounds + 1);
-      setSec(0);
+     // setSec(0);
     }
     if (sec == roundtime * 6 && roundtime * 6 !== 0 && !isbreakmode) {
       setCountRounds((prevRounds) => prevRounds + 1);
