@@ -53,7 +53,6 @@ function StartTraining() {
   }, [data]);
 
   const [idxExercise, setidx] = useState(0);
-  const [idxTraining, setidxTraining] = useState(0);
   const [inputValue, setInputValue] = useState([]);
   const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
@@ -429,7 +428,6 @@ function StartTraining() {
                 setCurrentPlan(planName);
                 setTraining(selectedExercise[planName][0]);
                 setSelectedTrainingSite(false);
-                setidxTraining(index);
               }}
               className="btn btn-outline btn-primary text-white flex items-center justify-center"
             >
