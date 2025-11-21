@@ -14,8 +14,6 @@ This project is part of my application for a Full-Stack Developer position. It i
 
 ---
 
-## 📋 Features
-
 ## 🔐 Authentication & Account Management
 
 ### 📝 Register
@@ -39,6 +37,10 @@ This project is part of my application for a Full-Stack Developer position. It i
 
 ### 🗑️ Delete Account
 - Permanently delete your account and all associated data
+
+---
+
+## 📋 Features
 
 ### 🏋️ Workout Management
 - Create and edit custom workout plans  
