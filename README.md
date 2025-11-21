@@ -16,6 +16,30 @@ This project is part of my application for a Full-Stack Developer position. It i
 
 ## 📋 Features
 
+## 🔐 Authentication & Account Management
+
+### 📝 Register
+- Create an account with your email
+- Password must meet security requirements (minimum length, uppercase/lowercase, number, special character)
+
+### 🔑 Login
+- Log in with your registered email and password
+- Secure authentication using JWT + HttpOnly Secure Cookies
+
+### ❓ Forgot Password
+- Request a password reset via email
+- Secure token-based reset process
+
+### 📧 Change Email
+- Update your account email after password confirmation
+
+### 🔒 Change Password
+- Change your password through the account settings
+- Requires current password for verification
+
+### 🗑️ Delete Account
+- Permanently delete your account and all associated data
+
 ### 🏋️ Workout Management
 - Create and edit custom workout plans  
 - Add exercises, sets, repetitions, and weights  
@@ -49,6 +73,11 @@ This project is part of my application for a Full-Stack Developer position. It i
 - Clean React component structure styled with Tailwind CSS    
 
 ---
+## Deployment 
+- Render via CI/CD Github
+- Frontend and Backend
+---
+
 
 
 
