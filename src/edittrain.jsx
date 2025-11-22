@@ -69,6 +69,35 @@ const EditTrain = () => {
       });
   }
 
+  function changePosition(element, direction) {
+    console.log(element, direction);
+    const index = selectedExercise[savekey].findIndex((ex) => ex === element);
+    if (direction === "up" && index > 0) {
+      const newExercises = [...selectedExercise[savekey]];
+      [newExercises[index - 1], newExercises[index]] = [
+        newExercises[index],
+        newExercises[index - 1],
+      ];
+      setSelectedExercise({
+        ...selectedExercise,
+        [savekey]: newExercises,
+      });
+    } else if (
+      direction === "down" &&
+      index < selectedExercise[savekey].length - 1
+    ) {
+      const newExercises = [...selectedExercise[savekey]];
+      [newExercises[index + 1], newExercises[index]] = [
+        newExercises[index],
+        newExercises[index + 1],
+      ];
+      setSelectedExercise({
+        ...selectedExercise,
+        [savekey]: newExercises,
+      });
+    }
+  }
+
   const exercise = [
     {
       name: "Benchpress",
@@ -482,20 +511,18 @@ const EditTrain = () => {
                                         ? { ...ex, sets: setIndex }
                                         : ex
                                   );
-                                  console.log(selectedExercise[savekey][index]);
-
-                                  const selectedSetRow = setRef.current[
-                                    index
-                                  ].querySelector(
-                                    `tr[data-set-index="${selectedExercise[savekey][index].sets}"]`
-                                  );
-                                  if (selectedSetRow) {
-                                    setRef.current[index].scrollTop =
-                                      selectedSetRow.offsetTop;
-                                  }
-
                                   return updated;
                                 });
+                                // Scroll to the selected sets row after state update
+                                const selectedSetRow = setRef.current[
+                                  index
+                                ]?.querySelector(
+                                  `tr[data-set-index="${setIndex}"]`
+                                );
+                                if (selectedSetRow) {
+                                  setRef.current[index].scrollTop =
+                                    selectedSetRow.offsetTop;
+                                }
                               }}
                             >
                               <td
@@ -530,7 +557,6 @@ const EditTrain = () => {
                               onClick={() => {
                                 setSelectedExercise((prev) => {
                                   const updated = { ...prev };
-                                  console.log(updated);
                                   updated[savekey] = updated[savekey].map(
                                     (ex, i) =>
                                       i === index
@@ -542,19 +568,18 @@ const EditTrain = () => {
                                           }
                                         : ex
                                   );
-
-                                  const selectedSetRow = repsRef.current[
-                                    index
-                                  ].querySelector(
-                                    `tr[data-reps-index="${selectedExercise[savekey][index].reps[0]}"]`
-                                  );
-                                  if (selectedSetRow) {
-                                    repsRef.current[index].scrollTop =
-                                      selectedSetRow.offsetTop;
-                                  }
-
                                   return updated;
                                 });
+                                // Scroll to the selected reps row after state update
+                                const selectedRepsRow = repsRef.current[
+                                  index
+                                ]?.querySelector(
+                                  `tr[data-reps-index="${repsIndex}"]`
+                                );
+                                if (selectedRepsRow) {
+                                  repsRef.current[index].scrollTop =
+                                    selectedRepsRow.offsetTop;
+                                }
                               }}
                             >
                               <td
@@ -596,8 +621,44 @@ const EditTrain = () => {
                       />
                     </svg>
                   </button>
-                  <button className="btn btn-outline btn-primary">Down</button>
-                  <button className="btn btn-outline btn-primary">Up</button>
+                  <button
+                    onClick={() => changePosition(ex, "down")}
+                    className="btn btn-outline btn-primary"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-4 h-4 mr-1"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => changePosition(ex, "up")}
+                    className="btn btn-outline btn-primary"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-4 h-4 mr-1"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 10l7-7m0 0l7 7m-7-7v18"
+                      />
+                    </svg>
+                  </button>
                 </div>
               </div>
             ))}
