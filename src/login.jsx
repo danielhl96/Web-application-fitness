@@ -118,6 +118,12 @@ function LoginForm() {
           >
             Do you have forgot your password?
           </button>
+          <button
+            onClick={() => navigate("/privacypolicy")}
+            className="btn btn-link w-80 text-white"
+          >
+            Privacy Policy
+          </button>
         </div>
       </div>
     </div>

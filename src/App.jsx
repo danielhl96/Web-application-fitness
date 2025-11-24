@@ -5,11 +5,12 @@ import Header from "./Header";
 import CreateTrainGUI from "./createtrain.jsx";
 import EditTrain from "./edittrain.jsx";
 import StartTraining from "./training.jsx";
-import Profile from "./profile";
+import Profile from "./profile.jsx";
 import RegisterPage from "./register.jsx";
 import PasswordForget from "./passwordforget.jsx";
 import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
+import PrivacyPolicy from "./privacypolicy.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
 import Statistic from "./statistic.jsx";
@@ -193,7 +194,7 @@ function App() {
         />
 
         <Route path="/login" element={<LoginForm />} />
-
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/profile"
@@ -236,6 +237,7 @@ function App() {
           }
         />
         <Route path="/passwordforget" element={<PasswordForget />} />
+
         <Route
           path="/counter"
           element={

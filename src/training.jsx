@@ -426,7 +426,7 @@ function StartTraining() {
     );
   }
 
-  function WorkoutCard({ planName, index }) {
+  function WorkoutCard({ planName }) {
     return (
       <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
         <div className="card-body text-xl items-center  text-center">
