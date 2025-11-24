@@ -267,6 +267,16 @@ const EditTrain = () => {
       description: "An exercise to train the biceps and forearms",
       img: "./hammercurls.png",
     },
+    {
+      name: "Hip Thrusts",
+      description: "An exercise to train the glutes and hamstrings",
+      img: "./hipthrusts.png",
+    },
+    {
+      name: "Adductor-Maschine",
+      description: "An exercise to train the inner thigh muscles",
+      img: "./adductormaschine.png",
+    },
   ];
 
   const [showModal, setShowModal] = useState(false);

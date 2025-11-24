@@ -600,7 +600,8 @@ def get_statistics():
             }
         exercise_dict[ex.name]["entries"].append({
             "date": ex.date.isoformat(),
-            "weights": ex.weights
+            "weights": ex.weights,
+            "reps": ex.reps
         })
         # Update max/min basierend auf allen weights
         if ex.weights:
