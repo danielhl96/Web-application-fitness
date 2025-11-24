@@ -278,6 +278,11 @@ function StartTraining() {
   useEffect(() => {
     if (showModal && scrollRef.current && training1 != null) {
       let wholePart = Math.floor(training1.weights[idx]);
+      setSelectedWeight1((prev) => {
+        const updated = [...prev];
+        updated[idx] = wholePart;
+        return updated;
+      });
       if (isNaN(wholePart)) wholePart = 0;
       const selectedRow = scrollRef.current.querySelector(
         `tr[data-weight="${wholePart}"]`
@@ -287,6 +292,11 @@ function StartTraining() {
 
     if (showModal && scrollRef2.current && training1 != null) {
       let decimalPart = training1.weights[idx] % 1;
+      setSelectedWeight2((prev) => {
+        const updated = [...prev];
+        updated[idx] = decimalPart;
+        return updated;
+      });
       if (isNaN(decimalPart)) decimalPart = 0;
       const selectedRow2 = scrollRef2.current.querySelector(
         `tr[data-weight2="${decimalPart}"]`

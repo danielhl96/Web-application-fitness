@@ -154,7 +154,7 @@ function Statistic() {
 
       console.log("Rendering chart for exercise:", exercise);
       const dates = exercise.entries.map((e) => e.date);
-      const reps = exercise.entries.map((e) => Math.max(...e.reps));
+      const reps = exercise.entries.map((e) => e.reps);
       console.log(dates);
 
       const weights = exercise.entries.map((e) => Math.max(...e.weights));
@@ -165,10 +165,6 @@ function Statistic() {
           {
             name: "Weight (kg)",
             data: weights,
-          },
-          {
-            name: "Reps",
-            data: reps,
           },
         ],
         chart: {
@@ -203,6 +199,13 @@ function Statistic() {
           style: {
             fontSize: "12px",
             color: "#000000",
+          },
+          custom: function ({ series, seriesIndex, dataPointIndex }) {
+            const weight = series[seriesIndex][dataPointIndex];
+            const repsArray = exercise.entries[dataPointIndex].reps;
+            const date = exercise.entries[dataPointIndex].date;
+            const repsDisplay = repsArray.join(", ");
+            return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${date}</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Weight: </span><span class="apexcharts-tooltip-text-y-value">${weight} kg</span></div><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Reps: </span><span class="apexcharts-tooltip-text-y-value">${repsDisplay}</span></div></div></div>`;
           },
         },
       };
