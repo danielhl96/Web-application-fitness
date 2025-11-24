@@ -108,6 +108,7 @@ This project is part of my application for a Full-Stack Developer position. It i
   <tr>
     <td><img src="screenshots/login.jpeg" width="300" alt="Login Page"></td>
     <td><img src="screenshots/register.jpeg" width="300" alt="Register Page"></td>
+      <td><img src="screenshots/hamburgermenue.jpeg" width="300" alt="Menue"></td>
   </tr>
   <tr>
     <td><img src="screenshots/password.jpeg" width="300" alt="Password Page"></td>
@@ -115,6 +116,7 @@ This project is part of my application for a Full-Stack Developer position. It i
   </tr>
   <tr>
     <td><img src="screenshots/createetrain.jpeg" width="300" alt="Workout Creation"></td>
+    <td><img src="screenshots/edittrain.jpeg" width="300" alt="Workout Editing"></td>
     <td><img src="screenshots/statistic.jpeg" width="300" alt="Statistics"></td>
   </tr>
   <tr>
