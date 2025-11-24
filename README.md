@@ -2,6 +2,10 @@
 
 This project is part of my application for a Full-Stack Developer position. It is a fitness-focused web application that allows users to create personalized workout plans, track progress, and manage their fitness goals.
 
+Link to live demo:
+
+https://web-application-fitness-1.onrender.com
+
 ---
 
 ## 🚀 Tech Stack
