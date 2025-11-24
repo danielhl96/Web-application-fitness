@@ -104,35 +104,24 @@ This project is part of my application for a Full-Stack Developer position. It i
 
 ## Screenshots
 
-### Login Page
-
-![Login Page](screenshots/login.jpeg)
-
-### Register Page
-
-![Register Page](screenshots/register.jpeg)
-
-![Password Page](screenshots/password.jpeg)
-
-### Dashboard
-
-![Dashboard](screenshots/dashboard.jpeg)
-
-### Workout Creation
-
-![Workout Creation](screenshots/createetrain.jpeg)
-
-### Statistics
-
-![Statistics](screenshots/statistic.jpeg)
-
-### Profile
-
-![Profile](screenshots/profile.jpeg)
-
-### Watch
-
-![Watch](screenshots/watch.jpeg)
+<table>
+  <tr>
+    <td><img src="screenshots/login.jpeg" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/register.jpeg" width="300" alt="Register Page"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/password.jpeg" width="300" alt="Password Page"></td>
+    <td><img src="screenshots/dashboard.jpeg" width="300" alt="Dashboard"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/createetrain.jpeg" width="300" alt="Workout Creation"></td>
+    <td><img src="screenshots/statistic.jpeg" width="300" alt="Statistics"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/profile.jpeg" width="300" alt="Profile"></td>
+    <td><img src="screenshots/watch.jpeg" width="300" alt="Watch"></td>
+  </tr>
+</table>
 
 Icon made by gravisio from www.flaticon.com
 
