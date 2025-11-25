@@ -112,7 +112,7 @@ Password: q!w7w'nF9Gb+d_j
 
 ---
 
-## Screenshots
+## Screenshots (Mobile Devices iPhone 11 Pro)
 
 <table>
   <tr>
