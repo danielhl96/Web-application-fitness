@@ -6,6 +6,12 @@ Link to live demo:
 
 https://web-application-fitness-1.onrender.com
 
+Please use following credentials:
+
+Email: gast@gast.de
+
+Password: q!w7w'nF9Gb+d_j
+
 ---
 
 ## 🚀 Tech Stack
