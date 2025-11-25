@@ -22,7 +22,7 @@ function Impressum() {
     <div className="flex items-center justify-center min-h-screen bg-gray-900  ">
       <Header />
       <div className="overflow-auto">
-        <div className="space-y-6 card sm:w-96 md:w-96 w-90 bg-gray-800 border mt.6 border-blue-500 shadow-sm p-6 rounded-md">
+        <div className="space-y-6 card sm:w-96 md:w-96 w-90 bg-gray-800 border mt-8 border-blue-500 shadow-sm p-6 rounded-md">
           <h2 className="text-2xl font-bold text-white mb-4">Imprint</h2>
           <p>
             Angaben gemäß § 5 TMG
