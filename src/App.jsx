@@ -11,6 +11,7 @@ import PasswordForget from "./passwordforget.jsx";
 import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import PrivacyPolicy from "./privacypolicy.jsx";
+import Impressum from "./impressum.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
 import Statistic from "./statistic.jsx";
@@ -43,57 +44,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Card 2: Start Training */}
-        <div
-          onClick={() => navigate("/training")}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
-        >
-          <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">Start Training</h2>
-            <div className="flex justify-center my-4">
-              <img
-                src="/pullup.png"
-                className="h-8 w-8 object-cover rounded-md"
-                alt="Pull-up Icon"
-                style={{ filter: "brightness(0) invert(1)" }}
-              />
-            </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
-              Start your training
-            </p>
-          </div>
-        </div>
-
-        {/* Card 3: Profile */}
-        <div
-          onClick={() => navigate("/profile")}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
-        >
-          <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">Profile</h2>
-            <div className="flex justify-center my-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
-              Manage your profile and goals
-            </p>
-          </div>
-        </div>
-
-        {/* Card 4: Edit training */}
+        {/* Card 2: Edit training */}
         <div
           onClick={() => navigate("/edittrain")}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
@@ -118,6 +69,56 @@ function Home() {
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
               Edit existing trainings
+            </p>
+          </div>
+        </div>
+
+        {/* Card 3: Start Training */}
+        <div
+          onClick={() => navigate("/training")}
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+        >
+          <div className="card-body">
+            <h2 className="card-title text-blue-400 text-sm">Start Training</h2>
+            <div className="flex justify-center my-4">
+              <img
+                src="/pullup.png"
+                className="h-8 w-8 object-cover rounded-md"
+                alt="Pull-up Icon"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
+            </div>
+            <p className="text-slate-300 text-sm text-center hidden md:block">
+              Start your training
+            </p>
+          </div>
+        </div>
+
+        {/* Card 4: Profile */}
+        <div
+          onClick={() => navigate("/profile")}
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+        >
+          <div className="card-body">
+            <h2 className="card-title text-blue-400 text-sm">Profile</h2>
+            <div className="flex justify-center my-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8 text-amber-50"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
+            <p className="text-slate-300 text-sm text-center hidden md:block">
+              Manage your profile and goals
             </p>
           </div>
         </div>
@@ -196,6 +197,7 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/impressum" element={<Impressum />} />
         <Route
           path="/profile"
           element={

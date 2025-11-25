@@ -63,7 +63,7 @@ function LoginForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 ">
       <Header />
-      <div className="space-y-4 card sm:w-96 md:w-96 w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
+      <div className="card sm:w-96 md:w-96 w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
         <div className="flex flex-col space-y-2 ">
           <h1 className="text-2xl font-bold">Login</h1>
           <div className="divider divider-primary"></div>
@@ -106,24 +106,35 @@ function LoginForm() {
           >
             Login
           </button>
-          <button
-            onClick={() => navigate("/register")}
-            className="btn btn-link w-80 text-white"
-          >
-            Are you new here?
-          </button>
-          <button
-            onClick={() => navigate("/passwordforget")}
-            className="btn btn-link w-80 text-white"
-          >
-            Do you have forgot your password?
-          </button>
-          <button
-            onClick={() => navigate("/privacypolicy")}
-            className="btn btn-link w-80 text-white"
-          >
-            Privacy Policy
-          </button>
+          <div className="space-y-0 flex flex-col items-center">
+            <button
+              onClick={() => navigate("/register")}
+              className="btn btn-link w-80 text-white"
+            >
+              Are you new here?
+            </button>
+            <button
+              onClick={() => navigate("/passwordforget")}
+              className="btn btn-link w-80 text-white"
+            >
+              Do you have forgot your password?
+            </button>
+            <div className="divider divider-primary"></div>
+            <div className="flex flex-row space-x-0">
+              <button
+                onClick={() => navigate("/privacypolicy")}
+                className="btn btn-link w-30 text-white"
+              >
+                Privacy Policy
+              </button>
+              <button
+                onClick={() => navigate("/impressum")}
+                className="btn btn-link w-30 text-white"
+              >
+                Imprint
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
