@@ -63,7 +63,7 @@ function LoginForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 ">
       <Header />
-      <div className="card sm:w-96 md:w-96 w-96 bg-gray-800 border border-blue-500 mt-6 shadow-sm p-6 rounded-md">
+      <div className="card sm:w-96 md:w-96 w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md">
         <div className="flex flex-col space-y-2 ">
           <h1 className="text-2xl font-bold">Login</h1>
           <div className="divider divider-primary"></div>

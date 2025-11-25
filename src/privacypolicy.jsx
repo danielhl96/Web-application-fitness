@@ -21,7 +21,7 @@ function PrivacyPolicy() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <Header />
-      <div className="space-y-8 card sm:w-96 md:w-150 h-150 w-90 bg-gray-800 border border-blue-500 shadow-sm p-8 rounded-md">
+      <div className="space-y-8 card sm:w-96 md:w-150 h-150 w-90 bg-gray-800 border  mt-6 border-blue-500 shadow-sm p-8 rounded-md">
         <div className="overflow-auto max-h-[80vh] text-white">
           <h2 className="text-3xl font-bold mb-6 text-center border-b border-blue-400 pb-2">
             Privacy Policy
