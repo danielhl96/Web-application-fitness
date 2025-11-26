@@ -1,13 +1,14 @@
 import "./index.css";
-
+import { useNavigate } from "react-router-dom";
 function PrivacyPolicy() {
   function Header() {
+    const navigate = useNavigate();
     return (
       <div>
         <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
           <div className="flex w-full justify-between items-center px-4">
             <button
-              onClick={() => window.history.back()}
+              onClick={() => navigate("/login")}
               className="btn btn-ghost text-white"
             >
               Fitness
@@ -23,12 +24,9 @@ function PrivacyPolicy() {
       <Header />
       <div className="space-y-8 card sm:w-96 md:w-150 h-150 w-90 bg-gray-800 border  mt-8 border-blue-500 shadow-sm p-8 rounded-md">
         <div className="overflow-auto max-h-[80vh] text-white">
-          <h2 className="text-3xl font-bold mb-6 text-center border-b border-blue-400 pb-2">
+          <h2 className="text-2xl font-bold text-white mb-4  text-start border-b border-blue-400 pb-2">
             Privacy Policy
           </h2>
-          <h1 className="text-2xl font-semibold mb-6 text-center">
-            Datenschutzerklärung
-          </h1>
 
           {/* Abschnitt 1 */}
           <section className="mb-8">
@@ -199,7 +197,7 @@ function PrivacyPolicy() {
               Ithweg 4<br />
               30851 Langenhagen
               <br />
-              E-Mail: daniel.hennies@t-online.de
+              E-Mail: admin@web-fitness-app.de
             </div>
             <p className="mb-4">
               Verantwortliche Stelle ist die natürliche oder juristische Person,

@@ -1,13 +1,14 @@
 import "./index.css";
-
+import { useNavigate } from "react-router-dom";
 function Impressum() {
   function Header() {
+    const navigate = useNavigate();
     return (
       <div>
         <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
           <div className="flex w-full justify-between items-center px-4">
             <button
-              onClick={() => window.history.back()}
+              onClick={() => navigate("/login")}
               className="btn btn-ghost text-white"
             >
               Fitness
@@ -37,7 +38,7 @@ function Impressum() {
           <p>
             Kontakt:
             <br />
-            E-Mail: daniel.hennies@t-online.de
+            E-Mail: admin@web-fitness-app.de
           </p>
           <p>
             Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:

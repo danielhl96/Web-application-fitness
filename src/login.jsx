@@ -134,6 +134,12 @@ function LoginForm() {
                 Imprint
               </button>
             </div>
+            <button
+              onClick={() => navigate("/attribution")}
+              className="btn btn-link w-30 text-white"
+            >
+              Attribution
+            </button>
           </div>
         </div>
       </div>

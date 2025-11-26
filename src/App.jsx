@@ -12,6 +12,7 @@ import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import PrivacyPolicy from "./privacypolicy.jsx";
 import Impressum from "./impressum.jsx";
+import AttributionPage from "./attributionpage.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
 import Statistic from "./statistic.jsx";
@@ -239,7 +240,7 @@ function App() {
           }
         />
         <Route path="/passwordforget" element={<PasswordForget />} />
-
+        <Route path="/attribution" element={<AttributionPage />} />
         <Route
           path="/counter"
           element={
