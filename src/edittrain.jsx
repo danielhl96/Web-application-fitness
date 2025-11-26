@@ -1,10 +1,12 @@
 import "./index.css";
 import Header from "./Header";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import api from "./api";
 
 const EditTrain = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [requestId, setRequestId] = useState(0);
 
@@ -37,6 +39,7 @@ const EditTrain = () => {
 
   // whenever `data` (from backend) changes, compute the desired shape and set state
   useEffect(() => {
+    console.log(selectedExercise);
     if (data && data.length > 0) {
       setSelectedExercise(mapPlans(data));
     } else {
@@ -730,9 +733,23 @@ const EditTrain = () => {
           Edit your workout
         </div>
         <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-100 max-h-120">
-          {Object.keys(selectedExercise).map((exercise, index) => (
-            <WorkoutCard exercise={exercise} key={index} />
-          ))}
+          {selectedExercise && Object.keys(selectedExercise).length > 0 ? (
+            Object.keys(selectedExercise).map((exercise, index) => (
+              <WorkoutCard exercise={exercise} key={index} />
+            ))
+          ) : (
+            <>
+              <p className="text-white">
+                No workout plans available. Please create one first.
+              </p>
+              <button
+                onClick={() => navigate("/createtrain")}
+                className="btn btn-outline btn-primary mt-4"
+              >
+                Create Workout
+              </button>
+            </>
+          )}
         </div>
         {showModal && <div>{EditWorkoutModal()}</div>}
       </div>

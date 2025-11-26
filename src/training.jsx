@@ -1,10 +1,12 @@
 import "./index.css";
 import Header from "./Header";
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import api from "./api";
 
 function StartTraining() {
+  const navigate = useNavigate();
   useEffect(() => {
     api.get("/get_workout_plans").then((response) => {
       console.log(response.data);
@@ -544,9 +546,24 @@ function StartTraining() {
                 Select your workout
               </div>
               <div className="overflow-y-auto max-md:h-100 max-h-120 gap-4">
-                {Object.keys(selectedExercise).map((name, index) => (
-                  <WorkoutCard planName={name} key={index} />
-                ))}
+                {selectedExercise &&
+                Object.keys(selectedExercise).length > 0 ? (
+                  Object.keys(selectedExercise).map((exercise, index) => (
+                    <WorkoutCard exercise={exercise} key={index} />
+                  ))
+                ) : (
+                  <>
+                    <p className="text-white">
+                      No workout plans available. Please create one first.
+                    </p>
+                    <button
+                      onClick={() => navigate("/createtrain")}
+                      className="btn btn-outline btn-primary mt-4"
+                    >
+                      Create Workout
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
