@@ -4,7 +4,7 @@ This project is part of my application for a Full-Stack Developer position. It i
 
 Link to live demo:
 
-https://web-application-fitness-1.onrender.com
+https://frontend.web-fitness-app.de
 
 Please use following credentials:
 
