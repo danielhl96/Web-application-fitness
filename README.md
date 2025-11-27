@@ -105,10 +105,31 @@ Password: q!w7w'nF9Gb+d_j
 
 ---
 
+## 📱 PWA (Progressive Web App)
+
+- You can install the web application on your smartphone (iPhone or Android) for a native app-like experience.
+- Simply open the app in your mobile browser and use "Add to Home Screen" to save it.
+
 ## Deployment
 
 - Render via CI/CD Github
 - Frontend and Backend
+- Set up Custom DNS to point to web-fitness-application
+
+---
+
+## Docker
+
+- The application runs in multiple Docker containers: frontend, backend, Redis, and PostgreSQL database.
+- Separate Dockerfiles are provided for both frontend and backend services.
+- Docker Compose orchestrates and connects all containers, enabling easy setup and management of the entire stack.
+
+---
+
+## Usage
+
+- Bulid a docker compose container
+- docker-compose up --build
 
 ---
 

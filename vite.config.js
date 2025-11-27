@@ -13,7 +13,7 @@ export default defineConfig({
         "apple-touch-icon.png",
         "offline.html",
       ],
-      devOptions: { enabled: true },
+      devOptions: { enabled: false },
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
@@ -70,4 +70,11 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: true,
+    hmr: {
+      clientPort: 5173,
+      host: "localhost",
+    },
+  },
 });

@@ -387,7 +387,7 @@ function CreateTrainGUI() {
       <Header />
       <div className="card w-85 h-auto md:w-100 sm:w-85  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center  ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
-          Create your workout
+          Create your
         </div>
         <div className="flex flex-col items-center space-y-4">
           <h1 className="text-slate-400">Your workout need an name:</h1>
@@ -405,6 +405,7 @@ function CreateTrainGUI() {
               onChange={(e) => setWorkoutName(e.target.value)}
             />
             <button
+              disabled={WorkoutName === ""}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
               className="btn btn-outline btn-primary"
             >

@@ -735,7 +735,6 @@ function StartTraining() {
                 >
                   <path
                     strokeLinecap="round"
-                    d
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M15 12H9m6 0l-3-3m3 3l-3 3"
