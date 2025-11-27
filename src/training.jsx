@@ -548,8 +548,8 @@ function StartTraining() {
               <div className="overflow-y-auto max-md:h-100 max-h-120 gap-4">
                 {selectedExercise &&
                 Object.keys(selectedExercise).length > 0 ? (
-                  Object.keys(selectedExercise).map((exercise, index) => (
-                    <WorkoutCard exercise={exercise} key={index} />
+                  Object.keys(selectedExercise).map((name, index) => (
+                    <WorkoutCard planName={name} key={index} />
                   ))
                 ) : (
                   <>
