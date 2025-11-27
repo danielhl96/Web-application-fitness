@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
+import Header from "./Header_logout.jsx";
 
 function PasswordForget() {
   const navigate = useNavigate();
@@ -16,18 +17,6 @@ function PasswordForget() {
   const [emailinputtouch, setemailinputtouch] = useState(false);
   const [passwordinputtouch, setpasswordinputtouch] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
-
-  function Header() {
-    return (
-      <div>
-        <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
-          <div className="flex w-full justify-between items-center px-4">
-            <button className="btn btn-ghost text-white">Fitness</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const checkEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

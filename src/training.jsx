@@ -552,7 +552,7 @@ function StartTraining() {
                     <WorkoutCard planName={name} key={index} />
                   ))
                 ) : (
-                  <>
+                  <div className="flex flex-col items-center">
                     <p className="text-white">
                       No workout plans available. Please create one first.
                     </p>
@@ -562,7 +562,7 @@ function StartTraining() {
                     >
                       Create Workout
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

@@ -1,19 +1,8 @@
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Header from "./Header_logout.jsx";
 import api from "./api";
-
-function Header() {
-  return (
-    <div>
-      <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
-        <div className="flex w-full justify-between items-center px-4">
-          <button className="btn btn-ghost text-white">Fitness</button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function LoginForm() {
   const [email, setEmail] = useState("");

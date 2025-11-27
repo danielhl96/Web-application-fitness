@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
+import Header from "./Header_logout.jsx";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -15,18 +16,6 @@ function RegisterPage() {
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
   const [message, setMessage] = useState("");
   const [succesRegister, setSuccesRegister] = useState(false);
-
-  function Header() {
-    return (
-      <div>
-        <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
-          <div className="flex w-full justify-between items-center px-4">
-            <button className="btn btn-ghost text-white">Fitness</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const handleRegister = () => {
     api
