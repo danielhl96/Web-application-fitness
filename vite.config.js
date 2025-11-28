@@ -70,4 +70,15 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: true,
+    strictPort: true,
+    watch: {
+      ignored: [/\.git\//, /node_modules\//, /dist\//, /dev-dist\//],
+    },
+    hmr: {
+      host: "localhost",
+      clientPort: 5173,
+    },
+  },
 });
