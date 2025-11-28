@@ -616,7 +616,7 @@ const EditTrain = () => {
                 </div>
                 <div className="flex flex-row space-x-2 mt-2">
                   <button
-                    onClick={() => handeRemoveWorkout(ex)}
+                    onClick={() => handeRemoveWorkout(ex.exercise)}
                     className="btn btn-outline btn-error "
                   >
                     <svg
