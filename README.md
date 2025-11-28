@@ -91,6 +91,15 @@ Password: q!w7w'nF9Gb+d_j
 ## 🔒 Security Highlights
 
 - Secure authentication using JWT + HttpOnly Secure Cookies
+- A JWT contains the following security-relevant claims:
+- `sub` (user ID),
+- `iss` (issuer),
+- `aud` (audience),
+- `exp` (expiration),
+- `iat` (issued at),
+- `nbf` (not before),
+- `jti` (JWT ID).
+- The backend application validates these claims to ensure the authenticity and integrity of each JWT.
 - Password hashing (argon2) and route protection
 - Clear separation of frontend and backend using a RESTful API
 
