@@ -72,6 +72,8 @@ const EditTrain = () => {
       });
   }
 
+  
+
   function changePosition(element, direction) {
     console.log(element, direction);
     const index = selectedExercise[savekey].findIndex((ex) => ex === element);
@@ -101,6 +103,13 @@ const EditTrain = () => {
     }
   }
 
+  const handleRemoveExerciseinWorkout = (indexToRemove) => {
+  setSelectedExercise((prev) => {
+    const updated = { ...prev };
+    updated[savekey] = updated[savekey].filter((_, i) => i !== indexToRemove);
+    return updated;
+  });
+};
   const exercise = [
     {
       name: "Benchpress",
@@ -616,7 +625,7 @@ const EditTrain = () => {
                 </div>
                 <div className="flex flex-row space-x-2 mt-2">
                   <button
-                    onClick={() => handeRemoveWorkout(ex.exercise)}
+                    onClick={() => handleRemoveExerciseinWorkout(index)}
                     className="btn btn-outline btn-error "
                   >
                     <svg
