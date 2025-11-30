@@ -10,7 +10,12 @@ function Header() {
             onClick={() => navigate("/login")}
             className="btn btn-ghost text-white"
           >
-            Fitness
+           <figure className="w-9 h-9 mb-2">
+              <img
+                src={"./squats.png"}
+                className="w-full h-full object-cover rounded-md filter brightness-0 invert" // <-- Filter hinzugefügt: brightness-0 invert (weiß)
+              />
+            </figure> 
           </button>
         </div>
       </div>
