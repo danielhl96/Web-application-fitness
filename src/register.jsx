@@ -102,7 +102,7 @@ function RegisterPage() {
                   border:
                     emailError && emailTouched
                       ? "1px solid red"
-                      : "1px solid blue",
+                      : "1px solid #3B82F6",
                 }}
               />
 
@@ -126,10 +126,10 @@ function RegisterPage() {
                   border:
                     passwordError && passwordTouched
                       ? "1px solid red"
-                      : "1px solid blue",
+                      : "1px solid #3B82F6",
                 }}
               />
-              {passwordError && passwordTouched && (
+              {ipasswordError && passwordTouched && (
                 <span className="text-red-500 text-sm">
                   Password must be at least 8 characters long include uppercase,
                   lowercase, number, and special character.
@@ -150,7 +150,7 @@ function RegisterPage() {
                   border:
                     confirmPasswordError && confirmPasswordTouched
                       ? "1px solid red"
-                      : "1px solid blue",
+                      : "1px solid #3B82F6",
                 }}
               />
               {confirmPasswordError && confirmPasswordTouched && (
