@@ -102,7 +102,7 @@ function RegisterPage() {
                   border:
                     emailError && emailTouched
                       ? "1px solid red"
-                      : "1px solid green",
+                      : "1px solid blue",
                 }}
               />
 
@@ -126,7 +126,7 @@ function RegisterPage() {
                   border:
                     passwordError && passwordTouched
                       ? "1px solid red"
-                      : "1px solid green",
+                      : "1px solid blue",
                 }}
               />
               {passwordError && passwordTouched && (
@@ -150,7 +150,7 @@ function RegisterPage() {
                   border:
                     confirmPasswordError && confirmPasswordTouched
                       ? "1px solid red"
-                      : "1px solid green",
+                      : "1px solid blue",
                 }}
               />
               {confirmPasswordError && confirmPasswordTouched && (
