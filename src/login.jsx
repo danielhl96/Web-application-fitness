@@ -68,7 +68,7 @@ function LoginForm() {
                 border:
                   emailError && emailTouched
                     ? "1px solid red"
-                    : "1px",
+                    : "1px solid gray",
               }}
             />
 
