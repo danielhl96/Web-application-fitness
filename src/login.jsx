@@ -64,12 +64,12 @@ function LoginForm() {
               className="input input-primary"
               onChange={(e) => handleEmailChange(e)}
               onBlur={handleEmailBlur}
-              style={{
-                border:
-                {emailError && emailTouched
-                    ? "1px solid red"
-                    : "1px solid blue ",
-              }}
+                style={{
+                  border:
+                    emailError && emailTouched
+                      ? "1px solid red"
+                      : "1px solid blue",
+                }}
             />
 
             {#60A5FA
