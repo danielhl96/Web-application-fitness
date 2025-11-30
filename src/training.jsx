@@ -351,7 +351,7 @@ function StartTraining() {
               <div className="flex flex-row justify-center items-center">
                 <table className="min-w-2 border-collapse">
                   <tbody>
-                    {Array.from({ length: 8 }, (_, i) => (i * 0.25).map(
+                    {Array.from({ length: 8 }, (_, i) => i * 0.25).map(
                       (weight, index) => (
                         <tr
                           key={index}
