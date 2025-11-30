@@ -72,7 +72,7 @@ function LoginForm() {
                 }}
             />
 
-            {#60A5FA
+            {
 emailError && emailTouched && (
               <span className="text-red-500 text-sm">
                 Please enter a valid email address.
