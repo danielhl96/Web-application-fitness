@@ -68,11 +68,12 @@ function LoginForm() {
                 border:
                   emailError && emailTouched
                     ? "1px solid red"
-                    : "1px solid gray",
+                    : "1px solid #DBEAFE ",
               }}
             />
 
-            {emailError && emailTouched && (
+            {#60A5FA
+emailError && emailTouched && (
               <span className="text-red-500 text-sm">
                 Please enter a valid email address.
               </span>
