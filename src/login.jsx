@@ -66,7 +66,7 @@ function LoginForm() {
               onBlur={handleEmailBlur}
               style={{
                 border:
-                  emailError && emailTouched
+                {emailError && emailTouched
                     ? "1px solid red"
                     : "1px solid blue ",
               }}
