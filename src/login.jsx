@@ -65,11 +65,9 @@ function LoginForm() {
               onChange={(e) => handleEmailChange(e)}
               onBlur={handleEmailBlur}
                 style={{
-                  border:
-                    emailError && emailTouched
-                      ? "1px solid red"
-                      : "1px solid blue",
-                }}
+  border: "1px solid",
+  borderColor: emailError && emailTouched ? "red" : "#3B82F6",
+}}
             />
 
             {
