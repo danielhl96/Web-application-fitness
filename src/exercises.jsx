@@ -1,5 +1,5 @@
 
-  const exercises = [
+  const exercise = [
     {
       name: "Benchpress",
       description: "An exercise to train the chest, shoulder, and triceps",
@@ -180,4 +180,4 @@
     },
   ];
 
-export default exercises;
+export default exercise;
