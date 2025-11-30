@@ -1,5 +1,5 @@
 
-  const exercise = [
+  const exercises = [
     {
       name: "Benchpress",
       description: "An exercise to train the chest, shoulder, and triceps",
