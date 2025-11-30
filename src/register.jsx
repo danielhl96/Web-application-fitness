@@ -129,7 +129,7 @@ function RegisterPage() {
                       : "1px solid #3B82F6",
                 }}
               />
-              {ipasswordError && passwordTouched && (
+              {passwordError && passwordTouched && (
                 <span className="text-red-500 text-sm">
                   Password must be at least 8 characters long include uppercase,
                   lowercase, number, and special character.
