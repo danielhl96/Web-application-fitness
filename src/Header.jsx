@@ -109,7 +109,7 @@ function Header() {
                   style={{ filter: "brightness(0) invert(1)" }}
                 />
               </div>
-              Create training
+              Create Workout
             </Link>
             <Link
               to="/edittrain"
@@ -130,7 +130,7 @@ function Header() {
                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                 />
               </svg>
-              Edit training
+              Edit Workout
             </Link>
             <Link
               to="/training"
@@ -141,7 +141,7 @@ function Header() {
                 src={"./pullup.png"}
                 className="w-6 h-6 mr-1 filter brightness-0 invert"
               />
-              Start training
+              Start Workout
             </Link>
 
             <Link
@@ -163,7 +163,7 @@ function Header() {
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              Timer
+              Stopwatch
             </Link>
             <Link
               to="/statistic"
@@ -176,7 +176,7 @@ function Header() {
                   className="w-full h-full object-cover rounded-md filter brightness-0 invert"
                 />
               </figure>
-              Statistics
+              Statistic
             </Link>
             <button
               className="btn btn-ghost text-white md:ml-4"
