@@ -29,7 +29,7 @@ function Home() {
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">
-              Create Training
+              Create Workout
             </h2>
             <div className="flex justify-center my-4">
               <img
@@ -51,7 +51,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">Edit training</h2>
+            <h2 className="card-title text-blue-400 text-sm">Edit Workout</h2>
             <div className="flex justify-center my-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">Start Training</h2>
+            <h2 className="card-title text-blue-400 text-sm">Start Workout</h2>
             <div className="flex justify-center my-4">
               <img
                 src="/pullup.png"
@@ -90,7 +90,7 @@ function Home() {
               />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
-              Start your training
+              Start your workout
             </p>
           </div>
         </div>
@@ -130,7 +130,7 @@ function Home() {
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">Timer</h2>
+            <h2 className="card-title text-blue-400 text-sm">Stopwatch</h2>
             <div className="flex justify-center my-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
