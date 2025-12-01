@@ -100,7 +100,8 @@ Password: q!w7w'nF9Gb+d_j
 - `nbf` (not before),
 - `jti` (JWT ID).
 - The backend application validates these claims to ensure the authenticity and integrity of each JWT.
-- Password hashing (argon2) and route protection
+- Password hashing (argon2) with salting
+- Route protection to protect the UI
 - Clear separation of frontend and backend using a RESTful API
 
 ---
@@ -109,15 +110,16 @@ Password: q!w7w'nF9Gb+d_j
 
 - Modular backend with Flask
 - Redis caching
-- PostgreSQL as a robust relational database
+- PostgreSQL as a relational database
 - Clean React component structure styled with Tailwind CSS
 
 ---
 
 ## 📱 PWA (Progressive Web App)
 
-- You can install the web application on your smartphone (iPhone or Android) for a native app-like experience.
+- You can install the web application on your smartphone (iPhone) for a native app-like experience.
 - Simply open the app in your mobile browser and use "Add to Home Screen" to save it.
+- An internet connection is required to save and retrieve data from the backend.
 
 ## Deployment
 
@@ -131,7 +133,7 @@ Password: q!w7w'nF9Gb+d_j
 
 - The application runs in multiple Docker containers: frontend, backend, Redis, and PostgreSQL database.
 - Separate Dockerfiles are provided for both frontend and backend services.
-- Docker Compose orchestrates and connects all containers, enabling easy setup and management of the entire stack.
+- Docker Compose orchestrates and connects all containers, enabling setup and management of the entire stack.
 
 ---
 
@@ -139,6 +141,7 @@ Password: q!w7w'nF9Gb+d_j
 
 - Bulid a docker compose container
 - docker-compose up --build
+- Please set up a test user once the Docker build is complete.
 
 ---
 
