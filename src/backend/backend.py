@@ -49,14 +49,14 @@ EXPECTED_AUDIENCE = os.getenv('JWT_AUDIENCE', 'user')
 EXPECTED_ISSUER = os.getenv('JWT_ISSUER', 'fitness_app')
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
 
-def createToken(user_id):
+def createToken(user_id,expiretime):
     SECRET_KEY = app.config['SECRET_KEY']
     now = datetime.now(UTC)
     payload = {
         "sub": str(user_id),
         "iss": EXPECTED_ISSUER,
         "aud": EXPECTED_AUDIENCE,
-        "exp": int((now + timedelta(minutes=15)).timestamp()),
+        "exp": int((now + timedelta(minutes = expiretime)).timestamp()), #Expiretime in minutes 
         "iat": int(now.timestamp()),
         "nbf": int(now.timestamp()),
         "jti": str(uuid.uuid4())
@@ -192,7 +192,7 @@ def login_user():
     password = request.args.get("password")
     user = session.query(User).filter_by(email=email).first()
     if user and argon2.verify(user.password, password):
-        token = createToken(user.id)
+        token = createToken(user.id,15)
         resp = jsonify({"message": "Login successful!"})
         resp.set_cookie(
             "access_token",
@@ -683,7 +683,7 @@ def refresh_token():
         return jsonify({"message": "Token has been revoked"}), 401
 
     user_id = payload.get("sub")
-    new_token = createToken(user_id)
+    new_token = createToken(user_id,120)
     resp = jsonify({"message": "Token refreshed"})
     resp.set_cookie(
         "access_token",
