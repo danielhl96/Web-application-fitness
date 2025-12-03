@@ -557,7 +557,7 @@ def get_workout_plans():
                     "reps": e.reps,
                     "weights": e.weights,
                     "date": e.date.isoformat()
-                } for e in plan.exercises
+                } for e in exercises
             ]
         })
     print(result)
