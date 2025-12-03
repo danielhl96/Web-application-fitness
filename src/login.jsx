@@ -2,7 +2,7 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "./HeaderLogout.jsx";
-import api from "./api";
+import api from "./api.js";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
