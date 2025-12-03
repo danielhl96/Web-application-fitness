@@ -551,7 +551,7 @@ function Profile() {
                 <h1>Age</h1>
                 <input
                   type="text"
-                  placeholder={"Age: "}
+                  placeholder={age + " years"}
                   className="input input-primary"
                   id={"age"}
                   onChange={(e) => handleAge(e)}
@@ -566,7 +566,7 @@ function Profile() {
                 <h1>Weight</h1>
                 <input
                   type="text"
-                  placeholder={"Weight: (kg) "}
+                  placeholder={weight + " kg"}
                   className="input input-primary"
                   id={"weight"}
                   onChange={(e) => handleWeight(e)}
@@ -581,7 +581,7 @@ function Profile() {
                 <h1>Height</h1>
                 <input
                   type="text"
-                  placeholder={"Height: (cm) "}
+                  placeholder={height + " cm"} 
                   className="input input-primary"
                   id={"height"}
                   onChange={(e) => handleHeight(e)}
@@ -596,7 +596,7 @@ function Profile() {
                 <h1>Waist</h1>
                 <input
                   type="text"
-                  placeholder={"Waist: (cm)"}
+                  placeholder={waist + " cm"}
                   className="input input-primary"
                   id={"waist"}
                   onChange={(e) => handleWaist(e)}
@@ -611,7 +611,7 @@ function Profile() {
                 <h1>Hip</h1>
                 <input
                   type="text"
-                  placeholder={"Hip: (cm)"}
+                  placeholder={hip + " cm"}
                   className="input input-primary"
                   id={"hip"}
                   onChange={(e) => handleHip(e)}
@@ -626,7 +626,7 @@ function Profile() {
                 <h1>BFP</h1>
                 <input
                   type="text"
-                  placeholder={"BFP: (%)"}
+                  placeholder={bfp + " %"}
                   className="input input-primary"
                   id={"bfp"}
                   onChange={(e) => handleBFP(e)}

@@ -81,7 +81,7 @@ function StartTraining() {
           updatedCurrent.reps.length == updatedCurrent.sets &&
           updatedCurrent.reps.every((rep) => rep != null)
             ? updatedCurrent.reps
-            : Array(updatedCurrent.sets).fill(0),
+            : Array(updatedCurrent.sets).fill(training1.reps[0]),
         weights: updatedCurrent.weights,
       })
       .then((response) => {
