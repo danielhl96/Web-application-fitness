@@ -91,7 +91,7 @@ emailError && emailTouched && (
           <h1 className="text-red-500 text-sm ">{message}</h1>
           <button
             onClick={() => handleLogin()}
-            className="btn btn-outline btn-success w-80 "
+            className="btn btn-outline btn-success w-auto "
           >
             Login
           </button>

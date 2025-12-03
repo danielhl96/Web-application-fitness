@@ -94,7 +94,7 @@ function RegisterPage() {
                 disabled={succesRegister}
                 id="email"
                 placeholder={"E-Mail: "}
-                className="input input-primary w-80"
+                className="input input-primary"
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 style={{
@@ -118,7 +118,7 @@ function RegisterPage() {
                 id="password"
                 disabled={succesRegister}
                 placeholder={"Password: "}
-                className="input input-primary w-80"
+                className="input input-primary"
                 onChange={handlePasswordChange}
                 onBlur={handlePasswordBlur}
                 style={{
@@ -142,7 +142,7 @@ function RegisterPage() {
                 id="password repeat"
                 disabled={succesRegister}
                 placeholder={"Repeat your password: "}
-                className="input input-primary w-80"
+                className="input input-primary"
                 onChange={handleConfirmPasswordChange}
                 onBlur={handleConfirmPasswordBlur}
                 style={{

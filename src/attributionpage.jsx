@@ -1,12 +1,13 @@
 import Header from "./HeaderLogout.jsx";
-
+import TemplatePage from "./templatepage.jsx";
 function AttributionPage() {
   return (
-    <div className="min-h-screen bg-slate-900 py-16">
+    <div>
       <Header />
-      <div className="flex flex-col justify-center items-center">
-        <div className="space-y-6 card sm:w-96 md:w-96 w-90 bg-gray-800 border mt-8 border-blue-500 shadow-sm p-6 rounded-md overflow-auto md:max-h-150 max:h-90">
+      <TemplatePage>
+        <div className = "overflow-auto max-h-[80vh]">
           <h1 className="text-2xl font-bold text-white mb-4">Attribution</h1>
+          <div className="divider divider-primary"></div>
           <p>
             This page provides attribution for the resources used in this
             application.
@@ -187,8 +188,8 @@ function AttributionPage() {
               Barbell glute bridge icons created by Leremy - Flaticon
             </a>
           </ul>
-        </div>
       </div>
+      </TemplatePage>
     </div>
   );
 }

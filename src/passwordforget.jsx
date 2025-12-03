@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
 import Header from "./HeaderLogout.jsx";
-
+import TemplatePage from "./templatepage.jsx";
 function PasswordForget() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -81,10 +81,12 @@ function PasswordForget() {
   };
 
   return (
-    <div className="min-h-screen flex items-center bg-gray-900 justify-center">
+    <div>
       <Header />
-      <div className="space-y-4 flex flex-col card w-96 sm:w-64 md:w-96 bg-gray-800  border border-blue-500 shadow-sm p-6 rounded-md">
-        <h1 className="text-2xl font-bold">Forgot Password</h1>
+      <TemplatePage>
+        <div className="items-start">
+        <h1 className="text-2xl text-left font-bold">Password forget</h1>
+        </div>
         <div>
           <h1 className="text-shadow-lg font-mono">E-Mail</h1>
 
@@ -170,7 +172,8 @@ function PasswordForget() {
           </button>
         </div>
         {message && <h1 className="text-green-500">{message}</h1>}
-      </div>
+      
+      </TemplatePage>
     </div>
   );
 }
