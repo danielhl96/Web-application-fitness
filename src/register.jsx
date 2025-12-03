@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
 import Header from "./HeaderLogout.jsx";
-
+import TemplatePage from "./templatepage.jsx";
 function RegisterPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -81,9 +81,8 @@ function RegisterPage() {
 
   return (
     <div>
-      <div className="min-h-screen flex items-center bg-gray-900 justify-center">
         <Header />
-        <div className="space-y-4 card w-96 sm:w-96 md:w-96 border border-blue-500 bg-gray-800 shadow-sm p-6 rounded-md">
+        <TemplatePage>
           <div className="flex flex-col space-y-2 ">
             <h1 className="text-2xl font-bold">Register</h1>
             <div className="divider divider-primary">Your data</div>
@@ -196,9 +195,10 @@ function RegisterPage() {
               </button>
             </div>
           </div>
-        </div>
+        </TemplatePage>
       </div>
-    </div>
+    
+  
   );
 }
 export default RegisterPage;

@@ -1,13 +1,13 @@
 import "./index.css";
-
+import TemplatePage from "./templatepage.jsx";
 import Header from "./HeaderLogout.jsx";
 function PrivacyPolicy() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
+    <div>
       <Header />
-      <div className="space-y-8 card sm:w-96 md:w-150 h-150 w-90 bg-gray-800 border  mt-8 border-blue-500 shadow-sm p-8 rounded-md">
+      <TemplatePage>
         <div className="overflow-auto max-h-[80vh] text-white">
-          <h2 className="text-2xl font-bold text-white mb-4  text-start border-b border-blue-400 pb-2">
+          <h2 className="text-2xl font-bold text-white mb-4  text-start  pb-2">
             Privacy Policy
           </h2>
 
@@ -241,8 +241,9 @@ function PrivacyPolicy() {
             </p>
           </section>
         </div>
+      </TemplatePage>
       </div>
-    </div>
+  
   );
 }
 

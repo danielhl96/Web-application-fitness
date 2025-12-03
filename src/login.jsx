@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "./HeaderLogout.jsx";
 import api from "./api.js";
+import TemplatePage from "./templatepage.jsx";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -50,9 +51,9 @@ function LoginForm() {
     setEmailError(!checkEmail(email));
   }, [email]);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 ">
+   <div>
       <Header />
-      <div className="card sm:w-96 md:w-96 w-96 bg-gray-800 border border-blue-500 shadow-sm p-6 rounded-md mt-8">
+      <TemplatePage>
         <div className="flex flex-col space-y-2 ">
           <h1 className="text-2xl font-bold">Login</h1>
           <div className="divider divider-primary"></div>
@@ -130,8 +131,10 @@ emailError && emailTouched && (
             </button>
           </div>
         </div>
-      </div>
-    </div>
+        </TemplatePage>
+      </div>      
+    
+    
   );
 }
 

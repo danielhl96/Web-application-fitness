@@ -1,12 +1,17 @@
 import "./index.css";
 import Header from "./HeaderLogout.jsx";
+import TemplatePage from "./templatepage.jsx";
 function Imprint() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900  ">
+    <div>
       <Header />
-      <div className="overflow-auto">
-        <div className="space-y-6 card sm:w-96 md:w-96 w-90 bg-gray-800 border mt-8 border-blue-500 shadow-sm p-6 rounded-md">
-          <h2 className="text-2xl font-bold text-white mb-4">Imprint</h2>
+      <TemplatePage>
+        
+          <h2 className="text-2xl font-bold text-white mb-4  text-start pb-2">
+            Imprint
+          </h2>
+          <div className="divider divider-primary"></div>
+          <div className="flex flex-col items-start text-white space-y-4">
           <p>
             Angaben gemäß § 5 TMG
             <br />
@@ -15,7 +20,7 @@ function Imprint() {
             Ithweg 4<br />
             30851 Langenhagen
             <br />
-            Deutschland
+            Deutschland‚
           </p>
           <p>
             Kontakt:
@@ -52,8 +57,8 @@ function Imprint() {
               https://www.e-recht24.de
             </a>
           </p>
-        </div>
-      </div>
+          </div>
+      </TemplatePage>
     </div>
   );
 }
