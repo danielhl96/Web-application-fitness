@@ -11,11 +11,11 @@ import PasswordForget from "./passwordforget.jsx";
 import Counter from "./counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import PrivacyPolicy from "./privacypolicy.jsx";
-import Impressum from "./impressum.jsx";
+import Impressum from "./imprint.jsx";
 import AttributionPage from "./attributionpage.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
-import Statistic from "./Statistic.jsx";
+import Statistic from "./statistic.jsx";
 
 function Home() {
   const navigate = useNavigate();

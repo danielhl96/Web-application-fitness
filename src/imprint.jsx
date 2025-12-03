@@ -1,6 +1,6 @@
 import "./index.css";
 import Header from "./HeaderLogout.jsx";
-function Impressum() {
+function Imprint() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900  ">
       <Header />
@@ -58,4 +58,4 @@ function Impressum() {
   );
 }
 
-export default Impressum;
+export default Imprint;
