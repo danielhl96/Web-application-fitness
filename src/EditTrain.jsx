@@ -2,7 +2,7 @@ import "./index.css";
 import Header from "./Header";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import exercise from "./Exercises";
+import exercise from "./exercises.jsx";
 import api from "./api";
 
 const EditTrain = () => {

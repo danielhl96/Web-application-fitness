@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
-import exercise from "./Exercises";
+import exercise from "./exercises.jsx";
 
 function ExerciseCard({
   name,
