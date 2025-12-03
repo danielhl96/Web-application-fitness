@@ -9,6 +9,7 @@ const EditTrain = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [requestId, setRequestId] = useState(0);
+  const [message, setMessage] = useState("");
 
   useEffect(
     () => {
@@ -65,10 +66,12 @@ const EditTrain = () => {
       .put("/edit_workout_plan", payload)
       .then((response) => {
         console.log("Workout plans updated successfully:", response.data);
+        setMessage("Workout plan updated successfully!");
         setRequestId((requestId) => requestId + 1); // Trigger data refresh
       })
       .catch((error) => {
         console.error("Error updating workout plans:", error);
+        setMessage("Error updating workout plan.");
       });
   }
 
@@ -255,7 +258,7 @@ const EditTrain = () => {
       <div className="modal modal-open">
         <div className="modal-box md:w-100 md:h-140 bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
           <div className="flex flex-col items-center space-y-1 overflow-auto max-h-120">
-            <p className="text-amber-50 font-bold mb-2 ">Add a new exercise:</p>
+            <p className="text-amber-50 font-bold mb-2 ">Add a new exercise</p>
 
             <div className="flex flex-col w-100 md:w-80  items-center space-y-4 ">
               <input
@@ -506,11 +509,14 @@ const EditTrain = () => {
               </div>
             ))}
             <div className="divider divider-primary"></div>
+            {message && (
+              <div className="text-green-500 font-light">{message}</div>
+            )}
             <div className="modal-action flex flex-row gap-2 justify-end">
               <button
                 onClick={() => {
                   handleEditWorkout(savekey);
-                  handleShowModal();
+      
                 }}
                 className="btn btn-outline btn-primary"
               >
