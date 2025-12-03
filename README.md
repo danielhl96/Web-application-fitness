@@ -140,8 +140,25 @@ Password: q!w7w'nF9Gb+d_j
 ## Usage
 
 - Bulid a docker compose container
+- Do you need an env file like the example
 - docker-compose up --build
 - Please set up a test user once the Docker build is complete.
+
+**Example `.env` file:**
+
+```env
+SECRET_KEY=dein-geheimer-schluessel
+JWT_ALGORITHM=HS256
+FLASK_ENV=development
+DATABASE_URL=postgresql+psycopg2://web_fitness_app_user:mysecretpassword@db:5432/web_fitness_app
+REDIS_HOST=redis://redis:6379/0
+ALLOWED_ORIGINS=http://localhost:5173
+JWT_AUDIENCE=user
+JWT_ISSUER=fitness_app
+SMTP_USER=
+SMTP_PASSWORD=
+VITE_API_URL=http://localhost:5001/api
+```
 
 ---
 
