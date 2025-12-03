@@ -47,7 +47,7 @@ function Home() {
 
         {/* Card 2: Edit training */}
         <div
-          onClick={() => navigate("/edittrain")}
+          onClick={() => navigate("/editTrain")}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -220,7 +220,7 @@ function App() {
           }
         />
         <Route
-          path="/edittrain"
+          path="/editTrain"
           element={
             <AuthProvider>
               <ProtectedRoute>
