@@ -1,6 +1,6 @@
 import "./index.css";
 import { Routes, Route, Link } from "react-router-dom";
-import LoginForm from "./login.jsx";
+import LoginForm from "./Login.jsx";
 import Header from "./Header";
 import CreateTrainGUI from "./CreateTrain.jsx";
 import EditTrain from "./EditTrain.jsx";
