@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
-import Header from "./Header_logout.jsx";
+import Header from "./HeaderLogout.jsx";
 
 function PasswordForget() {
   const navigate = useNavigate();

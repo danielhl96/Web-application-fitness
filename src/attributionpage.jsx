@@ -1,4 +1,4 @@
-import Header from "./Header_logout.jsx";
+import Header from "./HeaderLogout.jsx";
 
 function AttributionPage() {
   return (

@@ -1,21 +1,21 @@
 import "./index.css";
 import { Routes, Route, Link } from "react-router-dom";
-import LoginForm from "./login";
+import LoginForm from "./Login.jsx";
 import Header from "./Header";
-import CreateTrainGUI from "./createtrain.jsx";
-import EditTrain from "./edittrain.jsx";
-import StartTraining from "./training.jsx";
-import Profile from "./profile.jsx";
-import RegisterPage from "./register.jsx";
-import PasswordForget from "./passwordforget.jsx";
-import Counter from "./counter.jsx";
+import CreateTrainGUI from "./CreateTrain.jsx";
+import EditTrain from "./EditTrain.jsx";
+import StartTraining from "./Training.jsx";
+import Profile from "./Profile.jsx";
+import RegisterPage from "./Register.jsx";
+import PasswordForget from "./PasswordForget.jsx";
+import Counter from "./Counter.jsx";
 import ProtectedRoute from "./ProtectedRoute";
-import PrivacyPolicy from "./privacypolicy.jsx";
-import Impressum from "./impressum.jsx";
-import AttributionPage from "./attributionpage.jsx";
+import PrivacyPolicy from "./PrivacyPolicy.jsx";
+import Impressum from "./Impressum.jsx";
+import AttributionPage from "./AttributionPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthProvider } from "./AuthProvider.jsx";
-import Statistic from "./statistic.jsx";
+import Statistic from "./Statistic.jsx";
 
 function Home() {
   const navigate = useNavigate();

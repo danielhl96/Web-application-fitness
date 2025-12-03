@@ -1,5 +1,5 @@
 import "./index.css";
-import Header from "./Header_logout.jsx";
+import Header from "./HeaderLogout.jsx";
 function Impressum() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900  ">

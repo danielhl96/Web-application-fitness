@@ -1,7 +1,7 @@
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Header from "./Header_logout.jsx";
+import Header from "./HeaderLogout.jsx";
 import api from "./api";
 
 function LoginForm() {
