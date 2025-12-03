@@ -83,10 +83,10 @@ function RegisterPage() {
     <div>
         <Header />
         <TemplatePage>
-          <div className="flex flex-col space-y-2 ">
+          <div>
             <h1 className="text-2xl font-bold">Register</h1>
             <div className="divider divider-primary">Your data</div>
-            <div>
+          
               <h1 className="text-shadow-lg font-mono">E-Mail</h1>
 
               <input
@@ -94,7 +94,7 @@ function RegisterPage() {
                 disabled={succesRegister}
                 id="email"
                 placeholder={"E-Mail: "}
-                className="input input-primary"
+                className="input input-primary w-80"
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 style={{
@@ -118,7 +118,7 @@ function RegisterPage() {
                 id="password"
                 disabled={succesRegister}
                 placeholder={"Password: "}
-                className="input input-primary"
+                className="input input-primary w-80"
                 onChange={handlePasswordChange}
                 onBlur={handlePasswordBlur}
                 style={{
@@ -142,7 +142,7 @@ function RegisterPage() {
                 id="password repeat"
                 disabled={succesRegister}
                 placeholder={"Repeat your password: "}
-                className="input input-primary"
+                className="input input-primary w-80"
                 onChange={handleConfirmPasswordChange}
                 onBlur={handleConfirmPasswordBlur}
                 style={{
@@ -193,7 +193,7 @@ function RegisterPage() {
               >
                 Back
               </button>
-            </div>
+            
           </div>
         </TemplatePage>
       </div>
