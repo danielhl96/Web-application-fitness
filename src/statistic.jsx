@@ -65,7 +65,7 @@ function Statistic() {
         </div>
       </div>
     ) : (
-      <div className="lg:mt-0 sm:pt-2 sm:w-auto lg:max-w-2xl bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-end">
+      <div className="flex flex-col w-full">
         <div id="chart" className="w-full"></div>
         <div className="divider my-4"></div>
         {selectedExercise && <ChartRenderer exercise={selectedExercise} />}
@@ -90,7 +90,9 @@ function Statistic() {
             </svg>
           </button>
           <div className="flex space-x-1">
-            <button
+            <button disabled={
+              data.findIndex((e) => e === selectedExercise) === 0
+            }
               onClick={() =>
                 setSelectedExercise(
                   data.findIndex((e) => e === selectedExercise) - 1 >= 0
@@ -109,14 +111,16 @@ function Statistic() {
               >
                 <path
                   strokeLinecap="round"
-                  d
+                  d 
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M15 12H9m6 0l-3-3m3 3l-3 3"
                 />
               </svg>
             </button>
-            <button
+            <button disabled={
+              data.findIndex((e) => e === selectedExercise) === data.length - 1
+            }
               onClick={() =>
                 setSelectedExercise(
                   data.findIndex((e) => e === selectedExercise) + 1 <
