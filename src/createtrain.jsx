@@ -325,7 +325,7 @@ function CreateTrainGUI() {
           {/* Render selected exercises */}
           {WorkoutNameSet ? (
             <div className="flex flex-col items-center space-y-3">
-              <div className="w-100 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-h-80">
+              <div className="w-100 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard
