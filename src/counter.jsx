@@ -236,7 +236,7 @@ function CounterForm() {
           {/* Secondspointer */}
           <div
             className={`absolute left-1/2 top-1/2 w-1 ${
-              isbreakmode ? "bg-purple-500" : "bg-red-500"
+              isbreakmode  ? "bg-purple-500" : "bg-red-500"
             } flex items-center justify-center`}
             style={{
               height: `100px`,

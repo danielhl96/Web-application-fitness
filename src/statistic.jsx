@@ -159,7 +159,7 @@ function Statistic() {
 
       console.log("Rendering chart for exercise:", exercise);
       const dates = exercise.entries.map((e) => e.date);
-      const reps = exercise.entries.map((e) => e.reps);
+      
       console.log(dates);
 
       const weights = exercise.entries.map((e) => Math.max(...e.weights));

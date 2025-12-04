@@ -542,11 +542,10 @@ function StartTraining() {
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">
-            <div className="w-65 md:w-95 flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
               </div>
-              <div className="overflow-y-auto max-md:h-auto gap-4">
+              <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-150">
                 {selectedExercise &&
                 Object.keys(selectedExercise).length > 0 ? (
                   Object.keys(selectedExercise).map((name, index) => (
@@ -567,7 +566,7 @@ function StartTraining() {
                 )}
               </div>
             </div>
-          </div>
+          
         ) : (
           <div
             className={`space-y-2  justify-center ${
