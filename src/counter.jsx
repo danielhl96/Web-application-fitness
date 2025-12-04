@@ -174,7 +174,7 @@ function CounterForm() {
     Manage your workout rounds
 
         </div>
-        <div className="relative w-60 h-60  rounded-full border-4 border-blue-600">
+        <div className="relative w-60 h-60  rounded-full border-4 border-green-600 bg-black">
           {marks.map((_, index) => {
             const angle = index * 30;
             return (
