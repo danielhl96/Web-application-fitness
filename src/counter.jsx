@@ -171,10 +171,10 @@ function CounterForm() {
       {showModal && settingsModal()}
       <div className="flex flex-col items-center justify-center mt-4">
         <div className="divider divider-primary">
-    Watch
+    Manage your workout rounds
 
         </div>
-        <div className="relative w-60 h-60  rounded-full border-4 border-green-500">
+        <div className="relative w-60 h-60  rounded-full border-4 border-blue-600">
           {marks.map((_, index) => {
             const angle = index * 30;
             return (
