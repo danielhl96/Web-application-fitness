@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import exercise from "./exercises.jsx";
 import api from "./api";
+import TemplatePage from "./templatepage.jsx";
 
 const EditTrain = () => {
   const navigate = useNavigate();
@@ -258,7 +259,7 @@ const EditTrain = () => {
       <div className="modal modal-open">
         <div className="modal-box md:w-100 md:h-140 bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
           <div className="flex flex-col items-center space-y-1 overflow-auto max-h-120">
-            <p className="text-amber-50 font-bold mb-2 ">Add a new exercise</p>
+            <div className="divider divider-primary ">Edit your workout</div>
 
             <div className="flex flex-col w-100 md:w-80  items-center space-y-4 ">
               <input
@@ -562,9 +563,10 @@ const EditTrain = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
+    <div>
+      <TemplatePage>
       <Header />
-      <div className="space-y-4 card w-85  h-auto md:w-100 md:h-auto bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
+      <div className="flex flex-col items-center">
         <div className="divider divider-primary text-amber-50 font-bold mb-2">
           Edit your workout
         </div>
@@ -589,6 +591,8 @@ const EditTrain = () => {
         </div>
         {showModal && <div>{EditWorkoutModal()}</div>}
       </div>
+      
+      </TemplatePage>
     </div>
   );
 };

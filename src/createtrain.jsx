@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
 import exercise from "./exercises.jsx";
+import TemplatePage from "./templatepage.jsx";
 
 function ExerciseCard({
   name,
@@ -204,9 +205,10 @@ function CreateTrainGUI() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
+    
+    <div>
+      <TemplatePage>
       <Header />
-      <div className="card w-85 h-auto md:w-100 sm:w-85  bg-slate-800 border border-blue-500 shadow-lg p-8 rounded-md flex flex-col items-center  ">
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
           Create your workout
         </div>
@@ -422,7 +424,8 @@ function CreateTrainGUI() {
             </div>
           )}
         </div>
-      </div>
+      
+      </TemplatePage>
     </div>
   );
 }

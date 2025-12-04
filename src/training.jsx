@@ -2,6 +2,7 @@ import "./index.css";
 import Header from "./Header";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import TemplatePage from "./templatepage.jsx";
 
 import api from "./api";
 
@@ -538,9 +539,9 @@ function StartTraining() {
       {showModal && settingsModal()}
       {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
-      <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-24 pb-8">
+      <TemplatePage>
         {selectedTrainingSite ? (
-          <div className="space-y-4 card w-85  md:w-100 md:h-auto  bg-slate-800 border border-blue-500  shadow-sm p-8 rounded-md flex flex-col items-center">
+          <div className="flex flex-col items-center ">
             <div className="w-65 md:w-95 flex flex-col gap-2 items-center">
               <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
                 Select your workout
@@ -569,7 +570,7 @@ function StartTraining() {
           </div>
         ) : (
           <div
-            className={`space-y-2 card sm:w-100 md:w-100 w-85 h-140 bg-gray-800 shadow-sm p-6 justify-center rounded-md border ${
+            className={`space-y-2  justify-center ${
               training1.isFinished ? "border-green-500" : "border-blue-500"
             }`}
           >
@@ -803,7 +804,8 @@ function StartTraining() {
             </div>
           </div>
         )}
-      </div>
+        
+      </TemplatePage>
     </div>
   );
 }

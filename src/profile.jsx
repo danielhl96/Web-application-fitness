@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
-
+import TemplatePage from "./templatepage.jsx";
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -525,10 +525,10 @@ function Profile() {
 
   return (
     <div>
-      <div className="min-h-screen flex justify-center bg-slate-900  py-8 pt-24">
+      <TemplatePage>
         <Header />
         {edit ? (
-          <div className="card md:w-96 w-85 bg-slate-800 shadow-sm p-6 rounded-md border space-y-2 border-blue-500 overflow-auto">
+          <div className="space-y-2" >
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -639,7 +639,7 @@ function Profile() {
               </div>
             </div>
             <h1>Your gender:</h1>
-            <div className="flex flex-row space-x-2 items-center justify-center">
+            <div className="flex flex-row space-x-2  items-center justify-center">
               <button
                 onClick={() => handleGender("male")}
                 style={{
@@ -809,7 +809,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className=" card w-85 h-140  md:w-100 md:h-140  bg-slate-800 shadow-sm p-6 rounded-md border border-blue-500">
+          
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg
@@ -1023,10 +1023,11 @@ function Profile() {
                 </button>
               </div>
             </div>
-          </div>
+          
         )}
+        </TemplatePage>
       </div>
-    </div>
+    
   );
 }
 

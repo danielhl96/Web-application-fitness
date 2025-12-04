@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import TemplatePage from "./templatepage";
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
@@ -165,9 +166,14 @@ function CounterForm() {
 
   const totalRotation = -180 + sec;
   return (
-    <div className="flex flex-col items-center justify-start  min-h-screen bg-gray-900 ">
+    <div>
+    <TemplatePage>
       {showModal && settingsModal()}
-      <div className="items-center card sm:w-96 md:w-85 w-85 h-120 bg-gray-800 border border-blue-500 shadow-sm p-6 mt-25 rounded-md">
+      <div className="flex flex-col items-center justify-center mt-4">
+        <div className="divider divider-primary">
+    Watch
+
+        </div>
         <div className="relative w-60 h-60  rounded-full border-4 border-green-500">
           {marks.map((_, index) => {
             const angle = index * 30;
@@ -355,8 +361,10 @@ function CounterForm() {
             </svg>
           </button>
         </div>
-      </div>
+    </div>  
+    </TemplatePage>
     </div>
+    
   );
 }
 

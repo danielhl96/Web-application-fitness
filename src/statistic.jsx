@@ -1,6 +1,7 @@
 import api from "./api";
 import ApexCharts from "apexcharts";
 import { useState, useEffect } from "react";
+import TemplatePage from "./templatepage";
 
 function Statistic() {
   const [showOverview, setShowOverview] = useState(true);
@@ -8,7 +9,7 @@ function Statistic() {
 
   function ExerciseCards() {
     return showOverview ? (
-      <div className="lg:mt-0 justify-top bg-slate-800 border border-blue-500 shadow-sm p-8 rounded-md flex flex-col items-center">
+      <div className="">  
         <div className="divider divider-primary  text-amber-50 font-bold mb-2">
           Your statistics
         </div>
@@ -229,8 +230,10 @@ function Statistic() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center bg-slate-900 justify-center pt-20 pb-5">
+    <div>
+      <TemplatePage>
       <ExerciseCards />
+      </TemplatePage>
     </div>
   );
 }

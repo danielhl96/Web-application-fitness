@@ -54,7 +54,7 @@ function LoginForm() {
    <div>
       <Header />
       <TemplatePage>
-        <div className="flex flex-col space-y-2 ">
+        <div className="flex flex-col  space-y-2 ">
           <h1 className="text-2xl font-bold">Login</h1>
           <div className="divider divider-primary"></div>
           <div>
@@ -91,7 +91,7 @@ emailError && emailTouched && (
           <h1 className="text-red-500 text-sm ">{message}</h1>
           <button
             onClick={() => handleLogin()}
-            className="btn btn-outline btn-success w-auto "
+            className="btn btn-outline btn-success w-auto md:w-80 lg:w-80"
           >
             Login
           </button>
