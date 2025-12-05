@@ -1,38 +1,30 @@
-import "./index.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Header from "./HeaderLogout.jsx";
-import api from "./api.js";
-import TemplatePage from "./templatepage.jsx";
+import './index.css';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Header from './HeaderLogout.jsx';
+import api from './api.js';
+import TemplatePage from './templatepage.jsx';
+import EmailInput from './emailinput.jsx';
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-  const handleEmailBlur = () => {
-    setEmailTouched(true);
+  const handleEmailChange = (value) => {
+    setEmail(value);
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const checkEmail = (email) => {
-    //email regex for validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    console.log('Password changed:', e.target.value);
   };
 
   async function handleLogin() {
     try {
-      const response = await api.get("/login", {
+      const response = await api.get('/login', {
         params: {
           email,
           password,
@@ -40,18 +32,15 @@ function LoginForm() {
       });
       console.log(response[0]);
 
-      navigate("/");
+      navigate('/');
     } catch (error) {
       console.error(error);
-      setMessage("Login failed. Please check your credentials.");
+      setMessage('Login failed. Please check your credentials.');
     }
   }
 
-  useEffect(() => {
-    setEmailError(!checkEmail(email));
-  }, [email]);
   return (
-   <div>
+    <div>
       <Header />
       <TemplatePage>
         <div className="flex flex-col  space-y-2 ">
@@ -59,31 +48,20 @@ function LoginForm() {
           <div className="divider divider-primary"></div>
           <div>
             <h1 className="text-shadow-lg font-mono">E-Mail</h1>
-            <input
-              type="text"
-              placeholder={"E-Mail: "}
-              className="input input-primary"
-              onChange={(e) => handleEmailChange(e)}
-              onBlur={handleEmailBlur}
-                style={{
-  border: "1px solid",
-  borderColor: emailError && emailTouched ? "red" : "#3B82F6",
-}}
-            />
 
-            {
-emailError && emailTouched && (
-              <span className="text-red-500 text-sm">
-                Please enter a valid email address.
-              </span>
-            )}
+            <EmailInput
+              value={email}
+              onChange={handleEmailChange}
+              onError={(error) => setEmailError(error)}
+              errorMessage={'Please enter a valid email.'}
+            />
           </div>
           <h1 className="text-shadow-lg font-mono">Password</h1>
 
           <div>
             <input
               type="password"
-              placeholder={"Password: "}
+              placeholder={'Password: '}
               className="input input-primary"
               onChange={(e) => handlePasswordChange(e)}
             />
@@ -96,14 +74,11 @@ emailError && emailTouched && (
             Login
           </button>
           <div className="space-y-0 flex flex-col items-center">
-            <button
-              onClick={() => navigate("/register")}
-              className="btn btn-link w-80 text-white"
-            >
+            <button onClick={() => navigate('/register')} className="btn btn-link w-80 text-white">
               Are you new here?
             </button>
             <button
-              onClick={() => navigate("/passwordforget")}
+              onClick={() => navigate('/passwordforget')}
               className="btn btn-link w-80 text-white"
             >
               Do you have forgot your password?
@@ -111,30 +86,28 @@ emailError && emailTouched && (
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-0">
               <button
-                onClick={() => navigate("/privacypolicy")}
+                onClick={() => navigate('/privacypolicy')}
                 className="btn btn-link w-30 text-white"
               >
                 Privacy Policy
               </button>
               <button
-                onClick={() => navigate("/impressum")}
+                onClick={() => navigate('/impressum')}
                 className="btn btn-link w-30 text-white"
               >
                 Imprint
               </button>
             </div>
             <button
-              onClick={() => navigate("/attribution")}
+              onClick={() => navigate('/attribution')}
               className="btn btn-link w-30 text-white"
             >
               Attribution
             </button>
           </div>
         </div>
-        </TemplatePage>
-      </div>      
-    
-    
+      </TemplatePage>
+    </div>
   );
 }
 

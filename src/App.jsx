@@ -1,21 +1,21 @@
-import "./index.css";
-import { Routes, Route, Link } from "react-router-dom";
-import LoginForm from "./login.jsx";
-import Header from "./Header";
-import CreateTrainGUI from "./createtrain.jsx";
-import EditTrain from "./EditTrain.jsx";
-import StartTraining from "./training.jsx";
-import Profile from "./profile.jsx";
-import RegisterPage from "./register.jsx";
-import PasswordForget from "./passwordforget.jsx";
-import Counter from "./counter.jsx";
-import ProtectedRoute from "./ProtectedRoute";
-import PrivacyPolicy from "./privacypolicy.jsx";
-import Impressum from "./imprint.jsx";
-import AttributionPage from "./attributionpage.jsx";
-import { useNavigate } from "react-router-dom";
-import { AuthProvider } from "./AuthProvider.jsx";
-import Statistic from "./statistic.jsx";
+import './index.css';
+import { Routes, Route, Link } from 'react-router-dom';
+import LoginForm from './login.jsx';
+import Header from './Header';
+import CreateTrainGUI from './createtrain.jsx';
+import EditTrain from './EditTrain.jsx';
+import StartTraining from './training.jsx';
+import Profile from './profile.jsx';
+import RegisterPage from './register.jsx';
+import PasswordForget from './passwordforget.jsx';
+import Counter from './counter.jsx';
+import ProtectedRoute from './ProtectedRoute';
+import PrivacyPolicy from './privacypolicy.jsx';
+import Impressum from './imprint.jsx';
+import AttributionPage from './attributionpage.jsx';
+import { useNavigate } from 'react-router-dom';
+import { AuthProvider } from './AuthProvider.jsx';
+import Statistic from './statistic.jsx';
 
 function Home() {
   const navigate = useNavigate();
@@ -24,19 +24,17 @@ function Home() {
       <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 p-4">
         {/* Card 1: Create Training */}
         <div
-          onClick={() => navigate("/createtrain")}
+          onClick={() => navigate('/createtrain')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
-            <h2 className="card-title text-blue-400 text-sm">
-              Create Workout
-            </h2>
+            <h2 className="card-title text-blue-400 text-sm">Create Workout</h2>
             <div className="flex justify-center my-4">
               <img
                 src="/plan.png"
                 className="h-8 w-8 object-cover rounded-md"
                 alt="Create Training Icon"
-                style={{ filter: "brightness(0) invert(1)" }}
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
@@ -47,7 +45,7 @@ function Home() {
 
         {/* Card 2: Edit training */}
         <div
-          onClick={() => navigate("/editTrain")}
+          onClick={() => navigate('/editTrain')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -76,7 +74,7 @@ function Home() {
 
         {/* Card 3: Start Training */}
         <div
-          onClick={() => navigate("/training")}
+          onClick={() => navigate('/training')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -86,18 +84,16 @@ function Home() {
                 src="/pullup.png"
                 className="h-8 w-8 object-cover rounded-md"
                 alt="Pull-up Icon"
-                style={{ filter: "brightness(0) invert(1)" }}
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
-              Start your workout
-            </p>
+            <p className="text-slate-300 text-sm text-center hidden md:block">Start your workout</p>
           </div>
         </div>
 
         {/* Card 4: Profile */}
         <div
-          onClick={() => navigate("/profile")}
+          onClick={() => navigate('/profile')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -126,7 +122,7 @@ function Home() {
 
         {/* Card 5: Timer */}
         <div
-          onClick={() => navigate("/counter")}
+          onClick={() => navigate('/counter')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -155,7 +151,7 @@ function Home() {
 
         {/* Card 6: Statistic */}
         <div
-          onClick={() => navigate("/statistic")}
+          onClick={() => navigate('/statistic')}
           className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
         >
           <div className="card-body">
@@ -165,7 +161,7 @@ function Home() {
                 src="/statistic.png"
                 className="h-8 w-8 object-cover rounded-md"
                 alt="Statistic Icon"
-                style={{ filter: "brightness(0) invert(1)" }}
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">

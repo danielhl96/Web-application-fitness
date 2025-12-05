@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   frontend:
     build:
@@ -10,7 +10,7 @@ services:
       - ./:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - '5173:5173'
     command: npm run dev -- --host
     depends_on:
       - backend
@@ -24,7 +24,7 @@ services:
     volumes:
       - ./src/backend:/app
     ports:
-      - "5001:5000"
+      - '5001:5000'
     environment:
       - FLASK_ENV=development
       - FLASK_APP=backend.py
@@ -36,7 +36,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   db:
     image: postgres:15-alpine
@@ -45,7 +45,7 @@ services:
       POSTGRES_USER: web_fitness_app_user
       POSTGRES_PASSWORD: mysecretpassword
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
 

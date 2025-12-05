@@ -1,7 +1,7 @@
-import api from "./api";
-import ApexCharts from "apexcharts";
-import { useState, useEffect } from "react";
-import TemplatePage from "./templatepage";
+import api from './api';
+import ApexCharts from 'apexcharts';
+import { useState, useEffect } from 'react';
+import TemplatePage from './templatepage';
 
 function Statistic() {
   const [showOverview, setShowOverview] = useState(true);
@@ -9,10 +9,8 @@ function Statistic() {
 
   function ExerciseCards() {
     return showOverview ? (
-      <div className="">  
-        <div className="divider divider-primary  text-amber-50 font-bold mb-2">
-          Your statistics
-        </div>
+      <div className="">
+        <div className="divider divider-primary  text-amber-50 font-bold mb-2">Your statistics</div>
 
         <div className="grid sm:grid grid-cols-1 lg:grid-cols-3 space-x-2 justify-center items-center mt-4 text-xs overflow-y-auto max-h-130">
           {data.map((item, index) => (
@@ -27,37 +25,27 @@ function Statistic() {
               <div
                 className={`card w-auto h-auto bg-slate-800 border-2 border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
               >
-                <h2 className="text-amber-50 font-bold mb-2">
-                  {item.exercise_name}
-                </h2>
+                <h2 className="text-amber-50 font-bold mb-2">{item.exercise_name}</h2>
                 <figure className="w-9 h-9 mb-2">
                   <img
                     src={
-                      "./" +
-                      item.exercise_name
-                        .toLowerCase()
-                        .replace("-", "")
-                        .replace(" ", "") +
-                      ".png"
+                      './' +
+                      item.exercise_name.toLowerCase().replace('-', '').replace(' ', '') +
+                      '.png'
                     }
                     className="w-full h-full object-cover rounded-md"
                   />
                 </figure>
                 <div className="flex flex-row space-x-4">
                   <p className="text-slate-300 text-xs">
-                    Progress:{" "}
+                    Progress:{' '}
                     {item.max_weight && item.min_weight
-                      ? ((item.max_weight / item.min_weight) * 100).toFixed(1) -
-                        100
-                      : 0}{" "}
+                      ? ((item.max_weight / item.min_weight) * 100).toFixed(1) - 100
+                      : 0}{' '}
                     %
                   </p>
-                  <p className="text-slate-300 text-xs">
-                    Max: {item.max_weight || 0} kg
-                  </p>
-                  <p className="text-slate-300 text-xs">
-                    Min: {item.min_weight || 0} kg
-                  </p>
+                  <p className="text-slate-300 text-xs">Max: {item.max_weight || 0} kg</p>
+                  <p className="text-slate-300 text-xs">Min: {item.min_weight || 0} kg</p>
                 </div>
               </div>
             </div>
@@ -90,9 +78,8 @@ function Statistic() {
             </svg>
           </button>
           <div className="flex space-x-1">
-            <button disabled={
-              data.findIndex((e) => e === selectedExercise) === 0
-            }
+            <button
+              disabled={data.findIndex((e) => e === selectedExercise) === 0}
               onClick={() =>
                 setSelectedExercise(
                   data.findIndex((e) => e === selectedExercise) - 1 >= 0
@@ -111,20 +98,18 @@ function Statistic() {
               >
                 <path
                   strokeLinecap="round"
-                  d 
+                  d
                   strokeLinejoin="round"
                   strokeWidth={2}
                   d="M15 12H9m6 0l-3-3m3 3l-3 3"
                 />
               </svg>
             </button>
-            <button disabled={
-              data.findIndex((e) => e === selectedExercise) === data.length - 1
-            }
+            <button
+              disabled={data.findIndex((e) => e === selectedExercise) === data.length - 1}
               onClick={() =>
                 setSelectedExercise(
-                  data.findIndex((e) => e === selectedExercise) + 1 <
-                    data.length
+                  data.findIndex((e) => e === selectedExercise) + 1 < data.length
                     ? data[data.findIndex((e) => e === selectedExercise) + 1]
                     : selectedExercise
                 )
@@ -157,65 +142,65 @@ function Statistic() {
     useEffect(() => {
       if (!exercise) return;
 
-      console.log("Rendering chart for exercise:", exercise);
+      console.log('Rendering chart for exercise:', exercise);
       const dates = exercise.entries.map((e) => e.date);
-      
+
       console.log(dates);
 
       const weights = exercise.entries.map((e) => Math.max(...e.weights));
 
-      console.log("Weights:", weights);
+      console.log('Weights:', weights);
       const options = {
         series: [
           {
-            name: "Weight (kg)",
+            name: 'Weight (kg)',
             data: weights,
           },
         ],
         chart: {
           height: 300,
-          type: "line",
+          type: 'line',
           zoom: { enabled: false },
           toolbar: { show: false },
           menubar: { show: false },
         },
         dataLabels: { enabled: false },
-        stroke: { curve: "stepline" },
+        stroke: { curve: 'stepline' },
         title: {
           text: `Progress for ${exercise.exercise_name}`,
-          align: "left",
-          style: { color: "#FFFFFF" },
+          align: 'left',
+          style: { color: '#FFFFFF' },
         },
         grid: {
-          row: { colors: ["#FFFFFF", "transparent"], opacity: 0.5 },
+          row: { colors: ['#FFFFFF', 'transparent'], opacity: 0.5 },
         },
         xaxis: {
           categories: dates,
-          labels: { style: { colors: "#FFFFFF", fontSize: "9px" } },
+          labels: { style: { colors: '#FFFFFF', fontSize: '9px' } },
         },
         yaxis: {
           labels: {
-            style: { colors: "#FFFFFF" },
-            formatter: (value) => value + " kg",
+            style: { colors: '#FFFFFF' },
+            formatter: (value) => value + ' kg',
           },
         },
         tooltip: {
-          theme: "dark",
+          theme: 'dark',
           style: {
-            fontSize: "12px",
-            color: "#000000",
+            fontSize: '12px',
+            color: '#000000',
           },
           custom: function ({ series, seriesIndex, dataPointIndex }) {
             const weight = series[seriesIndex][dataPointIndex];
             const repsArray = exercise.entries[dataPointIndex].reps;
             const date = exercise.entries[dataPointIndex].date;
-            const repsDisplay = repsArray.join(", ");
+            const repsDisplay = repsArray.join(', ');
             return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${date}</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Weight: </span><span class="apexcharts-tooltip-text-y-value">${weight} kg</span></div><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Reps: </span><span class="apexcharts-tooltip-text-y-value">${repsDisplay}</span></div></div></div>`;
           },
         },
       };
 
-      const chart = new ApexCharts(document.querySelector("#chart"), options);
+      const chart = new ApexCharts(document.querySelector('#chart'), options);
       chart.render();
 
       return () => chart.destroy();
@@ -227,16 +212,16 @@ function Statistic() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    api.get("/statistics").then((response) => {
+    api.get('/statistics').then((response) => {
       setData(response.data);
-      console.log("Fetched statistics data:", response.data);
+      console.log('Fetched statistics data:', response.data);
     });
   }, []);
 
   return (
     <div>
       <TemplatePage>
-      <ExerciseCards />
+        <ExerciseCards />
       </TemplatePage>
     </div>
   );

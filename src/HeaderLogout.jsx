@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
@@ -6,16 +6,13 @@ function Header() {
     <div>
       <div className="navbar fixed top-0 left-0 w-full bg-black text-white z-50">
         <div className="flex w-full justify-between items-center px-4">
-          <button
-            onClick={() => navigate("/login")}
-            className="btn btn-ghost text-white"
-          >
-           <figure className="w-9 h-9 mb-2">
+          <button onClick={() => navigate('/login')} className="btn btn-ghost text-white">
+            <figure className="w-9 h-9 mb-2">
               <img
-                src={"./squats.png"}
+                src={'./squats.png'}
                 className="w-full h-full object-cover rounded-md filter brightness-0 invert" // <-- Filter hinzugefügt: brightness-0 invert (weiß)
               />
-            </figure> 
+            </figure>
           </button>
         </div>
       </div>

@@ -1,19 +1,12 @@
-import "./index.css";
-import Header from "./Header";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "./api";
-import exercise from "./exercises.jsx";
-import TemplatePage from "./templatepage.jsx";
+import './index.css';
+import Header from './Header';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from './api';
+import exercise from './exercises.jsx';
+import TemplatePage from './templatepage.jsx';
 
-function ExerciseCard({
-  name,
-  description,
-  img,
-  onRemove,
-  onRepsChange,
-  onSetsChange,
-}) {
+function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsChange }) {
   const [selectedSets, setSelectedSets] = useState([]);
   const [selectedReps, setSelectedReps] = useState([]);
 
@@ -42,20 +35,18 @@ function ExerciseCard({
           <div className="h-20 overflow-y-scroll border border-gray-800">
             <table id="sets-table" className="min-w-2 border-collapse">
               <tbody>
-                {Array.from({ length: 25 }, (_, i) => i + 1).map(
-                  (set, index) => (
-                    <tr key={index} data-set={set} className={"bg-gray-700"}>
-                      <td
-                        onClick={() => handleSets(set)}
-                        className={`border border-gray-800 p-2 text-center cursor-pointer ${
-                          selectedSets === set ? "bg-blue-600" : ""
-                        }`}
-                      >
-                        {"Sets: " + set}
-                      </td>
-                    </tr>
-                  )
-                )}
+                {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
+                  <tr key={index} data-set={set} className={'bg-gray-700'}>
+                    <td
+                      onClick={() => handleSets(set)}
+                      className={`border border-gray-800 p-2 text-center cursor-pointer ${
+                        selectedSets === set ? 'bg-blue-600' : ''
+                      }`}
+                    >
+                      {'Sets: ' + set}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -63,20 +54,18 @@ function ExerciseCard({
           <div className="h-20 overflow-y-scroll border border-gray-800">
             <table className="min-w-2 border-collapse">
               <tbody>
-                {Array.from({ length: 25 }, (_, i) => i + 1).map(
-                  (reps, index) => (
-                    <tr key={index} data-set={reps} className={"bg-gray-700"}>
-                      <td
-                        onClick={() => handleReps(reps)}
-                        className={`border border-gray-800 p-2 text-center cursor-pointer ${
-                          selectedReps === reps ? "bg-blue-600" : ""
-                        }`}
-                      >
-                        {"Reps: " + reps}
-                      </td>
-                    </tr>
-                  )
-                )}
+                {Array.from({ length: 25 }, (_, i) => i + 1).map((reps, index) => (
+                  <tr key={index} data-set={reps} className={'bg-gray-700'}>
+                    <td
+                      onClick={() => handleReps(reps)}
+                      className={`border border-gray-800 p-2 text-center cursor-pointer ${
+                        selectedReps === reps ? 'bg-blue-600' : ''
+                      }`}
+                    >
+                      {'Reps: ' + reps}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -91,11 +80,10 @@ function ExerciseCard({
 
 function CreateTrainGUI() {
   const navigate = useNavigate();
-  const [WorkoutName, setWorkoutName] = useState("");
+  const [WorkoutName, setWorkoutName] = useState('');
   const [WorkoutNameSet, setWorkoutNameSet] = useState(false);
   const handleSaveTraining = async () => {
-    const trainingName =
-      WorkoutName || document.getElementById("training-input").value;
+    const trainingName = WorkoutName || document.getElementById('training-input').value;
     const selectedExercises = selectedExercise.map((exercise) => ({
       name: exercise.name,
       sets: exercise.sets,
@@ -106,29 +94,28 @@ function CreateTrainGUI() {
     }));
 
     await api
-      .post("/create_workout_plan", {
+      .post('/create_workout_plan', {
         name: trainingName,
         exercises: selectedExercises,
       })
       .then((response) => {
-        setMessage("Training saved successfully!");
-        console.log("Training saved:", response.data);
+        setMessage('Training saved successfully!');
+        console.log('Training saved:', response.data);
       })
       .catch((error) => {
-        console.error("Error saving training:", error);
-        setMessage("Error saving training.");
+        console.error('Error saving training:', error);
+        setMessage('Error saving training.');
       });
   };
-
 
   useEffect(() => {
     setExerciseExists(exercise);
   }, []);
 
   const [selectedExercise, setSelectedExercise] = useState([]);
-  const [addExercise, setaddExercise] = useState("");
+  const [addExercise, setaddExercise] = useState('');
   const [exerciseExists, setExerciseExists] = useState([]);
-  const [Message, setMessage] = useState("");
+  const [Message, setMessage] = useState('');
 
   console.log(selectedExercise);
 
@@ -150,19 +137,16 @@ function CreateTrainGUI() {
       // Update the sets and reps for the found exercise
       const updatedExercise = {
         ...found,
-        sets: document.getElementById("sets-table").getElementsByTagName("tr")
-          .length,
+        sets: document.getElementById('sets-table').getElementsByTagName('tr').length,
         reps: [8, 8, 8],
         weights: [0, 0, 0],
-        date: new Date().toISOString().split("T")[0],
+        date: new Date().toISOString().split('T')[0],
       };
-      setSelectedExercise((prev) =>
-        prev.map((item) => (item.name === e ? updatedExercise : item))
-      );
+      setSelectedExercise((prev) => prev.map((item) => (item.name === e ? updatedExercise : item)));
     }
     console.log(selectedExercise);
-    document.getElementById("input-e").value = "";
-    setaddExercise("");
+    document.getElementById('input-e').value = '';
+    setaddExercise('');
   }
 
   const handleAddExercise2 = (e) => {
@@ -205,10 +189,9 @@ function CreateTrainGUI() {
   };
 
   return (
-    
     <div>
       <TemplatePage>
-      <Header />
+        <Header />
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
           Create your workout
         </div>
@@ -220,15 +203,13 @@ function CreateTrainGUI() {
               type="input"
               placeholder="Workout name"
               className={`w-54 h-10 ${
-                WorkoutNameSet
-                  ? "bg-gray-900 border border-green-500"
-                  : "bg-gray-900"
+                WorkoutNameSet ? 'bg-gray-900 border border-green-500' : 'bg-gray-900'
               } text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
               id="training-input"
               onChange={(e) => setWorkoutName(e.target.value)}
             />
             <button
-              disabled={WorkoutName === ""}
+              disabled={WorkoutName === ''}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
               className="btn btn-outline btn-primary"
             >
@@ -287,8 +268,8 @@ function CreateTrainGUI() {
               exerciseExists.some((ex) =>
                 ex.name.toLowerCase().includes(addExercise.toLowerCase())
               ) && addExercise.length > 0
-                ? "block"
-                : "hidden"
+                ? 'block'
+                : 'hidden'
             }`}
           >
             {exerciseExists
@@ -298,22 +279,14 @@ function CreateTrainGUI() {
                   !selectedExercise.some((ex) => ex.exercise === prev.name)
               )
               .map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center cursor-pointer"
-                >
+                <div key={index} className="flex flex-col items-center cursor-pointer">
                   <div
                     onClick={() => handleExerciseChange(item.name)}
                     className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2"
                   >
-                    <h2 className="text-amber-50 font-bold mb-2">
-                      {item.name}
-                    </h2>
+                    <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
                     <figure className="w-6 h-6 mb-2">
-                      <img
-                        src={item.img}
-                        className="w-full h-full object-cover rounded-md"
-                      />
+                      <img src={item.img} className="w-full h-full object-cover rounded-md" />
                     </figure>
                     <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
                       {item.description}
@@ -335,25 +308,19 @@ function CreateTrainGUI() {
                       img={exercise.img}
                       onRemove={() => handleRemoveExercise(exercise.name)}
                       // Callback for Prop passed
-                      onRepsChange={(reps) =>
-                        handleRepsChange(exercise.name, reps)
-                      }
-                      onSetsChange={(sets) =>
-                        handleSetsChange(exercise.name, sets)
-                      }
+                      onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
+                      onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
                     />
                   ))
                 ) : (
-                  <p className="text-slate-400 flex justify-center">
-                    No exercises selected yet.
-                  </p>
+                  <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
                 )}
               </div>
             </div>
           ) : null}
           <div className="flex flex-row items-center gap-4 mt-4">
             <button
-              disabled={WorkoutName === "" || selectedExercise.length === 0}
+              disabled={WorkoutName === '' || selectedExercise.length === 0}
               onClick={() => handleSaveTraining()}
               className="btn btn-outline btn-primary"
             >
@@ -372,11 +339,8 @@ function CreateTrainGUI() {
                 />
               </svg>
             </button>
-            <button
-              onClick={() => navigate("/")}
-              className="btn btn-outline btn-error"
-            >
-              {Message === "Training saved successfully!" ? (
+            <button onClick={() => navigate('/')} className="btn btn-outline btn-error">
+              {Message === 'Training saved successfully!' ? (
                 <>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -413,18 +377,17 @@ function CreateTrainGUI() {
               )}
             </button>
           </div>
-          {Message === "Training saved successfully!" && (
+          {Message === 'Training saved successfully!' && (
             <div className="mt-4">
               <p className="text-green-500">{Message}</p>
             </div>
-          )}{" "}
-          {Message === "Error saving training." && (
+          )}{' '}
+          {Message === 'Error saving training.' && (
             <div className="mt-4">
               <p className="text-red-500">{Message}</p>
             </div>
           )}
         </div>
-      
       </TemplatePage>
     </div>
   );

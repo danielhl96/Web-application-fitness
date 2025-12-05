@@ -1,38 +1,26 @@
-import Header from "./HeaderLogout.jsx";
-import TemplatePage from "./templatepage.jsx";
+import Header from './HeaderLogout.jsx';
+import TemplatePage from './templatepage.jsx';
 function AttributionPage() {
   return (
     <div>
       <Header />
       <TemplatePage>
-        <div className = "overflow-auto max-h-[80vh]">
+        <div className="overflow-auto max-h-[80vh]">
           <h1 className="text-2xl font-bold text-white mb-4">Attribution</h1>
           <div className="divider divider-primary"></div>
-          <p>
-            This page provides attribution for the resources used in this
-            application.
-          </p>
+          <p>This page provides attribution for the resources used in this application.</p>
 
           <h2 className="text-xl font-bold text-white mb-2">Icons</h2>
           <ul className="list-disc list-inside text-white">
-            <a
-              href="https://www.flaticon.com/free-icons/pull-ups"
-              title="pull ups icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/pull-ups" title="pull ups icons">
               Pull ups icons created by gravisio - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/bench-press"
-              title="bench press icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/bench-press" title="bench press icons">
               Bench press icons created by PIXARTIST - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/barbell"
-              title="barbell icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/barbell" title="barbell icons">
               Barbell icons created by Leremy - Flaticon
             </a>
 
@@ -43,10 +31,7 @@ function AttributionPage() {
               Incline hammer curl icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/exercise"
-              title="exercise icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/exercise" title="exercise icons">
               Exercise icons created by Pixel perfect - Flaticon
             </a>
 
@@ -57,17 +42,11 @@ function AttributionPage() {
               Ab crunch machine icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/deadlift"
-              title="deadlift icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/deadlift" title="deadlift icons">
               Deadlift icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/workout"
-              title="workout icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/workout" title="workout icons">
               Workout icons created by Leremy - Flaticon
             </a>
 
@@ -75,8 +54,7 @@ function AttributionPage() {
               href="https://www.flaticon.com/free-icons/standing-dumbbell-triceps-extension"
               title="standing dumbbell triceps extension icons"
             >
-              Standing dumbbell triceps extension icons created by Leremy -
-              Flaticon
+              Standing dumbbell triceps extension icons created by Leremy - Flaticon
             </a>
 
             <a
@@ -93,52 +71,31 @@ function AttributionPage() {
               Incline barbell bench press icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/kettlebell"
-              title="kettlebell icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/kettlebell" title="kettlebell icons">
               Kettlebell icons created by gravisio - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/leg-curl"
-              title="leg curl icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/leg-curl" title="leg curl icons">
               Leg curl icons created by faizgrafis - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/leg-press"
-              title="leg press icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/leg-press" title="leg press icons">
               Leg press icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/workout"
-              title="workout icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/workout" title="workout icons">
               Workout icons created by Smashicons - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/plank"
-              title="plank icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/plank" title="plank icons">
               Plank icons created by Freepik - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/pushup"
-              title="pushup icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/pushup" title="pushup icons">
               Pushup icons created by Freepik - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/sit-up"
-              title="sit up icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/sit-up" title="sit up icons">
               Sit up icons created by surang - Flaticon
             </a>
 
@@ -153,17 +110,11 @@ function AttributionPage() {
               Leverage shoulder press icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/workout"
-              title="workout icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/workout" title="workout icons">
               Workout icons created by Leremy - Flaticon
             </a>
 
-            <a
-              href="https://www.flaticon.com/free-icons/workout"
-              title="workout icons"
-            >
+            <a href="https://www.flaticon.com/free-icons/workout" title="workout icons">
               Workout icons created by juicy_fish - Flaticon
             </a>
 
@@ -188,7 +139,7 @@ function AttributionPage() {
               Barbell glute bridge icons created by Leremy - Flaticon
             </a>
           </ul>
-      </div>
+        </div>
       </TemplatePage>
     </div>
   );

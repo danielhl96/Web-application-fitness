@@ -1,15 +1,15 @@
-import "./index.css";
-import Header from "./Header";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import TemplatePage from "./templatepage.jsx";
+import './index.css';
+import Header from './Header';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TemplatePage from './templatepage.jsx';
 
-import api from "./api";
+import api from './api';
 
 function StartTraining() {
   const navigate = useNavigate();
   useEffect(() => {
-    api.get("/get_workout_plans").then((response) => {
+    api.get('/get_workout_plans').then((response) => {
       console.log(response.data);
       setData(response.data);
     });
@@ -19,9 +19,7 @@ function StartTraining() {
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
       acc[plan.name] = plan.templates.map((exercise) => {
-        const matchingExercise = plan.exercises.find(
-          (e) => e.name === exercise.name
-        );
+        const matchingExercise = plan.exercises.find((e) => e.name === exercise.name);
         return {
           exercise: exercise.name,
           reps: exercise.reps,
@@ -73,7 +71,7 @@ function StartTraining() {
   const postData = (updatedCurrent) => {
     console.log(training1.reps);
     api
-      .post("/create_exercise", {
+      .post('/create_exercise', {
         workout_plan_id: updatedCurrent.plan_id,
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,
@@ -107,11 +105,7 @@ function StartTraining() {
       updatedExercises[idxExercise] = finishedCurrent;
       setCurrentExercises(updatedExercises);
     }
-    if (
-      Object.keys(currentExercises).every(
-        (ex) => currentExercises[ex].isFinished
-      )
-    ) {
+    if (Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished)) {
       setShowTrainingEndModal(true);
     }
 
@@ -141,7 +135,7 @@ function StartTraining() {
       setInputValue([]);
 
       for (var i = 0; i < training1.sets; i++) {
-        document.getElementById("input" + (i + 1)).value = "";
+        document.getElementById('input' + (i + 1)).value = '';
       }
     }
   };
@@ -166,9 +160,8 @@ function StartTraining() {
   };
 
   const changeWeight = (index, flag) => {
-    const totalWeight =
-      (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
-    console.log("SELECTED:", currentExercises[idxExercise]);
+    const totalWeight = (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
+    console.log('SELECTED:', currentExercises[idxExercise]);
     const updatedSetw = [...currentExercises[idxExercise].weights];
     updatedSetw[index] = totalWeight;
 
@@ -265,15 +258,13 @@ function StartTraining() {
       // If sets have been added, fill with null
       while (arr.length < selectedExercise.sets) arr.push(null);
       // If sets have been removed, shorten the array
-      if (arr.length > selectedExercise.sets)
-        arr.length = selectedExercise.sets;
+      if (arr.length > selectedExercise.sets) arr.length = selectedExercise.sets;
       return arr;
     });
     setSelectedWeight2((prev) => {
       const arr = [...prev];
       while (arr.length < selectedExercise.sets) arr.push(null);
-      if (arr.length > selectedExercise.sets)
-        arr.length = selectedExercise.sets;
+      if (arr.length > selectedExercise.sets) arr.length = selectedExercise.sets;
       return arr;
     });
   }, [selectedExercise.sets]);
@@ -287,9 +278,7 @@ function StartTraining() {
         return updated;
       });
       if (isNaN(wholePart)) wholePart = 0;
-      const selectedRow = scrollRef.current.querySelector(
-        `tr[data-weight="${wholePart}"]`
-      );
+      const selectedRow = scrollRef.current.querySelector(`tr[data-weight="${wholePart}"]`);
       scrollRef.current.scrollTop = selectedRow.offsetTop;
     }
 
@@ -301,9 +290,7 @@ function StartTraining() {
         return updated;
       });
       if (isNaN(decimalPart)) decimalPart = 0;
-      const selectedRow2 = scrollRef2.current.querySelector(
-        `tr[data-weight2="${decimalPart}"]`
-      );
+      const selectedRow2 = scrollRef2.current.querySelector(`tr[data-weight2="${decimalPart}"]`);
       scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
   }, [showModal, idx]);
@@ -314,66 +301,50 @@ function StartTraining() {
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div className="modal-box border border-blue-500 bg-slate-800">
           <div className="flex flex-row justify-center items-center  text-xs">
-            <div
-              ref={scrollRef}
-              className="h-24 overflow-y-scroll border border-gray-800"
-            >
+            <div ref={scrollRef} className="h-24 overflow-y-scroll border border-gray-800">
               <div className="flex flex-row justify-center items-center">
                 <table className="min-w-2 border-collapse">
                   <tbody>
-                    {Array.from({ length: 1000 }, (_, i) => i).map(
-                      (weight, index) => (
-                        <tr
-                          key={index}
-                          data-weight={weight}
-                          onClick={() => handleWeightSelect(weight)}
-                          className={"bg-gray-700"}
+                    {Array.from({ length: 1000 }, (_, i) => i).map((weight, index) => (
+                      <tr
+                        key={index}
+                        data-weight={weight}
+                        onClick={() => handleWeightSelect(weight)}
+                        className={'bg-gray-700'}
+                      >
+                        <td
+                          className={`border border-gray-800 p-2 text-center ${
+                            selectedWeight1[idx] === weight ? 'bg-blue-600' : ''
+                          }`}
                         >
-                          <td
-                            className={`border border-gray-800 p-2 text-center ${
-                              selectedWeight1[idx] === weight
-                                ? "bg-blue-600"
-                                : ""
-                            }`}
-                          >
-                            {weight + " kg"}
-                          </td>
-                        </tr>
-                      )
-                    )}
+                          {weight + ' kg'}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
             </div>
-            <div
-              ref={scrollRef2}
-              className="h-24 overflow-y-scroll border border-gray-800"
-            >
+            <div ref={scrollRef2} className="h-24 overflow-y-scroll border border-gray-800">
               <div className="flex flex-row justify-center items-center">
                 <table className="min-w-2 border-collapse">
                   <tbody>
-                    {Array.from({ length: 8 }, (_, i) => i * 0.25).map(
-                      (weight, index) => (
-                        <tr
-                          key={index}
-                          data-weight2={weight}
-                          onClick={() => handleWeightSelect2(weight)}
-                          className={"bg-gray-700"}
+                    {Array.from({ length: 8 }, (_, i) => i * 0.25).map((weight, index) => (
+                      <tr
+                        key={index}
+                        data-weight2={weight}
+                        onClick={() => handleWeightSelect2(weight)}
+                        className={'bg-gray-700'}
+                      >
+                        <td
+                          className={`border border-gray-800 p-2 text-center 
+      ${selectedWeight2[idx] === weight ? 'bg-blue-600' : ''} 
+      ${selectedWeight1[idx] === null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
-                          <td
-                            className={`border border-gray-800 p-2 text-center 
-      ${selectedWeight2[idx] === weight ? "bg-blue-600" : ""} 
-      ${
-        selectedWeight1[idx] === null
-          ? "opacity-50 cursor-not-allowed"
-          : "cursor-pointer"
-      }`}
-                          >
-                            {weight + " kg"}
-                          </td>
-                        </tr>
-                      )
-                    )}
+                          {weight + ' kg'}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -389,10 +360,7 @@ function StartTraining() {
             >
               Save
             </button>
-            <button
-              className="btn btn-secondary rounded-full"
-              onClick={() => setShowModal(false)}
-            >
+            <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>
               Close
             </button>
           </div>
@@ -498,25 +466,20 @@ function StartTraining() {
               >
                 <div
                   className={`card w-40 h-20 ${
-                    currentExercises[index].isFinished
-                      ? "bg-green-500"
-                      : "bg-slate-800"
+                    currentExercises[index].isFinished ? 'bg-green-500' : 'bg-slate-800'
                   } ${
                     training1.exercise == currentExercises[index].exercise
-                      ? "border-2 border-green-500"
-                      : "border-2 border-blue-800"
+                      ? 'border-2 border-green-500'
+                      : 'border-2 border-blue-800'
                   }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
                 >
                   <h2 className="text-amber-50 text-sm">{item.exercise}</h2>
                   <figure className="w-9 h-9 mb-2">
                     <img
                       src={
-                        "./" +
-                        item.exercise
-                          .toLowerCase()
-                          .replace("-", "")
-                          .replace(" ", "") +
-                        ".png"
+                        './' +
+                        item.exercise.toLowerCase().replace('-', '').replace(' ', '') +
+                        '.png'
                       }
                       className="w-full h-full object-cover rounded-md"
                     />
@@ -542,35 +505,31 @@ function StartTraining() {
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">
-              <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
-                Select your workout
-              </div>
-              <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
-                {selectedExercise &&
-                Object.keys(selectedExercise).length > 0 ? (
-                  Object.keys(selectedExercise).map((name, index) => (
-                    <WorkoutCard planName={name} key={index} />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center">
-                    <p className="text-white">
-                      No workout plans available. Please create one first.
-                    </p>
-                    <button
-                      onClick={() => navigate("/createtrain")}
-                      className="btn btn-outline btn-primary mt-4"
-                    >
-                      Create Workout
-                    </button>
-                  </div>
-                )}
-              </div>
+            <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
+              Select your workout
             </div>
-          
+            <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
+              {selectedExercise && Object.keys(selectedExercise).length > 0 ? (
+                Object.keys(selectedExercise).map((name, index) => (
+                  <WorkoutCard planName={name} key={index} />
+                ))
+              ) : (
+                <div className="flex flex-col items-center">
+                  <p className="text-white">No workout plans available. Please create one first.</p>
+                  <button
+                    onClick={() => navigate('/createtrain')}
+                    className="btn btn-outline btn-primary mt-4"
+                  >
+                    Create Workout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         ) : (
           <div
             className={`space-y-2  justify-center ${
-              training1.isFinished ? "border-green-500" : "border-blue-500"
+              training1.isFinished ? 'border-green-500' : 'border-blue-500'
             }`}
           >
             <div className="flex flex-top justify-start"></div>
@@ -614,14 +573,9 @@ function StartTraining() {
             <figure className="mb-4">
               <img
                 src={
-                  "./" +
-                  training1.exercise
-                    .toLowerCase()
-                    .replace("-", "")
-                    .replace(" ", "") +
-                  ".png"
+                  './' + training1.exercise.toLowerCase().replace('-', '').replace(' ', '') + '.png'
                 }
-                name={"Benchpress"}
+                name={'Benchpress'}
                 className="rounded-md"
                 width="50"
                 height="50"
@@ -630,17 +584,14 @@ function StartTraining() {
             <div className="divider divider-primary">{training1.exercise}</div>
             <div className="overflow-y-auto max-h-40 space-y-2">
               {Array.from({ length: training1.sets }).map((_, index) => (
-                <div
-                  className="flex flex-row space-x-3 items-center justify-center"
-                  key={index}
-                >
+                <div className="flex flex-row space-x-3 items-center justify-center" key={index}>
                   <div className="flex w-20">
                     <input
                       disabled={training1.isFinished}
                       type="text"
-                      placeholder={"Reps: " + training1.reps[index]}
+                      placeholder={'Reps: ' + training1.reps[index]}
                       className="input input-primary"
-                      id={"input" + (index + 1)}
+                      id={'input' + (index + 1)}
                       onBlur={(e) => addInput(parseInt(e.target.value), index)}
                     />
                   </div>
@@ -741,13 +692,8 @@ function StartTraining() {
                   />
                 </svg>
               </button>
-              <button
-                onClick={() => handleExercise()}
-                className="btn btn-outline btn-primary"
-              >
-                {Object.keys(currentExercises).every(
-                  (ex) => currentExercises[ex].isFinished
-                ) ? (
+              <button onClick={() => handleExercise()} className="btn btn-outline btn-primary">
+                {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
                   <svg // success icon
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -803,7 +749,6 @@ function StartTraining() {
             </div>
           </div>
         )}
-        
       </TemplatePage>
     </div>
   );

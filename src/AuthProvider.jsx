@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
-import api from "./api";
+import React, { createContext, useState, useEffect, useRef } from 'react';
+import api from './api';
 
 export const AuthContext = createContext({
   isAuth: false,
@@ -16,14 +16,14 @@ export function AuthProvider({ children }) {
     if (isCheckingRef.current) return; // Prevent concurrent checks
     isCheckingRef.current = true;
     try {
-      console.log("Checking authentication...");
-      await api.get("/check_auth");
+      console.log('Checking authentication...');
+      await api.get('/check_auth');
       setIsAuth(true);
     } catch (err) {
-      console.log("Auth check failed, trying to refresh token...", err);
+      console.log('Auth check failed, trying to refresh token...', err);
       try {
-        await api.post("/refresh_token", {});
-        await api.get("/check_auth");
+        await api.post('/refresh_token', {});
+        await api.get('/check_auth');
         setIsAuth(true);
       } catch {
         setIsAuth(false);

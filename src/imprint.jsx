@@ -1,17 +1,14 @@
-import "./index.css";
-import Header from "./HeaderLogout.jsx";
-import TemplatePage from "./templatepage.jsx";
+import './index.css';
+import Header from './HeaderLogout.jsx';
+import TemplatePage from './templatepage.jsx';
 function Imprint() {
   return (
     <div>
       <Header />
       <TemplatePage>
-        
-          <h2 className="text-2xl font-bold text-white mb-4  text-start pb-2">
-            Imprint
-          </h2>
-          <div className="divider divider-primary"></div>
-          <div className="flex flex-col items-start text-white space-y-4">
+        <h2 className="text-2xl font-bold text-white mb-4  text-start pb-2">Imprint</h2>
+        <div className="divider divider-primary"></div>
+        <div className="flex flex-col items-start text-white space-y-4">
           <p>
             Angaben gemäß § 5 TMG
             <br />
@@ -36,7 +33,7 @@ function Imprint() {
             30851 Langenhagen
           </p>
           <p>
-            Plattform der EU-Kommission zur Online-Streitbeilegung:{" "}
+            Plattform der EU-Kommission zur Online-Streitbeilegung:{' '}
             <a
               href="https://ec.europa.eu/consumers/odr/"
               className="text-blue-400 underline"
@@ -47,7 +44,7 @@ function Imprint() {
             </a>
           </p>
           <p>
-            Quelle:{" "}
+            Quelle:{' '}
             <a
               href="https://www.e-recht24.de"
               className="text-blue-400 underline"
@@ -57,7 +54,7 @@ function Imprint() {
               https://www.e-recht24.de
             </a>
           </p>
-          </div>
+        </div>
       </TemplatePage>
     </div>
   );

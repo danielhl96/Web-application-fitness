@@ -1,33 +1,28 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { VitePWA } from "vite-plugin-pwa";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: [
-        "favicon.ico",
-        "robots.txt",
-        "apple-touch-icon.png",
-        "offline.html",
-      ],
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'offline.html'],
       devOptions: { enabled: true },
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
-        navigateFallback: "/offline.html",
-        globPatterns: ["**/*.{js,css,html,png,svg,ico,json}"],
+        navigateFallback: '/offline.html',
+        globPatterns: ['**/*.{js,css,html,png,svg,ico,json}'],
         runtimeCaching: [
           {
             urlPattern: ({ request }) =>
-              request.destination === "script" ||
-              request.destination === "style" ||
-              request.destination === "image",
-            handler: "CacheFirst",
+              request.destination === 'script' ||
+              request.destination === 'style' ||
+              request.destination === 'image',
+            handler: 'CacheFirst',
             options: {
-              cacheName: "static-cache",
+              cacheName: 'static-cache',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30,
@@ -35,36 +30,36 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
-            handler: "NetworkOnly", // Kein Caching für API
+            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+            handler: 'NetworkOnly', // Kein Caching für API
           },
         ],
       },
       manifest: {
-        name: "Fitness App",
-        short_name: "Fitness",
-        description: "Fitness App to record and create your workouts",
-        theme_color: "#ffffff",
-        background_color: "#000000",
-        display: "standalone",
-        start_url: "/",
-        scope: "/",
+        name: 'Fitness App',
+        short_name: 'Fitness',
+        description: 'Fitness App to record and create your workouts',
+        theme_color: '#ffffff',
+        background_color: '#000000',
+        display: 'standalone',
+        start_url: '/',
+        scope: '/',
         icons: [
           {
-            src: "./squats.png",
-            sizes: "192x192",
-            type: "image/png",
+            src: './squats.png',
+            sizes: '192x192',
+            type: 'image/png',
           },
           {
-            src: "./squats.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: './squats.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
           {
-            src: "./squats.png",
-            sizes: "180x180",
-            type: "image/png",
-            purpose: "apple-touch-icon",
+            src: './squats.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'apple-touch-icon',
           },
         ],
       },
@@ -77,7 +72,7 @@ export default defineConfig({
       ignored: [/\.git\//, /node_modules\//, /dist\//, /dev-dist\//],
     },
     hmr: {
-      host: "localhost",
+      host: 'localhost',
       clientPort: 5173,
     },
   },

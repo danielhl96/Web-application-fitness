@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "./api";
-import Header from "./HeaderLogout.jsx";
-import TemplatePage from "./templatepage.jsx";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from './api';
+import Header from './HeaderLogout.jsx';
+import TemplatePage from './templatepage.jsx';
 function PasswordForget() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [securityCode, setSecurityCode] = useState("");
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [securityCode, setSecurityCode] = useState('');
+  const [message, setMessage] = useState('');
   const [requireCode, setRequireCode] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordRepeat, setPasswordRepeat] = useState("");
+  const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordRepeat] = useState('');
   const [successfully, setSuccessfully] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -49,30 +49,30 @@ function PasswordForget() {
 
   const handleCode = () => {
     api
-      .post("/password_forget", { email })
+      .post('/password_forget', { email })
       .then(() => {
-        setMessage("Check your email for the security code.");
+        setMessage('Check your email for the security code.');
         setRequireCode(true);
       })
       .catch(() => {
-        setMessage("Error sending code. Please try again.");
+        setMessage('Error sending code. Please try again.');
       });
   };
 
   const checkCode = () => {
     api
-      .post("/check_safety_code", {
+      .post('/check_safety_code', {
         email: email,
         password: password,
         safety_code: securityCode,
       })
       .then(() => {
-        setMessage("Password changed successfully.");
+        setMessage('Password changed successfully.');
 
         setSuccessfully(false);
       })
       .catch((e) => {
-        setMessage(e.response.data.message || "Error changing password.");
+        setMessage(e.response.data.message || 'Error changing password.');
       });
   };
 
@@ -85,14 +85,14 @@ function PasswordForget() {
       <Header />
       <TemplatePage>
         <div className="items-start">
-        <h1 className="text-2xl text-left font-bold">Password forget</h1>
+          <h1 className="text-2xl text-left font-bold">Password forget</h1>
         </div>
         <div>
           <h1 className="text-shadow-lg font-mono">E-Mail</h1>
 
           <input
             type="text"
-            placeholder={"E-Mail: "}
+            placeholder={'E-Mail: '}
             className="input input-primary"
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setemailinputtouch(true)}
@@ -107,7 +107,7 @@ function PasswordForget() {
               <h1 className="text-shadow-lg font-mono">Security-Code</h1>
               <input
                 type="text"
-                placeholder={"Security-Code: "}
+                placeholder={'Security-Code: '}
                 className="input input-primary"
                 onChange={(e) => setSecurityCode(e.target.value)}
                 value={securityCode}
@@ -122,22 +122,21 @@ function PasswordForget() {
 
               <input
                 type="password"
-                placeholder={"New password: "}
+                placeholder={'New password: '}
                 className="input input-primary"
                 onChange={(e) => setPassword(e.target.value)}
                 onBlur={() => setpasswordinputtouch(true)}
               />
               {passwordError && passwordinputtouch && (
                 <p className="text-red-500 text-sm">
-                  Password must be at least 8 characters long and include
-                  uppercase letters, lowercase letters, numbers, and special
-                  characters.
+                  Password must be at least 8 characters long and include uppercase letters,
+                  lowercase letters, numbers, and special characters.
                 </p>
               )}
               <h1>Repeat your password</h1>
               <input
                 type="password"
-                placeholder={"Repeat password: "}
+                placeholder={'Repeat password: '}
                 className="input input-primary"
                 onChange={(e) => setPasswordRepeat(e.target.value)}
               />
@@ -151,28 +150,19 @@ function PasswordForget() {
           <button
             disabled={
               emailError ||
-              (requireCode &&
-                (securityCode.length === 0 ||
-                  passwordError ||
-                  passwordMatchError))
+              (requireCode && (securityCode.length === 0 || passwordError || passwordMatchError))
             }
-            onClick={
-              !requireCode ? () => handleCode() : () => handlePasswordChange()
-            }
+            onClick={!requireCode ? () => handleCode() : () => handlePasswordChange()}
             className="btn btn-outline btn-success"
           >
-            {requireCode ? "Change password" : "Require code"}
+            {requireCode ? 'Change password' : 'Require code'}
           </button>
 
-          <button
-            onClick={() => navigate("/login")}
-            className="btn btn-outline btn-error"
-          >
-            {successfully ? "Go to Login" : "Cancel"}
+          <button onClick={() => navigate('/login')} className="btn btn-outline btn-error">
+            {successfully ? 'Go to Login' : 'Cancel'}
           </button>
         </div>
         {message && <h1 className="text-green-500">{message}</h1>}
-      
       </TemplatePage>
     </div>
   );
