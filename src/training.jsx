@@ -130,8 +130,18 @@ function StartTraining() {
       });
 
       const newIdx = idxExercise + 1;
+      // Ensure reps array is valid for next exercise
+      const nextExercise = { ...updatedExercises[newIdx] };
+      if (!nextExercise.reps || nextExercise.reps.length !== nextExercise.sets) {
+        nextExercise.reps = Array(nextExercise.sets).fill(0);
+      }
       setidx(newIdx);
-      setTraining(updatedExercises[newIdx]);
+      setTraining(nextExercise);
+      setCurrentExercises((prev) => {
+        const updated = [...prev];
+        updated[newIdx] = nextExercise;
+        return updated;
+      });
       setInputValue([]);
 
       for (var i = 0; i < training1.sets; i++) {
@@ -143,12 +153,20 @@ function StartTraining() {
   const handleExerciseBack = () => {
     if (idxExercise > 0) {
       const newIdx = idxExercise - 1;
+      // Ensure reps array is valid
+      const prevExercise = { ...currentExercises[newIdx] };
+      if (!prevExercise.reps || prevExercise.reps.length !== prevExercise.sets) {
+        prevExercise.reps = Array(prevExercise.sets).fill(0);
+      }
       setidx(newIdx);
-      setTraining(currentExercises[newIdx]);
-      setCurrentExercises(currentExercises);
-
-      console.log(idxExercise);
+      setTraining(prevExercise);
+      setCurrentExercises((prev) => {
+        const updated = [...prev];
+        updated[newIdx] = prevExercise;
+        return updated;
+      });
       setInputValue([]);
+      console.log(idxExercise);
     }
   };
 
@@ -378,13 +396,21 @@ function StartTraining() {
             <h2 className="text-amber-50 font-bold mb-2">Workout Complete!</h2>
             <div className="flex flex-row justify-center items-center gap-4 mt-2">
               <button
-                onClick={() => {
+                // Resets all training states and navigates to the home page
+                onClick={(event) => {
+                  // Prevents the default button behavior (such as form submission or page reload)
+                  event.preventDefault();
                   setSelectedTrainingSite(true);
                   setShowTrainingEndModal(false);
                   setCurrentExercises([]);
                   setCurrentPlan(null);
                   setTraining(null);
                   setidx(0);
+                  setExercise({});
+                  setInputValue([]);
+                  setSelectedWeight1([3]);
+                  setSelectedWeight2([3]);
+                  navigate('/');
                 }}
                 className="btn btn-outline btn-primary hover:bg-blue-600 text-white"
               >

@@ -37,13 +37,38 @@ function Statistic() {
                   />
                 </figure>
                 <div className="flex flex-row space-x-4">
-                  <p className="text-slate-300 text-xs">
-                    Progress:{' '}
-                    {item.max_weight && item.min_weight
-                      ? ((item.max_weight / item.min_weight) * 100).toFixed(1) - 100
-                      : 0}{' '}
-                    %
-                  </p>
+                  {(() => {
+                    let progress = 0;
+                    if (item.entries && item.entries.length >= 2) {
+                      const first = item.entries[0];
+                      const last = item.entries[item.entries.length - 1];
+                      const firstWeight =
+                        first.weights && first.weights.length > 0 ? Math.max(...first.weights) : 0;
+                      const lastWeight =
+                        last.weights && last.weights.length > 0 ? Math.max(...last.weights) : 0;
+                      const firstReps =
+                        first.reps && first.reps.length > 0 ? Math.max(...first.reps) : 0;
+                      const lastReps =
+                        last.reps && last.reps.length > 0 ? Math.max(...last.reps) : 0;
+                      if (firstWeight > 0 && firstReps > 0) {
+                        progress =
+                          ((lastWeight * lastReps - firstWeight * firstReps) /
+                            (firstWeight * firstReps)) *
+                          100;
+                      }
+                    }
+                    const progressText = `${progress.toFixed(1)} %`;
+                    let progressClass = 'text-slate-300';
+                    if (progress > 0) progressClass = 'text-green-500';
+                    else if (progress < 0) progressClass = 'text-red-500';
+                    return (
+                      <p className={`text-xs ${progressClass}`}>
+                        Progress:{' '}
+                        {/* Progress is calculated as percentage increase from (first_weight * first_reps) to (last_weight * last_reps) */}{' '}
+                        {progressText}
+                      </p>
+                    );
+                  })()}
                   <p className="text-slate-300 text-xs">Max: {item.max_weight || 0} kg</p>
                   <p className="text-slate-300 text-xs">Min: {item.min_weight || 0} kg</p>
                 </div>
