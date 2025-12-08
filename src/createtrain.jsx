@@ -190,8 +190,8 @@ function CreateTrainGUI() {
 
   return (
     <div>
+      <Header />
       <TemplatePage>
-        <Header />
         <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
           Create your workout
         </div>

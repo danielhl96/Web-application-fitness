@@ -396,9 +396,9 @@ def check_safety_code():
             # Setze das neue Passwort
             user.password = hash_password(new_password)
             session.commit()
-            return jsonify({"message": "Password reset successful!"}, 200)
-        return jsonify({"message": "Invalid safety code!"}, 400)
-    return jsonify({"message": "Invalid safety code!"}, 400)
+            return jsonify({"message": "Password reset successful!"}), 200
+        return jsonify({"message": "Invalid safety code!"}), 400
+    return jsonify({"message": "Invalid safety code!"}), 400
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():

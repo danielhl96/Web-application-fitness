@@ -23,7 +23,12 @@ function Statistic() {
               }}
             >
               <div
-                className={`card w-auto h-auto bg-slate-800 border-2 border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
+                className={`card w-auto h-auto border-2 border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2`}
+                style={{
+                  background: 'rgba(0,0,0,0.20)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                }}
               >
                 <h2 className="text-amber-50 font-bold mb-2">{item.exercise_name}</h2>
                 <figure className="w-9 h-9 mb-2">

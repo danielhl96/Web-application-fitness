@@ -20,12 +20,16 @@ import Statistic from './statistic.jsx';
 function Home() {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900 py-16">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-gray-black py-16">
       <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 p-4">
         {/* Card 1: Create Training */}
         <div
           onClick={() => navigate('/createtrain')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Create Workout</h2>
@@ -46,7 +50,11 @@ function Home() {
         {/* Card 2: Edit training */}
         <div
           onClick={() => navigate('/editTrain')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Edit Workout</h2>
@@ -75,7 +83,11 @@ function Home() {
         {/* Card 3: Start Training */}
         <div
           onClick={() => navigate('/training')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Start Workout</h2>
@@ -94,7 +106,11 @@ function Home() {
         {/* Card 4: Profile */}
         <div
           onClick={() => navigate('/profile')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Profile</h2>
@@ -123,7 +139,11 @@ function Home() {
         {/* Card 5: Timer */}
         <div
           onClick={() => navigate('/counter')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Stopwatch</h2>
@@ -152,7 +172,11 @@ function Home() {
         {/* Card 6: Statistic */}
         <div
           onClick={() => navigate('/statistic')}
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-slate-800 shadow-lg border border-slate-700 cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Statistic</h2>

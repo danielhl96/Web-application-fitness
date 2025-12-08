@@ -118,8 +118,14 @@ const EditTrain = () => {
 
   function WorkoutCard({ exercise }) {
     return (
-      <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
-        <div className="card-body text-xl items-center  text-center">
+      <div
+        className="card w-55 md:w-65 bg-black/20 border border-blue-500 shadow-xl mb-4 rounded-xl backdrop-blur-lg"
+        style={{
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+        }}
+      >
+        <div className="card-body text-xl items-center text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
@@ -248,263 +254,262 @@ const EditTrain = () => {
 
   function EditWorkoutModal() {
     return (
-      <div className="modal modal-open">
-        <div className="modal-box md:w-100 md:h-140 bg-slate-800 border flex flex-col items-center justify-center border-blue-500 space-y-4">
-          <div className="flex flex-col items-center space-y-1 overflow-auto max-h-120">
-            <div className="divider divider-primary ">Edit your workout</div>
+      <div>
+        <div className="flex flex-col items-center space-y-1  max-h-auto ">
+          <div className="flex flex-col w-100 md:w-80 items-center space-y-4 ">
+            <input
+              type="search"
+              placeholder="Enter an exercise name"
+              className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="input-e"
+              onChange={handleAddExercise2}
+            />
 
-            <div className="flex flex-col w-100 md:w-80  items-center space-y-4 ">
-              <input
-                type="search"
-                placeholder="Enter an exercise name"
-                className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                id="input-e"
-                onChange={handleAddExercise2}
-              />
-
-              <div
-                className={`h-32 overflow-y-scroll border border-gray-800 ${
-                  exerciseExists.some((ex) =>
-                    ex.name.toLowerCase().includes(addExercise.toLowerCase())
-                  ) && addExercise.length > 0
-                    ? 'block'
-                    : 'hidden'
-                }`}
-              >
-                {exerciseExists
-                  .filter(
-                    (prev) =>
-                      prev.name.toLowerCase().includes(addExercise.toLowerCase()) &&
-                      !selectedExercise[savekey].some((ex) => ex.exercise === prev.name)
-                  )
-                  .map((item, index) => (
-                    <div key={index} className="flex flex-col items-center cursor-pointer">
-                      <div
-                        onClick={() => handleAddExercise(item.name)}
-                        className="card w-65 sm:w-40 md:w-60  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
-                      >
-                        <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
-                        <figure className="w-6 h-6 mb-2">
-                          <img src={item.img} className="w-full h-full object-cover rounded-md" />
-                        </figure>
-                        <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
-                          {item.description}
-                        </h1>
-                      </div>
+            <div
+              className={`h-32 overflow-y-scroll border border-gray-800 ${
+                exerciseExists.some((ex) =>
+                  ex.name.toLowerCase().includes(addExercise.toLowerCase())
+                ) && addExercise.length > 0
+                  ? 'block'
+                  : 'hidden'
+              }`}
+            >
+              {exerciseExists
+                .filter(
+                  (prev) =>
+                    prev.name.toLowerCase().includes(addExercise.toLowerCase()) &&
+                    !selectedExercise[savekey].some((ex) => ex.exercise === prev.name)
+                )
+                .map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center cursor-pointer max-h-auto overflow-y-auto"
+                  >
+                    <div
+                      onClick={() => handleAddExercise(item.name)}
+                      className="card w-65 sm:w-40 md:w-60  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
+                    >
+                      <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
+                      <figure className="w-6 h-6 mb-2">
+                        <img src={item.img} className="w-full h-full object-cover rounded-md" />
+                      </figure>
+                      <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
+                        {item.description}
+                      </h1>
                     </div>
-                  ))}
-              </div>
+                  </div>
+                ))}
             </div>
-            {selectedExercise[savekey].map((ex, index) => (
-              <div
-                key={index}
-                className="card w-64 md:w-50  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
-              >
-                <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
-                <figure className="w-12 h-12 mb-2">
-                  <img
-                    src={exercise.find((item) => item.name === ex.exercise)?.img}
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </figure>
+          </div>
+          {selectedExercise[savekey].map((ex, index) => (
+            <div
+              key={index}
+              className="card w-64 md:w-50 overflow-y-auto h-max-auto  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+            >
+              <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
+              <figure className="w-12 h-12 mb-2">
+                <img
+                  src={exercise.find((item) => item.name === ex.exercise)?.img}
+                  className="w-full h-full object-cover rounded-md"
+                />
+              </figure>
 
-                <h1 className="text-amber-50 font-light mb-2 text-center ">
-                  {exercise.find((item) => item.name === ex.exercise)?.description}{' '}
-                </h1>
-                <div className="flex flex-row justify-start text-xs space-y-2">
-                  <div
-                    ref={(el) => (setRef.current[index] = el)}
-                    className="h-24 overflow-y-scroll border border-gray-800"
-                  >
-                    <table className=" min-w-2 border-collapse">
-                      <tbody>
-                        {Array.from({ length: 25 }, (_, i) => i + 1).map((setIndex) => (
-                          <tr
-                            key={setIndex}
-                            data-set-index={setIndex}
-                            className={'bg-gray-700'}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map((ex, i) =>
-                                  i === index ? { ...ex, sets: setIndex } : ex
-                                );
-                                return updated;
-                              });
-                              // Scroll to the selected sets row after state update
-                              const selectedSetRow = setRef.current[index]?.querySelector(
-                                `tr[data-set-index="${setIndex}"]`
+              <h1 className="text-amber-50 font-light mb-2 text-center ">
+                {exercise.find((item) => item.name === ex.exercise)?.description}{' '}
+              </h1>
+              <div className="flex flex-row justify-start text-xs space-y-2">
+                <div
+                  ref={(el) => (setRef.current[index] = el)}
+                  className="h-24 overflow-y-scroll border border-gray-800"
+                >
+                  <table className=" min-w-2 border-collapse">
+                    <tbody>
+                      {Array.from({ length: 25 }, (_, i) => i + 1).map((setIndex) => (
+                        <tr
+                          key={setIndex}
+                          data-set-index={setIndex}
+                          className={'bg-gray-700'}
+                          onClick={() => {
+                            setSelectedExercise((prev) => {
+                              const updated = { ...prev };
+                              updated[savekey] = updated[savekey].map((ex, i) =>
+                                i === index ? { ...ex, sets: setIndex } : ex
                               );
-                              if (selectedSetRow) {
-                                setRef.current[index].scrollTop = selectedSetRow.offsetTop;
-                              }
-                            }}
+                              return updated;
+                            });
+                            // Scroll to the selected sets row after state update
+                            const selectedSetRow = setRef.current[index]?.querySelector(
+                              `tr[data-set-index="${setIndex}"]`
+                            );
+                            if (selectedSetRow) {
+                              setRef.current[index].scrollTop = selectedSetRow.offsetTop;
+                            }
+                          }}
+                        >
+                          <td
+                            className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                              setIndex === selectedExercise[savekey][index].sets
+                                ? 'bg-blue-500'
+                                : ''
+                            }`}
                           >
-                            <td
-                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                                setIndex === selectedExercise[savekey][index].sets
-                                  ? 'bg-blue-500'
-                                  : ''
-                              }`}
-                            >
-                              Sets: {setIndex}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div
-                    ref={(el) => (repsRef.current[index] = el)}
-                    className="h-24 overflow-y-scroll border border-gray-800"
-                  >
-                    <table className=" min-w-2 border-collapse">
-                      <tbody>
-                        {Array.from({ length: 25 }, (_, i) => i + 1).map((repsIndex) => (
-                          <tr
-                            key={repsIndex}
-                            data-reps-index={repsIndex}
-                            className={'bg-gray-700'}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map((ex, i) =>
-                                  i === index
-                                    ? {
-                                        ...ex,
-                                        reps: Array(ex.sets).fill(repsIndex),
-                                      }
-                                    : ex
-                                );
-                                return updated;
-                              });
-                              // Scroll to the selected reps row after state update
-                              const selectedRepsRow = repsRef.current[index]?.querySelector(
-                                `tr[data-reps-index="${repsIndex}"]`
-                              );
-                              if (selectedRepsRow) {
-                                repsRef.current[index].scrollTop = selectedRepsRow.offsetTop;
-                              }
-                            }}
-                          >
-                            <td
-                              className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                                repsIndex === Number(selectedExercise[savekey][index].reps[0])
-                                  ? 'bg-blue-500'
-                                  : ''
-                              }`}
-                            >
-                              Reps: {repsIndex}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                            Sets: {setIndex}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <div className="flex flex-row space-x-2 mt-2">
-                  <button
-                    onClick={() => handleRemoveExerciseinWorkout(index)}
-                    className="btn btn-outline btn-error "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => changePosition(ex, 'down')}
-                    className="btn btn-outline btn-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => changePosition(ex, 'up')}
-                    className="btn btn-outline btn-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 10l7-7m0 0l7 7m-7-7v18"
-                      />
-                    </svg>
-                  </button>
+
+                <div
+                  ref={(el) => (repsRef.current[index] = el)}
+                  className="h-24 overflow-y-scroll border border-gray-800"
+                >
+                  <table className=" min-w-2 border-collapse">
+                    <tbody>
+                      {Array.from({ length: 25 }, (_, i) => i + 1).map((repsIndex) => (
+                        <tr
+                          key={repsIndex}
+                          data-reps-index={repsIndex}
+                          className={'bg-gray-700'}
+                          onClick={() => {
+                            setSelectedExercise((prev) => {
+                              const updated = { ...prev };
+                              updated[savekey] = updated[savekey].map((ex, i) =>
+                                i === index
+                                  ? {
+                                      ...ex,
+                                      reps: Array(ex.sets).fill(repsIndex),
+                                    }
+                                  : ex
+                              );
+                              return updated;
+                            });
+                            // Scroll to the selected reps row after state update
+                            const selectedRepsRow = repsRef.current[index]?.querySelector(
+                              `tr[data-reps-index="${repsIndex}"]`
+                            );
+                            if (selectedRepsRow) {
+                              repsRef.current[index].scrollTop = selectedRepsRow.offsetTop;
+                            }
+                          }}
+                        >
+                          <td
+                            className={`border  border-gray-800 cursor-pointer p-2 text-center ${
+                              repsIndex === Number(selectedExercise[savekey][index].reps[0])
+                                ? 'bg-blue-500'
+                                : ''
+                            }`}
+                          >
+                            Reps: {repsIndex}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            ))}
-            <div className="divider divider-primary"></div>
-            {message && <div className="text-green-500 font-light">{message}</div>}
-            <div className="modal-action flex flex-row gap-2 justify-end">
-              <button
-                onClick={() => {
-                  handleEditWorkout(savekey);
-                }}
-                className="btn btn-outline btn-primary"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="w-4 h-4"
+              <div className="flex flex-row space-x-2 mt-2">
+                <button
+                  onClick={() => handleRemoveExerciseinWorkout(index)}
+                  className="btn btn-outline btn-error "
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </button>
-              <button onClick={handleShowModal} className="btn btn-outline btn-error">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="w-4 h-4"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => changePosition(ex, 'down')}
+                  className="btn btn-outline btn-primary"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-4 h-4 mr-1"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => changePosition(ex, 'up')}
+                  className="btn btn-outline btn-primary"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    className="w-4 h-4 mr-1"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 10l7-7m0 0l7 7m-7-7v18"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
+          ))}
+          <div className="divider divider-primary"></div>
+          {message && <div className="text-green-500 font-light">{message}</div>}
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => {
+                handleEditWorkout(savekey);
+              }}
+              className="btn btn-outline btn-primary"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </button>
+            <button onClick={handleShowModal} className="btn btn-outline btn-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -513,14 +518,17 @@ const EditTrain = () => {
 
   return (
     <div>
+      <Header />
+
       <TemplatePage>
-        <Header />
         <div className="flex flex-col items-center">
           <div className="divider divider-primary text-amber-50 font-bold mb-2">
             Edit your workout plans
           </div>
-          <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
-            {selectedExercise && Object.keys(selectedExercise).length > 0 ? (
+          <div className="w-65 md:w-95 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
+            {showModal ? (
+              <div>{EditWorkoutModal()}</div>
+            ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (
               Object.keys(selectedExercise).map((exercise, index) => (
                 <WorkoutCard exercise={exercise} key={index} />
               ))
@@ -536,7 +544,6 @@ const EditTrain = () => {
               </>
             )}
           </div>
-          {showModal && <div>{EditWorkoutModal()}</div>}
         </div>
       </TemplatePage>
     </div>

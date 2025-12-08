@@ -425,8 +425,15 @@ function StartTraining() {
 
   function WorkoutCard({ planName }) {
     return (
-      <div className="card w-55  md:w-65 bg-slate-800 shadow-lg border border-blue-500 mb-4">
-        <div className="card-body text-xl items-center  text-center">
+      <div
+        className="card w-55 md:w-65 mb-4 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
+        style={{
+          background: 'rgba(0,0,0,0.20)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+        }}
+      >
+        <div className="card-body text-xl items-center text-center">
           <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
@@ -491,13 +498,18 @@ function StartTraining() {
                 }}
               >
                 <div
-                  className={`card w-40 h-20 ${
-                    currentExercises[index].isFinished ? 'bg-green-500' : 'bg-slate-800'
-                  } ${
-                    training1.exercise == currentExercises[index].exercise
+                  className={`card w-40 h-20 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2 ${
+                    currentExercises[index].isFinished
                       ? 'border-2 border-green-500'
                       : 'border-2 border-blue-800'
-                  }  shadow-sm p-2 rounded-md flex flex-col items-center mb-2`}
+                  }`}
+                  style={{
+                    background: currentExercises[index].isFinished
+                      ? 'rgba(34,197,94,0.20)' // green glassy for finished
+                      : 'rgba(0,0,0,0.20)', // black glassy for unfinished
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                    border: '1px solid rgba(0, 0, 0, 0.18)',
+                  }}
                 >
                   <h2 className="text-amber-50 text-sm">{item.exercise}</h2>
                   <figure className="w-9 h-9 mb-2">

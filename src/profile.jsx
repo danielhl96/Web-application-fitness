@@ -508,8 +508,8 @@ function Profile() {
 
   return (
     <div>
+      <Header />
       <TemplatePage>
-        <Header />
         {edit ? (
           <div className="space-y-2">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
@@ -712,10 +712,10 @@ function Profile() {
                   {bmi > 30
                     ? 'Adipoistas'
                     : bmi > 25
-                      ? 'Overweight'
-                      : bmi < 20
-                        ? 'Underweight'
-                        : 'Normal'}{' '}
+                    ? 'Overweight'
+                    : bmi < 20
+                    ? 'Underweight'
+                    : 'Normal'}{' '}
                   ({Math.round(bmi)}){' '}
                 </h1>
                 <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
@@ -826,10 +826,10 @@ function Profile() {
                 {bmi > 30
                   ? '(Adipoistas)'
                   : bmi > 25
-                    ? '(Overweight)'
-                    : bmi < 20
-                      ? '(Underweight)'
-                      : '(Normal)'}
+                  ? '(Overweight)'
+                  : bmi < 20
+                  ? '(Underweight)'
+                  : '(Normal)'}
               </h1>
               <h1
                 style={{
@@ -850,16 +850,16 @@ function Profile() {
                   activity <= 1.2
                     ? { color: 'red' }
                     : activity >= 1.5
-                      ? { color: 'green' }
-                      : { color: 'orange' }
+                    ? { color: 'green' }
+                    : { color: 'orange' }
                 }
               >
                 Activity level:{' '}
                 {activity == 1.2
                   ? 'Not active'
                   : activity == 1.5
-                    ? 'Moderately active'
-                    : 'Very active'}{' '}
+                  ? 'Moderately active'
+                  : 'Very active'}{' '}
               </h1>
             </div>
             <div className="divider  text-amber-50 font-light mb-2  divider-primary">

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from './api';
 import Header from './HeaderLogout.jsx';
 import TemplatePage from './templatepage.jsx';
+import EmailInput from './emailinput.jsx';
+import PasswordInput from './passwordinput.jsx';
 function PasswordForget() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -51,11 +53,11 @@ function PasswordForget() {
     api
       .post('/password_forget', { email })
       .then(() => {
-        setMessage('Check your email for the security code.');
+        setMessage(<div className="text-green-500">Check your email for the security code.</div>);
         setRequireCode(true);
       })
       .catch(() => {
-        setMessage('Error sending code. Please try again.');
+        setMessage(<div className="text-green-500">Check your email for the security code.</div>);
       });
   };
 
@@ -66,13 +68,17 @@ function PasswordForget() {
         password: password,
         safety_code: securityCode,
       })
-      .then(() => {
-        setMessage('Password changed successfully.');
+      .then((response) => {
+        setMessage(<div className="text-green-500">{response.data.message}</div>);
 
         setSuccessfully(false);
       })
       .catch((e) => {
-        setMessage(e.response.data.message || 'Error changing password.');
+        setMessage(
+          <div className="text-xs text-red-500">
+            {e.response?.data?.message || 'Error changing password.'}
+          </div>
+        );
       });
   };
 
@@ -80,6 +86,18 @@ function PasswordForget() {
     checkCode();
   };
 
+  const handleEmail = (value) => {
+    setEmail(value);
+  };
+  const handleSafetyCode = (value) => {
+    setSecurityCode(value);
+  };
+  const handlePasswordRepeat = (value) => {
+    setPasswordRepeat(value);
+  };
+  const handlePassword = (value) => {
+    setPassword(value);
+  };
   return (
     <div>
       <Header />
@@ -90,16 +108,11 @@ function PasswordForget() {
         <div>
           <h1 className="text-shadow-lg font-mono">E-Mail</h1>
 
-          <input
-            type="text"
-            placeholder={'E-Mail: '}
-            className="input input-primary"
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => setemailinputtouch(true)}
+          <EmailInput
+            value={email}
+            onChange={handleEmail}
+            onError={(error) => setEmailError(error)}
           />
-          {emailError && emailinputtouch && (
-            <p className="text-red-500">Please enter a valid email address.</p>
-          )}
         </div>
         <div>
           {requireCode && (
@@ -109,7 +122,7 @@ function PasswordForget() {
                 type="text"
                 placeholder={'Security-Code: '}
                 className="input input-primary"
-                onChange={(e) => setSecurityCode(e.target.value)}
+                onChange={(e) => handleSafetyCode(e.target.value)}
                 value={securityCode}
               />
             </>
@@ -120,27 +133,25 @@ function PasswordForget() {
             <>
               <h1 className="text-shadow-lg font-mono">New password</h1>
 
-              <input
-                type="password"
+              <PasswordInput
+                value={password}
+                onChange={handlePassword}
+                onError={(error) => setPasswordError(error)}
+                errorMessage={
+                  'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
+                }
                 placeholder={'New password: '}
-                className="input input-primary"
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => setpasswordinputtouch(true)}
               />
-              {passwordError && passwordinputtouch && (
-                <p className="text-red-500 text-sm">
-                  Password must be at least 8 characters long and include uppercase letters,
-                  lowercase letters, numbers, and special characters.
-                </p>
-              )}
+
               <h1>Repeat your password</h1>
-              <input
-                type="password"
-                placeholder={'Repeat password: '}
-                className="input input-primary"
-                onChange={(e) => setPasswordRepeat(e.target.value)}
+              <PasswordInput
+                value={passwordRepeat}
+                placeholder={'Repeat your password: '}
+                errorMessage={''}
+                onError={(error) => setPasswordMatchError(password !== passwordRepeat)}
+                onChange={handlePasswordRepeat}
               />
-              {passwordMatchError && passwordinputtouch && (
+              {passwordMatchError && (
                 <p className="text-red-500 text-sm">Passwords do not match.</p>
               )}
             </>
