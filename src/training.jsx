@@ -520,6 +520,8 @@ function StartTraining() {
                         '.png'
                       }
                       className="w-full h-full object-cover rounded-md"
+                      style={{ filter: 'invert(1)' }}
+                      alt={item.exercise + ' icon'}
                     />
                   </figure>
                 </div>

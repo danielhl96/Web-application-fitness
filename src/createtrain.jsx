@@ -23,8 +23,15 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
   };
 
   return (
-    <div className="card  w-65 sm:w-40 md:w-60 bg-slate-800 shadow-lg border border-blue-500 mb-4">
-      <div className="card-body  items-center  text-center">
+    <div
+      className="card w-65 sm:w-40 md:w-65 lg:w-70 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg mb-4"
+      style={{
+        background: 'rgba(0,0,0,0.20)',
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        border: '1px solid rgba(0, 0, 0, 0.18)',
+      }}
+    >
+      <div className="card-body items-center text-center">
         <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
         <figure className="flex justify-center items-center w-6 h-6 mb-2">
           <img src={img} alt={name} className="rounded-md" />
@@ -282,7 +289,13 @@ function CreateTrainGUI() {
                 <div key={index} className="flex flex-col items-center cursor-pointer">
                   <div
                     onClick={() => handleExerciseChange(item.name)}
-                    className="card w-50 h-30  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2"
+                    className="card w-50 h-30 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2"
+                    style={{
+                      background: 'rgba(0,0,0,0.20)',
+                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                      border: '1px solid rgba(0, 0, 0, 0.18)',
+                      padding: '0.5rem',
+                    }}
                   >
                     <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
                     <figure className="w-6 h-6 mb-2">

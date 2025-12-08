@@ -287,7 +287,13 @@ const EditTrain = () => {
                   >
                     <div
                       onClick={() => handleAddExercise(item.name)}
-                      className="card w-65 sm:w-40 md:w-60  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center mb-2 "
+                      className="card w-65 sm:w-40 md:w-60 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2"
+                      style={{
+                        background: 'rgba(0,0,0,0.20)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        border: '1px solid rgba(0, 0, 0, 0.18)',
+                        padding: '0.5rem',
+                      }}
                     >
                       <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
                       <figure className="w-6 h-6 mb-2">
@@ -303,14 +309,18 @@ const EditTrain = () => {
           </div>
           {selectedExercise[savekey].map((ex, index) => (
             <div
-              key={index}
-              className="card w-64 md:w-50 overflow-y-auto h-max-auto  bg-slate-800 border border-blue-500 shadow-sm p-2 rounded-md flex flex-col items-center"
+              className="space-y-6 p-2 card w-64 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+              }}
             >
               <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
               <figure className="w-12 h-12 mb-2">
                 <img
                   src={exercise.find((item) => item.name === ex.exercise)?.img}
                   className="w-full h-full object-cover rounded-md"
+                  style={{ filter: 'invert(1)' }}
                 />
               </figure>
 
