@@ -20,11 +20,11 @@ function Header() {
             <figure className="w-9 h-9 mb-2">
               <img
                 src={'./squats.png'}
-                className="w-full h-full object-cover rounded-md filter brightness-0 invert" // <-- Filter hinzugefügt: brightness-0 invert (weiß)
+                className="w-full h-full object-cover rounded-md filter brightness-0 invert"
               />
             </figure>
           </Link>
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -66,7 +66,7 @@ function Header() {
             </button>
           </div>
           <div
-            className={`flex-col md:flex md:flex-row md:items-center md:static absolute top-full left-0 w-full md:w-auto bg-black md:bg-transparent z-40 transition-all duration-200 ${
+            className={`flex-col lg:flex lg:flex-row lg:items-center lg:static absolute top-full left-0 w-full lg:w-auto bg-black lg:bg-transparent z-40 transition-all duration-200 ${
               menuOpen ? 'flex' : 'hidden'
             }`}
           >

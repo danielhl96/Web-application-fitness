@@ -313,7 +313,7 @@ const EditTrain = () => {
           </div>
           {selectedExercise[savekey].map((ex, index) => (
             <div
-              className="space-y-6 p-2 card w-64 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+              className="space-y-6 p-2 card lg:w-64 w-64 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',

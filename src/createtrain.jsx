@@ -24,11 +24,10 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
 
   return (
     <div
-      className="card w-65 sm:w-40 md:w-65 lg:w-70 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg mb-4"
+      className="space-y-6 p-2 card lg:w-64 w-64 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
       style={{
-        background: 'rgba(0,0,0,0.20)',
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        border: '1px solid rgba(0, 0, 0, 0.18)',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
       }}
     >
       <div className="card-body items-center text-center">
