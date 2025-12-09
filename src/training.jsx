@@ -317,7 +317,7 @@ function StartTraining() {
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div className="modal-box border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg">
           <div className="flex flex-row justify-center items-center  text-xs">
             <div ref={scrollRef} className="h-24 overflow-y-scroll border border-gray-800">
               <div className="flex flex-row justify-center items-center">
@@ -331,9 +331,19 @@ function StartTraining() {
                         className={'bg-gray-700'}
                       >
                         <td
-                          className={`border border-gray-800 p-2 text-center ${
-                            selectedWeight1[idx] === weight ? 'bg-blue-600' : ''
-                          }`}
+                          className="border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg"
+                          style={{
+                            background:
+                              selectedWeight1[idx] === weight
+                                ? 'rgba(37,99,235,0.45)'
+                                : 'rgba(0,0,0,0.15)',
+                            boxShadow:
+                              selectedWeight1[idx] === weight
+                                ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                                : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            color: selectedWeight1[idx] === weight ? '#e0eaff' : '',
+                          }}
                         >
                           {weight + ' kg'}
                         </td>
@@ -355,9 +365,23 @@ function StartTraining() {
                         className={'bg-gray-700'}
                       >
                         <td
-                          className={`border border-gray-800 p-2 text-center 
-      ${selectedWeight2[idx] === weight ? 'bg-blue-600' : ''} 
-      ${selectedWeight1[idx] === null ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                          className={`border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg ${
+                            selectedWeight1[idx] === null
+                              ? 'opacity-50 cursor-not-allowed'
+                              : 'cursor-pointer'
+                          }`}
+                          style={{
+                            background:
+                              selectedWeight2[idx] === weight
+                                ? 'rgba(37,99,235,0.45)'
+                                : 'rgba(0,0,0,0.15)',
+                            boxShadow:
+                              selectedWeight2[idx] === weight
+                                ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                                : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            color: selectedWeight2[idx] === weight ? '#e0eaff' : '',
+                          }}
                         >
                           {weight + ' kg'}
                         </td>
@@ -477,7 +501,7 @@ function StartTraining() {
     console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800  overflow-y-auto max-h-120">
+        <div className="modal-box shadow-xl rounded-xl backdrop-blur-lg  overflow-y-auto max-h-120">
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
