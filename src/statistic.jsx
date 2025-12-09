@@ -12,7 +12,7 @@ function Statistic() {
       <div className="">
         <div className="divider divider-primary  text-amber-50 font-bold mb-2">Your statistics</div>
 
-        <div className="grid sm:grid grid-cols-1 lg:grid-cols-3 space-x-2 justify-center items-center mt-4 text-xs overflow-y-auto max-h-130">
+        <div className="grid sm:grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3 space-x-2 justify-center items-center mt-4 text-xs overflow-y-auto max-h-130">
           {data.map((item, index) => (
             <div
               key={index}
@@ -23,7 +23,7 @@ function Statistic() {
               }}
             >
               <div
-                className={`card w-auto h-auto border-2 border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2`}
+                className={`card w-65 lg:w-40 h-auto lg:h-30 border-2 border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2`}
                 style={{
                   background: 'rgba(0,0,0,0.20)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
@@ -38,6 +38,7 @@ function Statistic() {
                       item.exercise_name.toLowerCase().replace('-', '').replace(' ', '') +
                       '.png'
                     }
+                    style={{ filter: 'invert(1)' }}
                     className="w-full h-full object-cover rounded-md"
                   />
                 </figure>

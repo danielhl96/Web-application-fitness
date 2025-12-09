@@ -612,6 +612,7 @@ function StartTraining() {
             )}
             <figure className="mb-4">
               <img
+                style={{ filter: 'invert(1)' }}
                 src={
                   './' + training1.exercise.toLowerCase().replace('-', '').replace(' ', '') + '.png'
                 }

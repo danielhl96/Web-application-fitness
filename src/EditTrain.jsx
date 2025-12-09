@@ -297,7 +297,11 @@ const EditTrain = () => {
                     >
                       <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
                       <figure className="w-6 h-6 mb-2">
-                        <img src={item.img} className="w-full h-full object-cover rounded-md" />
+                        <img
+                          src={item.img}
+                          style={{ filter: 'invert(1)' }}
+                          className="w-full h-full object-cover rounded-md"
+                        />
                       </figure>
                       <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
                         {item.description}
@@ -357,11 +361,20 @@ const EditTrain = () => {
                           }}
                         >
                           <td
-                            className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                              setIndex === selectedExercise[savekey][index].sets
-                                ? 'bg-blue-500'
-                                : ''
-                            }`}
+                            className="border border-gray-800 cursor-pointer p-2 text-center rounded-md backdrop-blur-lg"
+                            style={{
+                              background:
+                                setIndex === selectedExercise[savekey][index].sets
+                                  ? 'rgba(37,99,235,0.45)'
+                                  : 'rgba(0,0,0,0.15)',
+                              boxShadow:
+                                setIndex === selectedExercise[savekey][index].sets
+                                  ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                                  : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                              border: '1px solid rgba(0, 0, 0, 0.12)',
+                              color:
+                                setIndex === selectedExercise[savekey][index].sets ? '#e0eaff' : '',
+                            }}
                           >
                             Sets: {setIndex}
                           </td>
@@ -405,11 +418,22 @@ const EditTrain = () => {
                           }}
                         >
                           <td
-                            className={`border  border-gray-800 cursor-pointer p-2 text-center ${
-                              repsIndex === Number(selectedExercise[savekey][index].reps[0])
-                                ? 'bg-blue-500'
-                                : ''
-                            }`}
+                            className="border border-gray-800 cursor-pointer p-2 text-center rounded-md backdrop-blur-lg"
+                            style={{
+                              background:
+                                repsIndex === Number(selectedExercise[savekey][index].reps[0])
+                                  ? 'rgba(37,99,235,0.45)'
+                                  : 'rgba(0,0,0,0.15)',
+                              boxShadow:
+                                repsIndex === Number(selectedExercise[savekey][index].reps[0])
+                                  ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                                  : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                              border: '1px solid rgba(0, 0, 0, 0.12)',
+                              color:
+                                repsIndex === Number(selectedExercise[savekey][index].reps[0])
+                                  ? '#e0eaff'
+                                  : '',
+                            }}
                           >
                             Reps: {repsIndex}
                           </td>

@@ -34,21 +34,36 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
       <div className="card-body items-center text-center">
         <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
         <figure className="flex justify-center items-center w-6 h-6 mb-2">
-          <img src={img} alt={name} className="rounded-md" />
+          <img style={{ filter: 'invert(1)' }} src={img} alt={name} className="rounded-md" />
         </figure>
         <p className="text-sm text-slate-200 mb-2">{description}</p>
 
         <div className="flex flex-row justify-center items-center">
-          <div className="h-20 overflow-y-scroll border border-gray-800">
+          <div
+            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
+            style={{
+              background: 'rgba(0,0,0,0.15)',
+              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+            }}
+          >
             <table id="sets-table" className="min-w-2 border-collapse">
               <tbody>
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
                   <tr key={index} data-set={set} className={'bg-gray-700'}>
                     <td
                       onClick={() => handleSets(set)}
-                      className={`border border-gray-800 p-2 text-center cursor-pointer ${
-                        selectedSets === set ? 'bg-blue-600' : ''
-                      }`}
+                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
+                      style={{
+                        background:
+                          selectedSets === set ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
+                        boxShadow:
+                          selectedSets === set
+                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                        border: '1px solid rgba(0, 0, 0, 0.12)',
+                        color: selectedSets === set ? '#e0eaff' : '',
+                      }}
                     >
                       {'Sets: ' + set}
                     </td>
@@ -58,16 +73,31 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
             </table>
           </div>
 
-          <div className="h-20 overflow-y-scroll border border-gray-800">
+          <div
+            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
+            style={{
+              background: 'rgba(0,0,0,0.15)',
+              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+            }}
+          >
             <table className="min-w-2 border-collapse">
               <tbody>
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((reps, index) => (
                   <tr key={index} data-set={reps} className={'bg-gray-700'}>
                     <td
                       onClick={() => handleReps(reps)}
-                      className={`border border-gray-800 p-2 text-center cursor-pointer ${
-                        selectedReps === reps ? 'bg-blue-600' : ''
-                      }`}
+                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
+                      style={{
+                        background:
+                          selectedReps === reps ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
+                        boxShadow:
+                          selectedReps === reps
+                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
+                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
+                        border: '1px solid rgba(0, 0, 0, 0.12)',
+                        color: selectedReps === reps ? '#e0eaff' : '',
+                      }}
                     >
                       {'Reps: ' + reps}
                     </td>
@@ -299,7 +329,11 @@ function CreateTrainGUI() {
                   >
                     <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
                     <figure className="w-6 h-6 mb-2">
-                      <img src={item.img} className="w-full h-full object-cover rounded-md" />
+                      <img
+                        src={item.img}
+                        style={{ filter: 'invert(1)' }}
+                        className="w-full h-full object-cover rounded-md"
+                      />
                     </figure>
                     <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
                       {item.description}
