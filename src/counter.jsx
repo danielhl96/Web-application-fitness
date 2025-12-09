@@ -95,7 +95,16 @@ function CounterForm() {
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <div className="divider divider-primary text-amber-50 font-bold mb-6">Settings</div>
           <div className="flex flex-col justify-center items-center space-y-4 text-xs">
             <input
@@ -156,7 +165,7 @@ function CounterForm() {
         {showModal && settingsModal()}
         <div className="flex flex-col items-center justify-center mt-4">
           <div className="divider divider-primary">Manage your workout rounds</div>
-          <div className="relative w-60 h-60  rounded-full border-4 border-green-600 bg-black">
+          <div className="relative w-60 h-60 border-5 rounded-full border-4 border-green-600 bg-black">
             {marks.map((_, index) => {
               const angle = index * 30;
               return (

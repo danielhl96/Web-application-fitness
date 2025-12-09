@@ -275,7 +275,16 @@ function Profile() {
   const handleEmailModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -345,7 +354,16 @@ function Profile() {
   const handleModalforPassword = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your password</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -429,7 +447,16 @@ function Profile() {
   const handleModalforAccountDelete = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <h3 className="font-bold text-lg text-amber-50">Delete your account</h3>
           <div className="flex flex-col justify-start  text-xs">
             <input

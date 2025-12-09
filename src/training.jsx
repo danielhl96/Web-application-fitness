@@ -317,7 +317,16 @@ function StartTraining() {
   const settingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <div className="flex flex-row justify-center items-center  text-xs">
             <div ref={scrollRef} className="h-24 overflow-y-scroll border border-gray-800">
               <div className="flex flex-row justify-center items-center">
@@ -501,7 +510,16 @@ function StartTraining() {
     console.log(currentExercises);
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box shadow-xl rounded-xl backdrop-blur-lg  overflow-y-auto max-h-120">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl h-auto max-h-130"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
