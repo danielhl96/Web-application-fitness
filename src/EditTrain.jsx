@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import exercise from './exercises.jsx';
 import api from './api';
 import TemplatePage from './templatepage.jsx';
+import WorkoutCard from './workoutcard.jsx';
 
 const EditTrain = () => {
   const navigate = useNavigate();
