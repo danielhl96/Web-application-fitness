@@ -9,10 +9,10 @@ function Statistic() {
 
   function ExerciseCards() {
     return showOverview ? (
-      <div className="">
+      <div className="flex flex-col items-center justify-center w-full">
         <div className="divider divider-primary  text-amber-50 font-bold mb-2">Your statistics</div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3 space-x-2 justify-center items-center mx-auto mt-4 text-xs overflow-y-auto max-h-130 max-w-3xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3  mt-4 text-xs overflow-y-auto max-h-130">
           {data.map((item, index) => (
             <div
               key={index}

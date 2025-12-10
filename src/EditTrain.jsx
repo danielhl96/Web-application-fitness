@@ -256,8 +256,8 @@ const EditTrain = () => {
   function EditWorkoutModal() {
     return (
       <div>
-        <div className="flex flex-col items-center space-y-1  max-h-auto ">
-          <div className="flex flex-col w-100 md:w-80 items-center space-y-4 ">
+        <div className="flex flex-col items-center space-y-1 max-h-auto ">
+          <div className="flex flex-col w-65 md:w-80 items-center space-y-4 ">
             <input
               type="search"
               placeholder="Enter an exercise name"
@@ -314,7 +314,7 @@ const EditTrain = () => {
           </div>
           {selectedExercise[savekey].map((ex, index) => (
             <div
-              className="space-y-6 p-2 card lg:w-64  w-64 h-auto md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+              className="space-y-6 p-2 card lg:w-64  w-64 h-auto md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col overflow-y-auto  items-center backdrop-blur-lg"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
