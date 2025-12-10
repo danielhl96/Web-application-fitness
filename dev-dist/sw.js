@@ -79,7 +79,7 @@ define(['./workbox-d38da2cf'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "/offline.html",
-    "revision": "0.0obovktofa"
+    "revision": "0.hor41l2fuso"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/offline.html"), {

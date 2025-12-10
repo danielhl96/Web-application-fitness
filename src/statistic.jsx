@@ -12,11 +12,11 @@ function Statistic() {
       <div className="">
         <div className="divider divider-primary  text-amber-50 font-bold mb-2">Your statistics</div>
 
-        <div className="grid sm:grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3 space-x-2 justify-center items-center mt-4 text-xs overflow-y-auto max-h-130">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3 space-x-2 justify-center items-center mx-auto mt-4 text-xs overflow-y-auto max-h-130 max-w-3xl">
           {data.map((item, index) => (
             <div
               key={index}
-              className="items-center cursor-pointer"
+              className="items-center justify-center cursor-pointer"
               onClick={() => {
                 setSelectedExercise(item);
                 setShowOverview(false);

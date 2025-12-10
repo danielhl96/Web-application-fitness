@@ -24,7 +24,7 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
 
   return (
     <div
-      className="space-y-6 p-2 card lg:w-64 w-64 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+      className="space-y-6 p-2 card lg:w-64 w-64 h-auto md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
       style={{
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
         border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -32,7 +32,7 @@ function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsCh
     >
       <div className="card-body items-center text-center">
         <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
-        <figure className="flex justify-center items-center w-6 h-6 mb-2">
+        <figure className="flex justify-center items-center w-12 h-12 mb-2">
           <img style={{ filter: 'invert(1)' }} src={img} alt={name} className="rounded-md" />
         </figure>
         <p className="text-sm text-slate-200 mb-2">{description}</p>
@@ -344,7 +344,7 @@ function CreateTrainGUI() {
           {/* Render selected exercises */}
           {WorkoutNameSet ? (
             <div className="flex flex-col items-center space-y-3">
-              <div className="w-100 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
+              <div className="w-100 h-auto flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard

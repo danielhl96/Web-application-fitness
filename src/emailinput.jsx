@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './index.css';
 function EmailInput({ value, onChange, onError }) {
   const [touched, setTouched] = useState(false);
@@ -8,6 +8,9 @@ function EmailInput({ value, onChange, onError }) {
     return emailRegex.test(email);
   };
 
+  useEffect(() => {
+    validEmail(value);
+  }, [value]);
   const error = value && !validEmail(value);
 
   // Inform parent about error state

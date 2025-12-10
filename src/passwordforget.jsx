@@ -14,10 +14,8 @@ function PasswordForget() {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [successfully, setSuccessfully] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [emailinputtouch, setemailinputtouch] = useState(false);
-  const [passwordinputtouch, setpasswordinputtouch] = useState(false);
+  const [emailError, setEmailError] = useState(true);
+  const [passwordError, setPasswordError] = useState(true);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
 
   const checkEmail = (email) => {
@@ -160,8 +158,13 @@ function PasswordForget() {
         <div className="flex space-x-2 items-center justify-start">
           <button
             disabled={
+              email.length === 0 ||
               emailError ||
-              (requireCode && (securityCode.length === 0 || passwordError || passwordMatchError))
+              (requireCode &&
+                (securityCode.length === 0 ||
+                  password.length === 0 ||
+                  passwordError ||
+                  passwordMatchError))
             }
             onClick={!requireCode ? () => handleCode() : () => handlePasswordChange()}
             className="btn btn-outline btn-success"
