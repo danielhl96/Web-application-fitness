@@ -10,7 +10,8 @@ function StartTraining() {
   const navigate = useNavigate();
   useEffect(() => {
     api.get('/get_workout_plans').then((response) => {
-      console.log(response.data);
+      console.log('API response:', response.data);
+
       setData(response.data);
     });
   }, []);

@@ -532,6 +532,8 @@ def get_workout_plans():
     exercises = session.query(Exercise).join(
         subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.date == subq.c.max_date)
     ).filter(Exercise.user_id == user_id).all()
+    print("Exercises loaded for latest dates:")
+    print([e.__dict__ for e in exercises])
 
 
 
@@ -557,7 +559,7 @@ def get_workout_plans():
                     "reps": e.reps,
                     "weights": e.weights,
                     "date": e.date.isoformat()
-                } for e in exercises
+                } for e in exercises if e.workout_plan_id == plan.id
             ]
         })
     print(result)
@@ -708,4 +710,3 @@ def remove_session(exception=None):
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
-    
