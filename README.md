@@ -162,7 +162,38 @@ VITE_API_URL=http://localhost:5001/api
 
 ---
 
-## Screenshots (Mobile Devices iPhone 11 Pro)
+## Screenshots current UI (Mobile Device iPhone 11 Pro)
+
+<table>
+  <tr>
+    <td><img src="screenshots/login.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/register.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/passwordforget.png" width="300" alt="Password Page"></td>
+         <td><img src="screenshots/passwordforget2.png" width="300" alt="Password Page"></td>
+      
+  </tr>
+  <tr>
+    <td><img src="screenshots/dashboard.png" width="300" alt="Dashboard"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/createworkout.png" width="300" alt="Workout Creation"></td>
+    <td><img src="screenshots/editworkoutplans.png" width="300" alt="Workout Editing"></td>
+    <td><img src="screenshots/editworkoutplans2.png" width="300" alt="Make a workout"></td>
+  </tr>
+  <tr>
+   <td><img src="screenshots/selectworkout.png" width="300" alt="Workout selection"></td>
+    <td><img src="screenshots/workout.png" width="300" alt="Workout start"></td>
+    <td><img src="screenshots/list.png" width="300" alt="Exercise list"></td>
+  </tr>
+  <tr>
+   <td><img src="screenshots/statistic.png" width="300" alt="Statistics"></td>
+   <td><img src="screenshots/statistic2.png" width="300" alt="Profile"></td>
+    <td><img src="screenshots/profile.png" width="300" alt="Profile"></td>
+    <td><img src="screenshots/watch.png" width="300" alt="Watch"></td>
+  </tr>
+</table>
+
+## Screenshots old UI (Mobile Devices iPhone 11 Pro)
 
 <table>
   <tr>
