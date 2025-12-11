@@ -170,12 +170,10 @@ VITE_API_URL=http://localhost:5001/api
     <td><img src="screenshots/register.png" width="300" alt="Register Page"></td>
      <td><img src="screenshots/passwordforget.png" width="300" alt="Password Page"></td>
          <td><img src="screenshots/passwordforget2.png" width="300" alt="Password Page"></td>
-      
   </tr>
+ 
   <tr>
-    <td><img src="screenshots/dashboard.png" width="300" alt="Dashboard"></td>
-  </tr>
-  <tr>
+   <td><img src="screenshots/dashboard.png" width="300" alt="Dashboard"></td>
     <td><img src="screenshots/createworkout.png" width="300" alt="Workout Creation"></td>
     <td><img src="screenshots/editworkoutplans.png" width="300" alt="Workout Editing"></td>
     <td><img src="screenshots/editworkoutplans2.png" width="300" alt="Make a workout"></td>
@@ -189,7 +187,7 @@ VITE_API_URL=http://localhost:5001/api
    <td><img src="screenshots/statistic.png" width="300" alt="Statistics"></td>
    <td><img src="screenshots/statistic2.png" width="300" alt="Profile"></td>
     <td><img src="screenshots/profile.png" width="300" alt="Profile"></td>
-    <td><img src="screenshots/watch.png" width="300" alt="Watch"></td>
+    <td><img src="screenshots/stopwatch.png" width="300" alt="Watch"></td>
   </tr>
 </table>
 
@@ -197,10 +195,8 @@ VITE_API_URL=http://localhost:5001/api
 
 <table>
   <tr>
-    <td><img src="screenshots/login.jpeg" width="300" alt="Login Page"></td>
     <td><img src="screenshots/register.jpeg" width="300" alt="Register Page"></td>
      <td><img src="screenshots/password.jpeg" width="300" alt="Password Page"></td>
-      
   </tr>
   <tr>
    <td><img src="screenshots/hamburgermenue.jpeg" width="300" alt="Menue"></td>
