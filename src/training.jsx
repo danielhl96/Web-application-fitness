@@ -3,6 +3,7 @@ import Header from './Header';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TemplatePage from './templatepage.jsx';
+import WorkoutCard from './workoutcard.jsx';
 
 import api from './api';
 
@@ -457,17 +458,10 @@ function StartTraining() {
     );
   }
 
-  function WorkoutCard({ planName }) {
+  function Workouts({ planName }) {
     return (
-      <div
-        className="card w-55 md:w-65 mb-4 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
-        style={{
-          background: 'rgba(0,0,0,0.20)',
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-        }}
-      >
-        <div className="card-body text-xl items-center text-center">
+      <div>
+        <WorkoutCard>
           <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
@@ -501,7 +495,7 @@ function StartTraining() {
               </svg>
             </button>
           </div>
-        </div>
+        </WorkoutCard>
       </div>
     );
   }
@@ -591,10 +585,10 @@ function StartTraining() {
             <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
               Select your workout
             </div>
-            <div className="w-65 md:w-95 flex flex-col  gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
+            <div className="w-65 md:w-95 lg:h-130 md:h-130 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
               {selectedExercise && Object.keys(selectedExercise).length > 0 ? (
                 Object.keys(selectedExercise).map((name, index) => (
-                  <WorkoutCard planName={name} key={index} />
+                  <Workouts planName={name} key={index} />
                 ))
               ) : (
                 <div className="flex flex-col items-center">
