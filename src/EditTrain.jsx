@@ -113,23 +113,21 @@ const EditTrain = () => {
   const [exerciseExists, setExerciseExists] = useState(exercise);
   const [WorkoutName, setWorkoutName] = useState('');
 
-  function changeWorkoutNameAPI() {
-    api
-      .put('/edit_workout_plan_name', {
+  async function changeWorkoutNameAPI() {
+    try {
+      const response = await api.put('/edit_workout_plan_name', {
         plan_id: selectedExercise[savekey][0]?.plan_id,
         new_name: WorkoutName,
-      })
-      .then((response) => {
-        console.log('Workout name changed successfully:', response.data);
-        setMessage('Workout name changed successfully!');
-        setRequestId((requestId) => requestId + 1); // Trigger data refresh
-        setShowEditWorkoutNameModal(false);
-      })
-      .catch((error) => {
-        console.error('Error changing workout name:', error);
-        setMessage('Error changing workout name.');
-        setShowEditWorkoutNameModal(false);
       });
+      console.log('Workout name changed successfully:', response.data);
+      setMessage('Workout name changed successfully!');
+      //setRequestId((requestId) => requestId + 1); // Trigger data refresh
+      setShowEditWorkoutNameModal(false);
+    } catch (error) {
+      console.error('Error changing workout name:', error);
+      setMessage('Error changing workout name.');
+      setShowEditWorkoutNameModal(false);
+    }
   }
 
   function changeWorkoutName() {
@@ -222,6 +220,7 @@ const EditTrain = () => {
   function handleShowModal(exercise) {
     setShowModal((prev) => !prev);
     setKey(exercise);
+    setRequestId((requestId) => requestId + 1);
   }
   //Nur im Frontend
   const handeRemoveWorkout = (workoutname) => {
@@ -302,7 +301,7 @@ const EditTrain = () => {
                 .filter(
                   (prev) =>
                     prev.name.toLowerCase().includes(addExercise.toLowerCase()) &&
-                    !selectedExercise[savekey].some((ex) => ex.exercise === prev.name)
+                    !selectedExercise[savekey]?.some((ex) => ex.exercise === prev.name)
                 )
                 .map((item, index) => (
                   <div
@@ -336,36 +335,37 @@ const EditTrain = () => {
             </div>
           </div>
           <div className="flex flex-col items-center gap-4 overflow-y-auto max-h-96 py-2 w-full">
-            {selectedExercise[savekey].map((ex, index) => (
-              <ExerciseCard
-                ExerciseName={ex.exercise}
-                Description={exercise.find((item) => item.name === ex.exercise)?.description}
-                ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
-                onRepsChange={(reps) => {
-                  setSelectedExercise((prev) => {
-                    const updated = { ...prev };
-                    updated[savekey] = updated[savekey].map((exercise, i) =>
-                      i === index ? { ...exercise, reps } : exercise
-                    );
-                    console.log(updated);
-                    return updated;
-                  });
-                }}
-                onSetsChange={(sets) => {
-                  setSelectedExercise((prev) => {
-                    const updated = { ...prev };
-                    updated[savekey] = updated[savekey].map((exercise, i) =>
-                      i === index ? { ...exercise, sets } : exercise
-                    );
-                    return updated;
-                  });
-                }}
-                handleRemoveExercise={() => handleRemoveExerciseinWorkout(index)}
-                changePosition={(direction) => changePosition(ex, direction)}
-                reps={ex.reps[0]}
-                sets={ex.sets}
-              />
-            ))}
+            {Array.isArray(selectedExercise[savekey]) &&
+              selectedExercise[savekey].map((ex, index) => (
+                <ExerciseCard
+                  ExerciseName={ex.exercise}
+                  Description={exercise.find((item) => item.name === ex.exercise)?.description}
+                  ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
+                  onRepsChange={(reps) => {
+                    setSelectedExercise((prev) => {
+                      const updated = { ...prev };
+                      updated[savekey] = updated[savekey].map((exercise, i) =>
+                        i === index ? { ...exercise, reps } : exercise
+                      );
+                      console.log(updated);
+                      return updated;
+                    });
+                  }}
+                  onSetsChange={(sets) => {
+                    setSelectedExercise((prev) => {
+                      const updated = { ...prev };
+                      updated[savekey] = updated[savekey].map((exercise, i) =>
+                        i === index ? { ...exercise, sets } : exercise
+                      );
+                      return updated;
+                    });
+                  }}
+                  handleRemoveExercise={() => handleRemoveExerciseinWorkout(index)}
+                  changePosition={(direction) => changePosition(ex, direction)}
+                  reps={ex.reps[0]}
+                  sets={ex.sets}
+                />
+              ))}
           </div>
           <div className="divider divider-primary"></div>
           <div className="flex flex-row gap-2">
