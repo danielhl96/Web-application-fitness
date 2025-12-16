@@ -65,6 +65,7 @@ const EditTrain = () => {
         console.log('Workout plans updated successfully:', response.data);
         setMessage('Workout plan updated successfully!');
         setRequestId((requestId) => requestId + 1); // Trigger data refresh
+        setShowModal(false);
       })
       .catch((error) => {
         console.error('Error updating workout plans:', error);

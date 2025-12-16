@@ -47,7 +47,7 @@ function ExerciseCard({
       setSelectedReps(reps);
       console.log('Selected reps:', reps);
     }
-  }, []);
+  }, [sets, reps]);
 
   // Auto-scroll to selected set/rep row
   useEffect(() => {
