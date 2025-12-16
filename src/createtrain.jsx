@@ -5,116 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import api from './api';
 import exercise from './exercises.jsx';
 import TemplatePage from './templatepage.jsx';
+import ExerciseCard from './exercisecard.jsx';
 
-function ExerciseCard({ name, description, img, onRemove, onRepsChange, onSetsChange }) {
-  const [selectedSets, setSelectedSets] = useState([]);
-  const [selectedReps, setSelectedReps] = useState([]);
-
-  const handleSets = (e) => {
-    console.log(e);
-    setSelectedSets(e);
-    ExerciseCard.sets = e;
-    if (onSetsChange) onSetsChange(e);
-  };
-  const handleReps = (e) => {
-    setSelectedReps(e);
-    // 3. Callback aufrufen
-    if (onRepsChange) onRepsChange(e);
-  };
-
-  return (
-    <div
-      className="space-y-0 p-2 card lg:w-64 w-64 h-80 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
-      style={{
-        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        border: '1px solid rgba(255, 255, 255, 0.18)',
-      }}
-    >
-      <div className="card-body items-center text-center">
-        <h2 className="text-amber-50 font-bold mb-2">{name}</h2>
-        <figure className="flex justify-center items-center w-10 h-10">
-          <img style={{ filter: 'invert(1)' }} src={img} alt={name} className="rounded-md" />
-        </figure>
-        <p className="text-sm text-slate-200 mb-2">{description}</p>
-
-        <div className="flex flex-row justify-center items-center">
-          <div
-            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-              border: '1px solid rgba(0, 0, 0, 0.12)',
-            }}
-          >
-            <table id="sets-table" className="min-w-2 border-collapse">
-              <tbody>
-                {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
-                  <tr key={index} data-set={set} className={'bg-gray-700'}>
-                    <td
-                      onClick={() => handleSets(set)}
-                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
-                      style={{
-                        background:
-                          selectedSets === set ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
-                        boxShadow:
-                          selectedSets === set
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                        border: '1px solid rgba(0, 0, 0, 0.12)',
-                        color: selectedSets === set ? '#e0eaff' : '',
-                      }}
-                    >
-                      {'Sets: ' + set}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div
-            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-              border: '1px solid rgba(0, 0, 0, 0.12)',
-            }}
-          >
-            <table className="min-w-2 border-collapse">
-              <tbody>
-                {Array.from({ length: 25 }, (_, i) => i + 1).map((reps, index) => (
-                  <tr key={index} data-set={reps} className={'bg-gray-700'}>
-                    <td
-                      onClick={() => handleReps(reps)}
-                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
-                      style={{
-                        background:
-                          selectedReps === reps ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
-                        boxShadow:
-                          selectedReps === reps
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                        border: '1px solid rgba(0, 0, 0, 0.12)',
-                        color: selectedReps === reps ? '#e0eaff' : '',
-                      }}
-                    >
-                      {'Reps: ' + reps}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <button className="btn btn-outline btn-warning" onClick={onRemove}>
-          Remove
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function CreateTrainGUI() {
+function CreateTraining() {
   const navigate = useNavigate();
   const [WorkoutName, setWorkoutName] = useState('');
   const [WorkoutNameSet, setWorkoutNameSet] = useState(false);
@@ -153,7 +46,25 @@ function CreateTrainGUI() {
   const [exerciseExists, setExerciseExists] = useState([]);
   const [Message, setMessage] = useState('');
 
-  console.log(selectedExercise);
+  function changePosition(element, direction) {
+    console.log(element, direction);
+    const index = selectedExercise.findIndex((ex) => ex === element);
+    if (direction === 'up' && index > 0) {
+      const newExercises = [...selectedExercise];
+      [newExercises[index - 1], newExercises[index]] = [
+        newExercises[index],
+        newExercises[index - 1],
+      ];
+      setSelectedExercise(newExercises);
+    } else if (direction === 'down' && index < selectedExercise.length - 1) {
+      const newExercises = [...selectedExercise];
+      [newExercises[index + 1], newExercises[index]] = [
+        newExercises[index],
+        newExercises[index + 1],
+      ];
+      setSelectedExercise(newExercises);
+    }
+  }
 
   function handleExerciseChange(e) {
     const selectedName = e;
@@ -348,14 +259,15 @@ function CreateTrainGUI() {
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard
-                      key={index}
-                      name={exercise.name}
-                      description={exercise.description}
-                      img={exercise.img}
+                      ExerciseName={exercise.name}
+                      Description={exercise.description}
+                      ExerciseImage={exercise.img}
                       onRemove={() => handleRemoveExercise(exercise.name)}
                       // Callback for Prop passed
                       onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
                       onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
+                      handleRemoveExercise={() => handleRemoveExercise(exercise.name)}
+                      changePosition={(direction) => changePosition(exercise, direction)}
                     />
                   ))
                 ) : (
@@ -439,4 +351,4 @@ function CreateTrainGUI() {
   );
 }
 
-export default CreateTrainGUI;
+export default CreateTraining;

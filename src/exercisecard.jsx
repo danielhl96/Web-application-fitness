@@ -1,22 +1,65 @@
 import React from 'react';
 import './index.css';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-function ExerciseCard({ ExerciseName, Description, ExerciseImage, onRepsChange, onSetsChange }) {
+function ExerciseCard({
+  ExerciseName,
+  Description,
+  ExerciseImage,
+  onRepsChange,
+  onSetsChange,
+  handleRemoveExercise,
+  changePosition,
+  reps,
+  sets,
+}) {
   const [selectedSets, setSelectedSets] = useState(null);
   const [selectedReps, setSelectedReps] = useState(null);
-  const handleSets = (sets) => {
+  const selectedSetRef = useRef(null);
+  const selectedRepRef = useRef(null);
+  const handleSets = (sets, ref) => {
     setSelectedSets(sets);
+
+    if (ref) {
+      selectedSetRef.current = ref;
+    }
     if (onSetsChange) {
       onSetsChange(sets);
     }
   };
-  const handleReps = (reps) => {
+  const handleReps = (reps, ref) => {
     setSelectedReps(reps);
+
+    if (ref) {
+      selectedRepRef.current = ref;
+    }
     if (onRepsChange) {
       onRepsChange(reps);
     }
   };
+
+  useEffect(() => {
+    if (sets) {
+      setSelectedSets(sets);
+      console.log('Selected sets:', sets);
+    }
+    if (reps) {
+      setSelectedReps(reps[1]);
+      console.log('Selected reps:', reps);
+    }
+  }, []);
+
+  // Auto-scroll to selected set/rep row
+  useEffect(() => {
+    if (selectedSetRef.current) {
+      selectedSetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [selectedSets]);
+  useEffect(() => {
+    if (selectedRepRef.current) {
+      selectedRepRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [selectedReps]);
 
   return (
     <div>
@@ -53,7 +96,8 @@ function ExerciseCard({ ExerciseName, Description, ExerciseImage, onRepsChange, 
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
                   <tr key={index} data-set={set} className={'bg-gray-700'}>
                     <td
-                      onClick={() => handleSets(set)}
+                      ref={selectedSets === set ? selectedSetRef : null}
+                      onClick={(e) => handleSets(set, e.target)}
                       className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
                       style={{
                         background:
@@ -87,7 +131,8 @@ function ExerciseCard({ ExerciseName, Description, ExerciseImage, onRepsChange, 
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((rep, index) => (
                   <tr key={index} data-rep={rep} className={'bg-gray-700'}>
                     <td
-                      onClick={() => handleReps(rep)}
+                      ref={selectedReps === rep ? selectedRepRef : null}
+                      onClick={(e) => handleReps(rep, e.target)}
                       className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
                       style={{
                         background:
@@ -108,23 +153,66 @@ function ExerciseCard({ ExerciseName, Description, ExerciseImage, onRepsChange, 
             </table>
           </div>
         </div>
-        <button className="btn btn-outline btn-warning mb-2" onClick={null}>
-          {/* Mülltonne Icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="h-5 w-5"
+        <div className="flex flex-row justify-center items-center space-x-2">
+          <button
+            className="btn btn-outline btn-warning mb-2"
+            onClick={() => handleRemoveExercise()}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+            {/* Mülltonne Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+
+          <button className="btn btn-outline btn-success mb-2" onClick={() => changePosition('up')}>
+            {/* Up Arrow Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+          <button
+            className="btn btn-outline btn-success mb-2"
+            onClick={() => changePosition('down')}
+          >
+            {/* Down Arrow Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

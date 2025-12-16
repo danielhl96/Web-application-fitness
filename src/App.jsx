@@ -2,7 +2,7 @@ import './index.css';
 import { Routes, Route, Link } from 'react-router-dom';
 import LoginForm from './login.jsx';
 import Header from './Header';
-import CreateTrainGUI from './createtrain.jsx';
+import CreateTraining from './createtrain.jsx';
 import EditTrain from './EditTrain.jsx';
 import StartTraining from './training.jsx';
 import Profile from './profile.jsx';
@@ -234,7 +234,7 @@ function App() {
           element={
             <AuthProvider>
               <ProtectedRoute>
-                <CreateTrainGUI />
+                <CreateTraining />
               </ProtectedRoute>
             </AuthProvider>
           }

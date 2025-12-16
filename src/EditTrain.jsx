@@ -6,6 +6,7 @@ import exercise from './exercises.jsx';
 import api from './api';
 import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
+import ExerciseCard from './exercisecard.jsx';
 
 const EditTrain = () => {
   const navigate = useNavigate();
@@ -114,9 +115,6 @@ const EditTrain = () => {
   const [addExercise, setaddExercise] = useState('');
   const [exerciseExists, setExerciseExists] = useState(exercise);
 
-  const setRef = useRef([]);
-  const repsRef = useRef([]);
-
   function Workouts({ exercise }) {
     return (
       <div>
@@ -223,31 +221,8 @@ const EditTrain = () => {
       setaddExercise('');
     }
   };
-  useEffect(() => {
-    console.log(selectedExercise);
-    for (let i = 0; i < selectedExercise[savekey]?.length; i++) {
-      if (setRef.current[i] != null) {
-        const selectedSetRow = setRef.current[i].querySelector(
-          `tr[data-set-index="${selectedExercise[savekey][i].sets}"]`
-        );
-        if (selectedSetRow) {
-          setRef.current[i].scrollTop = selectedSetRow.offsetTop;
-        }
-        console.log(selectedExercise[savekey][i].sets);
-      }
-      if (repsRef.current[i] != null) {
-        const selectedRepsRow = repsRef.current[i].querySelector(
-          `tr[data-reps-index="${selectedExercise[savekey][i].reps[0]}"]`
-        );
-        if (selectedRepsRow) {
-          repsRef.current[i].scrollTop = selectedRepsRow.offsetTop;
-        }
-        console.log(selectedExercise[savekey][i].reps);
-      }
-    }
-  }, [showModal]);
 
-  function EditWorkoutModal() {
+  function EditWorkoutPage() {
     return (
       <div>
         <div className="flex flex-col items-center space-y-1 h-130 ">
@@ -308,203 +283,36 @@ const EditTrain = () => {
           </div>
           <div className="flex flex-col gap-4 overflow-y-auto max-h-96 py-2 w-full">
             {selectedExercise[savekey].map((ex, index) => (
-              <div
-                className="space-y-6 p-2 card lg:w-64 w-64 h-auto md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg"
-                style={{
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
+              <ExerciseCard
+                ExerciseName={ex.exercise}
+                Description={exercise.find((item) => item.name === ex.exercise)?.description}
+                ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
+                onRepsChange={(reps) => {
+                  setSelectedExercise((prev) => {
+                    const updated = { ...prev };
+                    updated[savekey] = updated[savekey].map((exercise, i) =>
+                      i === index ? { ...exercise, reps } : exercise
+                    );
+                    return updated;
+                  });
                 }}
-              >
-                <h2 className="text-amber-50 font-bold mb-2 ">{ex.exercise}</h2>
-                <figure className="w-12 h-12 mb-2">
-                  <img
-                    src={exercise.find((item) => item.name === ex.exercise)?.img}
-                    className="w-full h-full object-cover rounded-md"
-                    style={{ filter: 'invert(1)' }}
-                  />
-                </figure>
-
-                <h1 className="text-amber-50 font-light mb-2 text-center ">
-                  {exercise.find((item) => item.name === ex.exercise)?.description}{' '}
-                </h1>
-                <div className="flex flex-row justify-start text-xs space-y-2">
-                  <div
-                    ref={(el) => (setRef.current[index] = el)}
-                    className="h-24 overflow-y-scroll border border-gray-800"
-                  >
-                    <table className=" min-w-2 border-collapse">
-                      <tbody>
-                        {Array.from({ length: 25 }, (_, i) => i + 1).map((setIndex) => (
-                          <tr
-                            key={setIndex}
-                            data-set-index={setIndex}
-                            className={'bg-gray-700'}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map((ex, i) =>
-                                  i === index ? { ...ex, sets: setIndex } : ex
-                                );
-                                return updated;
-                              });
-                              // Scroll to the selected sets row after state update
-                              const selectedSetRow = setRef.current[index]?.querySelector(
-                                `tr[data-set-index="${setIndex}"]`
-                              );
-                              if (selectedSetRow) {
-                                setRef.current[index].scrollTop = selectedSetRow.offsetTop;
-                              }
-                            }}
-                          >
-                            <td
-                              className="border border-gray-800 cursor-pointer p-2 text-center rounded-md backdrop-blur-lg"
-                              style={{
-                                background:
-                                  setIndex === selectedExercise[savekey][index].sets
-                                    ? 'rgba(37,99,235,0.45)'
-                                    : 'rgba(0,0,0,0.15)',
-                                boxShadow:
-                                  setIndex === selectedExercise[savekey][index].sets
-                                    ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                                    : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                                border: '1px solid rgba(0, 0, 0, 0.12)',
-                                color:
-                                  setIndex === selectedExercise[savekey][index].sets
-                                    ? '#e0eaff'
-                                    : '',
-                              }}
-                            >
-                              Sets: {setIndex}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div
-                    ref={(el) => (repsRef.current[index] = el)}
-                    className="h-24 overflow-y-scroll border border-gray-800"
-                  >
-                    <table className=" min-w-2 border-collapse">
-                      <tbody>
-                        {Array.from({ length: 25 }, (_, i) => i + 1).map((repsIndex) => (
-                          <tr
-                            key={repsIndex}
-                            data-reps-index={repsIndex}
-                            className={'bg-gray-700'}
-                            onClick={() => {
-                              setSelectedExercise((prev) => {
-                                const updated = { ...prev };
-                                updated[savekey] = updated[savekey].map((ex, i) =>
-                                  i === index
-                                    ? {
-                                        ...ex,
-                                        reps: Array(ex.sets).fill(repsIndex),
-                                      }
-                                    : ex
-                                );
-                                return updated;
-                              });
-                              // Scroll to the selected reps row after state update
-                              const selectedRepsRow = repsRef.current[index]?.querySelector(
-                                `tr[data-reps-index="${repsIndex}"]`
-                              );
-                              if (selectedRepsRow) {
-                                repsRef.current[index].scrollTop = selectedRepsRow.offsetTop;
-                              }
-                            }}
-                          >
-                            <td
-                              className="border border-gray-800 cursor-pointer p-2 text-center rounded-md backdrop-blur-lg"
-                              style={{
-                                background:
-                                  repsIndex === Number(selectedExercise[savekey][index].reps[0])
-                                    ? 'rgba(37,99,235,0.45)'
-                                    : 'rgba(0,0,0,0.15)',
-                                boxShadow:
-                                  repsIndex === Number(selectedExercise[savekey][index].reps[0])
-                                    ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                                    : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                                border: '1px solid rgba(0, 0, 0, 0.12)',
-                                color:
-                                  repsIndex === Number(selectedExercise[savekey][index].reps[0])
-                                    ? '#e0eaff'
-                                    : '',
-                              }}
-                            >
-                              Reps: {repsIndex}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className="flex flex-row space-x-2 mt-2">
-                  <button
-                    onClick={() => handleRemoveExerciseinWorkout(index)}
-                    className="btn btn-outline btn-error "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => changePosition(ex, 'down')}
-                    className="btn btn-outline btn-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => changePosition(ex, 'up')}
-                    className="btn btn-outline btn-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 10l7-7m0 0l7 7m-7-7v18"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+                onSetsChange={(sets) => {
+                  setSelectedExercise((prev) => {
+                    const updated = { ...prev };
+                    updated[savekey] = updated[savekey].map((exercise, i) =>
+                      i === index ? { ...exercise, sets } : exercise
+                    );
+                    return updated;
+                  });
+                }}
+                handleRemoveExercise={() => handleRemoveExerciseinWorkout(index)}
+                changePosition={(direction) => changePosition(ex, direction)}
+                reps={ex.reps}
+                sets={ex.sets}
+              />
             ))}
           </div>
           <div className="divider divider-primary"></div>
-          {message && <div className="text-green-500 font-light">{message}</div>}
           <div className="flex flex-row gap-2">
             <button
               onClick={() => {
@@ -544,6 +352,7 @@ const EditTrain = () => {
               </svg>
             </button>
           </div>
+          {message && <div className="text-green-500 mt-2">{message}</div>}
         </div>
       </div>
     );
@@ -564,7 +373,7 @@ const EditTrain = () => {
             }`}
           >
             {showModal ? (
-              <div>{EditWorkoutModal()}</div>
+              <div>{EditWorkoutPage()}</div>
             ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (
               Object.keys(selectedExercise).map((exercise, index) => (
                 <Workouts exercise={exercise} key={index} />
