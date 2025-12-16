@@ -582,7 +582,7 @@ function StartTraining() {
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">
-            <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
+            <div className="divider divider-primary text-blue-400 font-bold mb-2 ">
               Select your workout
             </div>
             <div className="w-65 md:w-95 lg:h-130 md:h-130 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-130">

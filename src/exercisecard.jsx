@@ -47,7 +47,7 @@ function ExerciseCard({
       setSelectedReps(reps[1]);
       console.log('Selected reps:', reps);
     }
-  }, []);
+  }, [changePosition]);
 
   // Auto-scroll to selected set/rep row
   useEffect(() => {
@@ -64,7 +64,7 @@ function ExerciseCard({
   return (
     <div>
       <div
-        className="card lg:w-64 w-64 h-80 mb-4 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+        className="card lg:w-64 w-64 h-84 mb-4 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
         style={{
           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -153,7 +153,7 @@ function ExerciseCard({
             </table>
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center space-x-2">
+        <div className="flex flex-row justify-center items-center space-x-2 mb-6 ">
           <button
             className="btn btn-outline btn-warning mb-2"
             onClick={() => handleRemoveExercise()}

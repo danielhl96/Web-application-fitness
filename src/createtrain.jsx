@@ -139,7 +139,7 @@ function CreateTraining() {
     <div>
       <Header />
       <TemplatePage>
-        <div className="divider divider-primary text-amber-50 font-bold mb-2 ">
+        <div className="divider divider-primary text-blue-400 font-bold mb-2 ">
           Create your workout
         </div>
         <div className="flex flex-col items-center space-y-2 h-auto">

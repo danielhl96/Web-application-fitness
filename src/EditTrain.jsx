@@ -229,7 +229,7 @@ const EditTrain = () => {
           <div className="flex flex-col w-65 md:w-80 items-center space-y-4 ">
             <input
               type="search"
-              placeholder="Enter an exercise name"
+              placeholder="Add an exercise..."
               className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="input-e"
               onChange={handleAddExercise2}
@@ -281,7 +281,7 @@ const EditTrain = () => {
                 ))}
             </div>
           </div>
-          <div className="flex flex-col gap-4 overflow-y-auto max-h-96 py-2 w-full">
+          <div className="flex flex-col items-center gap-4 overflow-y-auto max-h-96 py-2 w-full">
             {selectedExercise[savekey].map((ex, index) => (
               <ExerciseCard
                 ExerciseName={ex.exercise}
@@ -364,11 +364,29 @@ const EditTrain = () => {
 
       <TemplatePage>
         <div className="flex flex-col items-center">
-          <div className="divider divider-primary text-amber-50 font-bold mb-2">
-            Edit your workout plans
+          <div className="divider divider-primary text-blue-400 font-bold mb-2">
+            <div className="flex flex-row items-center justify-center ">
+              Edit your workout plans
+              <button className="btn btn-ghost btn-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           <div
-            className={`w-65 md:w-95 lg:h-130 md:h-130 flex flex-col gap-4 items-center pt-2 max-md:h-130${
+            className={`w-64 md:w-95 lg:h-130  md:h-130 flex flex-col gap-4 items-center pt-2 max-md:h-130${
               !showModal ? ' overflow-y-auto' : ''
             }`}
           >
