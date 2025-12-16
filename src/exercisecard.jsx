@@ -44,10 +44,10 @@ function ExerciseCard({
       console.log('Selected sets:', sets);
     }
     if (reps) {
-      setSelectedReps(reps[1]);
+      setSelectedReps(reps);
       console.log('Selected reps:', reps);
     }
-  }, [changePosition]);
+  }, []);
 
   // Auto-scroll to selected set/rep row
   useEffect(() => {

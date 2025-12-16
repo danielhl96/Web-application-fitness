@@ -14,16 +14,12 @@ const EditTrain = () => {
   const [requestId, setRequestId] = useState(0);
   const [message, setMessage] = useState('');
 
-  useEffect(
-    () => {
-      api.get('/get_workout_plans').then((response) => {
-        setData(response.data);
-        console.log(response.data);
-      });
-    },
-    [],
-    [requestId]
-  );
+  useEffect(() => {
+    api.get('/get_workout_plans').then((response) => {
+      setData(response.data);
+      console.log(response.data);
+    });
+  }, [requestId]);
 
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
   const mapPlans = (plans) =>
@@ -51,10 +47,10 @@ const EditTrain = () => {
     }
   }, [data]);
 
-  function handleEditWorkout(index) {
+  function handleEditWorkout() {
     const payload = {
-      plan_id: selectedExercise[index][0]?.plan_id || null,
-      exercises: selectedExercise[index]?.map(({ exercise, reps, sets, weights, plan_id }) => ({
+      plan_id: selectedExercise[savekey][0]?.plan_id || null,
+      exercises: selectedExercise[savekey]?.map(({ exercise, reps, sets, weights, plan_id }) => ({
         name: exercise,
         reps: Array.isArray(reps) ? reps : Array(sets).fill(reps),
         sets,
@@ -62,7 +58,7 @@ const EditTrain = () => {
         plan_id: plan_id || null,
       })),
     };
-    console.log(payload);
+
     api
       .put('/edit_workout_plan', payload)
       .then((response) => {
@@ -351,6 +347,7 @@ const EditTrain = () => {
                     updated[savekey] = updated[savekey].map((exercise, i) =>
                       i === index ? { ...exercise, reps } : exercise
                     );
+                    console.log(updated);
                     return updated;
                   });
                 }}
@@ -365,19 +362,14 @@ const EditTrain = () => {
                 }}
                 handleRemoveExercise={() => handleRemoveExerciseinWorkout(index)}
                 changePosition={(direction) => changePosition(ex, direction)}
-                reps={ex.reps}
+                reps={ex.reps[0]}
                 sets={ex.sets}
               />
             ))}
           </div>
           <div className="divider divider-primary"></div>
           <div className="flex flex-row gap-2">
-            <button
-              onClick={() => {
-                handleEditWorkout(savekey);
-              }}
-              className="btn btn-outline btn-primary"
-            >
+            <button onClick={handleEditWorkout} className="btn btn-outline btn-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
