@@ -13,6 +13,8 @@ const EditTrain = () => {
   const [data, setData] = useState([]);
   const [requestId, setRequestId] = useState(0);
   const [message, setMessage] = useState('');
+  const [ConfirmationModalforWorkoutDeleteModal, setConfirmationModalforWorkoutDelete] =
+    useState(false);
 
   useEffect(() => {
     api.get('/get_workout_plans').then((response) => {
@@ -58,6 +60,8 @@ const EditTrain = () => {
         plan_id: plan_id || null,
       })),
     };
+
+    console.log('Payload for editing workout plan:', payload);
 
     api
       .put('/edit_workout_plan', payload)
@@ -131,6 +135,40 @@ const EditTrain = () => {
     }
   }
 
+  function ConfirmationModalforWorkoutDelete() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className="modal-box border border-red-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #ef4444',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
+          <h3 className="font-bold text-lg text-amber-50 mb-4">Delete Workout Plan</h3>
+          <p className="text-amber-50 mb-4">Are you sure you want to delete this workout plan?</p>
+          <div className="modal-action">
+            <button
+              onClick={() => handeRemoveWorkoutAPI(savekey)}
+              className="btn btn-outline btn-error"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setConfirmationModalforWorkoutDelete(false)}
+              className="btn btn-outline btn-primary"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function changeWorkoutName() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -194,7 +232,7 @@ const EditTrain = () => {
               </svg>
             </button>
             <button
-              onClick={() => handeRemoveWorkoutAPI(exercise)}
+              onClick={() => (setConfirmationModalforWorkoutDelete(true), setKey(exercise))}
               className="btn btn-outline btn-error"
             >
               <svg
@@ -235,6 +273,7 @@ const EditTrain = () => {
 
   //Nur im Frontend
   const handeRemoveWorkoutAPI = (workoutname) => {
+    console.log(workoutname);
     api
       .delete(`/delete_workout_plan`, {
         data: { plan_id: selectedExercise[workoutname][0]?.plan_id },
@@ -339,6 +378,7 @@ const EditTrain = () => {
             {Array.isArray(selectedExercise[savekey]) &&
               selectedExercise[savekey].map((ex, index) => (
                 <ExerciseCard
+                  key={ex.exercise + '-' + index}
                   ExerciseName={ex.exercise}
                   Description={exercise.find((item) => item.name === ex.exercise)?.description}
                   ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
@@ -358,12 +398,13 @@ const EditTrain = () => {
                       updated[savekey] = updated[savekey].map((exercise, i) =>
                         i === index ? { ...exercise, sets } : exercise
                       );
+                      console.log(updated);
                       return updated;
                     });
                   }}
                   handleRemoveExercise={() => handleRemoveExerciseinWorkout(index)}
                   changePosition={(direction) => changePosition(ex, direction)}
-                  reps={ex.reps[0]}
+                  reps={Array.isArray(ex.reps) ? ex.reps[0] : ex.reps}
                   sets={ex.sets}
                 />
               ))}
@@ -415,6 +456,7 @@ const EditTrain = () => {
 
       <TemplatePage>
         {showEditWorkoutNameModal && changeWorkoutName()}
+        {ConfirmationModalforWorkoutDeleteModal && ConfirmationModalforWorkoutDelete()}
         <div className="flex flex-col items-center">
           <div className="divider divider-primary text-blue-400 font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
