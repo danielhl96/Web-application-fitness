@@ -111,9 +111,67 @@ const EditTrain = () => {
   };
 
   const [showModal, setShowModal] = useState(false);
+  const [showEditWorkoutNameModal, setShowEditWorkoutNameModal] = useState(false);
   const [savekey, setKey] = useState('');
   const [addExercise, setaddExercise] = useState('');
   const [exerciseExists, setExerciseExists] = useState(exercise);
+  const [WorkoutName, setWorkoutName] = useState('');
+
+  function changeWorkoutNameAPI() {
+    api
+      .put('/edit_workout_plan_name', {
+        plan_id: selectedExercise[savekey][0]?.plan_id,
+        new_name: WorkoutName,
+      })
+      .then((response) => {
+        console.log('Workout name changed successfully:', response.data);
+        setMessage('Workout name changed successfully!');
+        setRequestId((requestId) => requestId + 1); // Trigger data refresh
+        setShowEditWorkoutNameModal(false);
+      })
+      .catch((error) => {
+        console.error('Error changing workout name:', error);
+        setMessage('Error changing workout name.');
+        setShowEditWorkoutNameModal(false);
+      });
+  }
+
+  function changeWorkoutName() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
+          <h3 className="font-bold text-lg text-amber-50 mb-4">Change Workout Name</h3>
+          <input
+            type="text"
+            placeholder="New Workout Name"
+            className="input input-bordered w-full max-w-xs mb-4 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="workout-name-input"
+            onChange={(e) => setWorkoutName(e.target.value)}
+          />
+          <div className="modal-action">
+            <button onClick={() => changeWorkoutNameAPI()} className="btn btn-outline btn-primary">
+              Save
+            </button>
+            <button
+              onClick={() => setShowEditWorkoutNameModal(false)}
+              className="btn btn-outline btn-error"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function Workouts({ exercise }) {
     return (
@@ -363,11 +421,15 @@ const EditTrain = () => {
       <Header />
 
       <TemplatePage>
+        {showEditWorkoutNameModal && changeWorkoutName()}
         <div className="flex flex-col items-center">
           <div className="divider divider-primary text-blue-400 font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
               Edit your workout plans
-              <button className="btn btn-ghost btn-sm">
+              <button
+                onClick={() => setShowEditWorkoutNameModal(true)}
+                className="btn btn-ghost btn-sm"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

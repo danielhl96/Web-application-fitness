@@ -459,6 +459,26 @@ def delete_workout_plan():
     session.commit()
     return jsonify({"message": "Workout plan deleted successfully!"}), 200
 
+@app.route('/api/edit_workout_plan_name', methods=['put'])
+def edit_workout_plan_name():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    data = request.json
+    workout_plan_id = data.get("plan_id")
+    new_name = data.get("new_name")
+    
+    workout_plan = session.query(WorkoutPlan).filter_by(id=workout_plan_id).first()
+ 
+    if not workout_plan:
+        return jsonify({"message": "Workout plan not found!"}), 404
+    workout_plan.name = new_name
+    session.commit()
+    return jsonify({"message": "Workout plan name updated successfully!"}, 200)
 
 @app.route('/api/edit_workout_plan', methods=['put'])
 def edit_workout_plan():
