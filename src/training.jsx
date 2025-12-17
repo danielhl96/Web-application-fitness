@@ -475,21 +475,13 @@ function StartTraining() {
   const startCounter = () => {
     setCounterisRunning(true);
     intervalRef.current = setInterval(function () {
-      setBreakTime((prevSec) => prevSec - 1);
+      setBreakTime((prevSec) => prevSec + 1);
     }, 1000); // every 1000 ms = 1 second
   };
-
-  useEffect(() => {
-    if (breakTime === 0) {
-      stopCounter();
-      setCounterisRunning(false);
-    }
-  }, [breakTime]);
 
   const stopCounter = () => {
     clearInterval(intervalRef.current);
     setCounterisRunning(false);
-    setBreakTime(0);
   };
 
   function BreakTimeModal() {
@@ -516,35 +508,25 @@ function StartTraining() {
                 {breakTime % 60 < 10 ? `0${breakTime % 60}` : breakTime % 60}
               </p1>
             </div>
-            <div className="flex flex-row justify-center items-center gap-4 mt-2">
+
+            <div className="flex flex-row justify-center items-center gap-1 mt-3">
               <button
-                disabled={breakTime === 0 || counterisRunning}
-                onClick={() => startCounter()}
-                className="btn btn-outline btn-primary btn-xs"
+                onClick={() => {
+                  counterisRunning ? stopCounter() : startCounter();
+                }}
+                className="btn btn-outline btn-primary btn-sm"
               >
-                Go
+                {counterisRunning ? 'Break' : 'Go'}
               </button>
               <button
                 onClick={() => {
                   setBreakModal(false);
                   stopCounter();
+                  setBreakTime(0);
                 }}
-                className="btn btn-outline btn-error btn-xs"
+                className="btn btn-outline btn-error btn-sm"
               >
                 X
-              </button>
-              <button
-                onClick={() => setBreakTime((prev) => prev + 10)}
-                className="btn btn-outline btn-success btn-xs"
-              >
-                +10s
-              </button>
-              <button
-                disabled={breakTime < 10}
-                onClick={() => setBreakTime((prev) => prev - 10)}
-                className="btn btn-outline btn-success btn-xs "
-              >
-                -10s
               </button>
             </div>
           </div>
@@ -556,40 +538,16 @@ function StartTraining() {
   function Workouts({ planName }) {
     return (
       <div>
-        <WorkoutCard>
+        <WorkoutCard
+          onClick={() => {
+            setCurrentExercises(selectedExercise[planName]);
+            setCurrentPlan(planName);
+            setTraining(selectedExercise[planName][0]);
+            setSelectedTrainingSite(false);
+          }}
+        >
           <h2 className="text-amber-400 font-bold mb-2">{planName}</h2>
-          <div className="flex flex-row justify-center items-center gap-4 mt-2">
-            <button
-              onClick={() => {
-                setCurrentExercises(selectedExercise[planName]);
-                setCurrentPlan(planName);
-                setTraining(selectedExercise[planName][0]);
-                setSelectedTrainingSite(false);
-              }}
-              className="btn btn-outline btn-primary text-white flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button>
-          </div>
+          <div className="flex flex-row justify-center items-center gap-4 mt-2"></div>
           <div className="flex flex-col">
             <p className="text-blue-300 font-light  text-sm ">
               Exercises: {selectedExercise[planName]?.length || 0}
