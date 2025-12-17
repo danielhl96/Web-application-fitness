@@ -24,13 +24,14 @@ function Statistic() {
             >
               <div
                 className={`card w-65 lg:w-40 h-auto lg:h-30 border-2 border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2`}
+                role="button"
+                aria-pressed="false"
                 style={{
-                  background: 'rgba(0,0,0,0.20)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  border: '2px solid #3b82f6',
                 }}
               >
-                <h2 className="text-amber-50 font-bold mb-2">{item.exercise_name}</h2>
+                <h2 className="text-amber-400 font-bold mb-2">{item.exercise_name}</h2>
                 <figure className="w-9 h-9 mb-2">
                   <img
                     src={

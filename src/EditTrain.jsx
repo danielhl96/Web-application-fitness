@@ -514,7 +514,8 @@ const EditTrain = () => {
         <div className="flex flex-col items-center">
           <div className="divider divider-primary text-white font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
-              Edit your workout plans
+              {showModal ? savekey : 'Edit your workout plans'}
+
               {showModal && (
                 <button
                   onClick={() => setShowEditWorkoutNameModal(true)}
