@@ -139,7 +139,7 @@ function CreateTraining() {
     <div>
       <Header />
       <TemplatePage>
-        <div className="divider divider-primary text-blue-400 font-bold mb-2 ">
+        <div className="divider divider-primary text-white font-bold mb-2 ">
           Create your workout
         </div>
         <div className="flex flex-col items-center space-y-2 h-auto">
@@ -237,7 +237,7 @@ function CreateTraining() {
                       padding: '0.5rem',
                     }}
                   >
-                    <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
+                    <h2 className="text-amber-400 font-bold mb-2">{item.name}</h2>
                     <figure className="w-6 h-6 mb-2">
                       <img
                         src={item.img}
@@ -245,7 +245,7 @@ function CreateTraining() {
                         className="w-full h-full object-cover rounded-md"
                       />
                     </figure>
-                    <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
+                    <h1 className="text-slate-200 font-light text-xs mb-2 text-center ">
                       {item.description}
                     </h1>
                   </div>
@@ -255,7 +255,7 @@ function CreateTraining() {
           {/* Render selected exercises */}
           {WorkoutNameSet ? (
             <div className="flex flex-col items-center space-y-3">
-              <div className="w-100 max-h-82 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
+              <div className="w-100 max-h-90 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard

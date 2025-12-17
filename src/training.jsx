@@ -462,7 +462,7 @@ function StartTraining() {
     return (
       <div>
         <WorkoutCard>
-          <h2 className="text-amber-50 font-bold mb-2">Workout: {planName}</h2>
+          <h2 className="text-amber-400 font-bold mb-2">{planName}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => {
@@ -494,6 +494,11 @@ function StartTraining() {
                 />
               </svg>
             </button>
+          </div>
+          <div className="flex flex-col">
+            <p className="text-blue-300 font-light  text-sm ">
+              Exercises: {selectedExercise[planName]?.length || 0}
+            </p>
           </div>
         </WorkoutCard>
       </div>
@@ -548,7 +553,7 @@ function StartTraining() {
                     border: '1px solid rgba(0, 0, 0, 0.18)',
                   }}
                 >
-                  <h2 className="text-amber-50 text-sm">{item.exercise}</h2>
+                  <h2 className="text-amber-400 text-sm">{item.exercise}</h2>
                   <figure className="w-9 h-9 mb-2">
                     <img
                       src={
@@ -582,7 +587,7 @@ function StartTraining() {
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">
-            <div className="divider divider-primary text-blue-400 font-bold mb-2 ">
+            <div className="divider divider-primary text-white font-bold mb-2 ">
               Select your workout
             </div>
             <div className="w-65 md:w-95 lg:h-130 md:h-130 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
@@ -659,7 +664,7 @@ function StartTraining() {
                 height="50"
               />
             </figure>
-            <div className="divider divider-primary">{training1.exercise}</div>
+            <div className="divider divider-primary text-amber-400">{training1.exercise}</div>
             <div className="overflow-y-auto max-h-40 space-y-2">
               {Array.from({ length: training1.sets }).map((_, index) => (
                 <div className="flex flex-row space-x-3 items-center justify-center" key={index}>

@@ -210,7 +210,7 @@ const EditTrain = () => {
     return (
       <div>
         <WorkoutCard>
-          <h2 className="text-amber-50 font-bold mb-2">Workout: {exercise}</h2>
+          <h2 className="text-amber-400 font-bold mb-2">{exercise}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => handleShowModal(exercise)}
@@ -250,6 +250,12 @@ const EditTrain = () => {
                 />
               </svg>
             </button>
+          </div>
+
+          <div className="flex flex-col">
+            <p className="text-blue-300 font-light  text-sm ">
+              Exercises: {selectedExercise[exercise]?.length || 0}
+            </p>
           </div>
         </WorkoutCard>
       </div>
@@ -319,7 +325,7 @@ const EditTrain = () => {
     return (
       <div>
         <div className="flex flex-col items-center space-y-1 h-130 ">
-          <div className="flex flex-col w-65 md:w-80 items-center space-y-4 ">
+          <div className="flex flex-col w-70 md:w-80 items-center space-y-4 ">
             <input
               type="search"
               placeholder="Add an exercise..."
@@ -358,7 +364,7 @@ const EditTrain = () => {
                         padding: '0.5rem',
                       }}
                     >
-                      <h2 className="text-amber-50 font-bold mb-2">{item.name}</h2>
+                      <h2 className="text-amber-400 font-bold mb-2">{item.name}</h2>
                       <figure className="w-6 h-6 mb-2">
                         <img
                           src={item.img}
@@ -366,7 +372,7 @@ const EditTrain = () => {
                           className="w-full h-full object-cover rounded-md"
                         />
                       </figure>
-                      <h1 className="text-amber-50 font-light text-xs mb-2 text-center ">
+                      <h1 className="text-slate-200 font-light text-xs mb-2 text-center ">
                         {item.description}
                       </h1>
                     </div>
@@ -458,7 +464,7 @@ const EditTrain = () => {
         {showEditWorkoutNameModal && changeWorkoutName()}
         {ConfirmationModalforWorkoutDeleteModal && ConfirmationModalforWorkoutDelete()}
         <div className="flex flex-col items-center">
-          <div className="divider divider-primary text-blue-400 font-bold mb-2">
+          <div className="divider divider-primary text-white font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
               Edit your workout plans
               {showModal && (

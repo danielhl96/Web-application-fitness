@@ -64,14 +64,14 @@ function ExerciseCard({
   return (
     <div>
       <div
-        className="card lg:w-64 w-64 h-84 mb-4 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
+        className="card lg:w-64 w-64 h-auto mb-4 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
         style={{
           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           border: '1px solid rgba(255, 255, 255, 0.18)',
         }}
       >
         <div className="card-body items-center text-center">
-          <h2 className="text-amber-50 font-bold mb-2">{ExerciseName}</h2>
+          <h2 className="text-amber-400 font-bold mb-2">{ExerciseName}</h2>
           <figure className="flex justify-center items-center w-10 h-10">
             <img
               style={{ filter: 'invert(1)' }}
