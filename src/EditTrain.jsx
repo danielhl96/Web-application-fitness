@@ -7,12 +7,14 @@ import api from './api';
 import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
 import ExerciseCard from './exercisecard.jsx';
+import Notify from './notify.jsx';
 
 const EditTrain = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [requestId, setRequestId] = useState(0);
   const [message, setMessage] = useState('');
+  const [notification, setNotification] = useState(null);
   const [ConfirmationModalforWorkoutDeleteModal, setConfirmationModalforWorkoutDelete] =
     useState(false);
 
@@ -67,13 +69,21 @@ const EditTrain = () => {
       .put('/edit_workout_plan', payload)
       .then((response) => {
         console.log('Workout plans updated successfully:', response.data);
-        setMessage('Workout plan updated successfully!');
+        setNotification({
+          title: 'Workout Updated',
+          message: 'Your workout plan has been updated successfully.',
+          type: 'success',
+        });
         setRequestId((requestId) => requestId + 1); // Trigger data refresh
         setShowModal(false);
       })
       .catch((error) => {
         console.error('Error updating workout plans:', error);
-        setMessage('Error updating workout plan.');
+        setNotification({
+          title: 'Error',
+          message: 'There was an error updating your workout plan.',
+          type: 'error',
+        });
       });
   }
 
@@ -107,6 +117,11 @@ const EditTrain = () => {
     setSelectedExercise((prev) => {
       const updated = { ...prev };
       updated[savekey] = updated[savekey].filter((_, i) => i !== indexToRemove);
+      setNotification({
+        title: 'Exercise Removed',
+        message: `Exercise has been removed from your workout.`,
+        type: 'success',
+      });
       return updated;
     });
   };
@@ -125,12 +140,20 @@ const EditTrain = () => {
         new_name: WorkoutName,
       });
       console.log('Workout name changed successfully:', response.data);
-      setMessage('Workout name changed successfully!');
+      setNotification({
+        title: 'Workout Name Changed',
+        message: 'Your workout name has been changed successfully.',
+        type: 'success',
+      });
+
       //setRequestId((requestId) => requestId + 1); // Trigger data refresh
       setShowEditWorkoutNameModal(false);
     } catch (error) {
-      console.error('Error changing workout name:', error);
-      setMessage('Error changing workout name.');
+      setNotification({
+        title: 'Error',
+        message: 'There was an error changing the workout name.',
+        type: 'error',
+      });
       setShowEditWorkoutNameModal(false);
     }
   }
@@ -287,9 +310,20 @@ const EditTrain = () => {
       .then(() => {
         console.log('Workout plan deleted');
         handeRemoveWorkout(workoutname);
+        setConfirmationModalforWorkoutDelete(false);
+        setNotification({
+          title: 'Workout Deleted',
+          message: `Workout plan has been deleted.`,
+          type: 'success',
+        });
       })
       .catch((error) => {
         console.error('Error deleting workout plan:', error);
+        setNotification({
+          title: 'Error',
+          message: 'There was an error deleting the workout plan.',
+          type: 'error',
+        });
       });
   };
 
@@ -301,7 +335,6 @@ const EditTrain = () => {
   //Nur im Frontend
   const handleAddExercise = (elem) => {
     console.log(selectedExercise[savekey]);
-
     if (exercise.some((ex) => ex.name == elem)) {
       let newExercise = {
         exercise: elem,
@@ -318,6 +351,11 @@ const EditTrain = () => {
       console.log(selectedExercise);
       document.getElementById('input-e').value = '';
       setaddExercise('');
+      setNotification({
+        title: 'Exercise Added',
+        message: `${elem} has been added to your workout.`,
+        type: 'success',
+      });
     }
   };
 
@@ -450,7 +488,6 @@ const EditTrain = () => {
               </svg>
             </button>
           </div>
-          {message && <div className="text-green-500 mt-2">{message}</div>}
         </div>
       </div>
     );
@@ -461,6 +498,17 @@ const EditTrain = () => {
       <Header />
 
       <TemplatePage>
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            duration={1500}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotification(null)}
+          />
+        )}
         {showEditWorkoutNameModal && changeWorkoutName()}
         {ConfirmationModalforWorkoutDeleteModal && ConfirmationModalforWorkoutDelete()}
         <div className="flex flex-col items-center">

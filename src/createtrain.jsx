@@ -6,11 +6,13 @@ import api from './api';
 import exercise from './exercises.jsx';
 import TemplatePage from './templatepage.jsx';
 import ExerciseCard from './exercisecard.jsx';
+import Notify from './notify.jsx';
 
 function CreateTraining() {
   const navigate = useNavigate();
   const [WorkoutName, setWorkoutName] = useState('');
   const [WorkoutNameSet, setWorkoutNameSet] = useState(false);
+  const [notification, setNotification] = useState(null);
   const handleSaveTraining = async () => {
     const trainingName = WorkoutName || document.getElementById('training-input').value;
     const selectedExercises = selectedExercise.map((exercise) => ({
@@ -29,11 +31,24 @@ function CreateTraining() {
       })
       .then((response) => {
         setMessage('Training saved successfully!');
+        setNotification({
+          title: 'Training Saved',
+          message: 'Your training has been saved successfully!',
+          type: 'success',
+        });
         console.log('Training saved:', response.data);
+        setWorkoutName('');
+        setWorkoutNameSet(false);
+        setSelectedExercise([]);
       })
       .catch((error) => {
         console.error('Error saving training:', error);
         setMessage('Error saving training.');
+        setNotification({
+          title: 'Error',
+          message: 'There was an error saving your training.',
+          type: 'error',
+        });
       });
   };
 
@@ -75,8 +90,18 @@ function CreateTraining() {
       setSelectedExercise((prev) => {
         // Check if the exercise is already in the list before adding
         if (!prev.some((item) => item.name === found.name)) {
+          setNotification({
+            title: 'Exercise Added',
+            message: `${found.name} has been added to your workout.`,
+            type: 'success',
+          });
           return [...prev, found];
         }
+        setNotification({
+          title: 'Exercise Exists',
+          message: `${found.name} is already in your workout.`,
+          type: 'info',
+        });
         return prev; // Don't add if already in the list
       });
     }
@@ -103,6 +128,11 @@ function CreateTraining() {
 
   const handleRemoveExercise = (name) => {
     setSelectedExercise((prev) => prev.filter((item) => item.name !== name));
+    setNotification({
+      title: 'Exercise Removed',
+      message: `${name} has been removed from your workout.`,
+      type: 'success',
+    });
   };
 
   // 1. Funktion in CreateTrainGUI definieren
@@ -139,6 +169,15 @@ function CreateTraining() {
     <div>
       <Header />
       <TemplatePage>
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            type={notification.type}
+            duration={1500}
+            onClose={() => setNotification(null)}
+          />
+        )}
         <div className="divider divider-primary text-white font-bold mb-2 ">
           Create your workout
         </div>
@@ -335,16 +374,6 @@ function CreateTraining() {
               )}
             </button>
           </div>
-          {Message === 'Training saved successfully!' && (
-            <div className="mt-4">
-              <p className="text-green-500">{Message}</p>
-            </div>
-          )}{' '}
-          {Message === 'Error saving training.' && (
-            <div className="mt-4">
-              <p className="text-red-500">{Message}</p>
-            </div>
-          )}
         </div>
       </TemplatePage>
     </div>

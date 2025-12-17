@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from './api';
 import TemplatePage from './templatepage.jsx';
+import Notify from './notify.jsx';
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -39,6 +40,7 @@ function Profile() {
   const [errorEmailMessageAPI, setErrorEmailMessageAPI] = useState('');
   const [modalDeleteAccount, setModalDeleteAccount] = useState(false);
   const [messageDeleteAccount, setMessageDeleteAccount] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     api
@@ -82,10 +84,20 @@ function Profile() {
       })
       .then((response) => {
         console.log('Profile updated successfully:', response.data);
+        setNotification({
+          title: 'Profile Updated',
+          message: 'Your profile has been updated successfully.',
+          type: 'success',
+        });
         setEdit(false);
       })
       .catch((error) => {
         console.error('Error updating profile:', error);
+        setNotification({
+          title: 'Error',
+          message: 'There was an error updating your profile.',
+          type: 'error',
+        });
       });
   };
 
@@ -197,15 +209,21 @@ function Profile() {
         old_password: password,
         new_password: newPassword,
       })
-      .then((response) => {
-        console.log('Password changed successfully:', response.data);
+      .then(() => {
+        setNotification({
+          title: 'Password Changed',
+          message: 'Your password has been changed successfully.',
+          type: 'success',
+        });
+
         setModalPassword(false);
       })
-      .catch((error) => {
-        console.error('Error changing password:', error);
-        setErrorEmailMessageAPI(
-          <span className="text-red-500 text-xs text-center">Error changing password</span>
-        );
+      .catch(() => {
+        setNotification({
+          title: 'Error',
+          message: 'There was an error changing your password.',
+          type: 'error',
+        });
       });
   };
 
@@ -215,15 +233,20 @@ function Profile() {
         new_email: newEmail,
         password: password,
       })
-      .then((response) => {
-        console.log('Email changed successfully:', response.data);
+      .then(() => {
+        setNotification({
+          title: 'Email Changed',
+          message: 'Your email has been changed successfully.',
+          type: 'success',
+        });
         setEmailModal(false);
       })
-      .catch((error) => {
-        console.error('Error changing email:', error);
-        setErrorEmailMessageAPI(
-          <span className="text-red-500 text-xs text-center">Error changing email</span>
-        );
+      .catch(() => {
+        setNotification({
+          title: 'Error',
+          message: 'There was an error changing your email.',
+          type: 'error',
+        });
       });
   };
 
@@ -242,9 +265,11 @@ function Profile() {
       })
       .catch((error) => {
         console.error('Error deleting account:', error);
-        setMessageDeleteAccount(
-          <span className="text-red-500 text-xs text-center">Error deleting account</span>
-        );
+        setNotification({
+          title: 'Error',
+          message: 'There was an error deleting your account.',
+          type: 'error',
+        });
       });
   };
 
@@ -537,6 +562,17 @@ function Profile() {
     <div>
       <Header />
       <TemplatePage>
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            duration={1500}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotification(null)}
+          />
+        )}
         {edit ? (
           <div className="space-y-2">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
