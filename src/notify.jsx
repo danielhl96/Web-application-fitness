@@ -23,7 +23,13 @@ function Notify({ title, message, type, duration = 3000, onClose }) {
           border: `${type == 'success' ? '2px solid #22c55e' : '2px solid #ef4444'}`,
         }}
       >
-        <h1 className="text-green-400 font-bold text-lg mb-2">{title}</h1>
+        <h1
+          className={`${
+            type === 'success' ? 'text-green-400' : 'text-red-400'
+          } font-bold text-lg mb-2`}
+        >
+          {title}
+        </h1>
         <p className="text-slate-200 text-sm">{message}</p>
       </div>
     </div>
