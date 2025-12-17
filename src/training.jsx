@@ -43,6 +43,7 @@ function StartTraining() {
   const [data, setData] = useState([]);
   const [breakModal, setBreakModal] = useState(false);
   const [breakTime, setBreakTime] = useState(0);
+  const [counterisRunning, setCounterisRunning] = useState(false);
   const intervalRef = useRef();
 
   // whenever `data` (from backend) changes, compute the desired shape and set state
@@ -472,6 +473,7 @@ function StartTraining() {
   }
 
   const startCounter = () => {
+    setCounterisRunning(true);
     intervalRef.current = setInterval(function () {
       setBreakTime((prevSec) => prevSec - 1);
     }, 1000); // every 1000 ms = 1 second
@@ -480,11 +482,13 @@ function StartTraining() {
   useEffect(() => {
     if (breakTime === 0) {
       stopCounter();
+      setCounterisRunning(false);
     }
   }, [breakTime]);
 
   const stopCounter = () => {
     clearInterval(intervalRef.current);
+    setCounterisRunning(false);
     setBreakTime(0);
   };
 
@@ -514,7 +518,7 @@ function StartTraining() {
             </div>
             <div className="flex flex-row justify-center items-center gap-4 mt-2">
               <button
-                disabled={breakTime === 0}
+                disabled={breakTime === 0 || counterisRunning}
                 onClick={() => startCounter()}
                 className="btn btn-outline btn-primary btn-xs"
               >
