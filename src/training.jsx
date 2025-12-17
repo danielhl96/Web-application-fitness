@@ -1,6 +1,6 @@
 import './index.css';
 import Header from './Header';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
@@ -41,6 +41,9 @@ function StartTraining() {
   // keep the selected state separate and initialize as empty object
   const [selectedExercise, setExercise] = useState({});
   const [data, setData] = useState([]);
+  const [breakModal, setBreakModal] = useState(false);
+  const [breakTime, setBreakTime] = useState(0);
+  const intervalRef = useRef();
 
   // whenever `data` (from backend) changes, compute the desired shape and set state
   useEffect(() => {
@@ -426,7 +429,17 @@ function StartTraining() {
   function TrainingEndModal() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div className="modal-box border border-blue-500 bg-slate-800">
+        <div
+          className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
+          style={{
+            maxWidth: '90vw',
+            background: 'rgba(0,0,0,0.20)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+          }}
+        >
           <div className="flex flex-col justify-center items-center  text-xs">
             <h2 className="text-amber-50 font-bold mb-2">Workout Complete!</h2>
             <div className="flex flex-row justify-center items-center gap-4 mt-2">
@@ -450,6 +463,84 @@ function StartTraining() {
                 className="btn btn-outline btn-primary hover:bg-blue-600 text-white"
               >
                 ok
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const startCounter = () => {
+    intervalRef.current = setInterval(function () {
+      setBreakTime((prevSec) => prevSec - 1);
+    }, 1000); // every 1000 ms = 1 second
+  };
+
+  useEffect(() => {
+    if (breakTime === 0) {
+      stopCounter();
+    }
+  }, [breakTime]);
+
+  const stopCounter = () => {
+    clearInterval(intervalRef.current);
+    setBreakTime(0);
+  };
+
+  function BreakTimeModal() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
+          style={{
+            width: '16rem', // ca. 256px, deutlich kleiner als Standard
+            minWidth: '10rem',
+            maxWidth: '90vw',
+            background: 'rgba(0,0,0,0.20)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+          }}
+        >
+          <div className="flex flex-col justify-center items-center  text-xs">
+            <h1 className="text-amber-50 text-xl font-bold mb-2">Take a Break!</h1>
+            <div className="flex flex-row justify-center items-center  mt-2">
+              <p1 className="text-slate-200 text-xl font-mono">
+                {Math.floor(breakTime / 60)}:
+                {breakTime % 60 < 10 ? `0${breakTime % 60}` : breakTime % 60}
+              </p1>
+            </div>
+            <div className="flex flex-row justify-center items-center gap-4 mt-2">
+              <button
+                disabled={breakTime === 0}
+                onClick={() => startCounter()}
+                className="btn btn-outline btn-primary btn-xs"
+              >
+                Go
+              </button>
+              <button
+                onClick={() => {
+                  setBreakModal(false);
+                  stopCounter();
+                }}
+                className="btn btn-outline btn-error btn-xs"
+              >
+                X
+              </button>
+              <button
+                onClick={() => setBreakTime((prev) => prev + 10)}
+                className="btn btn-outline btn-success btn-xs"
+              >
+                +10s
+              </button>
+              <button
+                disabled={breakTime < 10}
+                onClick={() => setBreakTime((prev) => prev - 10)}
+                className="btn btn-outline btn-success btn-xs "
+              >
+                -10s
               </button>
             </div>
           </div>
@@ -731,6 +822,23 @@ function StartTraining() {
                   />
                 </svg>
               </button>
+              <button onClick={() => setBreakModal(true)} className="btn btn-outline btn-accent">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
+              {breakModal && BreakTimeModal()}
             </div>
             <div className="divider divider-primary"></div>
             <div className="flex space-x-2 items-center justify-center">
