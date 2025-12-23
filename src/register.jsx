@@ -138,11 +138,32 @@ function RegisterPage() {
               confirmPassword.length === 0 ||
               succesRegister
             }
-            className="btn btn-outline btn-success w-15 space-y-5"
+            className="w-auto px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
+            style={{
+              background: 'rgba(30, 41, 59, 0.25)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              border: '1.5px solid rgba(59, 130, 246, 0.25)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(8, 173, 77, 0.3)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
           >
             Register
           </button>
-          <button onClick={() => navigate('/login')} className="btn btn-outline btn-warning w-15">
+          <button
+            onClick={() => navigate('/login')}
+            className="w-auto px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
+            style={{
+              background: 'rgba(30, 41, 59, 0.25)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              border: '1.5px solid rgba(59, 130, 246, 0.25)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#f63b3bff')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+          >
             Back
           </button>
         </div>
