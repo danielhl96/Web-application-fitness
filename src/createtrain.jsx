@@ -196,7 +196,7 @@ function CreateTraining() {
             <button
               disabled={WorkoutName === ''}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -204,6 +204,8 @@ function CreateTraining() {
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               {WorkoutNameSet ? (
                 <svg
@@ -327,7 +329,7 @@ function CreateTraining() {
             <button
               disabled={WorkoutName === '' || selectedExercise.length === 0}
               onClick={() => handleSaveTraining()}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -335,6 +337,8 @@ function CreateTraining() {
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -353,7 +357,7 @@ function CreateTraining() {
             </button>
             <button
               onClick={() => navigate('/')}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400"
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -361,6 +365,8 @@ function CreateTraining() {
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               {Message === 'Training saved successfully!' ? (
                 <>

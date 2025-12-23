@@ -353,7 +353,7 @@ function Profile() {
               <button
                 onClick={() => handleChangeEmail()}
                 disabled={!!errorEmailMessage || password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -361,6 +361,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -379,7 +381,7 @@ function Profile() {
               </button>
               <button
                 onClick={() => setEmailModal(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -387,6 +389,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -479,7 +483,7 @@ function Profile() {
               <button
                 onClick={() => handleChangePassword()}
                 disabled={passwordError || newPassword !== confirmNewPassword}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -490,6 +494,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -508,7 +514,7 @@ function Profile() {
               </button>
               <button
                 onClick={() => setModalPassword(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -516,6 +522,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -577,7 +585,7 @@ function Profile() {
               <button
                 onClick={() => handleDeleteAccount()}
                 disabled={password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -585,6 +593,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -603,7 +613,7 @@ function Profile() {
               </button>
               <button
                 onClick={() => setModalDeleteAccount(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -611,6 +621,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -907,7 +919,7 @@ function Profile() {
                   failureWaist == true ||
                   failureHip == true
                 }
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -915,6 +927,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -933,7 +947,7 @@ function Profile() {
               </button>
               <button
                 onClick={() => setEdit(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
                 style={{
                   background: 'rgba(30, 41, 59, 0.25)',
                   boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -941,6 +955,8 @@ function Profile() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

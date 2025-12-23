@@ -184,7 +184,10 @@ const EditTrain = () => {
                 border: '1.5px solid #ef4444',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +213,10 @@ const EditTrain = () => {
                 border: '1.5px solid #3b82f6',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -264,7 +270,10 @@ const EditTrain = () => {
                 border: '1.5px solid #3b82f6',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +299,10 @@ const EditTrain = () => {
                 border: '1.5px solid #f63b3bff',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -328,7 +340,10 @@ const EditTrain = () => {
                 border: '1.5px solid #3b82f6',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -347,14 +362,17 @@ const EditTrain = () => {
             </button>
             <button
               onClick={() => (setConfirmationModalforWorkoutDelete(true), setKey(exercise))}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
+                border: '1.5px solid #ef4444',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -563,7 +581,10 @@ const EditTrain = () => {
                 border: '1.5px solid #3b82f6',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -589,7 +610,10 @@ const EditTrain = () => {
                 border: '1.5px solid #f63b3bff',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
+                transition: 'background 0.2s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -681,7 +705,14 @@ const EditTrain = () => {
                     border: '1.5px solid rgba(59, 130, 246, 0.25)',
                     backdropFilter: 'blur(8px)',
                     WebkitBackdropFilter: 'blur(8px)',
+                    transition: 'background 0.2s',
                   }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                  }
                 >
                   Create Workout
                 </button>
