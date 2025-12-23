@@ -149,7 +149,17 @@ function CounterForm() {
             <h1>Roundtime: {roundtime} s</h1>
           </div>
           <div className="modal-action justify-center">
-            <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>
+            <button
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onClick={() => setShowModal(false)}
+            >
               Close
             </button>
           </div>
@@ -257,7 +267,14 @@ function CounterForm() {
 
           <div className="flex flex-col items-center space-y-2">
             <button
-              className="btn btn-outline btn-warning rounded-full mt-2 btn-sm flex flex-col items-center"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center mt-2 btn-sm"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => setShowModal(true)}
             >
               <svg
@@ -286,7 +303,14 @@ function CounterForm() {
           <div className="flex- flex row space-x-2 ">
             <button
               disabled={rounds === 0}
-              className="btn btn-outline btn-primary rounded-full btn-sm flex flex-col items-center"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => (isStopmode ? stopCounter() : startCounter())}
             >
               {isStopmode ? (
@@ -334,7 +358,14 @@ function CounterForm() {
               )}
             </button>
             <button
-              className="btn btn-outline btn-secondary rounded-full btn-sm flex flex-col items-center"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => resetCounter()}
             >
               <svg

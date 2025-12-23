@@ -321,6 +321,17 @@ def delete_account():
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     user_id = verification.get("sub")
+    password = request.json.get("password")
+    user = session.query(User).filter_by(id=user_id).first()
+    data = request.json
+    try:
+        if not argon2.verify(user.password, data.get("password")):
+            return jsonify({"message": "Password is incorrect!"}), 400
+    except VerifyMismatchError:
+        return jsonify({"message": "Password is incorrect!"}), 400  
+    if not argon2.verify(user.password, data.get("password")):
+        return jsonify({"message": "Password is incorrect!"}), 400
+    
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
         return jsonify({"message": "User not found!"}), 404

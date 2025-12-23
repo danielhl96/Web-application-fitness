@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
-
+import Input from './input.jsx';
 import api from './api';
 
 function StartTraining() {
@@ -412,13 +412,56 @@ function StartTraining() {
           </div>
           <div className="modal-action justify-center">
             <button
-              className="btn btn-primary rounded-full"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => changeWeight(idx, false)}
             >
-              Save
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
             </button>
-            <button className="btn btn-secondary rounded-full" onClick={() => setShowModal(false)}>
-              Close
+            <button
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onClick={() => setShowModal(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -514,7 +557,14 @@ function StartTraining() {
                 onClick={() => {
                   counterisRunning ? stopCounter() : startCounter();
                 }}
-                className="btn btn-outline btn-primary btn-sm"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 {counterisRunning ? 'Break' : 'Go'}
               </button>
@@ -524,9 +574,29 @@ function StartTraining() {
                   stopCounter();
                   setBreakTime(0);
                 }}
-                className="btn btn-outline btn-error btn-sm"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
-                X
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
           </div>
@@ -653,7 +723,14 @@ function StartTraining() {
                   <p className="text-white">No workout plans available. Please create one first.</p>
                   <button
                     onClick={() => navigate('/createtrain')}
-                    className="btn btn-outline btn-primary mt-4"
+                    className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 mt-4"
+                    style={{
+                      background: 'rgba(30, 41, 59, 0.25)',
+                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                      border: '1.5px solid #f63b3bff',
+                      backdropFilter: 'blur(8px)',
+                      WebkitBackdropFilter: 'blur(8px)',
+                    }}
                   >
                     Create Workout
                   </button>
@@ -721,21 +798,31 @@ function StartTraining() {
             <div className="overflow-y-auto max-h-40 space-y-2">
               {Array.from({ length: training1.sets }).map((_, index) => (
                 <div className="flex flex-row space-x-3 items-center justify-center" key={index}>
-                  <div className="flex w-20">
-                    <input
-                      disabled={training1.isFinished}
+                  <div className="flex w-20 space-x-2 items-center justify-center ">
+                    <Input
+                      onDisable={training1.isFinished}
                       type="text"
                       placeholder={'Reps: ' + training1.reps[index]}
-                      className="input input-primary"
                       id={'input' + (index + 1)}
-                      onBlur={(e) => addInput(parseInt(e.target.value), index)}
+                      w="w-25"
+                      h="h-8"
+                      onChange={(e) => addInput(parseInt(e.target.value), index)}
                     />
                   </div>
                   <div className="flex space-x-2 items-center justify-center ">
                     <button
                       disabled={training1.isFinished}
                       onClick={() => handleModal(index, true)}
-                      className="btn btn-outline btn-warning"
+                      className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                      style={{
+                        background: 'rgba(30, 41, 59, 0.25)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                        border: !training1.isFinished
+                          ? '1.5px solid #ffea00ff'
+                          : '1.5px solid  #3b82f6  ',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                      }}
                     >
                       Weight: {training1.weights[index]} kg
                     </button>
@@ -747,7 +834,14 @@ function StartTraining() {
               <button
                 disabled={training1.isFinished}
                 onClick={() => handleReduceSets()}
-                className="btn btn-outline btn-secondary"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -767,7 +861,14 @@ function StartTraining() {
               <button
                 disabled={training1.isFinished}
                 onClick={() => handleAddSets()}
-                className="btn btn-outline btn-success"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -784,7 +885,17 @@ function StartTraining() {
                   />
                 </svg>
               </button>
-              <button onClick={() => setBreakModal(true)} className="btn btn-outline btn-accent">
+              <button
+                onClick={() => setBreakModal(true)}
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4"
@@ -808,7 +919,14 @@ function StartTraining() {
                 onClick={() => {
                   setSelectedTrainingSite(true);
                 }}
-                className="btn btn-outline btn-primary btn-primary"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -828,7 +946,14 @@ function StartTraining() {
               <button
                 disabled={idxExercise == 0}
                 onClick={() => handleExerciseBack()}
-                className="btn btn-outline btn-primary"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -845,7 +970,17 @@ function StartTraining() {
                   />
                 </svg>
               </button>
-              <button onClick={() => handleExercise()} className="btn btn-outline btn-primary">
+              <button
+                onClick={() => handleExercise()}
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              >
                 {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
                   <svg // success icon
                     xmlns="http://www.w3.org/2000/svg"
@@ -882,7 +1017,14 @@ function StartTraining() {
                 onClick={() => {
                   setExerciseList(true);
                 }}
-                className="btn btn-outline btn-primary btn-primary"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

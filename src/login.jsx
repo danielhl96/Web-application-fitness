@@ -5,6 +5,7 @@ import Header from './HeaderLogout.jsx';
 import api from './api.js';
 import TemplatePage from './templatepage.jsx';
 import EmailInput from './emailinput.jsx';
+import PasswordInput from './passwordinput.jsx';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -18,8 +19,7 @@ function LoginForm() {
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    console.log('Password changed:', e.target.value);
+    setPassword(e);
   };
 
   async function handleLogin() {
@@ -59,11 +59,21 @@ function LoginForm() {
           <h1 className="text-shadow-lg font-mono">Password</h1>
 
           <div>
-            <input
+            <PasswordInput
+              value={password}
               type="password"
-              placeholder={'Password: '}
-              className="input input-primary"
-              onChange={(e) => handlePasswordChange(e)}
+              placeholder={'Password'}
+              className="w-full px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid rgba(59, 130, 246, 0.25)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onChange={handlePasswordChange}
+              onError={(error) => console.log('Password error:', error)}
+              errorMessage={''}
             />
           </div>
           <h1 className="text-red-500 text-sm ">{message}</h1>

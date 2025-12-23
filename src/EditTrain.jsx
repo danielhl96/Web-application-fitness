@@ -8,6 +8,7 @@ import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
 import ExerciseCard from './exercisecard.jsx';
 import Notify from './notify.jsx';
+import Input from './input.jsx';
 
 const EditTrain = () => {
   const navigate = useNavigate();
@@ -176,15 +177,55 @@ const EditTrain = () => {
           <div className="modal-action">
             <button
               onClick={() => handeRemoveWorkoutAPI(savekey)}
-              className="btn btn-outline btn-error"
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #ef4444',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
-              Delete
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
             </button>
             <button
               onClick={() => setConfirmationModalforWorkoutDelete(false)}
-              className="btn btn-outline btn-primary"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
-              Cancel
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -206,22 +247,65 @@ const EditTrain = () => {
           }}
         >
           <h3 className="font-bold text-lg text-amber-50 mb-4">Change Workout Name</h3>
-          <input
-            type="text"
+          <Input
             placeholder="New Workout Name"
-            className="input input-bordered w-full max-w-xs mb-4 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            w="w-full"
+            h="h-10"
             id="workout-name-input"
             onChange={(e) => setWorkoutName(e.target.value)}
           />
           <div className="modal-action">
-            <button onClick={() => changeWorkoutNameAPI()} className="btn btn-outline btn-primary">
-              Save
+            <button
+              onClick={() => changeWorkoutNameAPI()}
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             </button>
             <button
               onClick={() => setShowEditWorkoutNameModal(false)}
-              className="btn btn-outline btn-error"
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
-              Cancel
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -237,7 +321,14 @@ const EditTrain = () => {
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
             <button
               onClick={() => handleShowModal(exercise)}
-              className="btn btn-outline btn-primary"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +347,14 @@ const EditTrain = () => {
             </button>
             <button
               onClick={() => (setConfirmationModalforWorkoutDelete(true), setKey(exercise))}
-              className="btn btn-outline btn-error"
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -364,12 +462,13 @@ const EditTrain = () => {
       <div>
         <div className="flex flex-col items-center space-y-1 h-130 ">
           <div className="flex flex-col w-70 md:w-80 items-center space-y-4 ">
-            <input
-              type="search"
+            <Input
               placeholder="Add an exercise..."
-              className="w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={addExercise}
+              onChange={(e) => setaddExercise(e.target.value)}
               id="input-e"
-              onChange={handleAddExercise2}
+              w="w-54"
+              h="h-10"
             />
 
             <div
@@ -455,7 +554,17 @@ const EditTrain = () => {
           </div>
           <div className="divider divider-primary"></div>
           <div className="flex flex-row gap-2">
-            <button onClick={handleEditWorkout} className="btn btn-outline btn-primary">
+            <button
+              onClick={handleEditWorkout}
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -471,7 +580,17 @@ const EditTrain = () => {
                 />
               </svg>
             </button>
-            <button onClick={handleShowModal} className="btn btn-outline btn-error">
+            <button
+              onClick={handleShowModal}
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -555,7 +674,14 @@ const EditTrain = () => {
                 <p className="text-white">No workout plans available. Please create one first.</p>
                 <button
                   onClick={() => navigate('/createtrain')}
-                  className="btn btn-outline btn-primary mt-4"
+                  className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                  style={{
+                    background: 'rgba(30, 41, 59, 0.25)',
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                    border: '1.5px solid rgba(59, 130, 246, 0.25)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                  }}
                 >
                   Create Workout
                 </button>

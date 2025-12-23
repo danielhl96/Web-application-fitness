@@ -155,7 +155,14 @@ function ExerciseCard({
         </div>
         <div className="flex flex-row justify-center items-center space-x-2 mb-6 ">
           <button
-            className="btn btn-outline btn-warning mb-2"
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+            style={{
+              background: 'rgba(30, 41, 59, 0.25)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              border: '1.5px solid #f63b3bff',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
             onClick={() => handleRemoveExercise()}
           >
             {/* Mülltonne Icon */}
@@ -175,7 +182,17 @@ function ExerciseCard({
             </svg>
           </button>
 
-          <button className="btn btn-outline btn-success mb-2" onClick={() => changePosition('up')}>
+          <button
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+            style={{
+              background: 'rgba(30, 41, 59, 0.25)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              border: '1.5px solid #3b82f6',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
+            onClick={() => changePosition('up')}
+          >
             {/* Up Arrow Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +210,14 @@ function ExerciseCard({
             </svg>
           </button>
           <button
-            className="btn btn-outline btn-success mb-2"
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+            style={{
+              background: 'rgba(30, 41, 59, 0.25)',
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              border: '1.5px solid #3b82f6',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
             onClick={() => changePosition('down')}
           >
             {/* Down Arrow Icon */}

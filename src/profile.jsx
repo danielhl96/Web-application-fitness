@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import api from './api';
 import TemplatePage from './templatepage.jsx';
 import Notify from './notify.jsx';
+import PasswordInput from './passwordinput.jsx';
+import EmailInput from './emailinput.jsx';
+import Input from './input.jsx';
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -261,7 +264,14 @@ function Profile() {
       })
       .then((response) => {
         console.log('Account deleted successfully:', response.data);
-        handlelogout();
+        setNotification({
+          title: 'Account Deleted',
+          message: 'Your account has been deleted successfully.',
+          type: 'success',
+        });
+        setTimeout(() => {
+          handlelogout();
+        }, 1200); // 1,2 Sekunden warten, damit Notify sichtbar ist
       })
       .catch((error) => {
         console.error('Error deleting account:', error);
@@ -300,6 +310,17 @@ function Profile() {
   const handleEmailModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            duration={1500}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotification(null)}
+          />
+        )}
         <div
           className="modal-box border border-blue-500 shadow-xl rounded-xl"
           style={{
@@ -313,18 +334,18 @@ function Profile() {
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
           <div className="flex flex-col space-y-2 mt-2">
-            <input
-              onChange={(e) => setNewEmail(e.target.value)}
-              className="input input-primary"
+            <EmailInput
+              onChange={setNewEmail}
               type="email"
+              value={newEmail}
               placeholder="New email"
             />
-            {errorEmailMessage}
 
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              className="input input-primary"
+            <PasswordInput
+              onChange={setPassword}
               type="password"
+              value={password}
+              errorMessage={''}
               placeholder="Current password"
             />
             <div className="divider divider-primary"></div>
@@ -332,7 +353,14 @@ function Profile() {
               <button
                 onClick={() => handleChangeEmail()}
                 disabled={!!errorEmailMessage || password.length === 0}
-                className="btn btn-outline btn-success  flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -351,7 +379,14 @@ function Profile() {
               </button>
               <button
                 onClick={() => setEmailModal(false)}
-                className="btn btn-outline btn-warning  flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -379,6 +414,17 @@ function Profile() {
   const handleModalforPassword = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            duration={1500}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotification(null)}
+          />
+        )}
         <div
           className="modal-box border border-blue-500 shadow-xl rounded-xl"
           style={{
@@ -392,18 +438,25 @@ function Profile() {
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your password</h3>
           <div className="flex flex-col space-y-2 mt-2">
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              className="input input-primary"
+            <PasswordInput
+              value={password}
               type="password"
-              placeholder="Current password"
+              placeholder={'Password'}
+              onChange={setPassword}
+              onError={(error) => console.log('Password error:', error)}
+              errorMessage={
+                'Password must be at least 8 characters uppercase, lowercase, number, and special character.'
+              }
             />
-            <input
-              onChange={(e) => setNewPassword(e.target.value)}
+            <PasswordInput
+              onChange={setNewPassword}
               onBlur={() => setInputTouched(true)}
-              className="input input-primary"
               type="password"
               placeholder="New password"
+              value={newPassword}
+              errorMessage={
+                'Password must be at least 8 characters uppercase, lowercase, number, and special character.'
+              }
             />
             {passwordError && inputTouched && (
               <span className="text-red-500 text-xs">
@@ -411,11 +464,12 @@ function Profile() {
                 character.
               </span>
             )}
-            <input
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="input input-primary"
+            <PasswordInput
+              onChange={setConfirmNewPassword}
               type="password"
               placeholder="Confirm new password"
+              value={confirmNewPassword}
+              errorMessage={'Passwords do not match.'}
             />
             {newPassword !== confirmNewPassword && (
               <span className="text-red-500 text-xs">Passwords do not match.</span>
@@ -425,7 +479,17 @@ function Profile() {
               <button
                 onClick={() => handleChangePassword()}
                 disabled={passwordError || newPassword !== confirmNewPassword}
-                className="btn btn-outline btn-success  flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border:
+                    passwordError || newPassword !== confirmNewPassword
+                      ? '1.5px solid transparent'
+                      : '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +508,14 @@ function Profile() {
               </button>
               <button
                 onClick={() => setModalPassword(false)}
-                className="btn btn-outline btn-warning  flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -472,6 +543,17 @@ function Profile() {
   const handleModalforAccountDelete = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        {notification && (
+          <Notify
+            title={notification.title}
+            message={notification.message}
+            duration={1500}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotification(null)}
+          />
+        )}
         <div
           className="modal-box border border-blue-500 shadow-xl rounded-xl"
           style={{
@@ -484,17 +566,25 @@ function Profile() {
         >
           <h3 className="font-bold text-lg text-amber-50">Delete your account</h3>
           <div className="flex flex-col justify-start  text-xs">
-            <input
+            <PasswordInput
+              value={password}
+              errorMessage={''}
               placeholder="Your password"
-              className="input input-primary mt-4"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
             />
-            <div className="flex flex-row justify-start space-x-2">
+            <div className="flex flex-row justify-start space-x-2 space-y-2 mt-4">
               <button
                 onClick={() => handleDeleteAccount()}
                 disabled={password.length === 0}
-                className="btn btn-outline btn-warning w-15 mt-4"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -513,7 +603,14 @@ function Profile() {
               </button>
               <button
                 onClick={() => setModalDeleteAccount(false)}
-                className="btn btn-outline btn-warning w-15 mt-4"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -592,15 +689,15 @@ function Profile() {
               </svg>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col space-y-1  h-15">
                 <h1>Age</h1>
-                <input
-                  type="text"
+                <Input
                   placeholder={age + ' years'}
-                  className="input input-primary"
                   id={'age'}
-                  onChange={(e) => handleAge(e)}
+                  onChange={handleAge}
+                  w="w-24"
+                  h="h-8"
                 />
                 {failureAge && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid age</h1>
@@ -608,12 +705,12 @@ function Profile() {
               </div>
               <div className="flex flex-col space-y-1 h-15">
                 <h1>Weight</h1>
-                <input
-                  type="text"
+                <Input
                   placeholder={weight + ' kg'}
-                  className="input input-primary"
                   id={'weight'}
-                  onChange={(e) => handleWeight(e)}
+                  onChange={handleWeight}
+                  w="w-24"
+                  h="h-8"
                 />
                 {failureWeight && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid weight</h1>
@@ -621,12 +718,12 @@ function Profile() {
               </div>
               <div className="flex flex-col space-y-1  h-15">
                 <h1>Height</h1>
-                <input
-                  type="text"
+                <Input
                   placeholder={height + ' cm'}
-                  className="input input-primary"
                   id={'height'}
-                  onChange={(e) => handleHeight(e)}
+                  onChange={handleHeight}
+                  w="w-24"
+                  h="h-8"
                 />
                 {failureHeight && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid height</h1>
@@ -634,12 +731,12 @@ function Profile() {
               </div>
               <div className="flex flex-col space-y-1  h-15">
                 <h1>Waist</h1>
-                <input
-                  type="text"
+                <Input
                   placeholder={waist + ' cm'}
-                  className="input input-primary"
                   id={'waist'}
-                  onChange={(e) => handleWaist(e)}
+                  onChange={handleWaist}
+                  w="w-24"
+                  h="h-8"
                 />
                 {failureWaist && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid waist</h1>
@@ -647,26 +744,14 @@ function Profile() {
               </div>
               <div className="flex flex-col space-y-1  h-15">
                 <h1>Hip</h1>
-                <input
-                  type="text"
-                  placeholder={hip + ' cm'}
-                  className="input input-primary"
-                  id={'hip'}
-                  onChange={(e) => handleHip(e)}
-                />
+                <Input placeholder={hip + ' cm'} id={'hip'} onChange={handleHip} w="w-24" h="h-8" />
                 {failureHip && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid hip</h1>
                 )}
               </div>
               <div className="flex flex-col space-y-1  h-15">
                 <h1>BFP</h1>
-                <input
-                  type="text"
-                  placeholder={bfp + ' %'}
-                  className="input input-primary"
-                  id={'bfp'}
-                  onChange={(e) => handleBFP(e)}
-                />
+                <Input placeholder={bfp + ' %'} id={'bfp'} onChange={handleBFP} w="w-24" h="h-8" />
                 {failureBFP && (
                   <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid bfp</h1>
                 )}
@@ -677,11 +762,16 @@ function Profile() {
               <button
                 onClick={() => handleGender('male')}
                 style={{
-                  color: gender === 'male' ? 'white' : 'black',
+                  color: gender === 'male' ? 'white' : 'white',
                   backgroundColor: gender === 'male' ? 'black' : 'transparent',
                   border: '1px solid black',
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                 }}
-                className="btn btn-outline w-15 h-9"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -695,11 +785,17 @@ function Profile() {
               <button
                 onClick={() => handleGender('female')}
                 style={{
-                  color: gender === 'female' ? 'white' : 'black',
+                  color: gender === 'female' ? 'white' : 'white',
                   backgroundColor: gender === 'female' ? 'black' : 'transparent',
                   border: '1px solid black',
+
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                 }}
-                className="btn btn-outline btn-primary w-15 h-9"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -731,33 +827,48 @@ function Profile() {
               <button
                 onClick={() => handleGoal(1)}
                 style={{
-                  color: goal === 1 ? 'white' : 'black',
+                  color: goal === 1 ? 'white' : 'white',
                   backgroundColor: goal === 1 ? 'black' : 'transparent',
                   border: '1px solid black',
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                 }}
-                className="btn btn-outline btn-primary w-15 h-9"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 Cut
               </button>
               <button
                 onClick={() => handleGoal(2)}
                 style={{
-                  color: goal === 2 ? 'white' : 'black',
+                  color: goal === 2 ? 'white' : 'white',
                   backgroundColor: goal === 2 ? 'black' : 'transparent',
                   border: '1px solid black',
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                 }}
-                className="btn btn-outline btn-primary w-15 h-9"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 Maintain
               </button>
               <button
                 onClick={() => handleGoal(3)}
                 style={{
-                  color: goal === 3 ? 'white' : 'black',
+                  color: goal === 3 ? 'white' : 'white',
                   backgroundColor: goal === 3 ? 'black' : 'transparent',
                   border: '1px solid black',
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                 }}
-                className="btn btn-outline btn-primary w-15 h-9"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 Bulk
               </button>
@@ -796,7 +907,14 @@ function Profile() {
                   failureWaist == true ||
                   failureHip == true
                 }
-                className="btn btn-outline btn-success w-15 flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -815,7 +933,14 @@ function Profile() {
               </button>
               <button
                 onClick={() => setEdit(false)}
-                className="btn btn-outline btn-warning w-15 flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -931,7 +1056,14 @@ function Profile() {
             <div className="flex flex-row space-x-2 items-center justify-center">
               <button
                 onClick={() => setEdit(true)}
-                className="btn btn-outline btn-success flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -950,7 +1082,14 @@ function Profile() {
               </button>
               <button
                 onClick={() => navigate('/')}
-                className="btn btn-outline btn-warning flex items-center justify-center"
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #f63b3bff',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

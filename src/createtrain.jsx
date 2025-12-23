@@ -7,6 +7,7 @@ import exercise from './exercises.jsx';
 import TemplatePage from './templatepage.jsx';
 import ExerciseCard from './exercisecard.jsx';
 import Notify from './notify.jsx';
+import Input from './input.jsx';
 
 function CreateTraining() {
   const navigate = useNavigate();
@@ -184,20 +185,25 @@ function CreateTraining() {
         <div className="flex flex-col items-center space-y-2 h-auto">
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
-            <input
-              disabled={WorkoutNameSet}
+            <Input
+              value={WorkoutName}
+              onDisable={WorkoutNameSet}
               type="input"
               placeholder="Workout name"
-              className={`w-54 h-10 ${
-                WorkoutNameSet ? 'bg-gray-900 border border-green-500' : 'bg-gray-900'
-              } text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
               id="training-input"
               onChange={(e) => setWorkoutName(e.target.value)}
             />
             <button
               disabled={WorkoutName === ''}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
-              className="btn btn-outline btn-primary"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
               {WorkoutNameSet ? (
                 <svg
@@ -236,12 +242,14 @@ function CreateTraining() {
             <div className="flex flex-col items-center space-y-2">
               <h1 className="text-slate-400">Search your exercise:</h1>
               <div className="form-control">
-                <input
-                  type="search"
+                <Input
+                  value={addExercise}
+                  onChange={(e) => setaddExercise(e.target.value)}
+                  w="w-54"
+                  h="h-10"
                   placeholder="Enter an exercise name"
                   className="input input-bordered w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   id="input-e"
-                  onChange={handleAddExercise2}
                 />
               </div>
               <div className="divider divider-primary text-amber-50 font-bold mb-2">
@@ -319,7 +327,14 @@ function CreateTraining() {
             <button
               disabled={WorkoutName === '' || selectedExercise.length === 0}
               onClick={() => handleSaveTraining()}
-              className="btn btn-outline btn-primary"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -336,7 +351,17 @@ function CreateTraining() {
                 />
               </svg>
             </button>
-            <button onClick={() => navigate('/')} className="btn btn-outline btn-error">
+            <button
+              onClick={() => navigate('/')}
+              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff', // red-500
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            >
               {Message === 'Training saved successfully!' ? (
                 <>
                   <svg
