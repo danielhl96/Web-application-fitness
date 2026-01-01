@@ -16,6 +16,7 @@ import AttributionPage from './attributionpage.jsx';
 import { useNavigate } from 'react-router-dom';
 import { AuthProvider } from './AuthProvider.jsx';
 import Statistic from './statistic.jsx';
+import CredentialsPage from './credentials.jsx';
 
 function Home() {
   const navigate = useNavigate();
@@ -193,6 +194,28 @@ function Home() {
             </p>
           </div>
         </div>
+        <div
+          onClick={() => navigate('/credentials')}
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+        >
+          <div className="card-body">
+            <h2 className="card-title text-blue-400 text-sm">Credentials</h2>
+            <div className="flex justify-center my-4">
+              <img
+                src="/credentials.png"
+                className="h-8 w-8 object-cover rounded-md"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+            </div>
+            <p className="text-slate-300 text-sm text-center hidden md:block">
+              View your credentials
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -277,6 +300,16 @@ function App() {
             <AuthProvider>
               <ProtectedRoute>
                 <Statistic />
+              </ProtectedRoute>
+            </AuthProvider>
+          }
+        />
+        <Route
+          path="/credentials"
+          element={
+            <AuthProvider>
+              <ProtectedRoute>
+                <CredentialsPage />
               </ProtectedRoute>
             </AuthProvider>
           }
