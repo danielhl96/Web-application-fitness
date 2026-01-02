@@ -17,12 +17,13 @@ import { useNavigate } from 'react-router-dom';
 import { AuthProvider } from './AuthProvider.jsx';
 import Statistic from './statistic.jsx';
 import CredentialsPage from './credentials.jsx';
+import Nutrition from './nutrition.jsx';
 
 function Home() {
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-gray-black py-16">
-      <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 p-4 overflow-y-auto max-h-140">
         {/* Card 1: Create Training */}
         <div
           onClick={() => navigate('/createtrain')}
@@ -103,7 +104,29 @@ function Home() {
             <p className="text-slate-300 text-sm text-center hidden md:block">Start your workout</p>
           </div>
         </div>
-
+        <div
+          onClick={() => navigate('/nutrition')}
+          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+        >
+          <div className="card-body">
+            <h2 className="card-title text-blue-400 text-sm">Nutrition </h2>
+            <div className="flex justify-center my-4">
+              <img
+                alt="Nutrition Icon"
+                src="/nutrition-plan.png"
+                className="h-8 w-8 object-cover rounded-md"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+            </div>
+            <p className="text-slate-300 text-sm text-center hidden md:block">
+              View your nutrition
+            </p>
+          </div>
+        </div>
         {/* Card 4: Profile */}
         <div
           onClick={() => navigate('/profile')}
@@ -116,20 +139,12 @@ function Home() {
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-sm">Profile</h2>
             <div className="flex justify-center my-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+              <img
+                alt="Profile Icon"
+                src="/scale.png"
+                className="h-8 w-8 object-cover rounded-md"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </div>
             <p className="text-slate-300 text-sm text-center hidden md:block">
               Manage your profile and goals
@@ -206,6 +221,7 @@ function Home() {
             <h2 className="card-title text-blue-400 text-sm">Credentials</h2>
             <div className="flex justify-center my-4">
               <img
+                alt="Credentials Icon"
                 src="/credentials.png"
                 className="h-8 w-8 object-cover rounded-md"
                 style={{ filter: 'brightness(0) invert(1)' }}
@@ -310,6 +326,16 @@ function App() {
             <AuthProvider>
               <ProtectedRoute>
                 <CredentialsPage />
+              </ProtectedRoute>
+            </AuthProvider>
+          }
+        />
+        <Route
+          path="/nutrition"
+          element={
+            <AuthProvider>
+              <ProtectedRoute>
+                <Nutrition />
               </ProtectedRoute>
             </AuthProvider>
           }

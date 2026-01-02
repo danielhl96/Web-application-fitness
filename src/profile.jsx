@@ -1123,69 +1123,6 @@ function Profile() {
                 </svg>
               </button>
             </div>
-            {modalPassword && handleModalforPassword()}
-            {modalDeleteAccount && handleModalforAccountDelete()}
-            {emailModal && handleEmailModal()}
-            <div className="divider  text-amber-50 font-light mb-2  divider-primary">
-              Change your credentials
-            </div>
-            <div className="flex flex-row space-x-2 items-center justify-center">
-              <button onClick={() => setModalPassword(true)} className="btn btn-ghost btn-primary">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-                Password
-              </button>
-              <button onClick={() => setEmailModal(true)} className="btn btn-ghost btn-primary">
-                {' '}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-                Email
-              </button>
-              <button
-                onClick={() => setModalDeleteAccount(true)}
-                className="btn btn-ghost btn-secondary"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-                Account
-              </button>
-            </div>
           </div>
         )}
       </TemplatePage>

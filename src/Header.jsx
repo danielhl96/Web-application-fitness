@@ -116,6 +116,20 @@ function Header() {
             </Link>
 
             <Link
+              to="/nutrition"
+              className="btn btn-ghost text-white md:ml-4"
+              onClick={() => setMenuOpen(false)}
+            >
+              <figure className="w-5 h-5 mb-2">
+                <img
+                  src={'./nutrition-plan.png'}
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                />
+              </figure>
+              Nutrition
+            </Link>
+
+            <Link
               to="/profile"
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
