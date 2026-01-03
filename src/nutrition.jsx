@@ -54,13 +54,23 @@ function Nutrition() {
               className="btn btn-outline btn-primary mr-2"
               onClick={() => cameraInputRef.current && cameraInputRef.current.click()}
             >
-              Cam
+              <figure className="w-5 h-5 mb-2">
+                <img
+                  src={'./cam.png'}
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                />
+              </figure>
             </button>
             <button
               className="btn btn-outline btn-primary"
               onClick={() => fileInputRef.current && fileInputRef.current.click()}
             >
-              File upload
+              <figure className="w-5 h-5 mb-2">
+                <img
+                  src={'./image.png'}
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                />
+              </figure>
             </button>
           </div>
           <div className="modal-action">
@@ -223,7 +233,7 @@ function Nutrition() {
             </button>
           </div>
 
-          <div className="flex flex-col space-y-2 overflow-y-auto max-h-96 mb-4">
+          <div className="flex flex-col space-y-2 overflow-y-auto max-h-90 mb-4">
             <div
               className="card w-full sm:w-80 lg:w-80 h-25 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
