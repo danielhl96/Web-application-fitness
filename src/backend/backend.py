@@ -696,9 +696,8 @@ def create_exercise():
         session.commit()
         return jsonify({"message": "Exercise logged successfully!"}, 201)
 
-@app.route('/api/create_meal', methods=['post'])
-def create_meal():
-    print("Received request to /api/create_meal", flush=True)
+@app.route('/api/calculate_meal', methods=['post'])
+def calculate_meal():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401

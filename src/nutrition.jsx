@@ -25,7 +25,7 @@ function Nutrition() {
     if (prompt) formData.append('prompt', prompt);
     console.log(formData);
     api
-      .post('/create_meal', formData, {
+      .post('/calculate_meal', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((response) => {
