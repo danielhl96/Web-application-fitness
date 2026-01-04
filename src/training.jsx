@@ -30,6 +30,10 @@ function StartTraining() {
             matchingExercise && matchingExercise.weights !== undefined
               ? matchingExercise.weights
               : Array(exercise.sets).fill(0),
+          previousReps:
+            matchingExercise && matchingExercise.reps !== undefined
+              ? matchingExercise.reps
+              : Array(exercise.sets).fill(0),
           plan_id: plan.id,
           isFinished: false,
         };
@@ -45,6 +49,7 @@ function StartTraining() {
   const [breakTime, setBreakTime] = useState(0);
   const [counterisRunning, setCounterisRunning] = useState(false);
   const intervalRef = useRef();
+  const [lastTrainingModalValue, setLastTrainingModal] = useState(false);
 
   // whenever `data` (from backend) changes, compute the desired shape and set state
   useEffect(() => {
@@ -318,6 +323,62 @@ function StartTraining() {
       scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
   }, [showModal, idx]);
+
+  const lastTrainingModal = () => {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className={`modal-box modal-xl border border-blue-500 shadow-xl rounded-xl p-6`}
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
+          <div className="flex flex-col justify-center items-center space-y-2 text-xs">
+            <table className="min-w-2 border-collapse">
+              <tbody>
+                {training1.reps.map((rep, index) => (
+                  <tr key={index} className={'bg-gray-700'}>
+                    <td
+                      className="border border-gray-800 w-48 h-12 text-center rounded-md backdrop-blur-lg "
+                      style={{
+                        background: 'rgba(10, 20, 40, 0.75)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                        border: '1.5px solid transparent',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                      }}
+                    >
+                      Set {index + 1}: {training1.previousReps[index]} Reps,{' '}
+                      {training1.weights[index]} kg
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #f63b3bff',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              onClick={() => setLastTrainingModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   //Modal for the weight selection
   const settingsModal = () => {
@@ -717,6 +778,7 @@ function StartTraining() {
       {showModal && settingsModal()}
       {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
+      {lastTrainingModalValue && lastTrainingModal()}
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">
@@ -926,6 +988,21 @@ function StartTraining() {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
+              </button>
+              <button
+                onClick={() => setLastTrainingModal(true)}
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              >
+                Last
               </button>
               {breakModal && BreakTimeModal()}
             </div>

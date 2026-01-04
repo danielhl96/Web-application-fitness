@@ -5,6 +5,7 @@ import jwt
 import uuid
 import redis
 import os
+import base64
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from flask import Flask, make_response, request, jsonify
@@ -14,6 +15,9 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError  # Import hinzufügen
 from sqlalchemy.orm import joinedload
 from dotenv import load_dotenv
+from openai import OpenAI
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import json
 
 load_dotenv()  # lädt .env in os.environ
 
@@ -159,6 +163,18 @@ class WorkoutPlan(Base):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     exercises = relationship("Exercise", backref="workout_plan", lazy=True)
     templates = relationship("PlanExerciseTemplate", backref="workout_plan", lazy=True)
+
+class Meal(Base):
+    __tablename__ = 'meals'
+    id = sqlalchemy.Column(sqlalchemy.Integer, autoincrement=True, primary_key=True)
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
+    user = relationship("User", backref="meals")
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
+    calories = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    protein = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    carbs = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    fats = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
 
 
 Base.metadata.create_all(engine)
@@ -408,8 +424,8 @@ def check_safety_code():
             user.password = hash_password(new_password)
             session.commit()
             return jsonify({"message": "Password reset successful!"}), 200
-        return jsonify({"message": "Invalid safety code!"}), 400
-    return jsonify({"message": "Invalid safety code!"}), 400
+        return jsonify({"message": "Invalid safety code!"}, 400)
+    return jsonify({"message": "Invalid safety code!"}, 400)
 
 @app.route('/api/create_workout_plan', methods=['post'])
 def create_workout_plan():
@@ -679,6 +695,92 @@ def create_exercise():
         session.add(new_exercise)
         session.commit()
         return jsonify({"message": "Exercise logged successfully!"}, 201)
+
+@app.route('/api/create_meal', methods=['post'])
+def create_meal():
+    print("Received request to /api/create_meal")
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    user_id = verification.get("sub")
+    # Expecting multipart/form-data with an image file under 'image' and optional JSON fields
+    if 'image' not in request.files:
+        return jsonify({"message": "No image file provided!"}), 400
+    image = request.files['image']
+    # Optionally process other form fields: name, meal_type, etc.
+    prompt = request.form.get('prompt')
+    meal_type = request.form.get('meal_type')
+    # Example: Save image to disk (or process as needed)
+    if image.filename == '':
+        return jsonify({"message": "No selected file!"}), 400
+    
+    image_bytes = image.read()
+    image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+    
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "user", "content": [
+                {"type": "text", "text": "Analyze the food in the image and estimate its nutritional content. ..." 
+                 + (prompt if prompt else "")},
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}}
+            ]}
+        ]
+    )
+    # Try to parse the model's response as JSON
+    print("OpenAI response:")
+    content = response.choices[0].message.content
+    print(content)
+    result = {"name": None, "calories": None, "protein": None, "carbs": None, "fats": None}
+    try:
+        # The response might be in response.choices[0].message.content or similar, depending on OpenAI lib
+        content = response.choices[0].message.content if hasattr(response.choices[0].message, 'content') else response.choices[0].text
+        parsed = json.loads(content)
+        # Copy only expected keys, fallback to None if missing
+        for key in result:
+            if key in parsed:
+                result[key] = parsed[key]
+        print("Parsed meal data:", result)  
+    except Exception as e:
+        print(f"Failed to parse OpenAI response: {e}")
+        # Optionally, log the raw response for debugging
+        print(f"Raw response: {response}")
+        if hasattr(response, "choices") and response.choices and hasattr(response.choices[0], "message"):
+            print("Content:", response.choices[0].message.content)
+        else:
+            print("No content in response!")
+    return jsonify(result), 200
+
+@app.route('/api/get_meals', methods=['get'])
+def get_meals():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    date = request.args.get("date")
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date).all()
+    result = []
+    for meal in meals:
+        result.append({
+            "id": meal.id,
+            "name": meal.name,
+            "date": meal.date.isoformat(),
+            "calories": meal.calories,
+            "protein": meal.protein,
+            "carbs": meal.carbs,
+            "fats": meal.fats
+        })
+    return jsonify(result), 200
+
+
 
 @app.route('/api/check_auth', methods=['get'])
 def check_auth():

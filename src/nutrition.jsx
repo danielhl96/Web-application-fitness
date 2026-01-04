@@ -1,4 +1,5 @@
 import TemplatePage from './templatepage';
+import api from './api.js';
 
 import { useState, useRef } from 'react';
 
@@ -10,6 +11,28 @@ function Nutrition() {
   const [showFileUpload, setShowFileUpload] = useState(false);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
+
+  function handleMeal(mealtype, image, prompt) {
+    console.log('Handling meal:', mealtype, image, prompt);
+    const formData = new FormData();
+    formData.append('meal_type', mealtype);
+    formData.append('image', image);
+    if (prompt) formData.append('prompt', prompt);
+    console.log(formData);
+    api
+      .post('/create_meal', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((response) => {
+        console.log('Meal created:', response.data);
+        setShowFileUpload(false);
+      })
+      .catch((error) => {
+        console.error('Error creating meal:', error);
+        setShowFileUpload(false);
+      });
+  }
+
   function handleFileUpload(event) {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -32,8 +55,8 @@ function Nutrition() {
             onChange={(event) => {
               const file = event.target.files[0];
               console.log(file);
-              // Process the file here
-              setShowFileUpload(false);
+              handleMeal('Breakfast', file, '');
+              //setShowFileUpload(false);
             }}
           />
           <input
@@ -45,13 +68,21 @@ function Nutrition() {
             onChange={(event) => {
               const file = event.target.files[0];
               console.log(file);
+
               // Process the camera image here
-              setShowFileUpload(false);
             }}
           />
           <div className="flex flex-row justify-center space-x-2 mb-4">
             <button
-              className="btn btn-outline btn-primary mr-2"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => cameraInputRef.current && cameraInputRef.current.click()}
             >
               <figure className="w-5 h-5 mb-2">
@@ -62,7 +93,15 @@ function Nutrition() {
               </figure>
             </button>
             <button
-              className="btn btn-outline btn-primary"
+              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
               onClick={() => fileInputRef.current && fileInputRef.current.click()}
             >
               <figure className="w-5 h-5 mb-2">
@@ -97,6 +136,14 @@ function Nutrition() {
     );
   }
 
+  const daysInMonth = (month, year) => {
+    if (month === 2) {
+      // Leap year check
+      return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28;
+    }
+    return [4, 6, 9, 11].includes(month) ? 30 : 31;
+  };
+
   function modalDate() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
@@ -110,7 +157,26 @@ function Nutrition() {
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >
-          <div className="flex space-x-2 mb-4">
+          <div className="flex flex-col space-y-4">
+            <select
+              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(parseInt(e.target.value))}
+            >
+              {Array.from({ length: daysInMonth(month, year) }).map((_, index) => (
+                <option key={index} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </select>
+
             <select
               className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
               style={{
@@ -147,46 +213,7 @@ function Nutrition() {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="overflow-x-auto flex max-w-70 mb-4 space-x-2">
-            {(() => {
-              const daysInMonth = (month, year) => {
-                if (month === 2) {
-                  // Leap year check
-                  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28;
-                }
-                return [4, 6, 9, 11].includes(month) ? 30 : 31;
-              };
-              return Array.from({ length: daysInMonth(month, year) }).map((_, index) => (
-                <button
-                  onClick={() => {
-                    setSelectedDay(index + 1);
-                    setShowModal(false);
-                  }}
-                  key={index}
-                  className={`btn btn-outline btn-primary mb-4${
-                    selectedDay === index + 1 ? ' btn-active' : ''
-                  }`}
-                  style={{
-                    background: 'rgba(30, 41, 59, 0.25)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                    border: '1.5px solid #3b82f6',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                  }
-                >
-                  {index + 1}
-                </button>
-              ));
-            })()}
-          </div>
-          <div className="modal-action">
+
             <button
               className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
               style={{
@@ -279,6 +306,7 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
+                    onClick={() => setShowFileUpload(true)}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -312,6 +340,7 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
+                    onClick={() => setShowFileUpload(true)}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -344,6 +373,7 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
+                    onClick={() => setShowFileUpload(true)}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -366,9 +396,9 @@ function Nutrition() {
             </div>
           </div>
           <div className="divider divider-primary"></div>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-16">
             <div
-              className="card w-full sm:w-80 lg:w-80 h-30 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-35 sm:w-30 lg:w-35 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -376,14 +406,34 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Calories</h2>
-                <div className="flex flex-col justify-center text-xs">
-                  <p>Goal:2500 </p>
-                  <p>Kcal: 2400 </p>
+                <div className="flex flex-col justify-center text-center text-center items-center">
+                  <div className="carousel rounded-box w-full">
+                    <div className="carousel-item w-full">
+                      <div
+                        className="radial-progress"
+                        style={
+                          { '--value': 100, '--thickness': '4px' } /* as React.CSSProperties */
+                        }
+                        aria-valuenow={100}
+                        role="progressbar"
+                      >
+                        2500 kcal
+                      </div>
+                    </div>
+
+                    <div className="carousel-item w-full">
+                      <div className="flex flex-col justify-center items-start text-xs">
+                        <p className="text-blue-300">In: 2500kcal</p>
+                        <p className="text-blue-300">Goal: 3000kcal</p>
+                        <p className="text-blue-300">Open: 500kcal</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div
-              className="card w-fullsm:w-80 lg:w-80 h-30 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-35 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -391,10 +441,10 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Macronutrients</h2>
-                <div className="flex flex-col justify-center text-xs">
-                  <p>Proteins: 140g </p>
-                  <p> Fats: 90g </p>
-                  <p> Carbs: 240 </p>
+                <div className="flex flex-col justify-center items-start text-center text-xs">
+                  <p className="text-blue-300">P: 140g</p>
+                  <p className="text-blue-300">C: 300g</p>
+                  <p className="text-blue-300">F: 70g</p>
                 </div>
               </div>
             </div>
