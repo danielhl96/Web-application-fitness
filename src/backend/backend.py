@@ -698,7 +698,7 @@ def create_exercise():
 
 @app.route('/api/create_meal', methods=['post'])
 def create_meal():
-    print("Received request to /api/create_meal")
+    print("Received request to /api/create_meal", flush=True)
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
@@ -724,16 +724,25 @@ def create_meal():
         model="gpt-4o",
         messages=[
             {"role": "user", "content": [
-                {"type": "text", "text": "Analyze the food in the image and estimate its nutritional content. ..." 
-                 + (prompt if prompt else "")},
+                {"type": "text", "text": (
+                    "Analyze the food in the image and estimate its nutritional content. "
+                    "Return the result as a compact JSON object with the following keys: "
+                    "name (short meal name), calories (kcal), protein (g), carbs (g), fats (g). "
+                    "Example: {\"name\": \"Chicken Salad\", \"calories\": 420, \"protein\": 32, \"carbs\": 18, \"fats\": 12}. "
+                    "Do not add any explanation, only the JSON. "
+                    + (prompt if prompt else "")
+                )},
                 {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}}
             ]}
         ]
     )
     # Try to parse the model's response as JSON
-    print("OpenAI response:")
+    print("OpenAI response:", flush=True)
     content = response.choices[0].message.content
-    print(content)
+    print(content,flush=True)
+    
+
+     # Initialize result with None values
     result = {"name": None, "calories": None, "protein": None, "carbs": None, "fats": None}
     try:
         # The response might be in response.choices[0].message.content or similar, depending on OpenAI lib
@@ -743,7 +752,7 @@ def create_meal():
         for key in result:
             if key in parsed:
                 result[key] = parsed[key]
-        print("Parsed meal data:", result)  
+        print("Parsed meal data:", result, flush=True)  
     except Exception as e:
         print(f"Failed to parse OpenAI response: {e}")
         # Optionally, log the raw response for debugging

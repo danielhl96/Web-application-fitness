@@ -8,12 +8,17 @@ function Nutrition() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [showModal, setShowModal] = useState(false);
+  const [showMeal, setShowMeal] = useState(false);
   const [showFileUpload, setShowFileUpload] = useState(false);
+  const [meal, setMeal] = useState(null);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [mealtype, setMealtype] = useState('');
 
   function handleMeal(mealtype, image, prompt) {
     console.log('Handling meal:', mealtype, image, prompt);
+    setLoading(true);
     const formData = new FormData();
     formData.append('meal_type', mealtype);
     formData.append('image', image);
@@ -25,15 +30,77 @@ function Nutrition() {
       })
       .then((response) => {
         console.log('Meal created:', response.data);
+        setMeal(response.data);
         setShowFileUpload(false);
+        setShowMeal(true);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error creating meal:', error);
         setShowFileUpload(false);
+        setLoading(false);
       });
   }
 
-  function handleFileUpload(event) {
+  function modalMeal() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
+          <h3 className="font-bold text-lg text-white mb-4">Add {mealtype} Meal</h3>
+          <div className="flex flex-col space-y-4">
+            <p>{meal.name}</p>
+            <p> Kcal:{meal.calories} </p>
+            <p> Protein:{meal.protein}</p>
+            <p> Carbs:{meal.carbs}</p>
+            <p> Fats:{meal.fats}</p>
+            <div className="flex flex-row space-x-2 justify-start">
+              <button
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                onClick={() => setShowMeal(false)}
+              >
+                Save{' '}
+              </button>
+              <button
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                onClick={() => setShowMeal(false)}
+              >
+                Close{' '}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function handleFileUpload() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
@@ -55,69 +122,39 @@ function Nutrition() {
             onChange={(event) => {
               const file = event.target.files[0];
               console.log(file);
-              handleMeal('Breakfast', file, '');
-              //setShowFileUpload(false);
+              handleMeal(mealtype, file, '');
             }}
           />
-          <input
-            type="file"
-            accept="image/*"
-            capture
-            ref={cameraInputRef}
-            style={{ display: 'none' }}
-            onChange={(event) => {
-              const file = event.target.files[0];
-              console.log(file);
 
-              // Process the camera image here
-            }}
-          />
           <div className="flex flex-row justify-center space-x-2 mb-4">
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onClick={() => cameraInputRef.current && cameraInputRef.current.click()}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./cam.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-            </button>
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onClick={() => fileInputRef.current && fileInputRef.current.click()}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./image.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-            </button>
+            {loading ? (
+              <span className="loading loading-bars loading-xl"></span>
+            ) : (
+              <button
+                className="btn btn-outline w-16 h-16 btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              >
+                <figure className="w-5 h-5 mb-2">
+                  <img
+                    src={'./image.png'}
+                    className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                  />
+                </figure>
+              </button>
+            )}
           </div>
           <div className="modal-action">
             <button
               className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
-
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
                 border: '1.5px solid #3b82f6',
                 backdropFilter: 'blur(8px)',
@@ -240,6 +277,7 @@ function Nutrition() {
       <TemplatePage>
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}
+        {showMeal && modalMeal()}
         <div className="overflow-auto max-h-[80vh]">
           <h1 className="text-2xl font-bold text-white mb-4">Nutrition</h1>
           <div className="divider divider-primary">
@@ -273,7 +311,10 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => setShowFileUpload(true)}
+                    onClick={() => {
+                      setShowFileUpload(true);
+                      setMealtype('breakfast');
+                    }}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -306,7 +347,10 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => setShowFileUpload(true)}
+                    onClick={() => {
+                      setShowFileUpload(true);
+                      setMealtype('launch');
+                    }}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -340,7 +384,10 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => setShowFileUpload(true)}
+                    onClick={() => {
+                      setShowFileUpload(true);
+                      setMealtype('dinner');
+                    }}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
@@ -373,7 +420,10 @@ function Nutrition() {
                 <div className="flex flex-col justify-center text-xs"></div>
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => setShowFileUpload(true)}
+                    onClick={() => {
+                      setShowFileUpload(true);
+                      setMealtype('snacks');
+                    }}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
