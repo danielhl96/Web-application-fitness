@@ -1,5 +1,6 @@
 import TemplatePage from './templatepage';
 import api from './api.js';
+import Input from './input.jsx';
 
 import { useState, useRef, useEffect, use } from 'react';
 
@@ -15,8 +16,9 @@ function Nutrition() {
   const [launchMeals, setLaunchMeals] = useState([]);
   const [breakfastMeals, setBreakfastMeals] = useState([]);
   const [snackMeals, setSnackMeals] = useState([]);
+  const [prompt, setPrompt] = useState('');
   const fileInputRef = useRef(null);
-  const cameraInputRef = useRef(null);
+
   const [loading, setLoading] = useState(false);
   const [mealtype, setMealtype] = useState('');
   const [calories, setCalories] = useState(0);
@@ -176,7 +178,7 @@ function Nutrition() {
     return total;
   }
 
-  function handleMeal(mealtype, image, prompt) {
+  function handleMeal(mealtype, image) {
     console.log('Handling meal:', mealtype, image, prompt);
     setLoading(true);
     const formData = new FormData();
@@ -244,10 +246,10 @@ function Nutrition() {
           <h3 className="font-bold text-lg text-white mb-4">Add {mealtype} Meal</h3>
           <div className="flex flex-col space-y-4">
             <p>{meal.name}</p>
-            <p> Kcal:{meal.calories} </p>
-            <p> Protein:{meal.protein}</p>
-            <p> Carbs:{meal.carbs}</p>
-            <p> Fats:{meal.fats}</p>
+            <p> Calories:{meal.calories} kcal</p>
+            <p> Protein:{meal.protein} g</p>
+            <p> Carbs:{meal.carbs} g</p>
+            <p> Fats:{meal.fats} g</p>
             <div className="flex flex-row space-x-2 justify-start">
               <button
                 className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
@@ -311,7 +313,7 @@ function Nutrition() {
             onChange={(event) => {
               const file = event.target.files[0];
               console.log(file);
-              handleMeal(mealtype, file, '');
+              handleMeal(mealtype, file);
             }}
           />
 
@@ -319,27 +321,34 @@ function Nutrition() {
             {loading ? (
               <span className="loading loading-bars loading-xl"></span>
             ) : (
-              <button
-                className="btn btn-outline w-16 h-16 btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onClick={() => fileInputRef.current && fileInputRef.current.click()}
-              >
-                <figure className="w-5 h-5 mb-2">
-                  <img
-                    src={'./image.png'}
-                    className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                  />
-                </figure>
-              </button>
+              <div className="flex flex-row items-center space-x-2">
+                <Input
+                  placeholder="Enter an optional description"
+                  onChange={(e) => setPrompt(e.target.value)}
+                  w={'w-62'}
+                ></Input>
+                <button
+                  className="btn btn-outline w-16 h-10 btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                  style={{
+                    background: 'rgba(30, 41, 59, 0.25)',
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                    border: '1.5px solid #3b82f6',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                  }}
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                >
+                  <figure className="w-5 h-5 mb-2">
+                    <img
+                      src={'./cam.png'}
+                      className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                    />
+                  </figure>
+                </button>
+              </div>
             )}
           </div>
-          <div className="modal-action">
+          <div className="modal-action items-start justify-start">
             <button
               className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
               style={{
@@ -502,10 +511,10 @@ function Nutrition() {
                     {breakfastMeals.map((meal, index) => (
                       <p key={index} className="flex flex-row space-x-1 items-center mr-2">
                         Meal {meal.name}
-                        <p>KCAL {meal.calories}</p>
-                        <p>P: {meal.protein}</p>
-                        <p>C: {meal.carbs}</p>
-                        <p>F: {meal.fats}</p>
+                        <p>kcal {meal.calories}</p>
+                        <p>P: {meal.protein}g</p>
+                        <p>C: {meal.carbs}g</p>
+                        <p>F: {meal.fats}g</p>
                         <button
                           onClick={() => {
                             deleteMeal(meal.id);
@@ -584,10 +593,10 @@ function Nutrition() {
                   {launchMeals.map((meal, index) => (
                     <p key={index} className="flex flex-row space-x-1 items-center mr-2">
                       Meal {meal.name}
-                      <p>KCAL {meal.calories}</p>
-                      <p>P: {meal.protein}</p>
-                      <p>C: {meal.carbs}</p>
-                      <p>F: {meal.fats}</p>
+                      <p>kcal {meal.calories}</p>
+                      <p>P: {meal.protein}g</p>
+                      <p>C: {meal.carbs}g</p>
+                      <p>F: {meal.fats}g</p>
                       <button
                         onClick={() => {
                           deleteMeal(meal.id);
@@ -665,10 +674,10 @@ function Nutrition() {
                   {dinnerMeals.map((meal, index) => (
                     <p key={index} className="flex flex-row space-x-1 items-center text-xs mr-2">
                       Meal {meal.name}
-                      <p>KCAL {meal.calories}</p>
-                      <p>P: {meal.protein}</p>
-                      <p>C: {meal.carbs}</p>
-                      <p>F: {meal.fats}</p>
+                      <p>kcal {meal.calories}</p>
+                      <p>P: {meal.protein}g</p>
+                      <p>C: {meal.carbs}g</p>
+                      <p>F: {meal.fats}g</p>
                       <button
                         onClick={() => {
                           deleteMeal(meal.id);
@@ -747,10 +756,10 @@ function Nutrition() {
                   <div className="flex flex-col items-center text-xs overflow-y-auto max-h-15">
                     <p key={index} className="flex flex-row space-x-1 items-center text-xs mr-2">
                       Meal {meal.name}
-                      <p>KCAL {meal.calories}</p>
-                      <p>P: {meal.protein}</p>
-                      <p>C: {meal.carbs}</p>
-                      <p>F: {meal.fats}</p>
+                      <p>kcal {meal.calories}</p>
+                      <p>P: {meal.protein}g</p>
+                      <p>C: {meal.carbs}g</p>
+                      <p>F: {meal.fats}g</p>
                       <button
                         onClick={() => {
                           deleteMeal(meal.id);
@@ -830,7 +839,7 @@ function Nutrition() {
                   <div className="carousel rounded-box w-full">
                     <div className="carousel-item w-full items-center justify-center">
                       <div
-                        className="radial-progress items-center justify-center"
+                        className="radial-progress text-xs items-center justify-center"
                         style={
                           {
                             '--value': (calculateCalories() / calories) * 100,
@@ -848,7 +857,11 @@ function Nutrition() {
                       <div className="text-xs">
                         <p className="text-white">In: {calculateCalories()}kcal</p>
                         <p className="text-white">Goal: {calories}kcal</p>
-                        <p className="text-white">Open: {calories - calculateCalories()}kcal</p>
+                        <p
+                          className={`${calories - calculateCalories() < 0 ? 'text-red-500' : ''}`}
+                        >
+                          Open: {calories - calculateCalories()}kcal
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -865,9 +878,9 @@ function Nutrition() {
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Macronutrients</h2>
                 <div className="flex flex-col justify-center items-start text-center text-xs">
-                  <p className="text-white">P: {calculateProteins()}</p>
-                  <p className="text-white">C: {calculateCarbs()}</p>
-                  <p className="text-white">F: {calculateFats()}</p>
+                  <p className="text-white">P: {calculateProteins()}g</p>
+                  <p className="text-white">C: {calculateCarbs()}g</p>
+                  <p className="text-white">F: {calculateFats()}g</p>
                 </div>
               </div>
             </div>
