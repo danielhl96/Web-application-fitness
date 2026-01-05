@@ -175,6 +175,7 @@ class Meal(Base):
     protein = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     carbs = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     fats = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    mealtype = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # breakfast, lunch, dinner, snack
 
 
 Base.metadata.create_all(engine)
@@ -764,8 +765,35 @@ def calculate_meal():
             print("No content in response!")
     return jsonify(result), 200
 
-@app.route('/api/get_meals', methods=['get'])
-def get_meals():
+@app.route('/api/create_meal', methods=['post'])
+def create_meal():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    data = request.json
+    new_meal = Meal(
+        user_id=user_id,
+        name=data.get("name"),
+        date=data.get("date"),
+        calories=data.get("calories"),
+        protein=data.get("protein"),
+        carbs=data.get("carbs"),
+        fats=data.get("fats"),
+        mealtype=data.get("mealtype")
+    )
+    session.add(new_meal)
+    session.commit()
+    return jsonify({"message": "Meal logged successfully!"}), 201
+
+
+@app.route('/api/get_meal_breakfast', methods=['get'])
+def get_meal_breakfast():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
@@ -776,7 +804,86 @@ def get_meals():
 
     user_id = verification.get("sub")
     date = request.args.get("date")
-    meals = session.query(Meal).filter_by(user_id=user_id, date=date).all()
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="breakfast").all()
+    result = []
+    for meal in meals:
+        result.append({
+            "id": meal.id,
+            "name": meal.name,
+            "date": meal.date.isoformat(),
+            "calories": meal.calories,
+            "protein": meal.protein,
+            "carbs": meal.carbs,
+            "fats": meal.fats
+        })
+    return jsonify(result), 200
+
+@app.route('/api/get_meal_launch', methods=['get'])
+def get_meal_launch():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    date = request.args.get("date")
+    print("Fetching launch meals for user:", user_id, "on date:", date, flush=True)
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="launch").all()
+    result = []
+    for meal in meals:
+        result.append({
+            "id": meal.id,
+            "name": meal.name,
+            "date": meal.date.isoformat(),
+            "calories": meal.calories,
+            "protein": meal.protein,
+            "carbs": meal.carbs,
+            "fats": meal.fats
+        })
+    return jsonify(result), 200
+
+@app.route('/api/get_meal_dinner', methods=['get'])
+def get_meal_dinner():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    date = request.args.get("date")
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="dinner").all()
+    result = []
+    for meal in meals:
+        result.append({
+            "id": meal.id,
+            "name": meal.name,
+            "date": meal.date.isoformat(),
+            "calories": meal.calories,
+            "protein": meal.protein,
+            "carbs": meal.carbs,
+            "fats": meal.fats
+        })
+    return jsonify(result), 200
+
+@app.route('/api/get_meal_snack', methods=['get'])
+def get_meal_snack():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    date = request.args.get("date")
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="snack").all()
     result = []
     for meal in meals:
         result.append({

@@ -11,6 +11,10 @@ function Nutrition() {
   const [showMeal, setShowMeal] = useState(false);
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [meal, setMeal] = useState(null);
+  const [dinnerMeals, setDinnerMeals] = useState([]);
+  const [launchMeals, setLaunchMeals] = useState([]);
+  const [breakfastMeals, setBreakfastMeals] = useState([]);
+  const [snackMeals, setSnackMeals] = useState([]);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -19,12 +23,72 @@ function Nutrition() {
 
   useEffect(() => {
     get_profile();
+    getdinnerMeals();
+    getlaunchMeals();
+    getbreakfastMeals();
+    getsnackMeals();
   }, []);
 
   function get_profile() {
     api.get('/get_profile').then((response) => {
       setCalories(response.data.calories);
     });
+  }
+  function getdinnerMeals() {
+    api
+      .get('/get_meal_dinner', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setDinnerMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getlaunchMeals() {
+    api
+      .get('/get_meal_launch', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setLaunchMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getbreakfastMeals() {
+    api
+      .get('/get_meal_breakfast', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setBreakfastMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getsnackMeals() {
+    api
+      .get('/get_meal_snack', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setSnackMeals(response.data);
+        console.log(response.data);
+      });
   }
 
   function handleMeal(mealtype, image, prompt) {
@@ -50,6 +114,32 @@ function Nutrition() {
         console.error('Error creating meal:', error);
         setShowFileUpload(false);
         setLoading(false);
+      });
+  }
+
+  function handleMealSave() {
+    console.log('Saving meal:', meal);
+    api
+      .post('/create_meal', {
+        name: meal.name,
+        calories: meal.calories,
+        protein: meal.protein,
+        carbs: meal.carbs,
+        fats: meal.fats,
+        mealtype: mealtype,
+        date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+          .toString()
+          .padStart(2, '0')}`,
+      })
+      .then(() => {
+        setShowMeal(false);
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+      })
+      .catch((error) => {
+        console.error('Error saving meal:', error);
       });
   }
 
@@ -85,7 +175,10 @@ function Nutrition() {
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-                onClick={() => setShowMeal(false)}
+                onClick={() => {
+                  setShowMeal(false);
+                  handleMealSave();
+                }}
               >
                 Save{' '}
               </button>
@@ -320,44 +413,48 @@ function Nutrition() {
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Breakfast</h2>
                 <div className="flex flex-col justify-center text-xs">
-                  <div className="flex flex-row  text-xs">
-                    <p>Meal 1</p>
-                    <p>KCAL 4500</p>
-                    <p>P:30</p>
-                    <p>C:50</p>
-                    <p>F:20</p>
-                    <button
-                      onClick={() => {}}
-                      className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                      style={{
-                        background: 'rgba(30, 41, 59, 0.25)',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                        border: '1.5px solid transparent',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                      }
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
+                  <div className="flex flex-col items-center">
+                    {breakfastMeals.map((meal, index) => (
+                      <p key={index} className="flex flex-row space-x-1 items-center mr-2">
+                        Meal {meal.name}
+                        <p>KCAL {meal.calories}</p>
+                        <p>P: {meal.protein}</p>
+                        <p>C: {meal.carbs}</p>
+                        <p>F: {meal.fats}</p>
+                        <button
+                          onClick={() => {}}
+                          className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                          style={{
+                            background: 'rgba(30, 41, 59, 0.25)',
+                            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                            border: '1.5px solid transparent',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                          }
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </p>
+                    ))}
                   </div>
                 </div>
                 <div className="flex justify-end mt-2">
@@ -395,30 +492,49 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Launch</h2>
-                <div className="flex flex-col justify-center text-xs"></div>
-                <div className="flex justify-end mt-2">
-                  <button
-                    onClick={() => {
-                      setShowFileUpload(true);
-                      setMealtype('launch');
-                    }}
-                    className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                      border: '1.5px solid #3b82f6',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                    }
-                  >
-                    +
-                  </button>
+
+                <div className="flex flex-col items-center text-xs">
+                  {launchMeals.map((meal, index) => (
+                    <p key={index} className="flex flex-row space-x-1 items-center mr-2">
+                      Meal {meal.name}
+                      <p>KCAL {meal.calories}</p>
+                      <p>P: {meal.protein}</p>
+                      <p>C: {meal.carbs}</p>
+                      <p>F: {meal.fats}</p>
+                      <button
+                        onClick={() => {}}
+                        className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                        style={{
+                          background: 'rgba(30, 41, 59, 0.25)',
+                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                          border: '1.5px solid transparent',
+                          backdropFilter: 'blur(8px)',
+                          WebkitBackdropFilter: 'blur(8px)',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                        }
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>
@@ -432,31 +548,48 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Dinner</h2>
-                <div className="flex flex-col justify-center text-xs"></div>
-                <div className="flex justify-end mt-2">
-                  <button
-                    onClick={() => {
-                      setShowFileUpload(true);
-                      setMealtype('dinner');
-                    }}
-                    className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                      border: '1.5px solid #3b82f6',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                    }
-                  >
-                    +
-                  </button>
-                </div>
+
+                {dinnerMeals.map((meal, index) => (
+                  <p key={index} className="flex flex-row space-x-1 items-center text-xs mr-2">
+                    Meal {meal.name}
+                    <p>KCAL {meal.calories}</p>
+                    <p>P: {meal.protein}</p>
+                    <p>C: {meal.carbs}</p>
+                    <p>F: {meal.fats}</p>
+                    <button
+                      onClick={() => {}}
+                      className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                      style={{
+                        background: 'rgba(30, 41, 59, 0.25)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                        border: '1.5px solid transparent',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                      }
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </p>
+                ))}
               </div>
             </div>
             <div
@@ -468,31 +601,48 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Snacks</h2>
-                <div className="flex flex-col justify-center text-xs"></div>
-                <div className="flex justify-end mt-2">
-                  <button
-                    onClick={() => {
-                      setShowFileUpload(true);
-                      setMealtype('snacks');
-                    }}
-                    className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                      border: '1.5px solid #3b82f6',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                    }
-                  >
-                    +
-                  </button>
-                </div>
+
+                {snackMeals.map((meal, index) => (
+                  <p key={index} className="flex flex-row space-x-1 items-center text-xs mr-2">
+                    Meal {meal.name}
+                    <p>KCAL {meal.calories}</p>
+                    <p>P: {meal.protein}</p>
+                    <p>C: {meal.carbs}</p>
+                    <p>F: {meal.fats}</p>
+                    <button
+                      onClick={() => {}}
+                      className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                      style={{
+                        background: 'rgba(30, 41, 59, 0.25)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                        border: '1.5px solid transparent',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                      }
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </p>
+                ))}
               </div>
             </div>
           </div>
