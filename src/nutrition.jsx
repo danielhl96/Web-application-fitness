@@ -27,7 +27,7 @@ function Nutrition() {
     getlaunchMeals();
     getbreakfastMeals();
     getsnackMeals();
-  }, []);
+  }, [selectedDay, month, year]);
 
   function get_profile() {
     api.get('/get_profile').then((response) => {
