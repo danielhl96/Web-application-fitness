@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 import json
+import re
 
 load_dotenv()  # lädt .env in os.environ
 
@@ -467,7 +468,7 @@ def create_workout_plan():
     )
     session.add(workout_plan)
     session.commit()
-    return jsonify({"message": "Workout plan created successfully!"}), 201
+    return jsonify({"message": "Workout plan created successfully!"}, 201)
 
 @app.route('/api/delete_workout_plan', methods=['delete'])
 def delete_workout_plan():
@@ -749,6 +750,10 @@ def calculate_meal():
     try:
         # The response might be in response.choices[0].message.content or similar, depending on OpenAI lib
         content = response.choices[0].message.content if hasattr(response.choices[0].message, 'content') else response.choices[0].text
+        # Extrahiere reines JSON aus Markdown-Block
+        match = re.search(r'\{.*\}', content, re.DOTALL)
+        if match:
+            content = match.group(0)
         parsed = json.loads(content)
         # Copy only expected keys, fallback to None if missing
         for key in result:

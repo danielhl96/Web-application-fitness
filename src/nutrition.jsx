@@ -710,7 +710,7 @@ function Nutrition() {
                   <button
                     onClick={() => {
                       setShowFileUpload(true);
-                      setMealtype('breakfast');
+                      setMealtype('dinner');
                     }}
                     className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                     style={{
