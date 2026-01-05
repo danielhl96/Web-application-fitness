@@ -883,7 +883,7 @@ def get_meal_snack():
 
     user_id = verification.get("sub")
     date = request.args.get("date")
-    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="snack").all()
+    meals = session.query(Meal).filter_by(user_id=user_id, date=date, mealtype="snacks").all()
     result = []
     for meal in meals:
         result.append({
