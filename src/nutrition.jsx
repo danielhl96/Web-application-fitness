@@ -278,7 +278,7 @@ function Nutrition() {
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}
         {showMeal && modalMeal()}
-        <div className="overflow-auto max-h-[80vh]">
+        <div className="">
           <h1 className="text-2xl font-bold text-white mb-4">Nutrition</h1>
           <div className="divider divider-primary">
             <button
@@ -298,9 +298,9 @@ function Nutrition() {
             </button>
           </div>
 
-          <div className="flex flex-col space-y-2 overflow-y-auto max-h-90 mb-4">
+          <div className="flex flex-col space-y-2 overflow-y-auto max-h-85 mb-4">
             <div
-              className="card w-full sm:w-80 lg:w-80 h-25 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-80 h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -308,7 +308,47 @@ function Nutrition() {
             >
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Breakfast</h2>
-                <div className="flex flex-col justify-center text-xs"></div>
+                <div className="flex flex-col justify-center text-xs">
+                  <div className="flex flex-row  text-xs">
+                    <p>Meal 1</p>
+                    <p>KCAL 4500</p>
+                    <p>P:30</p>
+                    <p>C:50</p>
+                    <p>F:20</p>
+                    <button
+                      onClick={() => {}}
+                      className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                      style={{
+                        background: 'rgba(30, 41, 59, 0.25)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                        border: '1.5px solid transparent',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                      }
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
                 <div className="flex justify-end mt-2">
                   <button
                     onClick={() => {
@@ -336,7 +376,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-full sm:w-80 lg:w-80 h-25 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-80 h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -373,7 +413,7 @@ function Nutrition() {
             </div>
 
             <div
-              className="card w-full sm:w-80 lg:w-80 h-25 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-80 h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -409,7 +449,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-full sm:w-80 lg:w-80 h-25 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-80 h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -448,21 +488,24 @@ function Nutrition() {
           <div className="divider divider-primary"></div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-16">
             <div
-              className="card w-35 sm:w-30 lg:w-35 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-35 sm:w-30 lg:w-35 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
               }}
             >
-              <div className="card-body">
+              <div className="card-body i">
                 <h2 className="card-title text-blue-400 text-xs">Calories</h2>
-                <div className="flex flex-col justify-center text-center text-center items-center">
+                <div className="flex flex-col">
                   <div className="carousel rounded-box w-full">
-                    <div className="carousel-item w-full">
+                    <div className="carousel-item w-full items-center justify-center">
                       <div
-                        className="radial-progress"
+                        className="radial-progress items-center justify-center"
                         style={
-                          { '--value': 100, '--thickness': '4px' } /* as React.CSSProperties */
+                          {
+                            '--value': 85,
+                            '--thickness': '4px',
+                          } /* as React.CSSProperties */
                         }
                         aria-valuenow={100}
                         role="progressbar"
@@ -473,9 +516,9 @@ function Nutrition() {
 
                     <div className="carousel-item w-full">
                       <div className="flex flex-col justify-center items-start text-xs">
-                        <p className="text-blue-300">In: 2500kcal</p>
-                        <p className="text-blue-300">Goal: 3000kcal</p>
-                        <p className="text-blue-300">Open: 500kcal</p>
+                        <p className="text-white">In: 2500kcal</p>
+                        <p className="text-white">Goal: 3000kcal</p>
+                        <p className="text-white">Open: 500kcal</p>
                       </div>
                     </div>
                   </div>
@@ -483,7 +526,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-full sm:w-80 lg:w-35 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-80 lg:w-35 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -492,9 +535,9 @@ function Nutrition() {
               <div className="card-body">
                 <h2 className="card-title text-blue-400 text-xs">Macronutrients</h2>
                 <div className="flex flex-col justify-center items-start text-center text-xs">
-                  <p className="text-blue-300">P: 140g</p>
-                  <p className="text-blue-300">C: 300g</p>
-                  <p className="text-blue-300">F: 70g</p>
+                  <p className="text-white">P: 140g</p>
+                  <p className="text-white">C: 300g</p>
+                  <p className="text-white">F: 70g</p>
                 </div>
               </div>
             </div>

@@ -292,6 +292,8 @@ def get_profile():
     }
     return jsonify(user_data), 200
 
+
+
 @app.route('/api/logout', methods=['post'])
 def logout_user():
     token = get_token_from_cookie()
