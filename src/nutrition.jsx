@@ -829,7 +829,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-full sm:w-80 lg:w-35 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-full sm:w-35 lg:w-35 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
