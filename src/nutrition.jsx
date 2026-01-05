@@ -1,7 +1,7 @@
 import TemplatePage from './templatepage';
 import api from './api.js';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, use } from 'react';
 
 function Nutrition() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDate());
@@ -15,6 +15,17 @@ function Nutrition() {
   const cameraInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [mealtype, setMealtype] = useState('');
+  const [calories, setCalories] = useState(0);
+
+  useEffect(() => {
+    get_profile();
+  }, []);
+
+  function get_profile() {
+    api.get('/get_profile').then((response) => {
+      setCalories(response.data.calories);
+    });
+  }
 
   function handleMeal(mealtype, image, prompt) {
     console.log('Handling meal:', mealtype, image, prompt);
@@ -517,8 +528,8 @@ function Nutrition() {
                     <div className="carousel-item w-full">
                       <div className="flex flex-col justify-center items-start text-xs">
                         <p className="text-white">In: 2500kcal</p>
-                        <p className="text-white">Goal: 3000kcal</p>
-                        <p className="text-white">Open: 500kcal</p>
+                        <p className="text-white">Goal: {calories}kcal</p>
+                        <p className="text-white">Open: {calories - 2500}kcal</p>
                       </div>
                     </div>
                   </div>
