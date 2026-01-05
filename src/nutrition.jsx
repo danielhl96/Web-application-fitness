@@ -845,7 +845,7 @@ function Nutrition() {
                     </div>
 
                     <div className="carousel-item w-full">
-                      <div className="flex flex-col justify-center items-start text-xs">
+                      <div className="text-xs">
                         <p className="text-white">In: {calculateCalories()}kcal</p>
                         <p className="text-white">Goal: {calories}kcal</p>
                         <p className="text-white">Open: {calories - calculateCalories()}kcal</p>
