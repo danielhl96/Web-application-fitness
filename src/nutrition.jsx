@@ -34,6 +34,25 @@ function Nutrition() {
       setCalories(response.data.calories);
     });
   }
+
+  function deleteMeal(mealId) {
+    api
+      .delete('/delete_meal', {
+        data: {
+          meal_id: mealId,
+        },
+      })
+      .then(() => {
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+      })
+      .catch((error) => {
+        console.error('Error deleting meal:', error);
+      });
+  }
+
   function getdinnerMeals() {
     api
       .get('/get_meal_dinner', {
@@ -488,7 +507,9 @@ function Nutrition() {
                         <p>C: {meal.carbs}</p>
                         <p>F: {meal.fats}</p>
                         <button
-                          onClick={() => {}}
+                          onClick={() => {
+                            deleteMeal(meal.id);
+                          }}
                           className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                           style={{
                             background: 'rgba(30, 41, 59, 0.25)',
@@ -568,7 +589,9 @@ function Nutrition() {
                       <p>C: {meal.carbs}</p>
                       <p>F: {meal.fats}</p>
                       <button
-                        onClick={() => {}}
+                        onClick={() => {
+                          deleteMeal(meal.id);
+                        }}
                         className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                         style={{
                           background: 'rgba(30, 41, 59, 0.25)',
@@ -647,7 +670,9 @@ function Nutrition() {
                       <p>C: {meal.carbs}</p>
                       <p>F: {meal.fats}</p>
                       <button
-                        onClick={() => {}}
+                        onClick={() => {
+                          deleteMeal(meal.id);
+                        }}
                         className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                         style={{
                           background: 'rgba(30, 41, 59, 0.25)',
@@ -727,7 +752,9 @@ function Nutrition() {
                       <p>C: {meal.carbs}</p>
                       <p>F: {meal.fats}</p>
                       <button
-                        onClick={() => {}}
+                        onClick={() => {
+                          deleteMeal(meal.id);
+                        }}
                         className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                         style={{
                           background: 'rgba(30, 41, 59, 0.25)',

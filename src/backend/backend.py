@@ -897,7 +897,25 @@ def get_meal_snack():
         })
     return jsonify(result), 200
 
+@app.route('/api/delete_meal', methods=['delete'])
+def delete_meal():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
+    verification = verifyToken(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    data = request.json
+    meal_id = data.get("meal_id")
+    meal = session.query(Meal).filter_by(id=meal_id, user_id=user_id).first()
+    if not meal:
+        return jsonify({"message": "Meal not found!"}), 404
+    session.delete(meal)
+    session.commit()
+    return jsonify({"message": "Meal deleted successfully!"}), 200
 
 @app.route('/api/check_auth', methods=['get'])
 def check_auth():
