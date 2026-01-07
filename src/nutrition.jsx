@@ -1,6 +1,7 @@
 import TemplatePage from './templatepage';
 import api from './api.js';
 import Input from './input.jsx';
+import ApexCharts from 'apexcharts';
 
 import { useState, useRef, useEffect, use } from 'react';
 
@@ -22,6 +23,35 @@ function Nutrition() {
   const [loading, setLoading] = useState(false);
   const [mealtype, setMealtype] = useState('');
   const [calories, setCalories] = useState(0);
+
+  function MacroPieChart({ protein, carbs, fats }) {
+    const chartRef = useRef(null);
+
+    useEffect(() => {
+      const options = {
+        chart: {
+          type: 'pie',
+          background: 'transparent',
+          width: 100,
+        },
+        labels: ['P', 'C', 'F'],
+        series: [protein, carbs, fats],
+        colors: ['#3b82f6', '#f59e42', '#f87171'],
+
+        dataLabels: { enabled: true, style: { colors: ['#fff'], fontSize: '8px' } },
+        legend: { show: false, width: 0, position: 'bottom', labels: { colors: '#fff' } },
+      };
+
+      const chart = new ApexCharts(chartRef.current, options);
+      chart.render();
+
+      return () => {
+        chart.destroy();
+      };
+    }, [protein, carbs, fats]);
+
+    return <div ref={chartRef} />;
+  }
 
   useEffect(() => {
     get_profile();
@@ -522,16 +552,16 @@ function Nutrition() {
         >
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-xs">{mealname}</h2>
-            <div className="flex flex-col items-center text-xs overflow-y-auto max-h-15">
+            <div className="flex flex-col items-center text-xs overflow-y-auto max-h-18">
               <div className="flex flex-col items-center">
                 {meals.map((meal, index) => (
-                  <p key={index} className="flex flex-row space-x-1 items-center ">
+                  <p key={index} className="flex flex-row space-x-0 items-center ">
                     <div className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center">
-                      <p>Meal {meal.name}</p>
-                      <p>kcal {meal.calories} </p>
-                      <p>P: {meal.protein}g</p>
-                      <p>C: {meal.carbs}g</p>
-                      <p>F: {meal.fats}g</p>
+                      <p className="mr-1">Meal {meal.name}</p>
+                      <p className="mr-1">Cal {meal.calories} </p>
+                      <p className="mr-1">P: {meal.protein}g</p>
+                      <p className="mr-1">C: {meal.carbs}g</p>
+                      <p className="mr-1">F: {meal.fats}g</p>
                       <button
                         onClick={() => {
                           deleteMeal(meal.id);
@@ -571,7 +601,7 @@ function Nutrition() {
                 ))}
               </div>
             </div>
-            <div className="flex justify-end mt-2">
+            <div className="flex justify-end ">
               <button
                 onClick={() => {
                   setShowFileUpload(true);
@@ -677,7 +707,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-full sm:w-35 lg:w-35 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-36 sm:w-36 lg:w-36 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -700,6 +730,14 @@ function Nutrition() {
                       <p className="text-white">C: {calculateCarbs() * 4} kcal</p>
                       <p className="text-white">F: {calculateFats() * 9} kcal</p>
                     </div>
+                  </div>
+
+                  <div className="carousel-item w-full">
+                    <MacroPieChart
+                      protein={calculateProteins()}
+                      carbs={calculateCarbs()}
+                      fats={calculateFats()}
+                    />
                   </div>
                 </div>
               </div>
