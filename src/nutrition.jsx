@@ -731,14 +731,15 @@ function Nutrition() {
                       <p className="text-white">F: {calculateFats() * 9} kcal</p>
                     </div>
                   </div>
-
-                  <div className="carousel-item w-full">
-                    <MacroPieChart
-                      protein={calculateProteins()}
-                      carbs={calculateCarbs()}
-                      fats={calculateFats()}
-                    />
-                  </div>
+                  {calculateCalories() > 0 && (
+                    <div className="carousel-item w-full">
+                      <MacroPieChart
+                        protein={calculateProteins()}
+                        carbs={calculateCarbs()}
+                        fats={calculateFats()}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
