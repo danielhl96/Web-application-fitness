@@ -2,6 +2,7 @@ import TemplatePage from './templatepage';
 import api from './api.js';
 import Input from './input.jsx';
 import ApexCharts from 'apexcharts';
+import Notify from './notify.jsx';
 
 import { useState, useRef, useEffect, use } from 'react';
 
@@ -24,6 +25,7 @@ function Nutrition() {
   const [mealtype, setMealtype] = useState('');
   const [calories, setCalories] = useState(0);
   const [showEditMeal, setShowEditMeal] = useState(false);
+  const [notify, setNotify] = useState(null);
 
   function MacroPieChart({ protein, carbs, fats }) {
     const chartRef = useRef(null);
@@ -33,7 +35,7 @@ function Nutrition() {
         chart: {
           type: 'pie',
           background: 'transparent',
-          width: 100,
+          width: 110,
         },
         labels: ['P', 'C', 'F'],
         series: [protein, carbs, fats],
@@ -80,9 +82,12 @@ function Nutrition() {
         getlaunchMeals();
         getbreakfastMeals();
         getsnackMeals();
+        setNotify({ title: 'Delete Meal', type: 'success', message: 'Meal deleted successfully!' });
+        setShowEditMeal(false);
       })
       .catch((error) => {
         console.error('Error deleting meal:', error);
+        setNotify({ title: 'Delete Meal', type: 'error', message: 'Failed to delete meal.' });
       });
   }
 
@@ -250,6 +255,7 @@ function Nutrition() {
           .padStart(2, '0')}`,
       })
       .then(() => {
+        setNotify({ title: 'Add Meal', type: 'success', message: 'Meal added successfully!' });
         setShowMeal(false);
         getdinnerMeals();
         getlaunchMeals();
@@ -274,6 +280,7 @@ function Nutrition() {
       })
       .then((message) => {
         console.log('Meal edited successfully:', message);
+        setNotify({ title: 'Edit Meal', type: 'success', message: 'Meal edited successfully!' });
         getdinnerMeals();
         getlaunchMeals();
         getbreakfastMeals();
@@ -705,7 +712,7 @@ function Nutrition() {
                       }}
                       className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
                     >
-                      <p className="mr-1">Meal {meal.name}</p>
+                      <p className="mr-1">{meal.name}</p>
                       <p className="mr-1">Cal {meal.calories.toFixed(0)} </p>
                       <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
                       <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
@@ -783,6 +790,17 @@ function Nutrition() {
         {showFileUpload && handleFileUpload()}
         {showMeal && modalMeal(meal)}
         {showEditMeal && editMeal()}
+        {notify && (
+          <Notify
+            title={notify.title}
+            message={notify.message}
+            duration={1500}
+            key={notify.message + notify.title + Date.now()}
+            type={notify.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotify(null)}
+          />
+        )}
         <div className="">
           <h1 className="text-2xl font-bold text-white mb-4">Nutrition</h1>
           <div className="divider divider-primary">
@@ -799,7 +817,9 @@ function Nutrition() {
               onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               onClick={() => setShowModal(true)}
             >
-              {`${selectedDay}.${month}.${year}`}
+              {`${selectedDay.toString().padStart(2, '0')}.${month
+                .toString()
+                .padStart(2, '0')}.${year}`}
             </button>
           </div>
           <div className="overflow-y-auto max-h-80">
@@ -882,7 +902,7 @@ function Nutrition() {
                     </div>
                   </div>
                   {calculateCalories() > 0 && (
-                    <div className="carousel-item w-full">
+                    <div className="carousel-item w-full items-center justify-center">
                       <MacroPieChart
                         protein={calculateProteins()}
                         carbs={calculateCarbs()}
