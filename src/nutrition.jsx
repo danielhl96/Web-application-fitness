@@ -19,10 +19,11 @@ function Nutrition() {
   const [snackMeals, setSnackMeals] = useState([]);
   const [prompt, setPrompt] = useState('');
   const fileInputRef = useRef(null);
-
+  const [calorie_factor, setCalorie_factor] = useState(0);
   const [loading, setLoading] = useState(false);
   const [mealtype, setMealtype] = useState('');
   const [calories, setCalories] = useState(0);
+  const [showEditMeal, setShowEditMeal] = useState(false);
 
   function MacroPieChart({ protein, carbs, fats }) {
     const chartRef = useRef(null);
@@ -239,10 +240,10 @@ function Nutrition() {
     api
       .post('/create_meal', {
         name: meal.name,
-        calories: meal.calories,
-        protein: meal.protein,
-        carbs: meal.carbs,
-        fats: meal.fats,
+        calories: meal.calories * (1 + calorie_factor / 100),
+        protein: meal.protein * (1 + calorie_factor / 100),
+        carbs: meal.carbs * (1 + calorie_factor / 100),
+        fats: meal.fats * (1 + calorie_factor / 100),
         mealtype: mealtype,
         date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
           .toString()
@@ -254,9 +255,34 @@ function Nutrition() {
         getlaunchMeals();
         getbreakfastMeals();
         getsnackMeals();
+        setCalorie_factor(0);
       })
       .catch((error) => {
         console.error('Error saving meal:', error);
+      });
+  }
+
+  function handleEditMealSave() {
+    api
+      .put('/edit_meal', {
+        meal_id: meal.id,
+        name: meal.name,
+        calories: meal.calories * (1 + calorie_factor / 100),
+        protein: meal.protein * (1 + calorie_factor / 100),
+        carbs: meal.carbs * (1 + calorie_factor / 100),
+        fats: meal.fats * (1 + calorie_factor / 100),
+      })
+      .then((message) => {
+        console.log('Meal edited successfully:', message);
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+        setShowEditMeal(false);
+        setCalorie_factor(0);
+      })
+      .catch((error) => {
+        console.error('Error editing meal:', error);
       });
   }
 
@@ -278,10 +304,25 @@ function Nutrition() {
           </h3>
           <div className="flex flex-col space-y-4">
             <p>{meal.name}</p>
-            <p> Calories: {meal.calories} kcal</p>
-            <p> Protein: {meal.protein} g</p>
-            <p> Carbs: {meal.carbs} g</p>
-            <p> Fats: {meal.fats} g</p>
+
+            <input
+              type="range"
+              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              min={-50}
+              max={50}
+              value={calorie_factor}
+              className="range range-xs"
+              style={{ label: 'Calorie Factor' }}
+            />
+            <div className="text-xs text-amber-400  text-center">
+              Calorie Factor: {calorie_factor}
+            </div>
+
+            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
+
+            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
             <div className="flex flex-row space-x-2 justify-center">
               <button
                 className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
@@ -540,6 +581,107 @@ function Nutrition() {
     );
   }
 
+  function editMeal() {
+    return (
+      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+        <div
+          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          style={{
+            background: 'rgba(10, 20, 40, 0.75)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid #3b82f6',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          }}
+        >
+          <h3 className="font-bold text-lg text-white mb-4">Edit Meal</h3>
+          <div className="flex flex-col space-y-4">
+            <p>{meal.name}</p>
+
+            <input
+              type="range"
+              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              min={-50}
+              max={50}
+              value={calorie_factor}
+              className="range range-xs"
+              style={{ label: 'Calorie Factor' }}
+            />
+            <div className="text-xs text-amber-400  text-center">
+              Calorie Factor: {calorie_factor}
+            </div>
+
+            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
+
+            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <div className="flex flex-row space-x-2 justify-center">
+              <button
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                onClick={() => {
+                  handleEditMealSave();
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </button>
+              <button
+                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                onClick={() => setShowEditMeal(false)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function mealSummary(mealname, meals) {
     return (
       <div className="mb-4">
@@ -556,12 +698,19 @@ function Nutrition() {
               <div className="flex flex-col items-center">
                 {meals.map((meal, index) => (
                   <p key={index} className="flex flex-row space-x-0 items-center ">
-                    <div className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center">
+                    <div
+                      onClick={() => {
+                        setShowEditMeal(true);
+                        setMeal(meal);
+                      }}
+                      className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
+                    >
                       <p className="mr-1">Meal {meal.name}</p>
-                      <p className="mr-1">Cal {meal.calories} </p>
-                      <p className="mr-1">P: {meal.protein}g</p>
-                      <p className="mr-1">C: {meal.carbs}g</p>
-                      <p className="mr-1">F: {meal.fats}g</p>
+                      <p className="mr-1">Cal {meal.calories.toFixed(0)} </p>
+                      <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
+                      <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
+                      <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
+
                       <button
                         onClick={() => {
                           deleteMeal(meal.id);
@@ -632,7 +781,8 @@ function Nutrition() {
       <TemplatePage>
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}
-        {showMeal && modalMeal()}
+        {showMeal && modalMeal(meal)}
+        {showEditMeal && editMeal()}
         <div className="">
           <h1 className="text-2xl font-bold text-white mb-4">Nutrition</h1>
           <div className="divider divider-primary">
