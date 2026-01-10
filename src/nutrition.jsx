@@ -24,8 +24,10 @@ function Nutrition() {
   const [loading, setLoading] = useState(false);
   const [mealtype, setMealtype] = useState('');
   const [calories, setCalories] = useState(0);
+  const [weight, setWeight] = useState(0);
   const [showEditMeal, setShowEditMeal] = useState(false);
   const [notify, setNotify] = useState(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   function MacroPieChart({ protein, carbs, fats }) {
     const chartRef = useRef(null);
@@ -67,6 +69,7 @@ function Nutrition() {
   function get_profile() {
     api.get('/get_profile').then((response) => {
       setCalories(response.data.calories);
+      setWeight(response.data.weight);
     });
   }
 
@@ -89,6 +92,16 @@ function Nutrition() {
         console.error('Error deleting meal:', error);
         setNotify({ title: 'Delete Meal', type: 'error', message: 'Failed to delete meal.' });
       });
+  }
+
+  function calculateProteinsGoal() {
+    return weight * (2.0).toFixed(0);
+  }
+  function calculateFatsGoal() {
+    return weight * (1.0).toFixed(0);
+  }
+  function calculateCarbsGoal() {
+    return ((calories - (weight * 2.0 * 4 + weight * 1.0 * 9)) / 4).toFixed(0);
   }
 
   function getdinnerMeals() {
@@ -888,19 +901,47 @@ function Nutrition() {
 
                 <div className="carousel rounded-box w-full">
                   <div className="carousel-item w-full">
-                    <div className="text-center text-xs">
-                      <p className="text-white">P: {calculateProteins().toFixed(0)}g</p>
-                      <p className="text-white">C: {calculateCarbs().toFixed(0)}g</p>
-                      <p className="text-white">F: {calculateFats().toFixed(0)}g</p>
+                    <div className="text-left text-xs">
+                      <h1 className="text-white text-left mb-2">Open:</h1>
+                      <p
+                        className={` ${
+                          calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        P: {(calculateProteinsGoal() - calculateProteins()).toFixed(0)}g
+                      </p>
+                      <p
+                        className={` ${
+                          calculateCarbsGoal() - calculateCarbs() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        C: {(calculateCarbsGoal() - calculateCarbs()).toFixed(0)}g
+                      </p>
+                      <p
+                        className={` ${
+                          calculateFatsGoal() - calculateFats() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        F: {(calculateFatsGoal() - calculateFats()).toFixed(0)}g
+                      </p>
+                    </div>
+                  </div>
+                  <div className="carousel-item w-full ">
+                    <div className="text-left text-xs">
+                      <h2 className="text-white text-left mb-2"> Goals:</h2>
+                      <p className=" text-white">P: {calculateProteinsGoal()} g</p>
+                      <p className="text-white">C: {calculateCarbsGoal()} g</p>
+                      <p className="text-white">F: {calculateFatsGoal()} g</p>
                     </div>
                   </div>
                   <div className="carousel-item w-full">
-                    <div className="text-center text-xs">
+                    <div className="text-left text-xs">
                       <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
                       <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
                       <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
                     </div>
                   </div>
+
                   {calculateCalories() > 0 && (
                     <div className="carousel-item w-full items-center justify-center">
                       <MacroPieChart
