@@ -43,7 +43,7 @@ function Nutrition() {
         series: [protein, carbs, fats],
         colors: ['#3b82f6', '#f59e42', '#f87171'],
 
-        dataLabels: { enabled: true, style: { colors: ['#fff'], fontSize: '8px' } },
+        dataLabels: { enabled: true, style: { colors: ['#fff'], fontSize: '7px' } },
         legend: { show: false, width: 0, position: 'bottom', labels: { colors: '#fff' } },
       };
 
@@ -943,7 +943,7 @@ function Nutrition() {
                   </div>
 
                   {calculateCalories() > 0 && (
-                    <div className="carousel-item w-full items-center justify-center">
+                    <div className="carousel-item w-full  items-center justify-center">
                       <MacroPieChart
                         protein={calculateProteins()}
                         carbs={calculateCarbs()}
