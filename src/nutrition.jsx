@@ -27,7 +27,6 @@ function Nutrition() {
   const [weight, setWeight] = useState(0);
   const [showEditMeal, setShowEditMeal] = useState(false);
   const [notify, setNotify] = useState(null);
-  const [carouselIndex, setCarouselIndex] = useState(0);
 
   function MacroPieChart({ protein, carbs, fats }) {
     const chartRef = useRef(null);
