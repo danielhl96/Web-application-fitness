@@ -933,13 +933,15 @@ function Nutrition() {
                       <p className="text-white">F: {calculateFatsGoal()} g</p>
                     </div>
                   </div>
-                  <div className="carousel-item w-full">
-                    <div className="text-left text-xs">
-                      <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
-                      <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
-                      <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
+                  {calculateCalories() > 0 && (
+                    <div className="carousel-item w-full">
+                      <div className="text-left text-xs">
+                        <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
+                        <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
+                        <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {calculateCalories() > 0 && (
                     <div className="carousel-item w-full  items-center justify-center">
