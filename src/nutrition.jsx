@@ -853,24 +853,25 @@ function Nutrition() {
                 <h2 className="card-title text-blue-400 text-xs">Calories</h2>
                 <div className="flex flex-col">
                   <div className="carousel rounded-box w-full">
-                    <div className="carousel-item w-full items-center justify-center">
-                      <div
-                        className={`radial-progress text-xs ${
-                          calories - calculateCalories() < 0 ? 'text-red-500' : ''
-                        } items-center justify-center`}
-                        style={
-                          {
-                            '--value': (calculateCalories() / calories) * 100,
-                            '--thickness': '4px',
-                          } /* as React.CSSProperties */
-                        }
-                        aria-valuenow={100}
-                        role="progressbar"
-                      >
-                        {calculateCalories()} kcal
+                    {calculateCalories() > 0 && (
+                      <div className="carousel-item w-full items-center justify-center">
+                        <div
+                          className={`radial-progress text-xs ${
+                            calories - calculateCalories() < 0 ? 'text-red-500' : ''
+                          } items-center justify-center`}
+                          style={
+                            {
+                              '--value': (calculateCalories() / calories) * 100,
+                              '--thickness': '4px',
+                            } /* as React.CSSProperties */
+                          }
+                          aria-valuenow={100}
+                          role="progressbar"
+                        >
+                          {calculateCalories()} kcal
+                        </div>
                       </div>
-                    </div>
-
+                    )}
                     <div className="carousel-item w-full">
                       <div className="text-xs">
                         <p className="text-white">In: {calculateCalories()}kcal</p>
