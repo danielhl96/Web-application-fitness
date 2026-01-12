@@ -725,7 +725,7 @@ function Nutrition() {
                       className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
                     >
                       <p className="mr-1">{meal.name}</p>
-                      <p className="mr-1">Cal {meal.calories.toFixed(0)} </p>
+                      <p className="mr-1">Cal: {meal.calories.toFixed(0)} </p>
                       <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
                       <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
                       <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
@@ -849,12 +849,13 @@ function Nutrition() {
                 border: '1px solid rgba(255, 255, 255, 0.18)',
               }}
             >
-              <div className="card-body i">
-                <h2 className="card-title text-blue-400 text-xs">Calories</h2>
+              <div className="card-body">
                 <div className="flex flex-col">
                   <div className="carousel rounded-box w-full">
                     {calculateCalories() > 0 && (
-                      <div className="carousel-item w-full items-center justify-center">
+                      <div className="carousel-item w-full flex flex-col items-left">
+                        <h1 className="text-blue-400 text-xs mb-2">Summary</h1>
+
                         <div
                           className={`radial-progress text-xs ${
                             calories - calculateCalories() < 0 ? 'text-red-500' : ''
@@ -874,6 +875,7 @@ function Nutrition() {
                     )}
                     <div className="carousel-item w-full">
                       <div className="text-xs">
+                        <h1 className="text-blue-400 text-xs mb-2">Calories</h1>
                         <p className="text-white">In: {calculateCalories()}kcal</p>
 
                         <p className="text-white">Goal: {calories}kcal</p>
@@ -897,12 +899,10 @@ function Nutrition() {
               }}
             >
               <div className="card-body">
-                <h2 className="card-title text-blue-400 text-xs">Macronutrients</h2>
-
                 <div className="carousel rounded-box w-full">
                   <div className="carousel-item w-full">
                     <div className="text-left text-xs">
-                      <h1 className="text-white text-left mb-2">Open:</h1>
+                      <h2 className="text-blue-400 text-xs mb-2">Open Macros</h2>
                       <p
                         className={` ${
                           calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
@@ -928,7 +928,7 @@ function Nutrition() {
                   </div>
                   <div className="carousel-item w-full ">
                     <div className="text-left text-xs">
-                      <h2 className="text-white text-left mb-2"> Goals:</h2>
+                      <h2 className="text-blue-400 text-xs mb-2">Goals</h2>
                       <p className=" text-white">P: {calculateProteinsGoal()} g</p>
                       <p className="text-white">C: {calculateCarbsGoal()} g</p>
                       <p className="text-white">F: {calculateFatsGoal()} g</p>
@@ -937,6 +937,7 @@ function Nutrition() {
                   {calculateCalories() > 0 && (
                     <div className="carousel-item w-full">
                       <div className="text-left text-xs">
+                        <h2 className="text-blue-400 text-xs mb-2">Macros (kcal)</h2>
                         <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
                         <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
                         <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
@@ -945,7 +946,8 @@ function Nutrition() {
                   )}
 
                   {calculateCalories() > 0 && (
-                    <div className="carousel-item w-full  items-center justify-center">
+                    <div className="carousel-item w-full  flex flex-col items-center">
+                      <h2 className="text-blue-400 text-xs mb-2">Macronutrients</h2>
                       <MacroPieChart
                         protein={calculateProteins()}
                         carbs={calculateCarbs()}

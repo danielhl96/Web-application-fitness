@@ -96,6 +96,7 @@ function CreateTraining() {
             message: `${found.name} has been added to your workout.`,
             type: 'success',
           });
+          setaddExercise('');
           return [...prev, found];
         }
         setNotification({
