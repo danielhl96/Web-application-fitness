@@ -21,7 +21,7 @@ Password: q!w7w'nF9Gb+d_j
 - **Database:** PostgreSQL
 - **Caching / Queues:** Redis
 - **Authentication:** HTTP Secure Cookies, JWT
-- **Architecture:** RESTful API
+- **Architecture:** Clear separation of REST API (backend), dynamic template pages, and modular workout and exercise components (frontend)
 
 ---
 
@@ -77,6 +77,14 @@ Password: q!w7w'nF9Gb+d_j
 - Automatic calculation of calorie needs
 - BMI and basic fitness metrics
 
+### 🍕 Nutrition Estimation
+
+- A nutrition estimation feature powered by OpenAI LLMs
+- Date selection for history and future food plans
+- Meal management for breakfast, lunch, dinner, and snacks
+- Meal editing to change the macros and calories
+- Nutrition will be estimated from uploaded meal pictures
+
 ### 📈 Progress Tracking
 
 - Log exercise and training data
@@ -112,12 +120,16 @@ Password: q!w7w'nF9Gb+d_j
 - Redis caching
 - PostgreSQL as a relational database
 - Clean React component structure styled with Tailwind CSS
+- Template page modules ensure a consistent user experience and make it easy to update frontend components
+- Exercise cards include an exercise description and icon. They also feature table logic for selecting sets and repetitions.
+- The workout card is a template component that ensures consistent workout selection and editing style.
+- Template modules for input fields, such as password and email, provide reusable and consistent input components throughout the frontend.
 
 ---
 
 ## 📱 PWA (Progressive Web App)
 
-- You can install the web application on your smartphone (iPhone) for a native app-like experience.
+- You can install the web application on your smartphone for a native app-like experience.
 - Simply open the app in your mobile browser and use "Add to Home Screen" to save it.
 - An internet connection is required to save and retrieve data from the backend.
 
