@@ -80,10 +80,10 @@ Password: q!w7w'nF9Gb+d_j
 ### 🍕 Nutrition Estimation
 
 - A nutrition estimation feature powered by OpenAI LLMs
+- Nutrition will be estimated from uploaded meal pictures
 - Date selection for history and future food plans
 - Meal management for breakfast, lunch, dinner, and snacks
 - Meal editing to change the macros and calories
-- Nutrition will be estimated from uploaded meal pictures
 
 ### 📈 Progress Tracking
 
