@@ -124,6 +124,7 @@ Password: q!w7w'nF9Gb+d_j
 - Exercise cards include an exercise description and icon. They also feature table logic for selecting sets and repetitions.
 - The workout card is a template component that ensures consistent workout selection and editing style.
 - Template modules for input fields, such as password and email, provide reusable and consistent input components throughout the frontend.
+- Notification module for success and error cases. The component displays a headline and a description for each case, with configurable display duration.
 
 ---
 
