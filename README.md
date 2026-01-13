@@ -174,7 +174,59 @@ VITE_API_URL=http://localhost:5001/api
 
 ---
 
-## Screenshots current UI (Mobile Device iPhone 11 Pro)
+## Screnshots 1.2 of UI (Mobile Device iPhone 11 Pro)
+
+<table>
+<tr>
+    <td><img src="screenshots/login1.2.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/register1.2.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/passwordforget1.2.png" width="300" alt="Password Page"></td>
+       
+  </tr>
+
+<tr>
+   <td><img src="screenshots/dashboard1.2.png" width="300" alt="Dashboard"></td>
+    <td><img src="screenshots/createworkout1.2.png" width="300" alt="Workout Creation"></td>
+    <td><img src="screenshots/editworkoutcards.png" width="300" alt="Make a workout"></td>
+    <td><img src="screenshots/editworkout1.2.png" width="300" alt="Make a workout"></td>
+     <td><img src="screenshots/notify.png" width="300" alt="Make a workout"></td>
+  </tr>
+
+<tr>
+    <td><img src="screenshots/selectworkout1.2.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/workout1.2.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/breaktimer.png" width="300" alt="Password Page"></td>
+        <td><img src="screenshots/lastworkout.png" width="300" alt="Password Page"></td>
+         <td><img src="screenshots/list1.2.png" width="300" alt="Password Page"></td>
+  </tr>
+
+  <tr>
+    <td><img src="screenshots/nutrition.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/nutritiondate.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/mealedit.png" width="300" alt="Password Page"></td>
+        <td><img src="screenshots/lastworkout.png" width="300" alt="Password Page"></td>
+         <td><img src="screenshots/mealupload.png" width="300" alt="Password Page"></td>
+  </tr>
+
+   <tr>
+    <td><img src="screenshots/profile1.2.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/profileedit1.2.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/stopwatch1.2.png" width="300" alt="Password Page"></td>
+        <td><img src="screenshots/stat1.2.png" width="300" alt="Password Page"></td>
+         <td><img src="screenshots/diagram1.2.png" width="300" alt="Password Page"></td>
+  </tr>
+
+  <tr>
+    <td><img src="screenshots/cred.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/emailchange.png" width="300" alt="Register Page"></td>
+     <td><img src="screenshots/passwordchange.png" width="300" alt="Password Page"></td>
+     <td><img src="screenshots/deleteaccount.png" width="300" alt="Password Page"></td>
+        
+  </tr>
+
+  </table>
+
+## Screenshots 1.1 of UI (Mobile Device iPhone 11 Pro)
 
 <table>
   <tr>
@@ -203,7 +255,7 @@ VITE_API_URL=http://localhost:5001/api
   </tr>
 </table>
 
-## Screenshots old UI (Mobile Devices iPhone 11 Pro)
+## Screenshots 1.0 of UI (Mobile Devices iPhone 11 Pro)
 
 <table>
   <tr>
