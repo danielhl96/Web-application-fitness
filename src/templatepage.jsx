@@ -2,7 +2,7 @@ function TemplatePage({ children }) {
   return (
     <div className="min-h-dvh bg-gradient-to-b from-gray-900 to-black flex flex-col items-center px-1 py-3">
       {/* vertikale Zentrierung */}
-      <div className="flex-1 flex items-start sm:items-center  w-full pt-16 pb-8">
+      <div className="flex flex-col items-center sm:items-center  w-full pt-16 pb-8">
         <div
           className="
             w-full

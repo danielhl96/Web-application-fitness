@@ -705,7 +705,7 @@ function Nutrition() {
     return (
       <div className="mb-4">
         <div
-          className="card w-full sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full  sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -834,7 +834,7 @@ function Nutrition() {
                 .padStart(2, '0')}.${year}`}
             </button>
           </div>
-          <div className="overflow-y-auto max-h-80">
+          <div className="overflow-y-auto flex flex-col lg:items-center max-h-80">
             {mealSummary('Breakfast', breakfastMeals)}
             {mealSummary('Launch', launchMeals)}
             {mealSummary('Dinner', dinnerMeals)}

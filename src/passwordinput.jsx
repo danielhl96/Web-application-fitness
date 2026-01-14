@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import './index.css';
+
 function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) {
   const [touched, setTouched] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setPasswordError(
@@ -23,10 +26,10 @@ function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) 
   }, [error, onError]);
 
   return (
-    <div className="input-group">
+    <div className="relative">
       <input
         placeholder={placeholder}
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
@@ -41,6 +44,12 @@ function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) 
           WebkitBackdropFilter: 'blur(8px)',
         }}
       />
+      <button
+        className="absolute right-2 top-2.5 text-blue-400"
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+      </button>
       {error && touched && <h1 className="text-red-500 text-xs ">{errorMessage}</h1>}
     </div>
   );
