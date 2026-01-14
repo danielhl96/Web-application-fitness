@@ -183,7 +183,7 @@ function CreateTraining() {
         <div className="divider divider-primary text-white font-bold mb-2 ">
           Create your workout
         </div>
-        <div className="flex flex-col items-center space-y-2 h-auto">
+        <div className="flex flex-col items-center space-y-2">
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
             <Input
@@ -261,7 +261,7 @@ function CreateTraining() {
             </div>
           )}
           <div
-            className={`h-32 overflow-y-scroll border border-gray-800 ${
+            className={`h-32 overflow-y-scroll  ${
               exerciseExists.some((ex) =>
                 ex.name.toLowerCase().includes(addExercise.toLowerCase())
               ) && addExercise.length > 0
@@ -276,10 +276,13 @@ function CreateTraining() {
                   !selectedExercise.some((ex) => ex.exercise === prev.name)
               )
               .map((item, index) => (
-                <div key={index} className="flex flex-col items-center cursor-pointer">
+                <div
+                  key={index}
+                  className="flex flex-col items-center cursor-pointer w-full max-w-xs sm:max-w-sm md:max-w-md"
+                >
                   <div
                     onClick={() => handleExerciseChange(item.name)}
-                    className="card w-50 h-30 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2"
+                    className="card w-60 h-30 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2"
                     style={{
                       background: 'rgba(0,0,0,0.20)',
                       boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
@@ -305,7 +308,7 @@ function CreateTraining() {
           {/* Render selected exercises */}
           {WorkoutNameSet ? (
             <div className="flex flex-col items-center space-y-3">
-              <div className="w-100 max-h-90 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
+              <div className="w-100 max-h-80 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard

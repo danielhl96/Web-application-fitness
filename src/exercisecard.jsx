@@ -62,35 +62,17 @@ function ExerciseCard({
   }, [selectedReps]);
 
   return (
-    <div>
-      <div
-        className="card lg:w-64 w-64 h-auto mb-4 md:w-64 md:h-auto bg-black/20 border border-blue-500 shadow-xl  rounded-xl flex flex-col  items-center backdrop-blur-lg"
-        style={{
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-        }}
-      >
+    <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-4">
+      <div className="card w-full h-auto bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20">
         <div className="card-body items-center text-center">
           <h2 className="text-amber-400 font-bold mb-2">{ExerciseName}</h2>
-          <figure className="flex justify-center items-center w-10 h-10">
-            <img
-              style={{ filter: 'invert(1)' }}
-              src={ExerciseImage}
-              alt={ExerciseName}
-              className="rounded-md"
-            />
+          <figure className="flex justify-center items-center w-8 h-8">
+            <img src={ExerciseImage} alt={ExerciseName} className="rounded-md invert" />
           </figure>
-          <p className="text-sm text-slate-200 mb-2">{Description}</p>
+          <p className="text-xs text-slate-200 mb-2">{Description}</p>
         </div>
         <div className="flex flex-row space-x-4 p-2">
-          <div
-            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-              border: '1px solid rgba(0, 0, 0, 0.12)',
-            }}
-          >
+          <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
             <table id="sets-table" className="min-w-2 border-collapse">
               <tbody>
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
@@ -98,17 +80,11 @@ function ExerciseCard({
                     <td
                       ref={selectedSets === set ? selectedSetRef : null}
                       onClick={(e) => handleSets(set, e.target)}
-                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
-                      style={{
-                        background:
-                          selectedSets === set ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
-                        boxShadow:
-                          selectedSets === set
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                        border: '1px solid rgba(0, 0, 0, 0.12)',
-                        color: selectedSets === set ? '#e0eaff' : '',
-                      }}
+                      className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
+                        selectedSets === set
+                          ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
+                          : 'bg-black/15'
+                      } `}
                     >
                       {'Sets: ' + set}
                     </td>
@@ -118,14 +94,7 @@ function ExerciseCard({
             </table>
           </div>
 
-          <div
-            className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg"
-            style={{
-              background: 'rgba(0,0,0,0.15)',
-              boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-              border: '1px solid rgba(0, 0, 0, 0.12)',
-            }}
-          >
+          <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
             <table id="reps-table" className="min-w-2 border-collapse">
               <tbody>
                 {Array.from({ length: 25 }, (_, i) => i + 1).map((rep, index) => (
@@ -133,17 +102,11 @@ function ExerciseCard({
                     <td
                       ref={selectedReps === rep ? selectedRepRef : null}
                       onClick={(e) => handleReps(rep, e.target)}
-                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
-                      style={{
-                        background:
-                          selectedReps === rep ? 'rgba(37,99,235,0.45)' : 'rgba(0,0,0,0.15)',
-                        boxShadow:
-                          selectedReps === rep
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                        border: '1px solid rgba(0, 0, 0, 0.12)',
-                        color: selectedReps === rep ? '#e0eaff' : '',
-                      }}
+                      className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
+                        selectedReps === rep
+                          ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
+                          : 'bg-black/15'
+                      } `}
                     >
                       {'Reps: ' + rep}
                     </td>
@@ -155,14 +118,7 @@ function ExerciseCard({
         </div>
         <div className="flex flex-row justify-center items-center space-x-2 mb-6 ">
           <button
-            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid #f63b3bff',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-red-500 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
             onClick={() => handleRemoveExercise()}
           >
             {/* Mülltonne Icon */}
@@ -183,14 +139,7 @@ function ExerciseCard({
           </button>
 
           <button
-            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid #3b82f6',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
             onClick={() => changePosition('up')}
           >
             {/* Up Arrow Icon */}
@@ -210,14 +159,7 @@ function ExerciseCard({
             </svg>
           </button>
           <button
-            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid #3b82f6',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
+            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
             onClick={() => changePosition('down')}
           >
             {/* Down Arrow Icon */}

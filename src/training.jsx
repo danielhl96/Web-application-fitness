@@ -854,7 +854,7 @@ function StartTraining() {
                 </button>
               </div>
             )}
-            <figure className="mb-4">
+            <figure className="flex justify-center mb-4">
               <img
                 style={{ filter: 'invert(1)' }}
                 src={

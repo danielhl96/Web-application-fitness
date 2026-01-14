@@ -478,8 +478,8 @@ const EditTrain = () => {
   function EditWorkoutPage() {
     return (
       <div>
-        <div className="flex flex-col items-center space-y-1 h-130 ">
-          <div className="flex flex-col w-70 md:w-80 items-center space-y-4 ">
+        <div className="flex flex-col items-center ">
+          <div className="flex flex-col w-70 md:w-80 space-y-2 items-center ">
             <Input
               placeholder="Add an exercise..."
               value={addExercise}
@@ -535,7 +535,7 @@ const EditTrain = () => {
                 ))}
             </div>
           </div>
-          <div className="flex flex-col items-center gap-4 overflow-y-auto max-h-96 py-2 w-full">
+          <div className="flex flex-col items-center gap-4 overflow-y-auto py-2 w-full max-h-90 sm:max-h-80 md:max-h-96 lg:max-h-[40vh]">
             {Array.isArray(selectedExercise[savekey]) &&
               selectedExercise[savekey].map((ex, index) => (
                 <ExerciseCard
@@ -654,7 +654,7 @@ const EditTrain = () => {
         )}
         {showEditWorkoutNameModal && changeWorkoutName()}
         {ConfirmationModalforWorkoutDeleteModal && ConfirmationModalforWorkoutDelete()}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center  min-h-0 pt-4">
           <div className="divider divider-primary text-white font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
               {showModal ? savekey : 'Edit your workout plans'}
@@ -682,11 +682,7 @@ const EditTrain = () => {
               )}
             </div>
           </div>
-          <div
-            className={`w-64 md:w-95 lg:h-130  md:h-130 flex flex-col gap-4 items-center pt-2 max-md:h-130${
-              !showModal ? ' overflow-y-auto' : ''
-            }`}
-          >
+          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl flex flex-col gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
             {showModal ? (
               <div>{EditWorkoutPage()}</div>
             ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (

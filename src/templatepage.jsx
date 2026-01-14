@@ -1,16 +1,26 @@
-function TemplatePage(props) {
+function TemplatePage({ children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-black flex flex-col items-center pt-24 pb-8">
-      <div
-        className="space-y-6 card  w-85 h-auto md:w-100 md:h-auto bg-black/20 border border-blue-500 shadow-xl p-8 rounded-xl flex flex-col backdrop-blur-lg"
-        style={{
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-        }}
-      >
-        {props.children}
+    <div className="container @container min-h-dvh bg-gradient-to-b from-gray-900 to-black flex flex-col items-center px-2 py-2">
+      {/* vertikale Zentrierung */}
+      <div className="flex-1 flex items-start sm:items-center  w-full pt-16 pb-8">
+        <div
+          className="
+            w-full
+            max-w-sm sm:max-w-md
+            space-y-6
+            rounded-xl
+            bg-black/20
+            border border-white/20
+            p-6 sm:p-8
+            shadow-xl
+            backdrop-blur-lg
+          "
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
 }
+
 export default TemplatePage;
