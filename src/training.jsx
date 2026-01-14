@@ -812,7 +812,7 @@ function StartTraining() {
           </div>
         ) : (
           <div
-            className={`space-y-2  justify-center ${
+            className={`space-y-auto  justify-center ${
               training1.isFinished ? 'border-green-500' : 'border-blue-500'
             }`}
           >
@@ -867,7 +867,7 @@ function StartTraining() {
               />
             </figure>
             <div className="divider divider-primary text-amber-400">{training1.exercise}</div>
-            <div className="overflow-y-auto max-h-40 space-y-2">
+            <div className="overflow-y-auto max-h-40 space-y-4 mb-4">
               {Array.from({ length: training1.sets }).map((_, index) => (
                 <div className="flex flex-row space-x-3 items-center justify-center" key={index}>
                   <div className="flex w-20 space-x-2 items-center justify-center ">

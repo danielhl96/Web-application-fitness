@@ -654,7 +654,7 @@ const EditTrain = () => {
         )}
         {showEditWorkoutNameModal && changeWorkoutName()}
         {ConfirmationModalforWorkoutDeleteModal && ConfirmationModalforWorkoutDelete()}
-        <div className="flex flex-col items-center  min-h-0 pt-4">
+        <div className="flex flex-col items-center  min-h-0">
           <div className="divider divider-primary text-white font-bold mb-2">
             <div className="flex flex-row items-center justify-center ">
               {showModal ? savekey : 'Edit your workout plans'}

@@ -823,7 +823,14 @@ function Profile() {
             <select
               defaultValue=""
               onChange={(e) => handleActivity(parseFloat(e.target.value))}
-              className="select select-primary"
+              className="select select-primary w-70 max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
             >
               <option value="" disabled>
                 Activity level
