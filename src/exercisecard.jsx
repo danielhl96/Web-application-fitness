@@ -13,8 +13,10 @@ function ExerciseCard({
   reps,
   sets,
 }) {
-  const [selectedSets, setSelectedSets] = useState(null);
-  const [selectedReps, setSelectedReps] = useState(null);
+  const [selectedSets, setSelectedSets] = useState(sets || null);
+  const [selectedReps, setSelectedReps] = useState(
+    reps ? (Array.isArray(reps) ? reps[0] : reps) : null
+  );
   const selectedSetRef = useRef(null);
   const selectedRepRef = useRef(null);
   const handleSets = (sets, ref) => {
@@ -41,13 +43,14 @@ function ExerciseCard({
   useEffect(() => {
     if (sets) {
       setSelectedSets(sets);
-      console.log('Selected sets:', sets);
     }
+  }, [sets]);
+
+  useEffect(() => {
     if (reps) {
-      setSelectedReps(reps);
-      console.log('Selected reps:', reps);
+      setSelectedReps(Array.isArray(reps) ? reps[0] : reps);
     }
-  }, []);
+  }, [reps]);
 
   // Auto-scroll to selected set/rep row
   useEffect(() => {

@@ -64,7 +64,7 @@ function CreateTraining() {
 
   function changePosition(element, direction) {
     console.log(element, direction);
-    const index = selectedExercise.findIndex((ex) => ex === element);
+    const index = selectedExercise.findIndex((ex) => ex.name === element.name);
     if (direction === 'up' && index > 0) {
       const newExercises = [...selectedExercise];
       [newExercises[index - 1], newExercises[index]] = [
@@ -315,6 +315,9 @@ function CreateTraining() {
                       ExerciseName={exercise.name}
                       Description={exercise.description}
                       ExerciseImage={exercise.img}
+                      reps={exercise.reps}
+                      sets={exercise.sets}
+                      weights={exercise.weights}
                       onRemove={() => handleRemoveExercise(exercise.name)}
                       // Callback for Prop passed
                       onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
