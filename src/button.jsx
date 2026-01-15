@@ -13,8 +13,6 @@ const Button = ({ onClick, disabled, border, children }) => {
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(8, 173, 77, 0.3)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
     >
       {children}
     </button>

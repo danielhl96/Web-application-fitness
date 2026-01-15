@@ -834,7 +834,7 @@ function Profile() {
                 border={goal === '2' ? '#3b82f6' : 'transparent'}
                 onClick={() => handleGoal('2')}
               >
-                Maintain
+                Hold
               </Button>
               <Button
                 border={goal === '3' ? '#3b82f6' : 'transparent'}
