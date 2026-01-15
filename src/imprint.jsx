@@ -5,7 +5,7 @@ function Imprint() {
   return (
     <div>
       <Header />
-      <TemplatePage>
+      <TemplatePage dockDisabled={true}>
         <h2 className="text-2xl font-bold text-white mb-4  text-start pb-2">Imprint</h2>
         <div className="divider divider-primary"></div>
         <div className="flex flex-col items-start text-white space-y-4">

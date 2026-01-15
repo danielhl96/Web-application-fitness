@@ -64,7 +64,7 @@ function RegisterPage() {
   return (
     <div>
       <Header />
-      <TemplatePage>
+      <TemplatePage dockDisabled={true}>
         <div>
           <h1 className="text-2xl font-bold">Register</h1>
           <div className="divider divider-primary">Your data</div>

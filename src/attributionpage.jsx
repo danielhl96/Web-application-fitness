@@ -4,7 +4,7 @@ function AttributionPage() {
   return (
     <div>
       <Header />
-      <TemplatePage>
+      <TemplatePage dockDisabled={true}>
         <div className="overflow-auto max-h-[80vh]">
           <h1 className="text-2xl font-bold text-white mb-4">Attribution</h1>
           <div className="divider divider-primary"></div>

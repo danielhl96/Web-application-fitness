@@ -100,7 +100,7 @@ function PasswordForget() {
   return (
     <div>
       <Header />
-      <TemplatePage>
+      <TemplatePage dockDisabled={true}>
         <div className="items-start">
           <h1 className="text-2xl text-left font-bold">Password forget</h1>
         </div>

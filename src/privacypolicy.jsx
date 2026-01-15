@@ -5,7 +5,7 @@ function PrivacyPolicy() {
   return (
     <div>
       <Header />
-      <TemplatePage>
+      <TemplatePage dockDisabled={true}>
         <div className="overflow-auto max-h-[80vh] text-white">
           <h2 className="text-2xl font-bold text-white mb-4  text-start  pb-2">Privacy Policy</h2>
 
