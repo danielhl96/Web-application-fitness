@@ -6,6 +6,7 @@ import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
 import Input from './input.jsx';
 import api from './api';
+import Button from './button.jsx';
 
 function StartTraining() {
   const navigate = useNavigate();
@@ -363,21 +364,9 @@ function StartTraining() {
                 ))}
               </tbody>
             </table>
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setLastTrainingModal(false)}
-            >
+            <Button border="#ef4444ff" onClick={() => setLastTrainingModal(false)}>
               Close
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -482,19 +471,7 @@ function StartTraining() {
             {selectedWeight1[idx] + selectedWeight2[idx]} kg
           </div>
           <div className="modal-action justify-center">
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => changeWeight(idx, false)}
-            >
+            <Button border="#08ad4dff" onClick={() => changeWeight(idx, false)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -509,20 +486,8 @@ function StartTraining() {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-            </button>
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setShowModal(false)}
-            >
+            </Button>
+            <Button border="#ef4444ff" onClick={() => setShowModal(false)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -537,7 +502,7 @@ function StartTraining() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -562,7 +527,7 @@ function StartTraining() {
           <div className="flex flex-col justify-center items-center  text-xs">
             <h2 className="text-amber-50 font-bold mb-2">Workout Complete!</h2>
             <div className="flex flex-row justify-center items-center gap-4 mt-2">
-              <button
+              <Button
                 // Resets all training states and navigates to the home page
                 onClick={(event) => {
                   // Prevents the default button behavior (such as form submission or page reload)
@@ -579,12 +544,10 @@ function StartTraining() {
                   setSelectedWeight2([3]);
                   navigate('/');
                 }}
-                className="btn btn-outline btn-primary hover:bg-blue-600 text-white"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = '')}
+                border="#08ad4dff"
               >
-                ok
-              </button>
+                Ok
+              </Button>
             </div>
           </div>
         </div>
@@ -630,39 +593,21 @@ function StartTraining() {
             </div>
 
             <div className="flex flex-row justify-center items-center gap-1 mt-3">
-              <button
+              <Button
                 onClick={() => {
                   counterisRunning ? stopCounter() : startCounter();
                 }}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 {counterisRunning ? 'Break' : 'Go'}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   setBreakModal(false);
                   stopCounter();
                   setBreakTime(0);
                 }}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#ef4444ff"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -678,7 +623,7 @@ function StartTraining() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -803,19 +748,9 @@ function StartTraining() {
               ) : (
                 <div className="flex flex-col items-center">
                   <p className="text-white">No workout plans available. Please create one first.</p>
-                  <button
-                    onClick={() => navigate('/createtrain')}
-                    className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 mt-4"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                      border: '1.5px solid #f63b3bff',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                  >
+                  <Button onClick={() => navigate('/createtrain')} border="#3b82f6">
                     Create Workout
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -830,7 +765,7 @@ function StartTraining() {
 
             {!training1.isFinished ? null : (
               <div className="flex flex-top justify-end">
-                <button
+                <Button
                   onClick={() => {
                     const updatedTraining = { ...training1, isFinished: false };
                     setTraining(updatedTraining);
@@ -845,7 +780,7 @@ function StartTraining() {
 
                     console.log(updatedTraining);
                   }}
-                  className="btn btn-outline btn-primary btn-sm mr-2"
+                  border="#3b82f6"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -861,7 +796,7 @@ function StartTraining() {
                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                     />
                   </svg>
-                </button>
+                </Button>
               </div>
             )}
             <figure className="flex justify-center mb-4">
@@ -899,40 +834,22 @@ function StartTraining() {
                     </p>
                   </div>
                   <div className="flex space-x-2 items-center justify-center ">
-                    <button
+                    <Button
                       disabled={training1.isFinished}
                       onClick={() => handleModal(index, true)}
-                      className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                      style={{
-                        background: 'rgba(30, 41, 59, 0.25)',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                        border: !training1.isFinished
-                          ? '1.5px solid #ffea00ff'
-                          : '1.5px solid  #3b82f6  ',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                      }}
+                      border={training1.isFinished ? '#3b82f6' : '#ffea00ff'}
                     >
                       Weight: {training1.weights[index]} kg
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
             </div>
             <div className="flex space-x-2 items-center justify-center">
-              <button
+              <Button
                 disabled={training1.isFinished}
                 onClick={() => handleReduceSets()}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
+                border="#ef4444ff"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -948,20 +865,11 @@ function StartTraining() {
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={training1.isFinished}
                 onClick={() => handleAddSets()}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -977,19 +885,11 @@ function StartTraining() {
                     d="M12 4v16m8-8H4"
                   />
                 </svg>
-              </button>
-              <button
+              </Button>
+              <Button
+                disabled={training1.isFinished}
                 onClick={() => setBreakModal(true)}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1005,40 +905,19 @@ function StartTraining() {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => setLastTrainingModal(true)}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => setLastTrainingModal(true)} border="#3b82f6">
                 Last
-              </button>
+              </Button>
               {breakModal && BreakTimeModal()}
             </div>
             <div className="divider divider-primary"></div>
             <div className="flex space-x-2 items-center justify-center">
-              <button
+              <Button
                 onClick={() => {
                   setSelectedTrainingSite(true);
                 }}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#ef4444ff"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1054,20 +933,11 @@ function StartTraining() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={idxExercise == 0}
                 onClick={() => handleExerciseBack()}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1083,20 +953,8 @@ function StartTraining() {
                     d="M15 12H9m6 0l-3-3m3 3l-3 3"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => handleExercise()}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => handleExercise()} border="#3b82f6">
                 {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
                   <svg // success icon
                     xmlns="http://www.w3.org/2000/svg"
@@ -1128,21 +986,12 @@ function StartTraining() {
                     />
                   </svg>
                 )}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   setExerciseList(true);
                 }}
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -1158,7 +1007,7 @@ function StartTraining() {
                     d="M3 12h18M3 6h18M3 18h18"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         )}

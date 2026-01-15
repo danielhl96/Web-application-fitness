@@ -5,6 +5,7 @@ import Header from './HeaderLogout.jsx';
 import TemplatePage from './templatepage.jsx';
 import EmailInput from './emailinput.jsx';
 import PasswordInput from './passwordinput.jsx';
+import Button from './button.jsx';
 function PasswordForget() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -156,7 +157,7 @@ function PasswordForget() {
           )}
         </div>
         <div className="flex space-x-2 items-center justify-start">
-          <button
+          <Button
             disabled={
               email.length === 0 ||
               emailError ||
@@ -167,35 +168,14 @@ function PasswordForget() {
                   passwordMatchError))
             }
             onClick={!requireCode ? () => handleCode() : () => handlePasswordChange()}
-            className="w-auto px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid rgba(59, 130, 246, 0.25)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(8, 173, 77, 0.3)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+            border="#3b82f6"
           >
             {requireCode ? 'Change password' : 'Require code'}
-          </button>
+          </Button>
 
-          <button
-            onClick={() => navigate('/login')}
-            className="w-auto px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid rgba(59, 130, 246, 0.25)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = '#f63b3bff')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-          >
+          <Button onClick={() => navigate('/login')} border="#ef4444">
             {successfully ? 'Go to Login' : 'Cancel'}
-          </button>
+          </Button>
         </div>
         {message && <h1 className="text-green-500">{message}</h1>}
       </TemplatePage>

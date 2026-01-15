@@ -3,6 +3,7 @@ import api from './api.js';
 import Input from './input.jsx';
 import ApexCharts from 'apexcharts';
 import Notify from './notify.jsx';
+import Button from './button.jsx';
 
 import { useState, useRef, useEffect, use } from 'react';
 
@@ -343,17 +344,8 @@ function Nutrition() {
             <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
             <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
             <div className="flex flex-row space-x-2 justify-center">
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              <Button
+                border="#3b82f6"
                 onClick={() => {
                   setShowMeal(false);
                   handleMealSave();
@@ -373,20 +365,8 @@ function Nutrition() {
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </button>
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-                onClick={() => setShowMeal(false)}
-              >
+              </Button>
+              <Button border="#3b82f6" onClick={() => setShowMeal(false)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -401,7 +381,7 @@ function Nutrition() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -445,15 +425,8 @@ function Nutrition() {
                   onChange={(e) => setPrompt(e.target.value)}
                   w={'w-62'}
                 ></Input>
-                <button
-                  className="btn btn-outline w-16 h-10 btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                  style={{
-                    background: 'rgba(30, 41, 59, 0.25)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                    border: '1.5px solid #3b82f6',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                  }}
+                <Button
+                  border="#3b82f6"
                   onClick={() => fileInputRef.current && fileInputRef.current.click()}
                 >
                   <figure className="w-5 h-5 mb-2">
@@ -462,24 +435,12 @@ function Nutrition() {
                       className="w-full h-full object-cover rounded-md filter brightness-0 invert"
                     />
                   </figure>
-                </button>
+                </Button>
               </div>
             )}
           </div>
           <div className="modal-action items-start justify-start">
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setShowFileUpload(false)}
-            >
+            <Button border="#ef4444" onClick={() => setShowFileUpload(false)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -494,7 +455,7 @@ function Nutrition() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -579,21 +540,9 @@ function Nutrition() {
               ))}
             </select>
 
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setShowModal(false)}
-            >
-              Close
-            </button>
+            <Button border="#3b82f6" onClick={() => setShowModal(false)}>
+              OK
+            </Button>
           </div>
         </div>
       </div>
@@ -636,17 +585,8 @@ function Nutrition() {
             <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
             <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
             <div className="flex flex-row space-x-2 justify-center">
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              <Button
+                border="#3b82f6"
                 onClick={() => {
                   handleEditMealSave();
                 }}
@@ -665,20 +605,8 @@ function Nutrition() {
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </button>
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-                onClick={() => setShowEditMeal(false)}
-              >
+              </Button>
+              <Button border="#ef4444" onClick={() => setShowEditMeal(false)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -693,7 +621,7 @@ function Nutrition() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>

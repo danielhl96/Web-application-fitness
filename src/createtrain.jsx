@@ -8,7 +8,7 @@ import TemplatePage from './templatepage.jsx';
 import ExerciseCard from './exercisecard.jsx';
 import Notify from './notify.jsx';
 import Input from './input.jsx';
-
+import Button from './button.jsx';
 function CreateTraining() {
   const navigate = useNavigate();
   const [WorkoutName, setWorkoutName] = useState('');
@@ -191,19 +191,10 @@ function CreateTraining() {
               id="training-input"
               onChange={(e) => setWorkoutName(e.target.value)}
             />
-            <button
+            <Button
               disabled={WorkoutName === ''}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border={WorkoutNameSet ? '#10B981' : '#3b82f6'}
             >
               {WorkoutNameSet ? (
                 <svg
@@ -236,7 +227,7 @@ function CreateTraining() {
                   />
                 </svg>
               )}
-            </button>
+            </Button>
           </div>
           {WorkoutNameSet === true && (
             <div className="flex flex-col items-center space-y-2">
@@ -330,19 +321,12 @@ function CreateTraining() {
             </div>
           ) : null}
           <div className="flex flex-row items-center gap-4 mt-4">
-            <button
-              disabled={WorkoutName === '' || selectedExercise.length === 0}
+            <Button
+              disabled={
+                WorkoutName === '' || selectedExercise.length === 0 || WorkoutNameSet === false
+              }
               onClick={() => handleSaveTraining()}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border={WorkoutNameSet ? '#10B981' : '#3b82f6'}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -358,20 +342,8 @@ function CreateTraining() {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-            </button>
-            <button
-              onClick={() => navigate('/')}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff', // red-500
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            </Button>
+            <Button onClick={() => navigate('/')} border="#ef4444">
               {Message === 'Training saved successfully!' ? (
                 <>
                   <svg
@@ -407,7 +379,7 @@ function CreateTraining() {
                   </svg>
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </TemplatePage>

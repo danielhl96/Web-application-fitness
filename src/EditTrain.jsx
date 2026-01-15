@@ -9,7 +9,7 @@ import WorkoutCard from './workoutcard.jsx';
 import ExerciseCard from './exercisecard.jsx';
 import Notify from './notify.jsx';
 import Input from './input.jsx';
-
+import Button from './button.jsx';
 const EditTrain = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -175,20 +175,7 @@ const EditTrain = () => {
           <h3 className="font-bold text-lg text-amber-50 mb-4">Delete Workout Plan</h3>
           <p className="text-amber-50 mb-4">Are you sure you want to delete this workout plan?</p>
           <div className="modal-action">
-            <button
-              onClick={() => handeRemoveWorkoutAPI(savekey)}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #ef4444',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            <Button onClick={() => handeRemoveWorkoutAPI(savekey)} border="#ef4444">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -203,21 +190,8 @@ const EditTrain = () => {
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
-            </button>
-            <button
-              onClick={() => setConfirmationModalforWorkoutDelete(false)}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            </Button>
+            <Button onClick={() => setConfirmationModalforWorkoutDelete(false)} border="#3b82f6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -232,7 +206,7 @@ const EditTrain = () => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -261,19 +235,10 @@ const EditTrain = () => {
             onChange={(e) => setWorkoutName(e.target.value)}
           />
           <div className="modal-action">
-            <button
+            <Button
               onClick={() => changeWorkoutNameAPI()}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#3b82f6"
+              disabled={WorkoutName.length === 0}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -289,21 +254,8 @@ const EditTrain = () => {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-            </button>
-            <button
-              onClick={() => setShowEditWorkoutNameModal(false)}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-2"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            </Button>
+            <Button onClick={() => setShowEditWorkoutNameModal(false)} border="#ef4444">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -318,7 +270,7 @@ const EditTrain = () => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -331,20 +283,7 @@ const EditTrain = () => {
         <WorkoutCard>
           <h2 className="text-amber-400 font-bold mb-2">{exercise}</h2>
           <div className="flex flex-row justify-center items-center gap-4 mt-2">
-            <button
-              onClick={() => handleShowModal(exercise)}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            <Button onClick={() => handleShowModal(exercise)} border="#3b82f6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -359,20 +298,10 @@ const EditTrain = () => {
                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                 />
               </svg>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => (setConfirmationModalforWorkoutDelete(true), setKey(exercise))}
-              className="btn btn-outline btn-error shadow-lg backdrop-blur-md border border-red-500 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #ef4444',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239, 68, 68, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#ef4444"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -388,7 +317,7 @@ const EditTrain = () => {
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
 
           <div className="flex flex-col">
@@ -567,19 +496,12 @@ const EditTrain = () => {
           </div>
           <div className="divider divider-primary"></div>
           <div className="flex flex-row gap-2">
-            <button
+            <Button
               onClick={handleEditWorkout}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#08ad4dff"
+              disabled={
+                Array.isArray(selectedExercise[savekey]) && selectedExercise[savekey].length === 0
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -595,21 +517,8 @@ const EditTrain = () => {
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-            </button>
-            <button
-              onClick={handleShowModal}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-            >
+            </Button>
+            <Button onClick={handleShowModal} border="#ef4444">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -624,7 +533,7 @@ const EditTrain = () => {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -655,10 +564,7 @@ const EditTrain = () => {
               {showModal ? savekey : 'Edit your workout plans'}
 
               {showModal && (
-                <button
-                  onClick={() => setShowEditWorkoutNameModal(true)}
-                  className="btn btn-ghost btn-sm"
-                >
+                <Button onClick={() => setShowEditWorkoutNameModal(true)} border="transparent">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -673,7 +579,7 @@ const EditTrain = () => {
                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                     />
                   </svg>
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -687,26 +593,9 @@ const EditTrain = () => {
             ) : (
               <>
                 <p className="text-white">No workout plans available. Please create one first.</p>
-                <button
-                  onClick={() => navigate('/createtrain')}
-                  className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                  style={{
-                    background: 'rgba(30, 41, 59, 0.25)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                    border: '1.5px solid rgba(59, 130, 246, 0.25)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.5)')
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                  }
-                >
+                <Button border="#ef4444" onClick={() => navigate('/createtrain')}>
                   Create Workout
-                </button>
+                </Button>
               </>
             )}
           </div>

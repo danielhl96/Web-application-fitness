@@ -6,6 +6,7 @@ import api from './api.js';
 import TemplatePage from './templatepage.jsx';
 import EmailInput from './emailinput.jsx';
 import PasswordInput from './passwordinput.jsx';
+import Button from './button.jsx';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -77,21 +78,10 @@ function LoginForm() {
             />
           </div>
           <h1 className="text-red-500 text-sm ">{message}</h1>
-          <button
-            onClick={() => handleLogin()}
-            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid #08ad4dff',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(8, 173, 77, 0.3)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-          >
+
+          <Button onClick={() => handleLogin()} disabled={false} border="#08ad4dff">
             Login
-          </button>
+          </Button>
           <div className="space-y-0 flex flex-col items-center">
             <button onClick={() => navigate('/register')} className="btn btn-link w-80 text-white">
               Are you new here?

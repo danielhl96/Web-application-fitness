@@ -8,6 +8,7 @@ import Notify from './notify.jsx';
 import PasswordInput from './passwordinput.jsx';
 import EmailInput from './emailinput.jsx';
 import Input from './input.jsx';
+import Button from './button.jsx';
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -771,19 +772,9 @@ function Profile() {
             </div>
             <h1>Your gender:</h1>
             <div className="flex flex-row space-x-2  items-center justify-center">
-              <button
+              <Button
+                border={gender === 'male' ? '#3b82f6' : 'transparent'}
                 onClick={() => handleGender('male')}
-                style={{
-                  color: gender === 'male' ? 'white' : 'white',
-                  backgroundColor: gender === 'male' ? 'black' : 'transparent',
-                  border: '1px solid black',
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -793,21 +784,10 @@ function Profile() {
                 >
                   <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
                 </svg>
-              </button>
-              <button
+              </Button>
+              <Button
+                border={gender === 'female' ? '#3b82f6' : 'transparent'}
                 onClick={() => handleGender('female')}
-                style={{
-                  color: gender === 'female' ? 'white' : 'white',
-                  backgroundColor: gender === 'female' ? 'black' : 'transparent',
-                  border: '1px solid black',
-
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -817,13 +797,14 @@ function Profile() {
                 >
                   <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
                 </svg>
-              </button>
+              </Button>
             </div>
 
             <select
+              value={activity}
               defaultValue=""
               onChange={(e) => handleActivity(parseFloat(e.target.value))}
-              className="select select-primary w-70 max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              className="select select-primary w-full max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -843,54 +824,24 @@ function Profile() {
 
             <div className="divider divider-neutral">Your goals:</div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
-                onClick={() => handleGoal(1)}
-                style={{
-                  color: goal === 1 ? 'white' : 'white',
-                  backgroundColor: goal === 1 ? 'black' : 'transparent',
-                  border: '1px solid black',
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              <Button
+                border={goal === '1' ? '#3b82f6' : 'transparent'}
+                onClick={() => handleGoal('1')}
               >
                 Cut
-              </button>
-              <button
-                onClick={() => handleGoal(2)}
-                style={{
-                  color: goal === 2 ? 'white' : 'white',
-                  backgroundColor: goal === 2 ? 'black' : 'transparent',
-                  border: '1px solid black',
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              </Button>
+              <Button
+                border={goal === '2' ? '#3b82f6' : 'transparent'}
+                onClick={() => handleGoal('2')}
               >
                 Maintain
-              </button>
-              <button
-                onClick={() => handleGoal(3)}
-                style={{
-                  color: goal === 3 ? 'white' : 'white',
-                  backgroundColor: goal === 3 ? 'black' : 'transparent',
-                  border: '1px solid black',
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
+              </Button>
+              <Button
+                border={goal === '3' ? '#3b82f6' : 'transparent'}
+                onClick={() => handleGoal('3')}
               >
                 Bulk
-              </button>
+              </Button>
             </div>
             <div className="divider divider-neutral">Important values</div>
             <div className="flex justify-center">
@@ -917,8 +868,9 @@ function Profile() {
               </div>
             </div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
+              <Button
                 onClick={() => handleEdit()}
+                border="#3b82f6"
                 disabled={
                   failureHeight == true ||
                   failureHip == true ||
@@ -926,16 +878,6 @@ function Profile() {
                   failureWaist == true ||
                   failureHip == true
                 }
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -951,20 +893,8 @@ function Profile() {
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => setEdit(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => setEdit(false)} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -979,7 +909,7 @@ function Profile() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
@@ -1077,17 +1007,7 @@ function Profile() {
               Change your personal information
             </div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
-                onClick={() => setEdit(true)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-              >
+              <Button onClick={() => setEdit(true)} border="#3b82f6">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -1102,18 +1022,8 @@ function Profile() {
                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => navigate('/')}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-              >
+              </Button>
+              <Button onClick={() => navigate('/')} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -1128,7 +1038,7 @@ function Profile() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         )}
