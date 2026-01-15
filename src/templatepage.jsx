@@ -33,13 +33,13 @@ function TemplatePage({ children, dockDisabled }) {
         </div>
         {!dockDisabled ? (
           <div
-            className="dock bg-neutral h-16 w-full  text-neutral-content overflow-x-auto  mt-6"
+            className="dock bg-neutral h-16 w-full overflow-y-hidden text-neutral-content overflow-x-auto   mt-6"
             style={{ maxWidth: 400, width: '100%' }}
             ref={dockRef}
           >
             <button
               ref={refs['/']}
-              style={{ minWidth: 95, padding: '4px 0' }}
+              style={{ minWidth: 105, padding: '4px 0' }}
               className={location.pathname === '/' ? 'dock-active' : ''}
               onClick={() => navigate('/')}
             >
@@ -77,7 +77,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/createtrain']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/createtrain' ? 'dock-active' : ''}
               onClick={() => navigate('/createtrain')}
             >
@@ -90,7 +90,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/editTrain']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/editTrain' ? 'dock-active' : ''}
               onClick={() => navigate('/editTrain')}
             >
@@ -112,7 +112,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/training']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/training' ? 'dock-active' : ''}
               onClick={() => navigate('/training')}
             >
@@ -125,7 +125,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/nutrition']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/nutrition' ? 'dock-active' : ''}
               onClick={() => navigate('/nutrition')}
             >
@@ -138,7 +138,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/profile']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/profile' ? 'dock-active' : ''}
               onClick={() => navigate('/profile')}
             >
@@ -151,7 +151,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/counter']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/counter' ? 'dock-active' : ''}
               onClick={() => navigate('/counter')}
             >
@@ -173,7 +173,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/statistic']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/statistic' ? 'dock-active' : ''}
               onClick={() => navigate('/statistic')}
             >
@@ -186,7 +186,7 @@ function TemplatePage({ children, dockDisabled }) {
             </button>
             <button
               ref={refs['/credentials']}
-              style={{ minWidth: 95 }}
+              style={{ minWidth: 105 }}
               className={location.pathname === '/credentials' ? 'dock-active' : ''}
               onClick={() => navigate('/credentials')}
             >
