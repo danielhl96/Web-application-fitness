@@ -443,11 +443,6 @@ const EditTrain = () => {
       });
   };
 
-  const handleAddExercise2 = (e) => {
-    console.log(e.target.value);
-    setaddExercise(e.target.value);
-  };
-
   //Nur im Frontend
   const handleAddExercise = (elem) => {
     console.log(selectedExercise[savekey]);
