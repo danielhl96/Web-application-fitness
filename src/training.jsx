@@ -72,6 +72,7 @@ function StartTraining() {
   const [showTrainingEndModal, setShowTrainingEndModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState([3]);
   const [exerciseList, setExerciseList] = useState(false);
+  const [setFailureMessage, setSetFailureMessage] = useState([]);
 
   const [selectedWeight2, setSelectedWeight2] = useState([3]);
   const [idx, setWeightidx] = useState(0);
@@ -185,7 +186,6 @@ function StartTraining() {
     const newinputs = [...inputValue];
     newinputs[index] = e;
     setInputValue(newinputs);
-    console.log(training1);
   };
 
   const changeWeight = (index, flag) => {
@@ -308,9 +308,12 @@ function StartTraining() {
       });
       if (isNaN(wholePart)) wholePart = 0;
       const selectedRow = scrollRef.current.querySelector(`tr[data-weight="${wholePart}"]`);
-      scrollRef.current.scrollTop = selectedRow.offsetTop;
+      if (selectedRow) selectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //scrollRef.current.scrollTop = selectedRow.offsetTop;
     }
+  }, [showModal, idx]);
 
+  useEffect(() => {
     if (showModal && scrollRef2.current && training1 != null) {
       let decimalPart = training1.weights[idx] % 1;
       setSelectedWeight2((prev) => {
@@ -320,7 +323,8 @@ function StartTraining() {
       });
       if (isNaN(decimalPart)) decimalPart = 0;
       const selectedRow2 = scrollRef2.current.querySelector(`tr[data-weight2="${decimalPart}"]`);
-      scrollRef2.current.scrollTop = selectedRow2.offsetTop;
+      if (selectedRow2) selectedRow2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
   }, [showModal, idx]);
 
@@ -403,7 +407,10 @@ function StartTraining() {
                       <tr
                         key={index}
                         data-weight={weight}
-                        onClick={() => handleWeightSelect(weight)}
+                        onClick={(e) => {
+                          handleWeightSelect(weight);
+                          e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }}
                         className={'bg-gray-700'}
                       >
                         <td
@@ -437,7 +444,10 @@ function StartTraining() {
                       <tr
                         key={index}
                         data-weight2={weight}
-                        onClick={() => handleWeightSelect2(weight)}
+                        onClick={(e) => {
+                          handleWeightSelect2(weight);
+                          e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }}
                         className={'bg-gray-700'}
                       >
                         <td
@@ -880,6 +890,13 @@ function StartTraining() {
                       h="h-8"
                       onChange={(e) => addInput(parseInt(e.target.value), index)}
                     />
+                    <p
+                      className={`${
+                        setFailureMessage[index] ? 'text-red-500' : 'text-transparent'
+                      } text-sm`}
+                    >
+                      {setFailureMessage[index] ? 'Invalid input' : ''}
+                    </p>
                   </div>
                   <div className="flex space-x-2 items-center justify-center ">
                     <button
