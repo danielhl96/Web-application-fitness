@@ -109,11 +109,13 @@ function CreateTraining() {
     }
     if (found) {
       // Update the sets and reps for the found exercise
+      console.log('Found exercise:', found);
       const updatedExercise = {
         ...found,
-        sets: document.getElementById('sets-table').getElementsByTagName('tr').length,
-        reps: [8, 8, 8],
-        weights: [0, 0, 0],
+        sets: 1,
+        reps: 1,
+        weights: 0,
+
         date: new Date().toISOString().split('T')[0],
       };
       setSelectedExercise((prev) => prev.map((item) => (item.name === e ? updatedExercise : item)));
@@ -122,11 +124,6 @@ function CreateTraining() {
     document.getElementById('input-e').value = '';
     setaddExercise('');
   }
-
-  const handleAddExercise2 = (e) => {
-    console.log(e.target.value);
-    setaddExercise(e.target.value);
-  };
 
   const handleRemoveExercise = (name) => {
     setSelectedExercise((prev) => prev.filter((item) => item.name !== name));

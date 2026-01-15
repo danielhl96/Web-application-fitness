@@ -449,8 +449,8 @@ const EditTrain = () => {
     if (exercise.some((ex) => ex.name == elem)) {
       let newExercise = {
         exercise: elem,
-        reps: 12,
-        sets: 4,
+        reps: 1,
+        sets: 1,
         plan_id: selectedExercise[savekey][0]?.plan_id || null,
       };
       setSelectedExercise((prev) => {
