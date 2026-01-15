@@ -7,6 +7,7 @@ import { useState } from 'react';
 import api from './api.js';
 import EmailInput from './emailinput.jsx';
 import PasswordInput from './passwordinput.jsx';
+import Button from './button.jsx';
 
 function CredentialsPage() {
   const [emailModal, setEmailModal] = useState(false);
@@ -136,19 +137,10 @@ function CredentialsPage() {
             />
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
+              <Button
                 onClick={() => handleChangeEmail()}
                 disabled={!!errorEmailMessage || password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -164,20 +156,8 @@ function CredentialsPage() {
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => setEmailModal(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => setEmailModal(false)} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -192,7 +172,7 @@ function CredentialsPage() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -265,7 +245,7 @@ function CredentialsPage() {
             )}
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
+              <Button
                 onClick={() => handleChangePassword()}
                 disabled={
                   passwordError ||
@@ -274,16 +254,7 @@ function CredentialsPage() {
                   newPassword.length === 0 ||
                   confirmNewPassword.length === 0
                 }
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -299,20 +270,8 @@ function CredentialsPage() {
                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => setModalPassword(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => setModalPassword(false)} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -327,7 +286,7 @@ function CredentialsPage() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -369,19 +328,10 @@ function CredentialsPage() {
               onChange={setPassword}
             />
             <div className="flex flex-row justify-start space-x-2 space-y-2 mt-4">
-              <button
+              <Button
                 onClick={() => handleDeleteAccount()}
                 disabled={password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                border="#3b82f6"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -397,20 +347,8 @@ function CredentialsPage() {
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-              </button>
-              <button
-                onClick={() => setModalDeleteAccount(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center justify-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
+              </Button>
+              <Button onClick={() => setModalDeleteAccount(false)} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -425,7 +363,7 @@ function CredentialsPage() {
                     d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
             <div className="divider divider-primary"></div>
             <p className="text-amber-50 mt-2 text-center text-xs">

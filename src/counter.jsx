@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import TemplatePage from './templatepage';
+import Button from './button';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
@@ -149,21 +150,9 @@ function CounterForm() {
             <h1>Roundtime: {roundtime} s</h1>
           </div>
           <div className="modal-action justify-center">
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setShowModal(false)}
-            >
+            <Button border="#3b82f6" onClick={() => setShowModal(false)}>
               Close
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -268,19 +257,7 @@ function CounterForm() {
           }
 
           <div className="flex flex-col items-center space-y-2">
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center mt-2 btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => setShowModal(true)}
-            >
+            <Button border="#3b82f6" onClick={() => setShowModal(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mb-1"
@@ -301,22 +278,13 @@ function CounterForm() {
                   d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
           <div className="divider divider-primary text font-lightfont-bold mb-2"></div>
           <div className="flex- flex row space-x-2 ">
-            <button
+            <Button
               disabled={rounds === 0}
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#3b82f6"
               onClick={() => (isStopmode ? stopCounter() : startCounter())}
             >
               {isStopmode ? (
@@ -362,20 +330,8 @@ function CounterForm() {
                   />
                 </svg>
               )}
-            </button>
-            <button
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex flex-col items-center btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #f63b3bff',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              onClick={() => resetCounter()}
-            >
+            </Button>
+            <Button border="#f63b3b" onClick={() => resetCounter()}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mb-1"
@@ -390,7 +346,7 @@ function CounterForm() {
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </TemplatePage>

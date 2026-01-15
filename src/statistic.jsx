@@ -2,6 +2,7 @@ import api from './api';
 import ApexCharts from 'apexcharts';
 import { useState, useEffect } from 'react';
 import TemplatePage from './templatepage';
+import Button from './button';
 
 function Statistic() {
   const [showOverview, setShowOverview] = useState(true);
@@ -90,19 +91,7 @@ function Statistic() {
         <div className="divider my-4"></div>
         {selectedExercise && <ChartRenderer exercise={selectedExercise} />}
         <div className="flex flex-row justify-between w-full">
-          <button
-            onClick={() => setShowOverview(true)}
-            className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 btn-sm"
-            style={{
-              background: 'rgba(30, 41, 59, 0.25)',
-              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-              border: '1.5px solid #f63b3bff',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-          >
+          <Button onClick={() => setShowOverview(true)} border="#3b82f6">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 mr-1"
@@ -117,9 +106,9 @@ function Statistic() {
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
+          </Button>
           <div className="flex space-x-1">
-            <button
+            <Button
               disabled={data.findIndex((e) => e === selectedExercise) === 0}
               onClick={() =>
                 setSelectedExercise(
@@ -128,16 +117,7 @@ function Statistic() {
                     : selectedExercise
                 )
               }
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#3b82f6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +134,8 @@ function Statistic() {
                   d="M15 12H9m6 0l-3-3m3 3l-3 3"
                 />
               </svg>
-            </button>
-            <button
+            </Button>
+            <Button
               disabled={data.findIndex((e) => e === selectedExercise) === data.length - 1}
               onClick={() =>
                 setSelectedExercise(
@@ -164,16 +144,7 @@ function Statistic() {
                     : selectedExercise
                 )
               }
-              className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 btn-sm"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid #3b82f6',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              border="#3b82f6"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +160,7 @@ function Statistic() {
                   d="M15 12H9m6 0l-3-3m3 3l-3 3"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
