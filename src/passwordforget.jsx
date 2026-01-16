@@ -6,6 +6,7 @@ import TemplatePage from './templatepage.jsx';
 import EmailInput from './emailinput.jsx';
 import PasswordInput from './passwordinput.jsx';
 import Button from './button.jsx';
+import Input from './input.jsx';
 function PasswordForget() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -117,12 +118,13 @@ function PasswordForget() {
           {requireCode && (
             <>
               <h1 className="text-shadow-lg font-mono">Security-Code</h1>
-              <input
+              <Input
                 type="text"
-                placeholder={'Security-Code: '}
+                placeholder={'Security-Code '}
                 className="input input-primary"
                 onChange={(e) => handleSafetyCode(e.target.value)}
                 value={securityCode}
+                w="w-full"
               />
             </>
           )}
@@ -139,13 +141,13 @@ function PasswordForget() {
                 errorMessage={
                   'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
                 }
-                placeholder={'New password: '}
+                placeholder={'New password'}
               />
 
               <h1>Repeat your password</h1>
               <PasswordInput
                 value={passwordRepeat}
-                placeholder={'Repeat your password: '}
+                placeholder={'Repeat your password '}
                 errorMessage={''}
                 onError={(error) => setPasswordMatchError(password !== passwordRepeat)}
                 onChange={handlePasswordRepeat}
