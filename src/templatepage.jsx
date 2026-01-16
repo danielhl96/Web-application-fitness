@@ -33,7 +33,7 @@ function TemplatePage({ children, dockDisabled }) {
         </div>
         {!dockDisabled ? (
           <div
-            className="dock bg-neutral h-16 w-full overflow-y-hidden text-neutral-content overflow-x-auto mt-6"
+            className="dock bg-neutral h-16 w-full overflow-y-hidden text-neutral-content overflow-x-auto mt-6 sm:hidden"
             style={{ maxWidth: 400, width: '100%' }}
             ref={dockRef}
           >
