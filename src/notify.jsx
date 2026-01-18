@@ -18,7 +18,7 @@ function Notify({ title, message, type, duration = 3000, onClose }) {
       <div
         className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
         style={{
-          width: '16rem', // ca. 256px, deutlich kleiner als Standard
+          width: '16rem',
           minWidth: '10rem',
           maxWidth: '90vw',
           background: 'rgba(0,0,0,0.20)',
