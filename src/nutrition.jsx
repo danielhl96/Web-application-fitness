@@ -762,7 +762,7 @@ function Nutrition() {
                 .padStart(2, '0')}.${year}`}
             </button>
           </div>
-          <div className="overflow-y-auto flex grid lg:grid-cols-2 lg:items-center lg:max-h-[65vh] max-h-80">
+          <div className="overflow-y-auto flex grid lg:grid-cols-2 lg:gap-6 lg:items-center lg:max-h-[65vh] max-h-80">
             {mealSummary('Breakfast', breakfastMeals)}
             {mealSummary('Launch', launchMeals)}
             {mealSummary('Dinner', dinnerMeals)}

@@ -46,6 +46,12 @@ function Profile() {
   const [messageDeleteAccount, setMessageDeleteAccount] = useState('');
   const [notification, setNotification] = useState(null);
 
+  const activityLevels = {
+    1.2: 'Not active',
+    1.4: 'Lightly active',
+    1.7: 'Moderately active',
+    '2.0': 'Very active',
+  };
   useEffect(() => {
     api
       .get('/get_profile')
@@ -63,7 +69,7 @@ function Profile() {
         setGender(data.gender);
         setAge(data.age);
         setCalories(data.calories);
-        setActivity(data.activity?.toString?.() ?? '1.2');
+        setActivity(data.activity_level);
       })
       .catch((error) => {
         console.error('Error fetching profile data:', error);
@@ -997,20 +1003,7 @@ function Profile() {
                       : { color: 'orange' }
                 }
               >
-                Activity level:{' '}
-                {(() => {
-                  const act = parseFloat(activity);
-                  console.log('Activity level:', activity);
-                  return act === 1.2
-                    ? 'Not active'
-                    : act === 1.4
-                      ? 'Light activity'
-                      : act === 1.7
-                        ? 'Moderate activity'
-                        : act === 2.0
-                          ? 'Very active'
-                          : 'UNS';
-                })()}{' '}
+                Activity level: {activityLevels[activity] ?? 'UNS'}
               </h1>
             </div>
             <div className="divider  text-amber-50 font-light mb-2  divider-primary">
