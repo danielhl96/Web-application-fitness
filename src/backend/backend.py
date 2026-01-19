@@ -254,7 +254,7 @@ def update_profile():
     user.waist = data.get("waist", user.waist)
     user.hip = data.get("hip", user.hip)
     user.bfp = data.get("bfp", user.bfp)
-    user.activity_level = data.get("activity_level", user.activity_level)
+    user.activity_level = data.get("activity", user.activity_level)
     user.goal = data.get("goal", user.goal)
     user.bmi = data.get("bmi", user.bmi)
     user.calories = data.get("calories", user.calories)

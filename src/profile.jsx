@@ -22,7 +22,7 @@ function Profile() {
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
   const [calories, setCalories] = useState(0.0);
-  const [activity, setActivity] = useState(0.0);
+  const [activity, setActivity] = useState('');
   const [failureHeight, setFailureHeight] = useState(false);
   const [failureWeight, setFailureWeight] = useState(false);
   const [failureHip, setFailureHip] = useState(false);
@@ -63,7 +63,7 @@ function Profile() {
         setGender(data.gender);
         setAge(data.age);
         setCalories(data.calories);
-        setActivity(data.activity);
+        setActivity(data.activity?.toString?.() ?? '1.2');
       })
       .catch((error) => {
         console.error('Error fetching profile data:', error);
@@ -119,6 +119,7 @@ function Profile() {
     }
   };
   const handleActivity = (activity) => {
+    console.log(activity);
     setActivity(activity);
   };
 
@@ -202,9 +203,9 @@ function Profile() {
       l += 200;
     }
     if (gender == 'male') {
-      setCalories((weight * 10 + 6.25 * height - 5 * age + 5) * activity + l);
+      setCalories((weight * 10 + 6.25 * height - 5 * age + 5) * parseFloat(activity) + l);
     } else if (gender == 'female') {
-      setCalories((weight * 10 + 6.25 * height - 5 * age - 161) * activity + l);
+      setCalories((weight * 10 + 6.25 * height - 5 * age - 161) * parseFloat(activity) + l);
     }
   };
 
@@ -685,7 +686,7 @@ function Profile() {
           />
         )}
         {edit ? (
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col items-center ">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -804,7 +805,7 @@ function Profile() {
             <select
               value={activity}
               defaultValue=""
-              onChange={(e) => handleActivity(parseFloat(e.target.value))}
+              onChange={(e) => handleActivity(e.target.value)}
               className="select select-primary w-full max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
@@ -989,19 +990,27 @@ function Profile() {
               <h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>
               <h1
                 style={
-                  activity <= 1.2
+                  parseFloat(activity) <= 1.2
                     ? { color: 'red' }
-                    : activity >= 1.5
+                    : parseFloat(activity) >= 1.5
                       ? { color: 'green' }
                       : { color: 'orange' }
                 }
               >
                 Activity level:{' '}
-                {activity == 1.2
-                  ? 'Not active'
-                  : activity == 1.5
-                    ? 'Moderately active'
-                    : 'Very active'}{' '}
+                {(() => {
+                  const act = parseFloat(activity);
+                  console.log('Activity level:', activity);
+                  return act === 1.2
+                    ? 'Not active'
+                    : act === 1.4
+                      ? 'Light activity'
+                      : act === 1.7
+                        ? 'Moderate activity'
+                        : act === 2.0
+                          ? 'Very active'
+                          : 'UNS';
+                })()}{' '}
               </h1>
             </div>
             <div className="divider  text-amber-50 font-light mb-2  divider-primary">

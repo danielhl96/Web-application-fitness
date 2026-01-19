@@ -180,7 +180,7 @@ function CreateTraining() {
         <div className="divider divider-primary text-white font-bold mb-2 ">
           Create your workout
         </div>
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex flex-col items-center  space-y-2">
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
             <Input
@@ -295,8 +295,10 @@ function CreateTraining() {
           </div>
           {/* Render selected exercises */}
           {WorkoutNameSet ? (
-            <div className="flex flex-col items-center space-y-3">
-              <div className="w-100 max-h-80 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-auto">
+            <div className={'items-center justify-center'}>
+              <div
+                className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-80 gap-0 items-center pt-2 overflow-y-auto max-md:h-auto`}
+              >
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard

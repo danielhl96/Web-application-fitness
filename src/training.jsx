@@ -658,7 +658,7 @@ function StartTraining() {
   function ExerciseList() {
     console.log(currentExercises);
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
+      <div className="modal modal-open modal-bottom  items-center justify-center">
         <div
           className="modal-box border border-blue-500 shadow-xl rounded-xl h-auto max-h-130"
           style={{
@@ -677,7 +677,7 @@ function StartTraining() {
               ✕
             </button>
           </form>
-          <div className="grid grid-cols-1 mt-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-3 w-full justify-center items-center">
             {Object.values(currentExercises).map((item, index) => (
               <div
                 key={index}
@@ -740,7 +740,7 @@ function StartTraining() {
             <div className="divider divider-primary text-white font-bold mb-2 ">
               Select your workout
             </div>
-            <div className="w-65 md:w-95 lg:h-130 md:h-130 flex flex-col gap-4 items-center pt-2 overflow-y-auto max-md:h-130">
+            <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
               {selectedExercise && Object.keys(selectedExercise).length > 0 ? (
                 Object.keys(selectedExercise).map((name, index) => (
                   <Workouts planName={name} key={index} />

@@ -28,12 +28,12 @@ function TemplatePage({ children, dockDisabled }) {
     <div className="min-h-dvh bg-gradient-to-b from-gray-900 to-black flex flex-col items-center px-1 py-3">
       {/* vertikale Zentrierung */}
       <div className="flex flex-col items-center sm:items-center  w-full pt-16 pb-8">
-        <div className="w-full max-w-sm sm:max-w-md space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
+        <div className="w-full max-w-sm sm:max-w-md lg:max-w-4xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
           {children}
         </div>
         {!dockDisabled ? (
           <div
-            className="dock bg-neutral h-16 w-full overflow-y-hidden text-neutral-content overflow-x-auto mt-6 sm:hidden"
+            className="dock bg-neutral h-16 w-full max-w-4xl overflow-y-hidden text-neutral-content overflow-x-auto mt-6 sm:hidden"
             style={{ maxWidth: 400, width: '100%' }}
             ref={dockRef}
           >

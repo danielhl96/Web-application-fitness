@@ -402,7 +402,7 @@ const EditTrain = () => {
   function EditWorkoutPage() {
     return (
       <div>
-        <div className="flex flex-col items-center ">
+        <div className="flex flex-col w-200 items-center justify-center pt-4 pb-8">
           <div className="flex flex-col w-70 md:w-80 space-y-2 items-center ">
             <Input
               placeholder="Add an exercise..."
@@ -459,7 +459,9 @@ const EditTrain = () => {
                 ))}
             </div>
           </div>
-          <div className="flex flex-col items-center gap-4 overflow-y-auto py-2 w-full max-h-90 sm:max-h-80 md:max-h-96 lg:max-h-[40vh]">
+          <div
+            className={` ${selectedExercise[savekey].length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} items-center gap-2 justify-center overflow-y-auto py-2 lg:w-auto w-full max-h-90 sm:max-h-80 md:max-h-96 lg:max-h-[40vh]`}
+          >
             {Array.isArray(selectedExercise[savekey]) &&
               selectedExercise[savekey].map((ex, index) => (
                 <ExerciseCard
@@ -583,7 +585,7 @@ const EditTrain = () => {
               )}
             </div>
           </div>
-          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl flex flex-col gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
+          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
             {showModal ? (
               <div>{EditWorkoutPage()}</div>
             ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (

@@ -15,7 +15,7 @@ function Statistic() {
         <div className="divider divider-primary  text-white font-bold mb-2">Your statistics</div>
 
         {showOverview ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-y-2 lg:space-x-3  mt-4 text-xs overflow-y-auto max-h-130">
+          <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-3  mt-4 text-xs overflow-y-auto max-h-130">
             {data.map((item, index) => (
               <div
                 key={index}

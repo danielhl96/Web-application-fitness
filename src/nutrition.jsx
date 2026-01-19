@@ -653,7 +653,7 @@ function Nutrition() {
                       className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
                     >
                       <p className="mr-1">{meal.name}</p>
-                      <p className="mr-1">Cal: {meal.calories.toFixed(0)} </p>
+                      <p className="mr-1">Cal: {meal.calories.toFixed(0)}kcal </p>
                       <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
                       <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
                       <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
@@ -762,7 +762,7 @@ function Nutrition() {
                 .padStart(2, '0')}.${year}`}
             </button>
           </div>
-          <div className="overflow-y-auto flex flex-col lg:items-center max-h-80">
+          <div className="overflow-y-auto flex grid lg:grid-cols-2 lg:items-center lg:max-h-[65vh] max-h-80">
             {mealSummary('Breakfast', breakfastMeals)}
             {mealSummary('Launch', launchMeals)}
             {mealSummary('Dinner', dinnerMeals)}
@@ -771,7 +771,7 @@ function Nutrition() {
           <div className="divider divider-primary"></div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-16">
             <div
-              className="card w-36 sm:w-36 lg:w-36 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-36 sm:w-36 lg:w-72 lg:h-40 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -781,11 +781,11 @@ function Nutrition() {
                 <div className="flex flex-col">
                   <div className="carousel rounded-box w-full">
                     {calculateCalories() > 0 && (
-                      <div className="carousel-item w-full flex flex-col items-left">
-                        <h1 className="text-blue-400 text-xs mb-2">Summary</h1>
+                      <div className="carousel-item w-full flex flex-col items-center">
+                        <h1 className="text-blue-400 text-xs text-left lg:text-lg mb-2">Summary</h1>
 
                         <div
-                          className={`radial-progress text-xs ${
+                          className={`radial-progress text-xs items-center ${
                             calories - calculateCalories() < 0 ? 'text-red-500' : ''
                           } items-center justify-center`}
                           style={
@@ -802,8 +802,8 @@ function Nutrition() {
                       </div>
                     )}
                     <div className="carousel-item w-full">
-                      <div className="text-xs">
-                        <h1 className="text-blue-400 text-xs mb-2">Calories</h1>
+                      <div className="text-xs ">
+                        <h1 className="text-blue-400 lg:text-md mb-2">Calories</h1>
                         <p className="text-white">In: {calculateCalories()}kcal</p>
 
                         <p className="text-white">Goal: {calories}kcal</p>
@@ -820,7 +820,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-36 sm:w-36 lg:w-36 h-35 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-36 sm:w-36 lg:w-72 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -830,7 +830,7 @@ function Nutrition() {
                 <div className="carousel rounded-box w-full">
                   <div className="carousel-item w-full">
                     <div className="text-left text-xs">
-                      <h2 className="text-blue-400 text-xs mb-2">Open Macros</h2>
+                      <h2 className="text-blue-400 lg:text-md mb-2">Open Macros</h2>
                       <p
                         className={` ${
                           calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
@@ -855,8 +855,8 @@ function Nutrition() {
                     </div>
                   </div>
                   <div className="carousel-item w-full ">
-                    <div className="text-left text-xs">
-                      <h2 className="text-blue-400 text-xs mb-2">Goals</h2>
+                    <div className="text-left text-xs lg:text-md">
+                      <h2 className="text-blue-400 lg:text-md mb-2">Goals</h2>
                       <p className=" text-white">P: {calculateProteinsGoal()} g</p>
                       <p className="text-white">C: {calculateCarbsGoal()} g</p>
                       <p className="text-white">F: {calculateFatsGoal()} g</p>
@@ -864,8 +864,8 @@ function Nutrition() {
                   </div>
                   {calculateCalories() > 0 && (
                     <div className="carousel-item w-full">
-                      <div className="text-left text-xs">
-                        <h2 className="text-blue-400 text-xs mb-2">Macros (kcal)</h2>
+                      <div className="text-left text-xs lg:text-md">
+                        <h2 className="text-blue-400 lg:text-md mb-2">Macros (kcal)</h2>
                         <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
                         <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
                         <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
@@ -875,7 +875,7 @@ function Nutrition() {
 
                   {calculateCalories() > 0 && (
                     <div className="carousel-item w-full  flex flex-col items-center">
-                      <h2 className="text-blue-400 text-xs mb-2">Macronutrients</h2>
+                      <h2 className="text-blue-400 lg:text-md mb-2">Macronutrients</h2>
                       <MacroPieChart
                         protein={calculateProteins()}
                         carbs={calculateCarbs()}
