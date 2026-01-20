@@ -938,7 +938,7 @@ def delete_meal():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -958,7 +958,7 @@ def check_auth():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
