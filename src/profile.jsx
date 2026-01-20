@@ -660,6 +660,20 @@ function Profile() {
     );
   };
 
+  function cardForValues(children) {
+    return (
+      <div
+        className="card w-auto items-center justify-center  lg:w-40 h-10 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
+        style={{
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
   useEffect(() => {
     if (edit) {
       calcCalories();
@@ -781,7 +795,7 @@ function Profile() {
             <h1>Your gender:</h1>
             <div className="flex flex-row space-x-2  items-center justify-center">
               <Button
-                border={gender === 'male' ? '#3b82f6' : 'transparent'}
+                border={gender === 'male' ? '#3b82f6' : '#64748b'}
                 onClick={() => handleGender('male')}
               >
                 <svg
@@ -794,7 +808,7 @@ function Profile() {
                 </svg>
               </Button>
               <Button
-                border={gender === 'female' ? '#3b82f6' : 'transparent'}
+                border={gender === 'female' ? '#3b82f6' : '#64748b'}
                 onClick={() => handleGender('female')}
               >
                 <svg
@@ -830,28 +844,19 @@ function Profile() {
               <option value="2.0">Very active</option>
             </select>
 
-            <div className="divider divider-neutral">Your goals:</div>
+            <div className="divider divider-primary">Your goals:</div>
             <div className="flex flex-row space-x-2 items-center justify-center">
-              <Button
-                border={goal === '1' ? '#3b82f6' : 'transparent'}
-                onClick={() => handleGoal('1')}
-              >
+              <Button border={goal === '1' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('1')}>
                 Cut
               </Button>
-              <Button
-                border={goal === '2' ? '#3b82f6' : 'transparent'}
-                onClick={() => handleGoal('2')}
-              >
+              <Button border={goal === '2' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('2')}>
                 Hold
               </Button>
-              <Button
-                border={goal === '3' ? '#3b82f6' : 'transparent'}
-                onClick={() => handleGoal('3')}
-              >
+              <Button border={goal === '3' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('3')}>
                 Bulk
               </Button>
             </div>
-            <div className="divider divider-neutral">Important values</div>
+            <div className="divider divider-primary">Important values</div>
             <div className="flex justify-center">
               <div className="flex flex-col space-y-2 items-center justify-center">
                 <h1>Your calories: {calories} kcal</h1>
@@ -938,73 +943,87 @@ function Profile() {
                 />
               </svg>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <h1>Weight: {Math.round(weight)} kg</h1>
-              <h1>Height: {Math.round(height)} cm</h1>
-              <h1>Age: {Math.round(age)} years</h1>
-              <div className="flex flex-row space-x-2 items-center">
-                <h1>Gender:</h1>
-                {gender == 'male' ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
-                  </svg>
-                )}
-              </div>
-              <h1>Hip: {Math.round(hip)} cm</h1>
-              <h1>Waist: {Math.round(waist)} cm</h1>
-              <h1
-                style={{
-                  color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
-                }}
-              >
-                BMI: {Math.round(bmi)}{' '}
-                {bmi > 30
-                  ? '(Adipoistas)'
-                  : bmi > 25
-                    ? '(Overweight)'
-                    : bmi < 20
-                      ? '(Underweight)'
-                      : '(Normal)'}
-              </h1>
-              <h1
-                style={{
-                  color: bri > 4.5 ? 'red' : bri > 3 ? 'orange' : 'green',
-                }}
-              >
-                BRI: {bri.toFixed(2)}
-              </h1>
-              <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
-                WHR: {(hwr || 0).toFixed(2)} {hwr >= 0.85 ? '(Risk)' : '(Good)'}
-              </h1>
-              <h1 style={{ color: bfp > 25 ? 'red' : 'green' }}>BFP: {Math.round(bfp)} %</h1>
-              <h1>Calories: {Math.round(calories)} kcal</h1>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              {cardForValues(<h1>Weight: {Math.round(weight)} kg</h1>)}
+              {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
 
-              <h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>
-              <h1
-                style={
-                  parseFloat(activity) <= 1.2
-                    ? { color: 'red' }
-                    : parseFloat(activity) >= 1.5
-                      ? { color: 'green' }
-                      : { color: 'orange' }
-                }
-              >
-                Activity level: {activityLevels[activity] ?? 'UNS'}
-              </h1>
+              {cardForValues(<h1>Age: {Math.round(age)} years</h1>)}
+              {cardForValues(
+                <div className="flex flex-row space-x-2 items-center">
+                  <h1>Gender:</h1>
+                  {gender == 'male' ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
+                    </svg>
+                  )}
+                </div>
+              )}
+              {cardForValues(<h1>Hip: {Math.round(hip)} cm</h1>)}
+              {cardForValues(<h1>Waist: {Math.round(waist)} cm</h1>)}
+
+              {cardForValues(
+                <h1
+                  style={{
+                    color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
+                  }}
+                >
+                  BMI: {Math.round(bmi)}{' '}
+                  {bmi > 30
+                    ? '(Adipoistas)'
+                    : bmi > 25
+                      ? '(Overweight)'
+                      : bmi < 20
+                        ? '(Underweight)'
+                        : '(Normal)'}
+                </h1>
+              )}
+              {cardForValues(
+                <h1
+                  style={{
+                    color: bri > 4.5 ? 'red' : bri > 3 ? 'orange' : 'green',
+                  }}
+                >
+                  BRI: {bri.toFixed(2)}
+                </h1>
+              )}
+              {cardForValues(
+                <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
+                  WHR: {(hwr || 0).toFixed(2)} {hwr >= 0.85 ? '(Risk)' : '(Good)'}
+                </h1>
+              )}
+              {cardForValues(
+                <h1 style={{ color: bfp > 25 ? 'red' : 'green' }}>BFP: {Math.round(bfp)} %</h1>
+              )}
+              {cardForValues(<h1>Calories: {Math.round(calories)} kcal</h1>)}
+
+              {cardForValues(<h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>)}
+              {cardForValues(
+                <h1
+                  style={
+                    parseFloat(activity) <= 1.2
+                      ? { color: 'red' }
+                      : parseFloat(activity) >= 1.5
+                        ? { color: 'green' }
+                        : { color: 'orange' }
+                  }
+                >
+                  Activity: {activityLevels[activity] ?? 'UNS'}
+                </h1>
+              )}
             </div>
             <div className="divider  text-amber-50 font-light mb-2  divider-primary">
               Change your personal information

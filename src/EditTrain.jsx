@@ -402,8 +402,8 @@ const EditTrain = () => {
   function EditWorkoutPage() {
     return (
       <div>
-        <div className="flex flex-col lg:w-200 items-center justify-center pt-4 pb-8">
-          <div className="flex flex-col w-70 md:w-80 space-y-2 items-center ">
+        <div className="flex flex-col h-120 lg:w-200 items-center justify-center pt-4 pb-8">
+          <div className="flex flex-col w-70 md:w-80 space-y-2 items-center lg:h-auto">
             <Input
               placeholder="Add an exercise..."
               value={addExercise}
@@ -460,7 +460,7 @@ const EditTrain = () => {
             </div>
           </div>
           <div
-            className={` ${selectedExercise[savekey].length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} items-center gap-2 justify-center w-full overflow-y-auto py-2 lg:w-auto max-h-90 sm:max-h-80 md:max-h-96 lg:max-h-[40vh]`}
+            className={` ${selectedExercise[savekey].length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} items-center gap-2 justify-center w-full overflow-y-auto py-2 lg:w-auto max-h-90  lg:max-h-[65vh]`}
           >
             {Array.isArray(selectedExercise[savekey]) &&
               selectedExercise[savekey].map((ex, index) => (

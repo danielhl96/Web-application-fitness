@@ -27,7 +27,7 @@ function Home() {
         {/* Card 1: Create Training */}
         <div
           onClick={() => navigate('/createtrain')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -43,7 +43,7 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               Create your own training program
             </p>
           </div>
@@ -52,7 +52,7 @@ function Home() {
         {/* Card 2: Edit training */}
         <div
           onClick={() => navigate('/editTrain')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -76,7 +76,7 @@ function Home() {
                 />
               </svg>
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               Edit existing trainings
             </p>
           </div>
@@ -85,7 +85,7 @@ function Home() {
         {/* Card 3: Start Training */}
         <div
           onClick={() => navigate('/training')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -101,12 +101,12 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">Start your workout</p>
+            <p className="text-slate-300 text-sm text-center hidden sm:block">Start your workout</p>
           </div>
         </div>
         <div
           onClick={() => navigate('/nutrition')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -122,7 +122,7 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               View your nutrition
             </p>
           </div>
@@ -130,7 +130,7 @@ function Home() {
         {/* Card 4: Profile */}
         <div
           onClick={() => navigate('/profile')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -146,7 +146,7 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               Manage your profile and goals
             </p>
           </div>
@@ -155,7 +155,7 @@ function Home() {
         {/* Card 5: Timer */}
         <div
           onClick={() => navigate('/counter')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -179,7 +179,7 @@ function Home() {
                 />
               </svg>
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               Use the timer for breaks
             </p>
           </div>
@@ -188,7 +188,7 @@ function Home() {
         {/* Card 6: Statistic */}
         <div
           onClick={() => navigate('/statistic')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -204,14 +204,14 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               View your statistics
             </p>
           </div>
         </div>
         <div
           onClick={() => navigate('/credentials')}
-          className="card w-full xs:w-full sm:w-80 md:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -227,7 +227,7 @@ function Home() {
                 style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
-            <p className="text-slate-300 text-sm text-center hidden md:block">
+            <p className="text-slate-300 text-sm text-center hidden sm:block">
               View your credentials
             </p>
           </div>

@@ -15,11 +15,11 @@ function Statistic() {
         <div className="divider divider-primary  text-white font-bold mb-2">Your statistics</div>
 
         {showOverview ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-3  mt-4 text-xs overflow-y-auto max-h-130">
+          <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-3 w-full items-center mt-4 text-xs overflow-y-auto overflow-x-hidden max-h-130">
             {data.map((item, index) => (
               <div
                 key={index}
-                className="items-center justify-center cursor-pointer"
+                className="flex flex-col items-center justify-center cursor-pointer"
                 onClick={() => {
                   setSelectedExercise(item);
                   setShowOverview(false);
@@ -94,7 +94,7 @@ function Statistic() {
             <div className="divider my-4"></div>
             {selectedExercise && <ChartRenderer exercise={selectedExercise} />}
             <div className="flex flex-row justify-between w-full">
-              <Button onClick={() => setShowOverview(true)} border="#3b82f6">
+              <Button onClick={() => setShowOverview(true)} border="#ef4444">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4 mr-1"
@@ -249,8 +249,6 @@ function Statistic() {
   useEffect(() => {
     api.get('/statistics').then((response) => {
       setData(response.data);
-
-      console.log('Fetched statistics data:', response.data);
     });
   }, []);
 
