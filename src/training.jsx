@@ -260,7 +260,7 @@ function StartTraining() {
     console.log(index);
     setShowModal(flag);
     setWeightidx(index);
-    settingsModal();
+    SettingsModal();
   };
 
   // Weight selection handlers
@@ -329,7 +329,7 @@ function StartTraining() {
     }
   }, [showModal, idx]);
 
-  const lastTrainingModal = () => {
+  const LastTrainingModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
@@ -374,7 +374,7 @@ function StartTraining() {
   };
 
   //Modal for the weight selection
-  const settingsModal = () => {
+  const SettingsModal = () => {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
@@ -730,10 +730,10 @@ function StartTraining() {
   return (
     <div>
       <Header />
-      {showModal && settingsModal()}
+      {showModal && SettingsModal()}
       {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
-      {lastTrainingModalValue && lastTrainingModal()}
+      {lastTrainingModalValue && LastTrainingModal()}
       <TemplatePage>
         {selectedTrainingSite ? (
           <div className="flex flex-col items-center ">

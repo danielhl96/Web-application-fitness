@@ -175,7 +175,7 @@ const EditTrain = () => {
           <h3 className="font-bold text-lg text-amber-50 mb-4">Delete Workout Plan</h3>
           <p className="text-amber-50 mb-4">Are you sure you want to delete this workout plan?</p>
           <div className="modal-action">
-            <Button onClick={() => handeRemoveWorkoutAPI(savekey)} border="#ef4444">
+            <Button onClick={() => handleRemoveWorkoutAPI(savekey)} border="#ef4444">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -336,7 +336,7 @@ const EditTrain = () => {
     setRequestId((requestId) => requestId + 1);
   }
   //Nur im Frontend
-  const handeRemoveWorkout = (workoutname) => {
+  const handleRemoveWorkout = (workoutname) => {
     console.log(workoutname);
     setSelectedExercise((prev) => {
       const updated = { ...prev };
@@ -346,7 +346,7 @@ const EditTrain = () => {
   };
 
   //Nur im Frontend
-  const handeRemoveWorkoutAPI = (workoutname) => {
+  const handleRemoveWorkoutAPI = (workoutname) => {
     console.log(workoutname);
     api
       .delete(`/delete_workout_plan`, {
@@ -354,7 +354,7 @@ const EditTrain = () => {
       })
       .then(() => {
         console.log('Workout plan deleted');
-        handeRemoveWorkout(workoutname);
+        handleRemoveWorkout(workoutname);
         setConfirmationModalforWorkoutDelete(false);
         setNotification({
           title: 'Workout Deleted',

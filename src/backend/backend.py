@@ -54,7 +54,7 @@ EXPECTED_AUDIENCE = os.getenv('JWT_AUDIENCE', 'user')
 EXPECTED_ISSUER = os.getenv('JWT_ISSUER', 'fitness_app')
 argon2 = PasswordHasher(time_cost=3, memory_cost=256, parallelism=4, hash_len=32, salt_len=16)
 
-def createToken(user_id,expiretime):
+def create_token(user_id, expiretime):
     SECRET_KEY = app.config['SECRET_KEY']
     now = datetime.now(UTC)
     payload = {
@@ -69,7 +69,7 @@ def createToken(user_id,expiretime):
     token = jwt.encode(payload, SECRET_KEY, algorithm=app.config['JWT_ALGORITHM'])
     return token
 
-def revokeToken(token):
+def revoke_token(token):
     jti = token['jti']
     exp = token['exp']
     now = datetime.now(UTC)
@@ -78,7 +78,7 @@ def revokeToken(token):
         redis_client.setex(jti, ttl, '1')
     
 
-def verifyToken(token):
+def verify_token(token):
     SECRET_KEY = app.config['SECRET_KEY']
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[app.config['JWT_ALGORITHM']], audience=EXPECTED_AUDIENCE, issuer=EXPECTED_ISSUER)
@@ -210,7 +210,7 @@ def login_user():
     password = request.args.get("password")
     user = session.query(User).filter_by(email=email).first()
     if user and argon2.verify(user.password, password):
-        token = createToken(user.id,15)
+        token = create_token(user.id, 15)
         resp = jsonify({"message": "Login successful!"})
         resp.set_cookie(
             "access_token",
@@ -237,7 +237,7 @@ def update_profile():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -269,7 +269,7 @@ def get_profile():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -300,10 +300,10 @@ def get_profile():
 def logout_user():
     token = get_token_from_cookie()
     if token:
-        payload = verifyToken(token)
+        payload = verify_token(token)
         if payload.get("error"):
             return jsonify({"message": payload["error"]}), 401
-        revokeToken(payload)
+        revoke_token(payload)
         resp = jsonify({"message": "Logout successful!"})
         resp.set_cookie("access_token", "", expires=0)
         return resp, 200
@@ -314,7 +314,7 @@ def change_email():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     user_id = verification.get("sub")   
@@ -337,7 +337,7 @@ def delete_account():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     user_id = verification.get("sub")
@@ -371,7 +371,7 @@ def change_password():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     user_id = verification.get("sub")
@@ -437,7 +437,7 @@ def create_workout_plan():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -475,7 +475,7 @@ def delete_workout_plan():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401   
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):   
         return jsonify({"message": verification["error"]}), 401
     data = request.json
@@ -495,7 +495,7 @@ def edit_workout_plan_name():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     data = request.json
@@ -516,7 +516,7 @@ def edit_workout_plan():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -561,7 +561,7 @@ def get_workout_plans():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -621,7 +621,7 @@ def get_statistics():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -664,7 +664,7 @@ def create_exercise():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -705,7 +705,7 @@ def calculate_meal():
     token = get_token_from_cookie()
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
     user_id = verification.get("sub")
@@ -776,7 +776,7 @@ def create_meal():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -802,7 +802,7 @@ def edit_meal():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -833,7 +833,7 @@ def get_meal_breakfast():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -859,7 +859,7 @@ def get_meal_launch():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -886,7 +886,7 @@ def get_meal_dinner():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -912,7 +912,7 @@ def get_meal_snack():
     if not token:
         return jsonify({"message": "Missing token cookie!"}), 401
 
-    verification = verifyToken(token)
+    verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -987,7 +987,7 @@ def refresh_token():
         return jsonify({"message": "Token has been revoked"}), 401
 
     user_id = payload.get("sub")
-    new_token = createToken(user_id,120)
+    new_token = create_token(user_id, 120)
     resp = jsonify({"message": "Token refreshed"})
     resp.set_cookie(
         "access_token",
