@@ -633,7 +633,7 @@ function Nutrition() {
     return (
       <div className="mb-4">
         <div
-          className="card w-full  sm:w-80 lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          className="card w-full  sm:w-80 lg:w-80 h-[15dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
           style={{
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -771,7 +771,7 @@ function Nutrition() {
           <div className="divider divider-primary"></div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-16">
             <div
-              className="card w-36 sm:w-36 lg:w-72 lg:h-40 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-36 sm:w-36 lg:w-72 lg:h-40 h-[15dvh]bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -820,7 +820,7 @@ function Nutrition() {
               </div>
             </div>
             <div
-              className="card w-36 sm:w-36 lg:w-72 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              className="card w-36 sm:w-36 lg:w-72 h-[15dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -828,7 +828,7 @@ function Nutrition() {
             >
               <div className="card-body">
                 <div className="carousel rounded-box w-full">
-                  <div className="carousel-item w-full">
+                  <div className="carousel-item w-full ">
                     <div className="text-left text-xs">
                       <h2 className="text-blue-400 lg:text-md mb-2">Open Macros</h2>
                       <p

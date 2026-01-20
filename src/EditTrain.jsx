@@ -585,7 +585,7 @@ const EditTrain = () => {
               )}
             </div>
           </div>
-          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[70vh]">
+          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[70dvh]">
             {showModal ? (
               <div>{EditWorkoutPage()}</div>
             ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (
