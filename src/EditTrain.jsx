@@ -402,8 +402,8 @@ const EditTrain = () => {
   function EditWorkoutPage() {
     return (
       <div>
-        <div className="flex flex-col h-120 lg:w-200 items-center justify-center pt-4 pb-8">
-          <div className="flex flex-col w-70 md:w-80 space-y-2 items-center lg:h-auto">
+        <div className="flex flex-col h-130 lg:h-130 lg:w-200 items-center justify-center pt-4 pb-8">
+          <div className="flex flex-col w-70 h-auto md:w-80 space-y-2 items-center ">
             <Input
               placeholder="Add an exercise..."
               value={addExercise}
@@ -585,7 +585,7 @@ const EditTrain = () => {
               )}
             </div>
           </div>
-          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
+          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[70vh]">
             {showModal ? (
               <div>{EditWorkoutPage()}</div>
             ) : selectedExercise && Object.keys(selectedExercise).length > 0 ? (
