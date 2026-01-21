@@ -792,7 +792,7 @@ function Profile() {
                 )}
               </div>
             </div>
-            <h1>Your gender:</h1>
+            
             <div className="flex flex-row space-x-2  items-center justify-center">
               <Button
                 border={gender === 'male' ? '#3b82f6' : '#64748b'}
