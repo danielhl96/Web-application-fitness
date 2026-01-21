@@ -243,9 +243,7 @@ function CreateTraining() {
                   id="input-e"
                 />
               </div>
-              <div className="divider divider-primary text-amber-50 font-bold mb-2">
-                {WorkoutName}
-              </div>
+             
             </div>
           )}
           <div
