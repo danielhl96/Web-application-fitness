@@ -567,11 +567,12 @@ def get_workout_plans():
 
     user_id = verification.get("sub")
 
-    # Subquery für max_date pro Plan
+    # Subquery für max_date pro Plan und Exercise Name
     subq = session.query(
         Exercise.workout_plan_id,
-        func.max(Exercise.id).label('max_id')
-    ).group_by(Exercise.workout_plan_id).subquery()
+        Exercise.name,
+        func.max(Exercise.date).label('max_date')
+    ).group_by(Exercise.workout_plan_id, Exercise.name).subquery()
 
     # Lade Pläne mit Templates
     plans = session.query(WorkoutPlan).options(
@@ -580,7 +581,7 @@ def get_workout_plans():
 
     # Lade gefilterte Exercises separat
     exercises = session.query(Exercise).join(
-        subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.id == subq.c.max_id)
+        subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.name == subq.c.name) & (Exercise.date == subq.c.max_date)
     ).filter(Exercise.user_id == user_id).all()
     print("Exercises loaded for latest dates:")
     print([e.__dict__ for e in exercises])
