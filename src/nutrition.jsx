@@ -6,6 +6,7 @@ import Notify from './notify.jsx';
 import Button from './button.jsx';
 
 import { useState, useRef, useEffect, use } from 'react';
+import Header from './Header.jsx';
 
 function Nutrition() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDate());
@@ -725,6 +726,7 @@ function Nutrition() {
 
   return (
     <div>
+      <Header />
       <TemplatePage>
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}

@@ -3,7 +3,7 @@ import ApexCharts from 'apexcharts';
 import { useState, useEffect } from 'react';
 import TemplatePage from './templatepage';
 import Button from './button';
-
+import Header from './Header.jsx';
 function Statistic() {
   const [showOverview, setShowOverview] = useState(true);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -254,6 +254,7 @@ function Statistic() {
 
   return (
     <div>
+      <Header />
       <TemplatePage>
         <ExerciseCards />
       </TemplatePage>

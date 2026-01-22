@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import TemplatePage from './templatepage';
 import Button from './button';
+import Header from './Header.jsx';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
@@ -162,6 +163,7 @@ function CounterForm() {
   const totalRotation = -180 + sec;
   return (
     <div>
+      <Header />
       <TemplatePage>
         {showModal && settingsModal()}
         <div className="flex flex-col items-center justify-center mt-4">
