@@ -1,0 +1,227 @@
+import './index.css';
+import { useNavigate } from 'react-router-dom';
+import Header from './Header';
+
+function Home() {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <Header />
+      <div className="flex items-center justify-center min-h-dvh bg-gradient-to-b from-gray-900 to-black py-14 px-2">
+        <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 p-4 overflow-y-auto h-[80vh] w-full max-w-3xl">
+          {/* Card 1: Create Training */}
+          <div
+            onClick={() => navigate('/createtrain')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Create Workout</h2>
+              <div className="flex justify-center my-4">
+                <img
+                  src="/plan.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  alt="Create Training Icon"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Create your own training program
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2: Edit training */}
+          <div
+            onClick={() => navigate('/editTrain')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Edit Workout</h2>
+              <div className="flex justify-center my-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-amber-50"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Edit existing trainings
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3: Start Training */}
+          <div
+            onClick={() => navigate('/training')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Start Workout</h2>
+              <div className="flex justify-center my-4">
+                <img
+                  src="/pullup.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  alt="Pull-up Icon"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Start your workout
+              </p>
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/nutrition')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Nutrition </h2>
+              <div className="flex justify-center my-4">
+                <img
+                  alt="Nutrition Icon"
+                  src="/nutrition-plan.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                View your nutrition
+              </p>
+            </div>
+          </div>
+          {/* Card 4: Profile */}
+          <div
+            onClick={() => navigate('/profile')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Profile</h2>
+              <div className="flex justify-center my-4">
+                <img
+                  alt="Profile Icon"
+                  src="/scale.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Manage your profile and goals
+              </p>
+            </div>
+          </div>
+
+          {/* Card 5: Timer */}
+          <div
+            onClick={() => navigate('/counter')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Stopwatch</h2>
+              <div className="flex justify-center my-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-amber-50"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Use the timer for breaks
+              </p>
+            </div>
+          </div>
+
+          {/* Card 6: Statistic */}
+          <div
+            onClick={() => navigate('/statistic')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Statistic</h2>
+              <div className="flex justify-center my-4">
+                <img
+                  src="/statistic.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  alt="Statistic Icon"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                View your statistics
+              </p>
+            </div>
+          </div>
+          <div
+            onClick={() => navigate('/credentials')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">Credentials</h2>
+              <div className="flex justify-center my-4">
+                <img
+                  alt="Credentials Icon"
+                  src="/credentials.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                View your credentials
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+export default Home;
