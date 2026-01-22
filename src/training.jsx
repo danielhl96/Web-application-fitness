@@ -689,17 +689,20 @@ function StartTraining() {
                 }}
               >
                 <div
-                  className={`card w-40 h-20 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2 ${
+                  className={`card w-40 h-20 shadow-xl  rounded-xl backdrop-blur-lg flex flex-col items-center mb-2 ${
                     currentExercises[index].isFinished
                       ? 'border-2 border-green-500'
                       : 'border-2 border-blue-800'
+                  } ${
+                    currentExercises[index].exercise === training1.exercise
+                      ? ' border-yellow-500'
+                      : ''
                   }`}
                   style={{
                     background: currentExercises[index].isFinished
                       ? 'rgba(34,197,94,0.20)' // green glassy for finished
                       : 'rgba(0,0,0,0.20)', // black glassy for unfinished
                     boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                    border: '1px solid rgba(0, 0, 0, 0.18)',
                   }}
                 >
                   <h2 className="text-amber-400 text-sm">{item.exercise}</h2>

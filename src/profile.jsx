@@ -663,7 +663,7 @@ function Profile() {
   function cardForValues(children) {
     return (
       <div
-        className="card w-auto items-center justify-center  lg:w-40 h-10 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
+        className="card w-full items-center justify-center  lg:w-40 h-[5dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
         style={{
           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           border: '1px solid rgba(255, 255, 255, 0.18)',

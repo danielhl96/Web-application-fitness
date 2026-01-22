@@ -548,7 +548,7 @@ def edit_workout_plan():
             sets=sets,
             reps_template=reps,
             weights_template=weights,
-            date= datetime.now()
+            date= datetime.now().date()
         ))
 
     session.add_all(new_templates)
@@ -570,7 +570,7 @@ def get_workout_plans():
     # Subquery für max_date pro Plan
     subq = session.query(
         Exercise.workout_plan_id,
-        func.max(Exercise.date).label('max_date')
+        func.max(Exercise.id).label('max_id')
     ).group_by(Exercise.workout_plan_id).subquery()
 
     # Lade Pläne mit Templates
@@ -580,7 +580,7 @@ def get_workout_plans():
 
     # Lade gefilterte Exercises separat
     exercises = session.query(Exercise).join(
-        subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.date == subq.c.max_date)
+        subq, (Exercise.workout_plan_id == subq.c.workout_plan_id) & (Exercise.id == subq.c.max_id)
     ).filter(Exercise.user_id == user_id).all()
     print("Exercises loaded for latest dates:")
     print([e.__dict__ for e in exercises])
@@ -690,7 +690,7 @@ def create_exercise():
         new_exercise = Exercise(
             user_id=user_id,
             workout_plan_id=data.get("workout_plan_id"),
-            date=datetime.now(),
+            date=datetime.now().date(),
             name=data.get("name"),
             sets=data.get("sets"),
             reps=data.get("reps"),
