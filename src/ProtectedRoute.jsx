@@ -8,7 +8,7 @@ function ProtectedRoute({ children }) {
   console.log(isAuth, loading);
   if (loading)
     return (
-      <div>
+      <div className="min-h-[100dvh] bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center">
         <span className="loading loading-bars loading-xl"></span>
       </div>
     );
