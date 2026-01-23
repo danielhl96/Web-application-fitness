@@ -792,7 +792,7 @@ function Profile() {
                 )}
               </div>
             </div>
-            
+
             <div className="flex flex-row space-x-2  items-center justify-center">
               <Button
                 border={gender === 'male' ? '#3b82f6' : '#64748b'}
@@ -943,7 +943,7 @@ function Profile() {
                 />
               </svg>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
               {cardForValues(<h1>Weight: {Math.round(weight)} kg</h1>)}
               {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
 

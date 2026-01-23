@@ -956,6 +956,7 @@ function StartTraining() {
                 </div>
               </div>
             </div>
+            <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
                 onClick={() => {
