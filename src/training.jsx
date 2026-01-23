@@ -915,7 +915,48 @@ function StartTraining() {
               {breakModal && BreakTimeModal()}
             </div>
             <div className="divider divider-primary"></div>
-            <div className="flex space-x-2 items-center justify-center">
+            <div
+              className="card w-full mt-2 sm:w-full mb-2  lg:w-full  h-[20dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+              }}
+            >
+              <h2 className="text-amber-400 text-center mb-2 font-bold">Reps Estimation</h2>
+              <div className="grid grid-cols-1 gap-1 text-sm px-1 ">
+                <div className="flex justify-between">
+                  <span>RM:1</span>
+                  <span className="font-mono text-blue-300">
+                    {(training1.weights[0] * (1 + training1.reps[0] / 30)).toFixed(1)} kg
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>RM:3-4</span>
+                  <span className="font-mono text-blue-300">
+                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.9).toFixed(1)} kg
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>RM:5-6</span>
+                  <span className="font-mono text-blue-300">
+                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.85).toFixed(1)} kg
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>RM:8-10</span>
+                  <span className="font-mono text-blue-300">
+                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.8).toFixed(1)} kg
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>RM:12-15</span>
+                  <span className="font-mono text-blue-300">
+                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.7).toFixed(1)} kg
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
                 onClick={() => {
                   setSelectedTrainingSite(true);
