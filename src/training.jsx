@@ -927,31 +927,31 @@ function StartTraining() {
                 <div className="flex justify-between">
                   <span>RM:1</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.reps[0] / 30)).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30)).toFixed(1)} kg
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>RM:3-4</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.9).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.9).toFixed(1)} kg
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>RM:5-6</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.85).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.85).toFixed(1)} kg
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>RM:8-10</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.8).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.8).toFixed(1)} kg
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>RM:12-15</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.reps[0] / 30) * 0.7).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.7).toFixed(1)} kg
                   </span>
                 </div>
               </div>
