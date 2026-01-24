@@ -865,7 +865,7 @@ function StartTraining() {
                         disabled={training1.isFinished}
                         onClick={() => handleModal(index, true)}
                         border={training1.isFinished ? '#3b82f6' : '#ffea00ff'}
-                        w="w-32"
+                        w="w-34"
                       >
                         <figure className="flex flex-col justify-center items-center">
                           <img
