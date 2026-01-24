@@ -923,99 +923,53 @@ function StartTraining() {
               }}
             >
               <h2 className="text-amber-400 text-center mb-2 font-bold">Reps Estimation</h2>
-              <div className="grid grid-cols-1 gap-1 text-sm px-1 ">
+              <div className="grid grid-cols-1 gap-1 text-xs px-1 ">
                 <div className="flex justify-between">
-                  <span>RM:1</span>
+                  <span>RM: 1</span>
                   <span className="font-mono text-blue-300">
                     {(training1.weights[0] * (1 + training1.previousReps[0] / 30)).toFixed(1)} kg
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>RM:3-4</span>
+                  <span>RM: 3-4</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.9).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.9).toFixed(1)}{' '}
+                    kg
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>RM:5-6</span>
+                  <span>RM: 5-6</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.85).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.85).toFixed(
+                      1
+                    )}{' '}
+                    kg
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>RM:8-10</span>
+                  <span>RM: 8-10</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.8).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.8).toFixed(1)}{' '}
+                    kg
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>RM:12-15</span>
+                  <span>RM: 12-15</span>
                   <span className="font-mono text-blue-300">
-                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.7).toFixed(1)} kg
+                    {(training1.weights[0] * (1 + training1.previousReps[0] / 30) * 0.7).toFixed(1)}{' '}
+                    kg
                   </span>
                 </div>
               </div>
             </div>
-            <div className="divider divider-primary"></div>
-            <div className="flex flex-row space-x-2 items-center justify-center">
-              <Button
-                onClick={() => {
-                  setSelectedTrainingSite(true);
-                }}
-                border="#ef4444ff"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <div className="divider divider-primary mt-6">
+              <div className="flex flex-row space-x-2 items-center justify-center">
+                <Button
+                  onClick={() => {
+                    setSelectedTrainingSite(true);
+                  }}
+                  border="#ef4444ff"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </Button>
-              <Button
-                disabled={idxExercise == 0}
-                onClick={() => handleExerciseBack()}
-                border="#3b82f6"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 transform scale-x-[-1]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12H9m6 0l-3-3m3 3l-3 3"
-                  />
-                </svg>
-              </Button>
-              <Button onClick={() => handleExercise()} border="#3b82f6">
-                {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
-                  <svg // success icon
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -1027,32 +981,85 @@ function StartTraining() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </Button>
+                <Button
+                  disabled={idxExercise == 0}
+                  onClick={() => handleExerciseBack()}
+                  border="#3b82f6"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 transform scale-x-[-1]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M15 12H9m6 0l-3-3m3 3l-3 3"
                     />
                   </svg>
-                )}
-              </Button>
-              <Button
-                onClick={() => {
-                  setExerciseList(true);
-                }}
-                border="#3b82f6"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                </Button>
+                <Button onClick={() => handleExercise()} border="#3b82f6">
+                  {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
+                    <svg // success icon
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12H9m6 0l-3-3m3 3l-3 3"
+                      />
+                    </svg>
+                  )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setExerciseList(true);
+                  }}
+                  border="#3b82f6"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12h18M3 6h18M3 18h18"
-                  />
-                </svg>
-              </Button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 12h18M3 6h18M3 18h18"
+                    />
+                  </svg>
+                </Button>
+              </div>
             </div>
           </div>
         )}
