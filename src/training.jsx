@@ -815,37 +815,39 @@ function StartTraining() {
             <div className="divider divider-primary  text-amber-400">{training1.exercise}</div>
             <div className="overflow-y-auto max-h-40 space-y-4 mb-4">
               {Array.from({ length: training1.sets }).map((_, index) => (
-                <div className="flex flex-row space-x-8 items-center justify-center" key={index}>
-                  <div className="flex w-20  items-center justify-center ">
-                    <Input
-                      onDisable={training1.isFinished}
-                      type="text"
-                      placeholder={'Reps: ' + training1.reps[index]}
-                      id={'input' + (index + 1)}
-                      w="w-32"
-                      h="h-10"
-                      onChange={(e) => addInput(parseInt(e.target.value), index)}
-                    />
-                  </div>
-                  <div className="flex space-x-2 items-center justify-center ">
-                    <Button
-                      disabled={training1.isFinished}
-                      onClick={() => handleModal(index, true)}
-                      border={training1.isFinished ? '#3b82f6' : '#ffea00ff'}
-                      w="w-32"
-                    >
-                      <figure className="flex flex-col justify-center items-center">
-                        <img
-                          style={{ filter: 'invert(1)' }}
-                          src={'./barbell.png'}
-                          name={'Benchpress'}
-                          className="rounded-md"
-                          width="25"
-                          height="25"
-                        />
-                      </figure>
-                      {training1.weights[index]} kg
-                    </Button>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-row space-x-8 " key={index}>
+                    <div className="flex w-20  items-center justify-center ">
+                      <Input
+                        onDisable={training1.isFinished}
+                        type="text"
+                        placeholder={'Reps: ' + training1.reps[index]}
+                        id={'input' + (index + 1)}
+                        w="w-32"
+                        h="h-10"
+                        onChange={(e) => addInput(parseInt(e.target.value), index)}
+                      />
+                    </div>
+                    <div className="flex space-x-2 items-center justify-center ">
+                      <Button
+                        disabled={training1.isFinished}
+                        onClick={() => handleModal(index, true)}
+                        border={training1.isFinished ? '#3b82f6' : '#ffea00ff'}
+                        w="w-32"
+                      >
+                        <figure className="flex flex-col justify-center items-center">
+                          <img
+                            style={{ filter: 'invert(1)' }}
+                            src={'./barbell.png'}
+                            name={'Benchpress'}
+                            className="rounded-md"
+                            width="25"
+                            height="25"
+                          />
+                        </figure>
+                        {training1.weights[index]} kg
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
