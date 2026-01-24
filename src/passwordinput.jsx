@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import './index.css';
 
 function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) {
@@ -28,12 +28,11 @@ function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) 
   return (
     <div className="relative">
       <input
-        placeholder={placeholder}
         type={showPassword ? 'text' : 'password'}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
-        className={`w-full px-4 py-2 rounded-xl border border-blue-400 bg-white/10
+        className={`w-full px-4 py-2 pl-9 pr-4 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400
       placeholder:text-blue-200${error && touched ? 'border-red-500' : ''}`}
         style={{
@@ -44,8 +43,9 @@ function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) 
           WebkitBackdropFilter: 'blur(8px)',
         }}
       />
+      <LockClosedIcon className="absolute left-2 top-2.5 h-5 w-5 text-white-400" />
       <button
-        className="absolute right-2 top-2.5 text-blue-400"
+        className="absolute right-2 top-2.5 text-white-400"
         onClick={() => setShowPassword(!showPassword)}
       >
         {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './index.css';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 function EmailInput({ value, onChange, onError }) {
   const [touched, setTouched] = useState(false);
 
@@ -19,10 +20,11 @@ function EmailInput({ value, onChange, onError }) {
   }
 
   return (
-    <div className="input-group">
+    <div className="input-group relative">
+      <EnvelopeIcon className="absolute left-2 top-2.5 h-5 w-5 text-white-400" />
       <input
         type="text"
-        className="w-full px-4 py-2 rounded-xl border border-blue-400 bg-white/10
+        className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400
       placeholder:text-blue-200"
         style={{
@@ -32,7 +34,6 @@ function EmailInput({ value, onChange, onError }) {
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
         }}
-        placeholder="Email"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
