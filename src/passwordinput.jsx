@@ -31,6 +31,7 @@ function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) 
         type={showPassword ? 'text' : 'password'}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
         onBlur={() => setTouched(true)}
         className={`w-full px-4 py-2 pl-9 pr-4 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400

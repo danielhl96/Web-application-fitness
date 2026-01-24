@@ -23,6 +23,7 @@ function EmailInput({ value, onChange, onError }) {
     <div className="input-group relative">
       <EnvelopeIcon className="absolute left-2 top-2.5 h-5 w-5 text-white-400" />
       <input
+        placeholder="E-Mail"
         type="text"
         className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400
