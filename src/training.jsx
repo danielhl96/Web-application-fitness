@@ -818,47 +818,54 @@ function StartTraining() {
                 <div className="flex flex-col items-center justify-center">
                   <div className="flex flex-row space-x-8 " key={index}>
                     <div className="flex items-center justify-center space-x-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                        />
-                      </svg>
-                      <select
-                        disabled={training1.isFinished}
-                        id={'input' + (index + 1)}
-                        className="w-24 h-10 px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        style={{
-                          background: 'rgba(30, 41, 59, 0.25)',
-                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                          border: '1.5px solid rgba(59, 130, 246, 0.25)',
-                          backdropFilter: 'blur(8px)',
-                          WebkitBackdropFilter: 'blur(8px)',
-                        }}
-                        onChange={(e) => addInput(parseInt(e.target.value), index)}
-                        value={
-                          inputValue[index] !== undefined
-                            ? inputValue[index]
-                            : training1.reps[index] || 0
-                        }
-                      >
-                        <option value="" disabled hidden>
-                          Reps
-                        </option>
-                        {Array.from({ length: 51 }, (_, i) => (
-                          <option key={i} value={i}>
-                            {i}
+                      <span className="relative">
+                        <select
+                          disabled={training1.isFinished}
+                          id={'input' + (index + 1)}
+                          className="w-25 h-10 px-11 py-0 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          style={{
+                            background: 'rgba(30, 41, 59, 0.25)',
+                            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                            border: '1.5px solid rgba(59, 130, 246, 0.25)',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                            WebkitAppearance: 'none',
+                            MozAppearance: 'none',
+                            appearance: 'none',
+                          }}
+                          onChange={(e) => addInput(parseInt(e.target.value), index)}
+                          value={
+                            inputValue[index] !== undefined
+                              ? inputValue[index]
+                              : training1.reps[index] || 0
+                          }
+                        >
+                          <option value="" disabled hidden>
+                            Reps
                           </option>
-                        ))}
-                      </select>
+                          {Array.from({ length: 25 }, (_, i) => (
+                            <option key={i} value={i}>
+                              {i}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute left-1 top-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-4 h-4 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                            />
+                          </svg>
+                        </div>
+                      </span>
                     </div>
                     <div className="flex space-x-2 items-center justify-center ">
                       <Button
