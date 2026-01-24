@@ -138,6 +138,10 @@ function AttributionPage() {
             >
               Barbell glute bridge icons created by Leremy - Flaticon
             </a>
+
+            <a href="https://www.flaticon.com/free-icons/dumbell" title="Dumbell icons">
+              Dumbell icons created by Mihimihi - Flaticon
+            </a>
           </ul>
         </div>
       </TemplatePage>
