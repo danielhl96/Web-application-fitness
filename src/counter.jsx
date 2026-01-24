@@ -72,8 +72,8 @@ function CounterForm() {
 
   const startCounter = () => {
     intervalRef.current = setInterval(function () {
-      setSec((prevSec) => prevSec + 6);
-    }, 1000); // every 1000 ms = 1 second
+      setSec((prevSec) => prevSec + 6 / 100);
+    }, 10); // every 100 ms = 0.1 second
     setisStopMode(true);
   };
 
@@ -170,7 +170,7 @@ function CounterForm() {
           <div className="divider divider-primary text-white font-bold mb-2">
             Manage your workout rounds
           </div>
-          <div className="relative w-60 h-60 border-5 rounded-full border-4 border-green-600 bg-black">
+          <div className="relative w-60 h-60 border-8 border-gray-400/10 rounded-full bg-gradient-to-b from-gray-900 to-black">
             {marks.map((_, index) => {
               const angle = index * 30;
               return (
