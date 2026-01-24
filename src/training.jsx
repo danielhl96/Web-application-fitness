@@ -822,7 +822,7 @@ function StartTraining() {
                         <select
                           disabled={training1.isFinished}
                           id={'input' + (index + 1)}
-                          className="w-25 h-10 px-11 py-0 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          className="w-28 h-10 px-11 py-0 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                           style={{
                             background: 'rgba(30, 41, 59, 0.25)',
                             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
