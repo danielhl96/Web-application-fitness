@@ -394,12 +394,11 @@ function Nutrition() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
           style={{
-            background: 'rgba(10, 20, 40, 0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
+            border: '1.5px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >
@@ -475,12 +474,11 @@ function Nutrition() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
           style={{
-            background: 'rgba(10, 20, 40, 0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
+            border: '1.5px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >

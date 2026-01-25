@@ -333,39 +333,37 @@ function StartTraining() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
-          className={`modal-box modal-xl border border-blue-500 shadow-xl rounded-xl p-6`}
+          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
           style={{
-            background: 'rgba(10, 20, 40, 0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
+            border: '1.5px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >
           <div className="flex flex-col justify-center items-center space-y-2 text-xs">
-            <table className="min-w-2 border-collapse">
-              <tbody>
-                {training1.reps.map((rep, index) => (
-                  <tr key={index} className={'bg-gray-700'}>
-                    <td
-                      className="border border-gray-800 w-48 h-12 text-center rounded-md backdrop-blur-lg "
-                      style={{
-                        background: 'rgba(10, 20, 40, 0.75)',
-                        backdropFilter: 'blur(16px)',
-                        WebkitBackdropFilter: 'blur(16px)',
-                        border: '1.5px solid transparent',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                      }}
-                    >
-                      Set {index + 1}: {training1.previousReps[index]} Reps,{' '}
-                      {training1.weights[index]} kg
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="grid grid-cols-1 gap-2">
+              {training1.reps.map((rep, index) => (
+                <div
+                  key={index}
+                  className="card w-48 h-12 shadow-xl rounded-xl backdrop-blur-lg flex items-center justify-center"
+                  style={{
+                    background: 'rgba(0,0,0,0.2)',
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                  }}
+                >
+                  <p className="text-center text-xs">
+                    Set {index + 1}: {training1.previousReps[index]} Reps,{' '}
+                    {training1.weights[index]} kg
+                  </p>
+                </div>
+              ))}
+            </div>
             <Button border="#ef4444ff" onClick={() => setLastTrainingModal(false)}>
-              Close
+              X
             </Button>
           </div>
         </div>
@@ -378,12 +376,11 @@ function StartTraining() {
     return (
       <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
         <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
+          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
           style={{
-            background: 'rgba(10, 20, 40, 0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
+            border: '1.5px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >
@@ -403,17 +400,17 @@ function StartTraining() {
                         className={'bg-gray-700'}
                       >
                         <td
-                          className="border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg"
+                          className="border border-gray-800  bg-gradient-to-b from-gray-900 to-black  p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
                           style={{
                             background:
                               selectedWeight1[idx] === weight
                                 ? 'rgba(37,99,235,0.45)'
-                                : 'rgba(0,0,0,0.15)',
+                                : 'rgba(0,0,0,0.2)',
                             boxShadow:
                               selectedWeight1[idx] === weight
                                 ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                                : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                                : '0 8px 32px 0 rgba(0,0,0,0.1)',
+                            border: '1px solid rgba(255,255,255,0.2)',
                             color: selectedWeight1[idx] === weight ? '#e0eaff' : '',
                           }}
                         >
@@ -440,7 +437,7 @@ function StartTraining() {
                         className={'bg-gray-700'}
                       >
                         <td
-                          className={`border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg ${
+                          className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg${
                             selectedWeight1[idx] === null
                               ? 'opacity-50 cursor-not-allowed'
                               : 'cursor-pointer'
@@ -449,12 +446,12 @@ function StartTraining() {
                             background:
                               selectedWeight2[idx] === weight
                                 ? 'rgba(37,99,235,0.45)'
-                                : 'rgba(0,0,0,0.15)',
+                                : 'rgba(0,0,0,0.2)',
                             boxShadow:
                               selectedWeight2[idx] === weight
                                 ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                                : '0 4px 16px 0 rgba(31, 38, 135, 0.17)',
-                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                                : '0 8px 32px 0 rgba(0,0,0,0.1)',
+                            border: '1px solid rgba(255,255,255,0.2)',
                             color: selectedWeight2[idx] === weight ? '#e0eaff' : '',
                           }}
                         >
@@ -660,12 +657,11 @@ function StartTraining() {
     return (
       <div className="modal modal-open modal-bottom  items-center justify-center">
         <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl h-auto max-h-130"
+          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
           style={{
-            background: 'rgba(10, 20, 40, 0.75)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
+            border: '1.5px solid rgba(255,255,255,0.2)',
             boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
           }}
         >
@@ -816,7 +812,7 @@ function StartTraining() {
             <div className="overflow-y-auto max-h-40 space-y-4 mb-4">
               {Array.from({ length: training1.sets }).map((_, index) => (
                 <div className="flex flex-col items-center justify-center">
-                  <div className="flex flex-row space-x-8 " key={index}>
+                  <div className="flex flex-row space-x-2 " key={index}>
                     <div className="flex items-center justify-center space-x-2">
                       <span className="relative">
                         <select
@@ -840,9 +836,7 @@ function StartTraining() {
                               : training1.reps[index] || 0
                           }
                         >
-                          <option value="" disabled hidden>
-                            Reps
-                          </option>
+                          <option value="" disabled hidden></option>
                           {Array.from({ length: 25 }, (_, i) => (
                             <option key={i} value={i}>
                               {i}
