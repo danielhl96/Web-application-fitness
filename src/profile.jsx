@@ -1150,7 +1150,7 @@ function Profile() {
                 )}
               </div>
               <div className="divider  text-amber-50 font-light mb-2  divider-primary">
-                Change your personal information
+                Updates and Trends
               </div>
 
               <div className="flex flex-row space-x-2 items-center justify-center">
