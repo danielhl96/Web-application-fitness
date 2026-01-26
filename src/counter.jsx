@@ -32,7 +32,7 @@ function CounterForm() {
       // Reset for next round
       setSec(0);
       setMin(0);
-      setIsBreakMode(true);
+      if (breaktime > 0) setIsBreakMode(true);
     }
     if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
       clearInterval(intervalRef.current);
@@ -86,9 +86,9 @@ function CounterForm() {
     clearInterval(intervalRef.current);
     setSec(0);
     setMin(0);
-
     setCountRounds(0);
-    setBreaktime(0);
+    setTotalTime(0);
+
     setIsBreakMode(false);
     setisStartMode(false);
     setisStopMode(false);
