@@ -178,6 +178,18 @@ class Meal(Base):
     fats = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     mealtype = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # breakfast, lunch, dinner, snack
 
+class HistoryBodyMetrics(Base):
+    __tablename__ = 'history_body_metrics'
+    id = sqlalchemy.Column(sqlalchemy.Integer, autoincrement=True, primary_key=True)
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
+    user = relationship("User", backref="body_metrics_history")
+    date = sqlalchemy.Column(sqlalchemy.Date, nullable=False)
+    weight = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    waist = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    hip = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    bfp = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
+    
+
 
 Base.metadata.create_all(engine)
 
@@ -245,8 +257,28 @@ def update_profile():
     user = session.query(User).filter_by(id=user_id).first()
     if not user:
         return jsonify({"message": "User not found!"}), 404
-
+    
     data = request.get_json()
+    
+    history_exists = session.query(HistoryBodyMetrics).filter_by(user_id=user.id, date=datetime.now().date()).first()
+    if not history_exists:
+        new_history = HistoryBodyMetrics(
+        user_id=user.id,
+        date=datetime.now().date(),
+        weight= data.get("weight", user.weight),
+        waist=data.get("waist", user.waist),
+        hip=data.get("hip", user.hip),
+        bfp=data.get("bfp", user.bfp)
+    )
+        session.add(new_history)
+    else:
+        history_exists.weight = data.get("weight", user.weight)
+        history_exists.waist = data.get("waist", user.waist)
+        history_exists.hip = data.get("hip", user.hip)
+        history_exists.bfp = data.get("bfp", user.bfp)
+        
+
+   
     user.height = data.get("height", user.height)
     user.weight = data.get("weight", user.weight)
     user.age = data.get("age", user.age)
@@ -294,7 +326,32 @@ def get_profile():
     }
     return jsonify(user_data), 200
 
+@app.route('/api/get_history', methods=['GET'])
+def get_history():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
 
+    verification = verify_token(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+
+    user_id = verification.get("sub")
+    history = session.query(HistoryBodyMetrics).filter_by(user_id=user_id).all()
+    history_data = [
+        {
+            "date": record.date.isoformat(),
+            "weight": record.weight,
+            "waist": record.waist,
+            "hip": record.hip,
+            "bfp": record.bfp
+        }
+        for record in history
+    ]
+
+    history_data.sort(key=lambda x: x["date"])
+
+    return jsonify(history_data), 200
 
 @app.route('/api/logout', methods=['post'])
 def logout_user():

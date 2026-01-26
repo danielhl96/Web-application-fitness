@@ -131,7 +131,6 @@ function Statistic() {
                   >
                     <path
                       strokeLinecap="round"
-                      d
                       strokeLinejoin="round"
                       strokeWidth={2}
                       d="M15 12H9m6 0l-3-3m3 3l-3 3"
@@ -194,21 +193,19 @@ function Statistic() {
         ],
         chart: {
           height: 300,
-          type: 'line',
+          type: 'area',
           zoom: { enabled: false },
           toolbar: { show: false },
           menubar: { show: false },
         },
         dataLabels: { enabled: false },
-        stroke: { curve: 'stepline' },
+        stroke: { curve: 'smooth' },
         title: {
           text: `Progress for ${exercise.exercise_name}`,
           align: 'left',
           style: { color: '#FFFFFF' },
         },
-        grid: {
-          row: { colors: ['#FFFFFF', 'transparent'], opacity: 0.5 },
-        },
+        grid: { show: false },
         xaxis: {
           categories: dates,
           labels: { style: { colors: '#FFFFFF', fontSize: '9px' } },

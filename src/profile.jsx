@@ -8,7 +8,10 @@ import Notify from './notify.jsx';
 import PasswordInput from './passwordinput.jsx';
 import EmailInput from './emailinput.jsx';
 import Input from './input.jsx';
+import ApexCharts from 'apexcharts';
 import Button from './button.jsx';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
+
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -45,6 +48,79 @@ function Profile() {
   const [modalDeleteAccount, setModalDeleteAccount] = useState(false);
   const [messageDeleteAccount, setMessageDeleteAccount] = useState('');
   const [notification, setNotification] = useState(null);
+  const [showTrend, setShowTrend] = useState(false);
+  const [bodyvalue, setBodyvalue] = useState(null);
+  const [selectedBodyValue, setSelectedBodyValue] = useState('weight');
+
+  function ChartRenderer({ bodyvalue, type }) {
+    useEffect(() => {
+      if (!bodyvalue) return;
+
+      console.log('Rendering chart for bodyvalue:', bodyvalue);
+      const dates = bodyvalue.map((e) => e.date);
+
+      console.log(dates);
+
+      const weights = bodyvalue.map((e) => e[type]);
+
+      console.log('Weights:', weights);
+      const options = {
+        series: [
+          {
+            name: 'Weight (kg)',
+            data: weights,
+          },
+        ],
+        chart: {
+          height: 300,
+          type: 'area',
+          zoom: { enabled: false },
+          toolbar: { show: false },
+          menubar: { show: false },
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth' },
+        title: {
+          text: `Progress for ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+          align: 'left',
+          style: { color: '#FFFFFF' },
+        },
+        grid: { show: false },
+        xaxis: {
+          categories: dates,
+          labels: { style: { colors: '#FFFFFF', fontSize: '9px' } },
+        },
+        yaxis: {
+          labels: {
+            style: { colors: '#FFFFFF' },
+            formatter: (value) =>
+              value +
+              (type === 'weight'
+                ? ' kg'
+                : type === 'waist'
+                  ? ' cm'
+                  : type === 'hip'
+                    ? ' cm'
+                    : type === 'bfp'
+                      ? ' %'
+                      : ''),
+          },
+        },
+        tooltip: {
+          theme: 'dark',
+          style: {
+            fontSize: '12px',
+            color: '#000000',
+          },
+        },
+      };
+
+      const chart = new ApexCharts(document.querySelector('#chart'), options);
+      chart.render();
+
+      return () => chart.destroy();
+    }, [bodyvalue]);
+  }
 
   const activityLevels = {
     1.2: 'Not active',
@@ -74,6 +150,12 @@ function Profile() {
       .catch((error) => {
         console.error('Error fetching profile data:', error);
       });
+
+    api.get('/get_history').then((response) => {
+      const data = response.data;
+      console.log('Fetched history data:', data);
+      setBodyvalue(data);
+    });
   }, [edit]);
 
   const handleEdit = () => {
@@ -705,6 +787,47 @@ function Profile() {
             onClose={() => setNotification(null)}
           />
         )}
+
+        {showTrend && (
+          <div className="">
+            <div id="chart"></div>
+
+            <ChartRenderer bodyvalue={bodyvalue} type={selectedBodyValue} />
+            <div className="divider divider-primary"></div>
+            <div className="flex flex-row space-x-2 ">
+              <select
+                className="w-auto h-10 px-11 py-0 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid rgba(59, 130, 246, 0.25)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                }}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setSelectedBodyValue(e.target.value);
+                  // Hier kannst du die Logik hinzufügen, um den Chart basierend auf der Auswahl zu aktualisieren
+                }}
+              >
+                <option disabled selected>
+                  Select Body Value
+                </option>
+                <option value="weight">Weight</option>
+                <option value="bfp">Body Fat Percentage</option>
+                <option value="waist">Waist Circumference</option>
+                <option value="hip">Hip Circumference</option>
+              </select>
+              <Button border="#f63b3bff" onClick={() => setShowTrend(false)}>
+                Close{' '}
+              </Button>
+            </div>
+          </div>
+        )}
+
         {edit ? (
           <div className="space-y-2 flex flex-col items-center ">
             <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
@@ -926,113 +1049,12 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col justify-center items-center">
-            <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-              {cardForValues(<h1>Weight: {Math.round(weight)} kg</h1>)}
-              {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
-
-              {cardForValues(<h1>Age: {Math.round(age)} years</h1>)}
-              {cardForValues(
-                <div className="flex flex-row space-x-2 items-center">
-                  <h1>Gender:</h1>
-                  {gender == 'male' ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
-                    </svg>
-                  )}
-                </div>
-              )}
-              {cardForValues(<h1>Hip: {Math.round(hip)} cm</h1>)}
-              {cardForValues(<h1>Waist: {Math.round(waist)} cm</h1>)}
-
-              {cardForValues(
-                <h1
-                  style={{
-                    color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
-                  }}
-                >
-                  BMI: {Math.round(bmi)}{' '}
-                  {bmi > 30
-                    ? '(Adipoistas)'
-                    : bmi > 25
-                      ? '(Overweight)'
-                      : bmi < 20
-                        ? '(Underweight)'
-                        : '(Normal)'}
-                </h1>
-              )}
-              {cardForValues(
-                <h1
-                  style={{
-                    color: bri > 4.5 ? 'red' : bri > 3 ? 'orange' : 'green',
-                  }}
-                >
-                  BRI: {bri.toFixed(2)}
-                </h1>
-              )}
-              {cardForValues(
-                <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
-                  WHR: {(hwr || 0).toFixed(2)} {hwr >= 0.85 ? '(Risk)' : '(Good)'}
-                </h1>
-              )}
-              {cardForValues(
-                <h1 style={{ color: bfp > 25 ? 'red' : 'green' }}>BFP: {Math.round(bfp)} %</h1>
-              )}
-              {cardForValues(<h1>Calories: {Math.round(calories)} kcal</h1>)}
-
-              {cardForValues(<h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>)}
-              {cardForValues(
-                <h1
-                  style={
-                    parseFloat(activity) <= 1.2
-                      ? { color: 'red' }
-                      : parseFloat(activity) >= 1.5
-                        ? { color: 'green' }
-                        : { color: 'orange' }
-                  }
-                >
-                  Activity: {activityLevels[activity] ?? 'UNS'}
-                </h1>
-              )}
-            </div>
-            <div className="divider  text-amber-50 font-light mb-2  divider-primary">
-              Change your personal information
-            </div>
-            <div className="flex flex-row space-x-2 items-center justify-center">
-              <Button onClick={() => setEdit(true)} border="#3b82f6">
+          !showTrend && (
+            <div className="flex flex-col justify-center items-center">
+              <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
+                  className="w-12 h-12 text-amber-50"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1041,28 +1063,143 @@ function Profile() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-              </Button>
-              <Button onClick={() => navigate('/')} border="#ef4444">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                {cardForValues(<h1>Weight: {Math.round(weight)} kg</h1>)}
+                {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
+
+                {cardForValues(<h1>Age: {Math.round(age)} years</h1>)}
+                {cardForValues(
+                  <div className="flex flex-row space-x-2 items-center">
+                    <h1>Gender:</h1>
+                    {gender == 'male' ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
+                      </svg>
+                    )}
+                  </div>
+                )}
+                {cardForValues(<h1>Hip: {Math.round(hip)} cm</h1>)}
+                {cardForValues(<h1>Waist: {Math.round(waist)} cm</h1>)}
+
+                {cardForValues(
+                  <h1
+                    style={{
+                      color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
+                    }}
+                  >
+                    BMI: {Math.round(bmi)}{' '}
+                    {bmi > 30
+                      ? '(Adipoistas)'
+                      : bmi > 25
+                        ? '(Overweight)'
+                        : bmi < 20
+                          ? '(Underweight)'
+                          : '(Normal)'}
+                  </h1>
+                )}
+                {cardForValues(
+                  <h1
+                    style={{
+                      color: bri > 4.5 ? 'red' : bri > 3 ? 'orange' : 'green',
+                    }}
+                  >
+                    BRI: {bri.toFixed(2)}
+                  </h1>
+                )}
+                {cardForValues(
+                  <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
+                    WHR: {(hwr || 0).toFixed(2)} {hwr >= 0.85 ? '(Risk)' : '(Good)'}
+                  </h1>
+                )}
+                {cardForValues(
+                  <h1 style={{ color: bfp > 25 ? 'red' : 'green' }}>BFP: {Math.round(bfp)} %</h1>
+                )}
+                {cardForValues(<h1>Calories: {Math.round(calories)} kcal</h1>)}
+
+                {cardForValues(<h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>)}
+                {cardForValues(
+                  <h1
+                    style={
+                      parseFloat(activity) <= 1.2
+                        ? { color: 'red' }
+                        : parseFloat(activity) >= 1.5
+                          ? { color: 'green' }
+                          : { color: 'orange' }
+                    }
+                  >
+                    Activity: {activityLevels[activity] ?? 'UNS'}
+                  </h1>
+                )}
+              </div>
+              <div className="divider  text-amber-50 font-light mb-2  divider-primary">
+                Change your personal information
+              </div>
+
+              <div className="flex flex-row space-x-2 items-center justify-center">
+                <Button
+                  onClick={() => {
+                    setShowTrend(true);
+                    setEdit(false);
+                  }}
+                  border="#3b82f6"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </Button>
+                  <ArrowTrendingUpIcon className="w-4 h-4 mr-1" />
+                </Button>
+
+                <Button onClick={() => setEdit(true)} border="#3b82f6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </Button>
+
+                <Button onClick={() => navigate('/')} border="#ef4444">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </Button>
+              </div>
             </div>
-          </div>
+          )
         )}
       </TemplatePage>
     </div>
