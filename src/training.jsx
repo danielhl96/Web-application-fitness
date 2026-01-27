@@ -200,6 +200,7 @@ function StartTraining() {
     const updatedExercise = {
       ...currentExercises[idxExercise],
       weights: updatedSetw,
+      reps: [...inputValue],
     };
 
     setTraining(updatedExercise);
@@ -239,8 +240,8 @@ function StartTraining() {
       updatedExercises[idxExercise] = updatedExercise;
       return updatedExercises;
     });
-    setTraining(updatedExercise);
     setInputValue([...training1.reps, 0]);
+    setTraining(updatedExercise);
   };
 
   const handleReduceSets = () => {
@@ -321,12 +322,6 @@ function StartTraining() {
       //scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
   }, [showModal, idx]);
-
-  useEffect(() => {
-    if (training1 && training1.reps) {
-      setInputValue([...training1.reps]);
-    }
-  }, [training1]);
 
   const LastTrainingModal = () => {
     return (
