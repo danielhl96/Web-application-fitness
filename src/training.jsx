@@ -57,7 +57,6 @@ function StartTraining() {
     if (data && data.length > 0) {
       const mapped = mapPlans(data);
       setExercise(mapped);
-      setTraining(mapped[0]);
     } else {
       setExercise({});
     }
@@ -110,6 +109,7 @@ function StartTraining() {
         ...currentExercises[idxExercise],
         reps: inputValue,
       };
+
       if (!updatedCurrent.isFinished) {
         postData(updatedCurrent);
       }
@@ -155,8 +155,8 @@ function StartTraining() {
         updated[newIdx] = nextExercise;
         return updated;
       });
-      setInputValue([]);
-
+      setInputValue([...nextExercise.reps]);
+      console.log(updatedCurrent);
       for (var i = 0; i < training1.sets; i++) {
         document.getElementById('input' + (i + 1)).value = '';
       }
@@ -178,14 +178,16 @@ function StartTraining() {
         updated[newIdx] = prevExercise;
         return updated;
       });
-      setInputValue([]);
+      setInputValue([...prevExercise.reps]);
       console.log(idxExercise);
     }
   };
 
   const addInput = (e, index) => {
+    console.log('index:', e, 'value:', e);
     const newinputs = [...inputValue];
     newinputs[index] = e;
+    console.log('NEW INPUTS:', newinputs);
     setInputValue(newinputs);
   };
 
@@ -238,6 +240,7 @@ function StartTraining() {
       return updatedExercises;
     });
     setTraining(updatedExercise);
+    setInputValue([...training1.reps, 0]);
   };
 
   const handleReduceSets = () => {
@@ -254,6 +257,7 @@ function StartTraining() {
       return updatedExercises;
     });
     setTraining(updatedExercise);
+    setInputValue(inputValue.slice(0, updatedSets));
   };
 
   const handleModal = (index, flag) => {
@@ -283,21 +287,10 @@ function StartTraining() {
   };
 
   useEffect(() => {
-    setSelectedWeight1((prev) => {
-      const arr = [...prev];
-      // If sets have been added, fill with null
-      while (arr.length < selectedExercise.sets) arr.push(null);
-      // If sets have been removed, shorten the array
-      if (arr.length > selectedExercise.sets) arr.length = selectedExercise.sets;
-      return arr;
-    });
-    setSelectedWeight2((prev) => {
-      const arr = [...prev];
-      while (arr.length < selectedExercise.sets) arr.push(null);
-      if (arr.length > selectedExercise.sets) arr.length = selectedExercise.sets;
-      return arr;
-    });
-  }, [selectedExercise.sets]);
+    if (training1 && training1.reps) {
+      setInputValue([...training1.reps]);
+    }
+  }, [training1]);
 
   useEffect(() => {
     if (showModal && scrollRef.current && training1 != null) {
@@ -328,6 +321,12 @@ function StartTraining() {
       //scrollRef2.current.scrollTop = selectedRow2.offsetTop;
     }
   }, [showModal, idx]);
+
+  useEffect(() => {
+    if (training1 && training1.reps) {
+      setInputValue([...training1.reps]);
+    }
+  }, [training1]);
 
   const LastTrainingModal = () => {
     return (
@@ -636,6 +635,7 @@ function StartTraining() {
             setCurrentExercises(selectedExercise[planName]);
             setCurrentPlan(planName);
             setTraining(selectedExercise[planName][0]);
+
             setSelectedTrainingSite(false);
           }}
         >
