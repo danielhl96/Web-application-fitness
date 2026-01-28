@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import TemplatePage from './templatepage';
 import Button from './button';
 import Header from './Header.jsx';
-import TemplateModal from './templateModal.jsx';
+import TemplateModal from './templatemodal.jsx';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
