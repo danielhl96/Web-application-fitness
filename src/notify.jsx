@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function Notify({ title, message, type, duration = 3000, onClose }) {
+function Notify({ title, message, type, duration, onClose }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {

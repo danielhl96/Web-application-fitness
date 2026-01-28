@@ -7,6 +7,7 @@ import WorkoutCard from './workoutcard.jsx';
 import Input from './input.jsx';
 import api from './api';
 import Button from './button.jsx';
+import Notify from './notify.jsx';
 
 function StartTraining() {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ function StartTraining() {
   const [counterisRunning, setCounterisRunning] = useState(false);
   const intervalRef = useRef();
   const [lastTrainingModalValue, setLastTrainingModal] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   // whenever `data` (from backend) changes, compute the desired shape and set state
   useEffect(() => {
@@ -97,6 +99,12 @@ function StartTraining() {
       })
       .then((response) => {
         console.log(response.data);
+        setNotification({
+          title: 'Success',
+          message: `Exercise ${updatedCurrent.exercise} saved successfully!`,
+          type: 'success',
+          duration: 250,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -732,6 +740,18 @@ function StartTraining() {
     <div>
       <Header />
       {showModal && SettingsModal()}
+      {notification && (
+        <Notify
+          title={notification.title}
+          message={notification.message}
+          duration={1500}
+          key={notification.message + notification.title + Date.now()}
+          type={notification.type}
+          // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+          onClose={() => setNotification(null)}
+        />
+      )}
+      {breakModal && BreakTimeModal()}
       {showTrainingEndModal && TrainingEndModal()}
       {exerciseList && ExerciseList()}
       {lastTrainingModalValue && LastTrainingModal()}
@@ -770,6 +790,14 @@ function StartTraining() {
                     setTraining(updatedTraining);
                     setExercise((prev) => {
                       const updatedExercises = { ...prev };
+                      updatedExercises[idxExercise] = {
+                        ...updatedExercises[idxExercise],
+                        isFinished: false,
+                      };
+                      return updatedExercises;
+                    });
+                    setCurrentExercises((prev) => {
+                      const updatedExercises = [...prev];
                       updatedExercises[idxExercise] = {
                         ...updatedExercises[idxExercise],
                         isFinished: false,
