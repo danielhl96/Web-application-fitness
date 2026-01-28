@@ -59,12 +59,12 @@ function ExerciseCard({
     if (selectedSetRef.current) {
       selectedSetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [selectedSets]);
+  }, [selectedSets, maximized]);
   useEffect(() => {
     if (selectedRepRef.current) {
       selectedRepRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [selectedReps]);
+  }, [selectedReps, maximized]);
 
   useEffect(() => {
     const checkMobile = () => {
