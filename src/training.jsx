@@ -189,6 +189,11 @@ function StartTraining() {
     newinputs[index] = e;
     console.log('NEW INPUTS:', newinputs);
     setInputValue(newinputs);
+    setTraining((prev) => ({
+      ...prev,
+      reps: newinputs,
+    }));
+    console.log(training1);
   };
 
   const changeWeight = (index, flag) => {
@@ -225,22 +230,22 @@ function StartTraining() {
   // Add a new sets entry initialized to 0
   const handleAddSets = () => {
     const updatedSets = training1.sets + 1;
-    const weightArray = [...training1.weights];
-    weightArray.push(0);
 
     const updatedExercise = {
       ...training1,
       sets: updatedSets,
-      weight: weightArray,
+      weights: [...training1.weights, 0],
       reps: [...training1.reps, 0],
     };
+    console.log('UPDATED EXERCISE:', updatedExercise);
+
     console.log(updatedExercise);
     setCurrentExercises((prev) => {
       const updatedExercises = [...prev];
       updatedExercises[idxExercise] = updatedExercise;
       return updatedExercises;
     });
-    setInputValue([...training1.reps, 0]);
+    //setInputValue([...training1.reps, 0]);
     setTraining(updatedExercise);
   };
 
@@ -250,6 +255,8 @@ function StartTraining() {
     const updatedExercise = {
       ...training1,
       sets: updatedSets,
+      reps: training1.reps.slice(0, updatedSets),
+      weights: training1.weights.slice(0, updatedSets),
     };
     console.log(updatedExercise);
     setCurrentExercises((prev) => {
