@@ -127,7 +127,13 @@ function StartTraining() {
       setCurrentExercises(updatedExercises);
     }
     if (Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished)) {
-      setShowTrainingEndModal(true);
+      setNotification({
+        title: 'Workout Complete',
+        message: `Congratulations! You have completed the workout.`,
+        type: 'success',
+        duration: 3000,
+      });
+      setSelectedTrainingSite(true);
     }
 
     if (idxExercise < currentExercises.length - 1) {
@@ -517,48 +523,11 @@ function StartTraining() {
 
   //Modal for the end of training
   function TrainingEndModal() {
-    return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
-          style={{
-            maxWidth: '90vw',
-            background: 'rgba(0,0,0,0.20)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-          }}
-        >
-          <div className="flex flex-col justify-center items-center  text-xs">
-            <h2 className="text-amber-50 font-bold mb-2">Workout Complete!</h2>
-            <div className="flex flex-row justify-center items-center gap-4 mt-2">
-              <Button
-                // Resets all training states and navigates to the home page
-                onClick={(event) => {
-                  // Prevents the default button behavior (such as form submission or page reload)
-                  event.preventDefault();
-                  setSelectedTrainingSite(true);
-                  setShowTrainingEndModal(false);
-                  setCurrentExercises([]);
-                  setCurrentPlan(null);
-                  setTraining(null);
-                  setidx(0);
-                  setExercise({});
-                  setInputValue([]);
-                  setSelectedWeight1([3]);
-                  setSelectedWeight2([3]);
-                  navigate('/');
-                }}
-                border="#08ad4dff"
-              >
-                Ok
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    setNotification({
+      title: 'Success',
+      message: `Workout finished successfully!`,
+      duration: 100,
+    });
   }
 
   const startCounter = () => {
@@ -752,7 +721,7 @@ function StartTraining() {
         />
       )}
       {breakModal && BreakTimeModal()}
-      {showTrainingEndModal && TrainingEndModal()}
+
       {exerciseList && ExerciseList()}
       {lastTrainingModalValue && LastTrainingModal()}
       <TemplatePage>
