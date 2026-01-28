@@ -8,7 +8,7 @@ import api from './api.js';
 import EmailInput from './emailinput.jsx';
 import PasswordInput from './passwordinput.jsx';
 import Button from './button.jsx';
-
+import TemplateModal from './templatemodal.jsx';
 function CredentialsPage() {
   const [emailModal, setEmailModal] = useState(false);
   const [modalPassword, setModalPassword] = useState(false);
@@ -95,27 +95,20 @@ function CredentialsPage() {
 
   const handleEmailModal = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
+          {notification && (
+            <Notify
+              title={notification.title}
+              message={notification.message}
+              duration={1500}
+              key={notification.message + notification.title + Date.now()}
+              type={notification.type}
+              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+              onClose={() => setNotification(null)}
+            />
+          )}
+
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -174,34 +167,27 @@ function CredentialsPage() {
               </Button>
             </div>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   };
 
   const handleModalforPassword = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
+          {notification && (
+            <Notify
+              title={notification.title}
+              message={notification.message}
+              duration={1500}
+              key={notification.message + notification.title + Date.now()}
+              type={notification.type}
+              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+              onClose={() => setNotification(null)}
+            />
+          )}
+
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your password</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -287,34 +273,27 @@ function CredentialsPage() {
               </Button>
             </div>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   };
 
   const handleModalforAccountDelete = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
+          {notification && (
+            <Notify
+              title={notification.title}
+              message={notification.message}
+              duration={1500}
+              key={notification.message + notification.title + Date.now()}
+              type={notification.type}
+              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+              onClose={() => setNotification(null)}
+            />
+          )}
+
           <h3 className="font-bold text-lg text-amber-50">Delete your account</h3>
           <div className="flex flex-col justify-start  text-xs">
             <PasswordInput
@@ -367,7 +346,7 @@ function CredentialsPage() {
               Hint: This process will not be returnable. You will be logged out immediately.
             </p>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   };

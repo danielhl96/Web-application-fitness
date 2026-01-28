@@ -4,6 +4,7 @@ import Input from './input.jsx';
 import ApexCharts from 'apexcharts';
 import Notify from './notify.jsx';
 import Button from './button.jsx';
+import TemplateModal from './templatemodal.jsx';
 
 import { useState, useRef, useEffect, use } from 'react';
 import Header from './Header.jsx';
@@ -309,17 +310,8 @@ function Nutrition() {
 
   function modalMeal() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
-          style={{
-            background: 'rgba(10, 20, 40, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <h3 className="font-bold text-lg text-white mb-4">
             Add {mealtype.charAt(0).toUpperCase() + mealtype.slice(1)}
           </h3>
@@ -385,23 +377,15 @@ function Nutrition() {
               </Button>
             </div>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   }
 
   function handleFileUpload() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <h3 className="font-bold text-lg text-white mb-4">Nutrition Estimation</h3>
           <input
             type="file"
@@ -457,7 +441,7 @@ function Nutrition() {
               </svg>
             </Button>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   }
@@ -472,16 +456,8 @@ function Nutrition() {
 
   function modalDate() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <div className="flex flex-col space-y-4">
             <select
               className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
@@ -543,24 +519,15 @@ function Nutrition() {
               OK
             </Button>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   }
 
   function editMeal() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
-          style={{
-            background: 'rgba(10, 20, 40, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <h3 className="font-bold text-lg text-white mb-4">Edit Meal</h3>
           <div className="flex flex-col space-y-4">
             <p>{meal.name}</p>
@@ -623,7 +590,7 @@ function Nutrition() {
               </Button>
             </div>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   }

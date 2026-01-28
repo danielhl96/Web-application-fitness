@@ -4,10 +4,10 @@ import { useEffect, useState, useRef, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TemplatePage from './templatepage.jsx';
 import WorkoutCard from './workoutcard.jsx';
-import Input from './input.jsx';
 import api from './api';
 import Button from './button.jsx';
 import Notify from './notify.jsx';
+import TemplateModal from './templatemodal.jsx';
 
 function StartTraining() {
   const navigate = useNavigate();
@@ -71,7 +71,6 @@ function StartTraining() {
   const [training1, setTraining] = useState();
   const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [showTrainingEndModal, setShowTrainingEndModal] = useState(false);
   const [selectedWeight1, setSelectedWeight1] = useState([3]);
   const [exerciseList, setExerciseList] = useState(false);
   const [showRepsInfo, setShowRepsInfo] = useState(false);
@@ -103,7 +102,6 @@ function StartTraining() {
           title: 'Success',
           message: `Exercise ${updatedCurrent.exercise} saved successfully!`,
           type: 'success',
-          duration: 250,
         });
       })
       .catch((error) => {
@@ -131,7 +129,6 @@ function StartTraining() {
         title: 'Workout Complete',
         message: `Congratulations! You have completed the workout.`,
         type: 'success',
-        duration: 3000,
       });
       setSelectedTrainingSite(true);
     }
@@ -149,7 +146,7 @@ function StartTraining() {
       updatedExercises[idxExercise] = finishedCurrent;
       setCurrentExercises(updatedExercises);
 
-      // Aktualisiere Objekt
+      // Update selectedExercise accordingly
       setExercise((prev) => {
         const updated = { ...prev };
         updated[currentPlan] = updatedExercises;
@@ -259,7 +256,7 @@ function StartTraining() {
       updatedExercises[idxExercise] = updatedExercise;
       return updatedExercises;
     });
-    //setInputValue([...training1.reps, 0]);
+
     setTraining(updatedExercise);
   };
 
@@ -282,6 +279,7 @@ function StartTraining() {
     setInputValue(inputValue.slice(0, updatedSets));
   };
 
+  // Open/close modal for weight selection
   const handleModal = (index, flag) => {
     console.log(index);
     setShowModal(flag);
@@ -346,16 +344,8 @@ function StartTraining() {
 
   const LastTrainingModal = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <TemplateModal>
+        <div>
           <div className="flex flex-col justify-center items-center space-y-2 text-xs">
             <div className="grid grid-cols-1 gap-2">
               {training1.reps.map((rep, index) => (
@@ -382,23 +372,15 @@ function StartTraining() {
             </Button>
           </div>
         </div>
-      </div>
+      </TemplateModal>
     );
   };
 
   //Modal for the weight selection
   const SettingsModal = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <TemplateModal>
+        <div>
           <div className="flex flex-row justify-center items-center  text-xs">
             <div ref={scrollRef} className="h-24 overflow-y-scroll border border-gray-800">
               <div className="flex flex-row justify-center items-center">
@@ -517,18 +499,9 @@ function StartTraining() {
             </Button>
           </div>
         </div>
-      </div>
+      </TemplateModal>
     );
   };
-
-  //Modal for the end of training
-  function TrainingEndModal() {
-    setNotification({
-      title: 'Success',
-      message: `Workout finished successfully!`,
-      duration: 100,
-    });
-  }
 
   const startCounter = () => {
     setCounterisRunning(true);
@@ -544,20 +517,8 @@ function StartTraining() {
 
   function BreakTimeModal() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
-          style={{
-            width: '16rem', // ca. 256px, deutlich kleiner als Standard
-            minWidth: '10rem',
-            maxWidth: '90vw',
-            background: 'rgba(0,0,0,0.20)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-          }}
-        >
+      <TemplateModal>
+        <div>
           <div className="flex flex-col justify-center items-center  text-xs">
             <h1 className="text-amber-50 text-xl font-bold mb-2">Take a Break!</h1>
             <div className="flex flex-row justify-center items-center  mt-2">
@@ -602,7 +563,7 @@ function StartTraining() {
             </div>
           </div>
         </div>
-      </div>
+      </TemplateModal>
     );
   }
 
@@ -634,16 +595,8 @@ function StartTraining() {
   function ExerciseList() {
     console.log(currentExercises);
     return (
-      <div className="modal modal-open modal-bottom  items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <form method="dialog">
             <button
               onClick={() => setExerciseList(false)}
@@ -697,7 +650,7 @@ function StartTraining() {
               </div>
             ))}
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   }
@@ -713,7 +666,7 @@ function StartTraining() {
         <Notify
           title={notification.title}
           message={notification.message}
-          duration={1500}
+          duration={1000}
           key={notification.message + notification.title + Date.now()}
           type={notification.type}
           // Notify handles its own visibility, but we clear notification after duration to allow re-showing

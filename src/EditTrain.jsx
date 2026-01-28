@@ -10,6 +10,7 @@ import ExerciseCard from './exercisecard.jsx';
 import Notify from './notify.jsx';
 import Input from './input.jsx';
 import Button from './button.jsx';
+import TemplateModal from './templatemodal.jsx';
 const EditTrain = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -161,16 +162,8 @@ const EditTrain = () => {
 
   function ConfirmationModalforWorkoutDelete() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255, 0, 0, 1)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <TemplateModal border="#ef4444 1.5px solid">
+        <div>
           <h3 className="font-bold text-lg text-amber-50 mb-4">Delete Workout Plan</h3>
           <p className="text-amber-50 mb-4">Are you sure you want to delete this workout plan?</p>
           <div className="modal-action">
@@ -208,22 +201,14 @@ const EditTrain = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </TemplateModal>
     );
   }
 
   function changeWorkoutName() {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <TemplateModal>
+        <div>
           <h3 className="font-bold text-lg text-amber-50 mb-4">Change Workout Name</h3>
           <Input
             placeholder="New Workout Name"
@@ -271,7 +256,7 @@ const EditTrain = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </TemplateModal>
     );
   }
 

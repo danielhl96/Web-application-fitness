@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import TemplatePage from './templatepage';
 import Button from './button';
 import Header from './Header.jsx';
+import TemplateModal from './templateModal.jsx';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
@@ -96,16 +97,8 @@ function CounterForm() {
 
   const settingsModal = () => {
     return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        <div
-          className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
-          style={{
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid rgba(255,255,255,0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
+      <div>
+        <TemplateModal>
           <div className="divider divider-primary text-amber-50 font-bold mb-6">Settings</div>
           <div className="flex flex-col justify-center items-center space-y-4 text-xs">
             <input
@@ -154,7 +147,7 @@ function CounterForm() {
               Close
             </Button>
           </div>
-        </div>
+        </TemplateModal>
       </div>
     );
   };
