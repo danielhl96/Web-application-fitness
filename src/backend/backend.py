@@ -1051,11 +1051,9 @@ def refresh_token():
         "access_token",
         new_token,
         httponly=True,
-        secure=True,  # Ändere von False zu True für Konsistenz und Sicherheit (setze auf False nur für lokale Dev ohne HTTPS)
+        secure=True,  
         samesite="None",
-        #partitioned=True,  # Neu hinzugefügt, um die Warnung zu beheben
-        max_age=60*60*4  # 2 Minuten
-      
+        max_age=60*60*4
     )
     return resp, 200
 
