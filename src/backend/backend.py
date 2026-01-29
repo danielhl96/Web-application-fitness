@@ -459,11 +459,11 @@ def change_password():
 @app.route('/api/password_forget', methods=['post'])
 def password_forget():
     email = request.json.get("email")
-    user = session.query(User).filter_by(email=email).first()
+    user = session.query(User).filter_by(email=email.lower()).first()
     if user:
         safety_code = str(uuid.uuid4())
-        redis_client.setex(f"safety_code:{email}", 300, safety_code)  # Expires in 5 minutes
-        print(redis_client.get(f"safety_code:{email}"))
+        redis_client.setex(f"safety_code:{email.lower()}", 300, safety_code)  # Expires in 5 minutes
+        print(redis_client.get(f"safety_code:{email.lower()}"))
         send_email(email, safety_code)
         return jsonify({"message": "Password reset email sent!"}), 200
     return jsonify({"message": "User not found!"}), 404
@@ -474,9 +474,9 @@ def check_safety_code():
     new_password = request.json.get("password")
     safety_code = request.json.get("safety_code")
     print(email, new_password, safety_code)
-    user = session.query(User).filter_by(email=email).first()
+    user = session.query(User).filter_by(email=email.lower()).first()
     if user and safety_code:
-        stored_code = redis_client.get(f"safety_code:{email}")
+        stored_code = redis_client.get(f"safety_code:{email.lower()}")
         if stored_code and stored_code.decode("utf-8") == safety_code:
             # Prüfe, ob das neue Passwort dem alten entspricht
             if argon2.verify(user.password, new_password):
