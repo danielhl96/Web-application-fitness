@@ -21,7 +21,7 @@ function AiCoach() {
       const profile = response.data;
       handleMessage(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm. Please consider this information to analyse.`,
-        false
+        true
       );
       handleOpenAIResponse(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm. Please consider this information to analyse.`
@@ -63,7 +63,7 @@ function AiCoach() {
           aiMessage = 'No meals found for today.';
         }
 
-        handleMessage(allMealsMessage, false);
+        handleMessage(allMealsMessage, true);
         handleOpenAIResponse(aiMessage);
       })
       .catch((error) => {
