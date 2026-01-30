@@ -39,7 +39,10 @@ function AiCoach() {
           type,
           meals: response.data,
         }))
-        .catch(() => ({ type, meals: [] }))
+        .catch(() => {
+          setIsLoading(false);
+          return { type, meals: [] };
+        })
     );
 
     Promise.all(promises)
@@ -62,13 +65,14 @@ function AiCoach() {
           allMealsMessage = 'No meals found for today.';
           aiMessage = 'No meals found for today.';
         }
-
+        // Send user message to chat history (chatbubble) and request AI analysis
         handleMessage(allMealsMessage, true);
         handleOpenAIResponse(aiMessage);
       })
       .catch((error) => {
         console.error('Error fetching meals:', error);
         handleMessage('Sorry, there was an error fetching your meals.', false);
+        setIsLoading(false);
       });
   }
 
@@ -115,7 +119,7 @@ function AiCoach() {
       </div>
     );
   }
-
+  //Render the main component consisting of TemplatePage and other reusable components (Inputs, Buttons, Header, Modal)
   return (
     <div>
       <Header />
