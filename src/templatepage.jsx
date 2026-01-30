@@ -11,6 +11,7 @@ function TemplatePage({ children, dockDisabled }) {
     '/editTrain': useRef(null),
     '/training': useRef(null),
     '/nutrition': useRef(null),
+    '/aicoach': useRef(null),
     '/profile': useRef(null),
     '/counter': useRef(null),
     '/statistic': useRef(null),
@@ -135,6 +136,15 @@ function TemplatePage({ children, dockDisabled }) {
                 alt="Nutrition"
               />
               <span className="dock-label">Nutrition</span>
+            </button>
+            <button
+              ref={refs['/aicoach']}
+              style={{ minWidth: 105 }}
+              className={location.pathname === '/aicoach' ? 'dock-active' : ''}
+              onClick={() => navigate('/aicoach')}
+            >
+              <img src={'./aicoach.png'} className="w-6 h-6 mx-auto filter brightness-0 invert" />
+              <span className="dock-label">AI Coach</span>
             </button>
             <button
               ref={refs['/profile']}
