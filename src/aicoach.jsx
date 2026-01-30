@@ -139,9 +139,7 @@ function AiCoach() {
             >
               Analyse today's meals
             </Button>
-            <Button border="#3b82f6" w="w-35">
-              Analyse my last workout
-            </Button>
+
             <Button
               border="#3b82f6"
               onClick={() => {
