@@ -8,7 +8,7 @@ import TemplateModal from './templatemodal';
 function AiCoach() {
   const [question, setQuestion] = useState('');
   const [chatHistory, setChatHistory] = useState([
-    { message: 'Hi, how can I help you?', isUser: false },
+    { message: 'Hi, im your fitness coach! How can I assist you today?', isUser: false },
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
