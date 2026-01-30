@@ -1,7 +1,7 @@
 import TemplatePage from './templatepage';
 import Button from './button';
 import Input from './input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './Header.jsx';
 import api from './api.js';
 import TemplateModal from './templatemodal';
@@ -14,6 +14,62 @@ function AiCoach() {
 
   function handleMessage(message, isUser) {
     setChatHistory((prev) => [...prev, { message, isUser }]);
+  }
+
+  function fetchUserProfile() {
+    api.get('/get_profile').then((response) => {
+      const profile = response.data;
+      handleMessage(
+        `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm. Please consider this information to analyse.`,
+        false
+      );
+      handleOpenAIResponse(
+        `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm. Please consider this information to analyse.`
+      );
+    });
+  }
+
+  function fetchLastMeal() {
+    const date = new Date().toISOString().split('T')[0];
+    const mealTypes = ['breakfast', 'launch', 'dinner', 'snacks'];
+    const promises = mealTypes.map((type) =>
+      api
+        .get(`/get_meal_${type}`, { params: { date } })
+        .then((response) => ({
+          type,
+          meals: response.data,
+        }))
+        .catch(() => ({ type, meals: [] }))
+    );
+
+    Promise.all(promises)
+      .then((results) => {
+        let allMealsMessage = 'My meals today: ';
+        let aiMessage = 'My meals today: ';
+        let hasMeals = false;
+
+        results.forEach(({ type, meals }) => {
+          if (meals.length > 0) {
+            hasMeals = true;
+            meals.forEach((meal) => {
+              allMealsMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fat}g fat). Analyze accordingly. `;
+              aiMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fat}g fat). Analyze accordingly. `;
+            });
+          }
+        });
+
+        if (!hasMeals) {
+          allMealsMessage = 'No meals found for today.';
+          aiMessage = 'No meals found for today.';
+        }
+
+        handleMessage(allMealsMessage, false);
+        handleOpenAIResponse(aiMessage);
+      })
+      .catch((error) => {
+        console.error('Error fetching meals:', error);
+        handleMessage('Sorry, there was an error fetching your meals.', false);
+      });
   }
 
   function openModal() {
@@ -66,15 +122,33 @@ function AiCoach() {
       <TemplatePage>
         <div className="flex flex-col h-full">
           <div className="divider divider-primary">AI-Coaching</div>
-          <div className="flex-grow overflow-y-auto">
+          <div className="flex-grow overflow-y-auto h-[40dvh]">
             {chatHistory.map(({ message, isUser }, index) => createBubble(message, isUser, index))}
             {isLoading && openModal()}
           </div>
           <div className="divider divider-primary"></div>
-          <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto">
-            <Button w="w-30">Analyse my last meal</Button>
-            <Button w="w-30">Analyse my last workout</Button>
-            <Button w="w-32">Bodymeasurement</Button>
+          <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto overflow-y-hidden">
+            <Button
+              onClick={() => {
+                fetchLastMeal();
+                setQuestion('');
+                setIsLoading(true);
+              }}
+              w="w-35"
+            >
+              Analyse today's meals
+            </Button>
+            <Button w="w-35">Analyse my last workout</Button>
+            <Button
+              onClick={() => {
+                fetchUserProfile();
+                setQuestion('');
+                setIsLoading(true);
+              }}
+              w="w-32"
+            >
+              Bodymeasurement
+            </Button>
           </div>
           <div className="flex flex-row space-x-1 items-center justify-center">
             <Input
