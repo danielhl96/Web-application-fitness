@@ -71,6 +71,11 @@ function AiCoach() {
             {isLoading && openModal()}
           </div>
           <div className="divider divider-primary"></div>
+          <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto">
+            <Button w="w-30">Analyse my last meal</Button>
+            <Button w="w-30">Analyse my last workout</Button>
+            <Button w="w-32">Bodymeasurement</Button>
+          </div>
           <div className="flex flex-row space-x-1 items-center justify-center">
             <Input
               value={question}
@@ -90,7 +95,7 @@ function AiCoach() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-6 w-3"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

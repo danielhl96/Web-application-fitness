@@ -775,6 +775,7 @@ def ai_coach():
     for item in history:
         role = "user" if item.get("isUser") else "assistant"
         messages.append({"role": role, "content": item.get("message")})
+    messages.append({"role": "user", "content": data.get("question")})
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=messages
