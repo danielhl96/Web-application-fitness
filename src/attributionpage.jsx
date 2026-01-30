@@ -5,7 +5,7 @@ function AttributionPage() {
     <div>
       <Header />
       <TemplatePage dockDisabled={true}>
-        <div className="overflow-auto max-h-[80vh]">
+        <div className="overflow-y-auto max-h-[75vh]">
           <h1 className="text-2xl font-bold text-white mb-4">Attribution</h1>
           <div className="divider divider-primary"></div>
           <p>This page provides attribution for the resources used in this application.</p>
@@ -141,6 +141,9 @@ function AttributionPage() {
 
             <a href="https://www.flaticon.com/free-icons/dumbell" title="Dumbell icons">
               Dumbell icons created by Mihimihi - Flaticon
+            </a>
+            <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons">
+              Chatbot icons created by LAFS - Flaticon
             </a>
           </ul>
         </div>

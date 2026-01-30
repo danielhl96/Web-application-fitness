@@ -13,7 +13,7 @@ function AiCoach() {
   const [isLoading, setIsLoading] = useState(false);
 
   function handleMessage(message, isUser) {
-    setChatHistory(prev => [...prev, { message, isUser }]);
+    setChatHistory((prev) => [...prev, { message, isUser }]);
   }
 
   function openModal() {
@@ -50,7 +50,9 @@ function AiCoach() {
   function createBubble(message, isUser, index) {
     return (
       <div className={`chat ${isUser ? 'chat-end' : 'chat-start'}`} key={index}>
-        <div className="chat-bubble break-words">
+        <div
+          className={`chat-bubble ${isUser ? 'chat-bubble-primary' : 'chat-bubble-secondary'} break-words`}
+        >
           {isUser ? 'User: ' : 'Coach: '}
           {message}
         </div>
@@ -68,7 +70,8 @@ function AiCoach() {
             {chatHistory.map(({ message, isUser }, index) => createBubble(message, isUser, index))}
             {isLoading && openModal()}
           </div>
-          <div className="flex flex-row items-center justify-center">
+          <div className="divider divider-primary"></div>
+          <div className="flex flex-row space-x-1 items-center justify-center">
             <Input
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
