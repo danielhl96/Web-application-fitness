@@ -129,6 +129,7 @@ function AiCoach() {
           <div className="divider divider-primary"></div>
           <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto overflow-y-hidden">
             <Button
+              border="#3b82f6"
               onClick={() => {
                 fetchLastMeal();
                 setQuestion('');
@@ -138,8 +139,11 @@ function AiCoach() {
             >
               Analyse today's meals
             </Button>
-            <Button w="w-35">Analyse my last workout</Button>
+            <Button border="#3b82f6" w="w-35">
+              Analyse my last workout
+            </Button>
             <Button
+              border="#3b82f6"
               onClick={() => {
                 fetchUserProfile();
                 setQuestion('');
