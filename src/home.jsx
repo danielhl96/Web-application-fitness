@@ -114,6 +114,29 @@ function Home() {
               </p>
             </div>
           </div>
+          <div
+            onClick={() => navigate('/aicoach')}
+            className="card w-full xs:w-full sm:w-70  lg:w-80 h-40 bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+            style={{
+              boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+            }}
+          >
+            <div className="card-body">
+              <h2 className="card-title text-blue-400 text-sm">AI Coach </h2>
+              <div className="flex justify-center my-4">
+                <img
+                  alt="AI Coach Icon"
+                  src="/aicoach.png"
+                  className="h-8 w-8 object-cover rounded-md"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
+              </div>
+              <p className="text-slate-300 text-sm text-center hidden sm:block">
+                Get AI-powered coaching
+              </p>
+            </div>
+          </div>
           {/* Card 4: Profile */}
           <div
             onClick={() => navigate('/profile')}

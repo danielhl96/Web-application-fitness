@@ -757,6 +757,27 @@ def create_exercise():
         session.add(new_exercise)
         session.commit()
         return jsonify({"message": "Exercise logged successfully!"}, 201)
+    
+@app.route('/api/aicoach', methods=['post'])
+def ai_coach():
+    token = get_token_from_cookie()
+    if not token:
+        return jsonify({"message": "Missing token cookie!"}), 401
+    verification = verify_token(token)
+    if verification.get("error"):
+        return jsonify({"message": verification["error"]}), 401
+    user_id = verification.get("sub")
+    data = request.json
+    prompt = data.get("question")
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": "You are an AI Coach for Fitness and Sports. Answer only questions related to athletic topics like training, nutrition, motivation, and health. If the question is not athletic, politely respond that you only answer athletic questions. You can respond in English or German, but primarily in English. Answer concisely and informatively and shortly."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    answer = response.choices[0].message.content
+    return jsonify({"answer": answer}), 200
 
 @app.route('/api/calculate_meal', methods=['post'])
 def calculate_meal():

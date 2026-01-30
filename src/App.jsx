@@ -19,6 +19,7 @@ import Statistic from './statistic.jsx';
 import CredentialsPage from './credentials.jsx';
 import Nutrition from './nutrition.jsx';
 import Home from './home.jsx';
+import AiCoach from './aicoach.jsx';
 
 //Routes with ProtectedRoute to protect routes for the application
 function App() {
@@ -118,6 +119,16 @@ function App() {
             <AuthProvider>
               <ProtectedRoute>
                 <Nutrition />
+              </ProtectedRoute>
+            </AuthProvider>
+          }
+        />
+        <Route
+          path="/aicoach"
+          element={
+            <AuthProvider>
+              <ProtectedRoute>
+                <AiCoach />
               </ProtectedRoute>
             </AuthProvider>
           }

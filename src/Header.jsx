@@ -130,6 +130,20 @@ function Header() {
             </Link>
 
             <Link
+              to="/aicoach"
+              className="btn btn-ghost text-white md:ml-4"
+              onClick={() => setMenuOpen(false)}
+            >
+              <figure className="w-5 h-5 mb-2">
+                <img
+                  src={'./aicoach.png'}
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                />
+              </figure>
+              AI-Coach
+            </Link>
+
+            <Link
               to="/profile"
               className="btn btn-ghost text-white"
               onClick={() => setMenuOpen(false)}
