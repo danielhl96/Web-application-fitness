@@ -28,7 +28,7 @@ function AiCoach() {
     api
       .post(
         '/aicoach',
-        { question: userMessage },
+        { question: userMessage, history: chatHistory },
         {
           headers: {
             'Content-Type': 'application/json',

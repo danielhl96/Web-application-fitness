@@ -766,15 +766,18 @@ def ai_coach():
     verification = verify_token(token)
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
-    user_id = verification.get("sub")
     data = request.json
-    prompt = data.get("question")
+    
+    history = data.get("history", [])
+    messages = [
+        {"role": "system", "content": "You are an AI Coach for Fitness and Sports. Answer only questions related to athletic topics like training, nutrition, motivation, and health. If the question is not athletic, politely respond that you only answer athletic questions. You can respond in English or German, but primarily in English. Answer concisely and informatively and shortly."}
+    ]
+    for item in history:
+        role = "user" if item.get("isUser") else "assistant"
+        messages.append({"role": role, "content": item.get("message")})
     response = client.chat.completions.create(
         model="gpt-4o",
-        messages=[
-            {"role": "system", "content": "You are an AI Coach for Fitness and Sports. Answer only questions related to athletic topics like training, nutrition, motivation, and health. If the question is not athletic, politely respond that you only answer athletic questions. You can respond in English or German, but primarily in English. Answer concisely and informatively and shortly."},
-            {"role": "user", "content": prompt}
-        ]
+        messages=messages
     )
     answer = response.choices[0].message.content
     return jsonify({"answer": answer}), 200
