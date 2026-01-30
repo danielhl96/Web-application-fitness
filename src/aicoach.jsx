@@ -52,8 +52,8 @@ function AiCoach() {
           if (meals.length > 0) {
             hasMeals = true;
             meals.forEach((meal) => {
-              allMealsMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fat}g fat). Analyze accordingly. `;
-              aiMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fat}g fat). Analyze accordingly. `;
+              allMealsMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fats}g fat). Analyze accordingly. `;
+              aiMessage += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fats}g fat). Analyze accordingly. `;
             });
           }
         });
