@@ -60,7 +60,7 @@ function AiCoach() {
   function fetchLastMeal() {
     const date = new Date().toISOString().split('T')[0];
     //All meal types to fetch
-    const mealTypes = ['breakfast', 'launch', 'dinner', 'snacks'];
+    const mealTypes = ['breakfast', 'launch', 'dinner', 'snack'];
     const promises = mealTypes.map((type) =>
       api
         .get(`/get_meal_${type}`, { params: { date } })
