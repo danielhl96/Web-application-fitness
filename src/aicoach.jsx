@@ -166,7 +166,7 @@ function AiCoach() {
           <div className="divider divider-primary"></div>
           <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto overflow-y-hidden">
             <select
-              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              className="select text-xs select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
               style={{
                 background: 'rgba(30, 41, 59, 0.25)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
