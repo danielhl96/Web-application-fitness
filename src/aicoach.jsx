@@ -24,9 +24,7 @@ function AiCoach() {
 
   useEffect(() => {
     const ref = refs.current[chatHistory.length - 1];
-    console.log('Scrolling to ref:', ref);
     if (ref) {
-      console.log('Ref found, scrolling into view.');
       ref.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     }
   }, [chatHistory]);
@@ -53,7 +51,7 @@ function AiCoach() {
       const workoutsData = response.data;
       console.log('Fetched workouts:', workoutsData);
       const newWorkouts = workoutsData.map((workout) => ({
-        workouts: workout.templates,
+        workouts: workout.exercises,
         name: workout.name,
       }));
       setWorkouts(newWorkouts);
@@ -182,7 +180,7 @@ function AiCoach() {
                   const workoutMessage = `I have the following workout plan: ${selectedWorkout.name} with exercises: ${selectedWorkout.workouts
                     .map(
                       (ex) =>
-                        `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps}
+                        `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps}, Weight: ${ex.weights}kg
                         `
                     )
                     .join('; ')}. Please consider this information to analyse.`;
@@ -193,7 +191,7 @@ function AiCoach() {
               }}
             >
               <option disabled selected>
-                Analyse Workout Plan
+                Analyse Workouts
               </option>
               {workouts.map((workout, index) => (
                 <option key={index} value={workout.name}>
