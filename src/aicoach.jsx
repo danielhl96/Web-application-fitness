@@ -1,20 +1,39 @@
 import TemplatePage from './templatepage';
 import Button from './button';
 import Input from './input';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, use } from 'react';
 import Header from './Header.jsx';
 import api from './api.js';
 import TemplateModal from './templatemodal';
 function AiCoach() {
   const [question, setQuestion] = useState('');
+  const refs = useRef({});
+  const [workouts, setWorkouts] = useState([]);
   const [chatHistory, setChatHistory] = useState([
-    { message: 'Hi, im your fitness coach! How can I assist you today?', isUser: false },
+    {
+      message: 'Hi, im your fitness coach! How can I assist you today?',
+      isUser: false,
+      refs: null,
+    },
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleMessage(message, isUser) {
-    setChatHistory((prev) => [...prev, { message, isUser }]);
+    setChatHistory((prev) => [...prev, { message, isUser, refs: null }]);
   }
+
+  useEffect(() => {
+    const ref = refs.current[chatHistory.length - 1];
+    console.log('Scrolling to ref:', ref);
+    if (ref) {
+      console.log('Ref found, scrolling into view.');
+      ref.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [chatHistory]);
+
+  useEffect(() => {
+    fetchWorkouts();
+  }, []);
 
   function fetchUserProfile() {
     api.get('/get_profile').then((response) => {
@@ -26,6 +45,18 @@ function AiCoach() {
       handleOpenAIResponse(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm and Fitness goal: ${profile.goal == 3 ? 'Bulk' : profile.goal == 2 ? 'Maintain weight' : profile.goal == 1 ? 'Loss weight' : ''}. Please consider this information to analyse.`
       );
+    });
+  }
+
+  function fetchWorkouts() {
+    api.get('/get_workout_plans').then((response) => {
+      const workoutsData = response.data;
+      console.log('Fetched workouts:', workoutsData);
+      const newWorkouts = workoutsData.map((workout) => ({
+        workouts: workout.templates,
+        name: workout.name,
+      }));
+      setWorkouts(newWorkouts);
     });
   }
 
@@ -107,9 +138,9 @@ function AiCoach() {
       });
   }
 
-  function createBubble(message, isUser, index) {
+  function createBubble(message, isUser, index, ref) {
     return (
-      <div className={`chat ${isUser ? 'chat-end' : 'chat-start'}`} key={index}>
+      <div className={`chat ${isUser ? 'chat-end' : 'chat-start'}`} key={index} ref={ref}>
         <div
           className={`chat-bubble ${isUser ? 'chat-bubble-primary' : 'chat-bubble-secondary'} break-words`}
         >
@@ -127,17 +158,56 @@ function AiCoach() {
         <div className="flex flex-col h-full">
           <div className="divider divider-primary">AI-Coaching</div>
           <div className="flex-grow overflow-y-auto h-[40dvh]">
-            {chatHistory.map(({ message, isUser }, index) => createBubble(message, isUser, index))}
+            {chatHistory.map(({ message, isUser }, index) =>
+              createBubble(message, isUser, index, (el) => {
+                refs.current[index] = el;
+              })
+            )}
             {isLoading && openModal()}
           </div>
           <div className="divider divider-primary"></div>
           <div className="flex flex-row justify-center mb-4 gap-1 text-xs overflow-x-auto overflow-y-hidden">
+            <select
+              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onChange={(e) => {
+                const selectedWorkout = workouts.find((w) => w.name === e.target.value);
+                if (selectedWorkout) {
+                  const workoutMessage = `I have the following workout plan: ${selectedWorkout.name} with exercises: ${selectedWorkout.workouts
+                    .map(
+                      (ex) =>
+                        `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps}
+                        `
+                    )
+                    .join('; ')}. Please consider this information to analyse.`;
+                  handleMessage(workoutMessage, true);
+                  handleOpenAIResponse(workoutMessage);
+                  setIsLoading(true);
+                }
+              }}
+            >
+              <option disabled selected>
+                Analyse Workout Plan
+              </option>
+              {workouts.map((workout, index) => (
+                <option key={index} value={workout.name}>
+                  {workout.name}
+                </option>
+              ))}
+            </select>
             <Button
               border="#3b82f6"
               onClick={() => {
                 fetchLastMeal();
                 setQuestion('');
                 setIsLoading(true);
+                console.log(workouts);
               }}
               w="w-35"
             >
