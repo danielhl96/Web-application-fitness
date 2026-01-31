@@ -153,20 +153,6 @@ function Header() {
             </Link>
 
             <Link
-              to="/credentials"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./credentials.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-              Credentials
-            </Link>
-
-            <Link
               to="/counter"
               className="btn btn-ghost text-white md:ml-4"
               onClick={() => setMenuOpen(false)}
@@ -200,11 +186,22 @@ function Header() {
               </figure>
               Statistic
             </Link>
+
+            <Link
+              to="/credentials"
+              className="btn btn-ghost text-white md:ml-4"
+              onClick={() => setMenuOpen(false)}
+            >
+              <figure className="w-5 h-5 mb-2">
+                <img
+                  src={'./credentials.png'}
+                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                />
+              </figure>
+              Credentials
+            </Link>
             <button className="btn btn-ghost text-white md:ml-4" onClick={() => handlelogout()}>
               <svg
-                icon
-                für
-                logout
                 className="h-6 w-6 mr-1"
                 fill="none"
                 stroke="currentColor"

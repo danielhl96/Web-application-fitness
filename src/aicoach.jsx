@@ -49,7 +49,6 @@ function AiCoach() {
   function fetchWorkouts() {
     api.get('/get_workout_plans').then((response) => {
       const workoutsData = response.data;
-      console.log('Fetched workouts:', workoutsData);
       const newWorkouts = workoutsData.map((workout) => ({
         workouts: workout.exercises,
         name: workout.name,
@@ -60,6 +59,7 @@ function AiCoach() {
 
   function fetchLastMeal() {
     const date = new Date().toISOString().split('T')[0];
+    //All meal types to fetch
     const mealTypes = ['breakfast', 'launch', 'dinner', 'snacks'];
     const promises = mealTypes.map((type) =>
       api
@@ -74,6 +74,7 @@ function AiCoach() {
         })
     );
 
+    //Wait for all meal fetches to complete
     Promise.all(promises)
       .then((results) => {
         let allMealsMessage = 'My meals today: ';
@@ -99,7 +100,6 @@ function AiCoach() {
         handleOpenAIResponse(aiMessage);
       })
       .catch((error) => {
-        console.error('Error fetching meals:', error);
         handleMessage('Sorry, there was an error fetching your meals.', false);
         setIsLoading(false);
       });
@@ -130,7 +130,6 @@ function AiCoach() {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching AI response:', error);
         handleMessage('Sorry, there was an error processing your request.', false);
         setIsLoading(false);
       });
@@ -205,7 +204,6 @@ function AiCoach() {
                 fetchLastMeal();
                 setQuestion('');
                 setIsLoading(true);
-                console.log(workouts);
               }}
               w="w-35"
             >

@@ -355,7 +355,6 @@ const EditTrain = () => {
       });
   };
 
-  //Nur im Frontend
   const handleAddExercise = (elem) => {
     console.log(selectedExercise[savekey]);
     if (exercise.some((ex) => ex.name == elem)) {

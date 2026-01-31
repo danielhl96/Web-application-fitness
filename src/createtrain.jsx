@@ -37,13 +37,12 @@ function CreateTraining() {
           message: 'Your training has been saved successfully!',
           type: 'success',
         });
-        console.log('Training saved:', response.data);
+
         setWorkoutName('');
         setWorkoutNameSet(false);
         setSelectedExercise([]);
       })
       .catch((error) => {
-        console.error('Error saving training:', error);
         setMessage('Error saving training.');
         setNotification({
           title: 'Error',
@@ -63,7 +62,6 @@ function CreateTraining() {
   const [Message, setMessage] = useState('');
 
   function changePosition(element, direction) {
-    console.log(element, direction);
     const index = selectedExercise.findIndex((ex) => ex.name === element.name);
     if (direction === 'up' && index > 0) {
       const newExercises = [...selectedExercise];
@@ -84,7 +82,7 @@ function CreateTraining() {
 
   function handleExerciseChange(e) {
     const selectedName = e;
-    console.log(selectedName);
+
     const found = exercise.find((item) => item.name === selectedName);
     if (found) {
       // Add the found exercise to the selectedExercise state
@@ -109,7 +107,7 @@ function CreateTraining() {
     }
     if (found) {
       // Update the sets and reps for the found exercise
-      console.log('Found exercise:', found);
+
       const updatedExercise = {
         ...found,
         sets: 1,
@@ -120,7 +118,7 @@ function CreateTraining() {
       };
       setSelectedExercise((prev) => prev.map((item) => (item.name === e ? updatedExercise : item)));
     }
-    console.log(selectedExercise);
+
     document.getElementById('input-e').value = '';
     setaddExercise('');
   }
@@ -134,7 +132,6 @@ function CreateTraining() {
     });
   };
 
-  // 1. Funktion in CreateTrainGUI definieren
   const handleRepsChange = (exerciseName, reps) => {
     setSelectedExercise((prev) =>
       prev.map((item) =>
@@ -143,7 +140,6 @@ function CreateTraining() {
           : item
       )
     );
-    console.log(selectedExercise);
   };
   const handleSetsChange = (exerciseName, sets) => {
     setSelectedExercise((prev) =>
