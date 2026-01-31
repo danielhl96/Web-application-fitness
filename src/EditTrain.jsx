@@ -449,6 +449,7 @@ const EditTrain = () => {
               selectedExercise[savekey].map((ex, index) => (
                 <ExerciseCard
                   key={ex.exercise + '-' + index}
+                  ismaximized={index === selectedExercise[savekey].length - 1 ? true : false}
                   ExerciseName={ex.exercise}
                   Description={exercise.find((item) => item.name === ex.exercise)?.description}
                   ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}

@@ -243,7 +243,6 @@ function CreateTraining() {
                   id="input-e"
                 />
               </div>
-             
             </div>
           )}
           <div
@@ -300,6 +299,7 @@ function CreateTraining() {
                 {selectedExercise.length > 0 ? (
                   selectedExercise.map((exercise, index) => (
                     <ExerciseCard
+                      ismaximized={true}
                       ExerciseName={exercise.name}
                       Description={exercise.description}
                       ExerciseImage={exercise.img}

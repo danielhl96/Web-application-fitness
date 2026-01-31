@@ -12,9 +12,10 @@ function ExerciseCard({
   changePosition,
   reps,
   sets,
+  ismaximized,
 }) {
   const [selectedSets, setSelectedSets] = useState(sets || null);
-  const [maximized, setMaximized] = useState(false);
+  const [maximized, setMaximized] = useState(ismaximized || false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedReps, setSelectedReps] = useState(
     reps ? (Array.isArray(reps) ? reps[0] : reps) : null
