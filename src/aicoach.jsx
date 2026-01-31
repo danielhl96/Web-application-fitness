@@ -140,7 +140,7 @@ function AiCoach() {
     return (
       <div className={`chat ${isUser ? 'chat-end' : 'chat-start'}`} key={index} ref={ref}>
         <div
-          className={`chat-bubble ${isUser ? 'chat-bubble-primary' : 'chat-bubble-secondary'} break-words`}
+          className={`chat-bubble ${isUser ? 'chat-bubble-primary' : 'chat-bubble-secondary'} break-words text-sm`}
         >
           {isUser ? 'User: ' : 'Coach: '}
           {message}
