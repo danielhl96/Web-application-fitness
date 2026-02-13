@@ -221,6 +221,8 @@ def login_user():
     email = request.args.get("email").lower()
     password = request.args.get("password")
     user = session.query(User).filter_by(email=email).first()
+    if user.locked:
+        return jsonify({"message": "Account is locked. Please try again later."}), 403
     if user and argon2.verify(user.password, password):
         token = create_token(user.id, 15)
         resp = jsonify({"message": "Login successful!"})
