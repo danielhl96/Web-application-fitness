@@ -133,6 +133,7 @@ class User(Base):
     goal = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     bmi = sqlalchemy.Column(sqlalchemy.Float, nullable=True)
     calories = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    locked = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
 
 class Exercise(Base):
     __tablename__ = 'exercises'
