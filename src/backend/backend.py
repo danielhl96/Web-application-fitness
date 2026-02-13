@@ -1045,6 +1045,10 @@ def check_auth():
         return jsonify({"message": "Missing token cookie!"}), 401
 
     verification = verify_token(token)
+    user_id = verification.get("sub")
+    user = session.query(User).filter_by(id=user_id).first()
+    if user and user.locked:
+        return jsonify({"message": "Account is locked. Please try again later."}), 401
     if verification.get("error"):
         return jsonify({"message": verification["error"]}), 401
 
@@ -1073,6 +1077,10 @@ def refresh_token():
         return jsonify({"message": "Token has been revoked"}), 401
 
     user_id = payload.get("sub")
+    user = session.query(User).filter_by(id=user_id).first()
+    if user and user.locked:
+        return jsonify({"message": "Account is locked. Please try again later."}), 401
+
     new_token = create_token(user_id, 120)
     resp = jsonify({"message": "Token refreshed"})
     resp.set_cookie(
