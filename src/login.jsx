@@ -36,7 +36,7 @@ function LoginForm() {
       navigate('/');
     } catch (error) {
       console.error(error);
-      setMessage('Login failed. Please check your credentials.');
+      setMessage(error.response?.data?.message || 'An error occurred during login.');
     }
   }
 
