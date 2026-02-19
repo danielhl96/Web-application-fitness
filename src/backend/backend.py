@@ -217,11 +217,14 @@ def register_user():
 
 @app.route('/api/login', methods=['GET'])
 def login_user():
+    print("Login attempt with args:", request.args)
     if( not request.args.get("email") or not request.args.get("password")):
         return jsonify({"message": "Email and password are required!"}), 400
     email = request.args.get("email").lower()
     password = request.args.get("password")
+    print("Looking for user with email:", email)
     user = session.query(User).filter_by(email=email).first()
+    print("User found:", user.email if user else "No user")
     if user.locked:
         return jsonify({"message": "Account is locked. Please try again later."}), 403
     if user and argon2.verify(user.password, password):
@@ -482,8 +485,11 @@ def check_safety_code():
         stored_code = redis_client.get(f"safety_code:{email.lower()}")
         if stored_code and stored_code.decode("utf-8") == safety_code:
             # Prüfe, ob das neue Passwort dem alten entspricht
-            if argon2.verify(user.password, new_password):
-                return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+            try:
+                if argon2.verify(user.password, new_password):
+                    return jsonify({"message": "New password cannot be the same as the old password!"}), 400
+            except VerifyMismatchError:
+                pass  # Wenn alter Hash ungültig, erlaube Reset
             # Setze das neue Passwort
             user.password = hash_password(new_password)
             session.commit()
