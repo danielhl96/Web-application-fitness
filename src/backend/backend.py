@@ -419,12 +419,12 @@ def delete_account():
     if not user:
         return jsonify({"message": "User not found!"}), 404
     session.query(Exercise).filter_by(user_id=user_id).delete(synchronize_session=False)
+    session.query(HistoryBodyMetrics).filter_by(user_id=user_id).delete(synchronize_session=False)
+    session.query(Meal).filter_by(user_id=user_id).delete(synchronize_session=False)
     session.query(PlanExerciseTemplate).filter(PlanExerciseTemplate.workout_plan_id.in_(
         session.query(WorkoutPlan.id).filter_by(user_id=user_id)
     )).delete(synchronize_session=False)
     session.query(WorkoutPlan).filter_by(user_id=user_id).delete(synchronize_session=False)
-
-
     session.delete(user)
     session.commit()
     return jsonify({"message": "Account deleted successfully!"})
