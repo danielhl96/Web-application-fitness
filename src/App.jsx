@@ -1,25 +1,23 @@
 import './index.css';
 import { Routes, Route, Link } from 'react-router-dom';
-import LoginForm from './login.jsx';
-import Header from './Header';
-import CreateTraining from './createtrain.jsx';
-import EditTrain from './EditTrain.jsx';
-import StartTraining from './training.jsx';
-import Profile from './profile.jsx';
-import RegisterPage from './register.jsx';
-import PasswordForget from './passwordforget.jsx';
-import Counter from './counter.jsx';
-import ProtectedRoute from './ProtectedRoute';
-import PrivacyPolicy from './privacypolicy.jsx';
-import Impressum from './imprint.jsx';
-import AttributionPage from './attributionpage.jsx';
-import { useNavigate } from 'react-router-dom';
-import { AuthProvider } from './AuthProvider.jsx';
-import Statistic from './statistic.jsx';
-import CredentialsPage from './credentials.jsx';
-import Nutrition from './nutrition.jsx';
-import Home from './home.jsx';
-import AiCoach from './aicoach.jsx';
+import LoginForm from './Pages/login.jsx';
+import CreateTraining from './Pages/createtrain.jsx';
+import EditTrain from './Pages/EditTrain.jsx';
+import StartTraining from './Pages/training.jsx';
+import Profile from './Pages/profile.jsx';
+import RegisterPage from './Pages/register.jsx';
+import PasswordForget from './Pages/passwordforget.jsx';
+import Counter from './Pages/counter.jsx';
+import ProtectedRoute from './Auth/ProtectedRoute.jsx';
+import PrivacyPolicy from './Pages/privacypolicy.jsx';
+import Impressum from './Pages/imprint.jsx';
+import AttributionPage from './Pages/attributionpage.jsx';
+import { AuthProvider } from './Auth/AuthProvider.jsx';
+import Statistic from './Pages/statistic.jsx';
+import CredentialsPage from './Pages/credentials.jsx';
+import Nutrition from './Pages/nutrition.jsx';
+import Home from './Pages/home.jsx';
+import AiCoach from './Pages/aicoach.jsx';
 
 //Routes with ProtectedRoute to protect routes for the application
 function App() {

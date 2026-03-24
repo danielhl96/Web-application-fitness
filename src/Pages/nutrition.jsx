@@ -1,0 +1,863 @@
+import TemplatePage from '../Components/templatepage';
+import api from '../Utils/api.js';
+import Input from '../Components/input.jsx';
+import ApexCharts from 'apexcharts';
+import Notify from './notify.jsx';
+import Button from '../Components/button.jsx';
+import TemplateModal from '../Components/templatemodal.jsx';
+
+import { useState, useRef, useEffect, use } from 'react';
+import Header from '../Components/Header.jsx';
+
+function Nutrition() {
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [showModal, setShowModal] = useState(false);
+  const [showMeal, setShowMeal] = useState(false);
+  const [showFileUpload, setShowFileUpload] = useState(false);
+  const [meal, setMeal] = useState(null);
+  const [dinnerMeals, setDinnerMeals] = useState([]);
+  const [launchMeals, setLaunchMeals] = useState([]);
+  const [breakfastMeals, setBreakfastMeals] = useState([]);
+  const [snackMeals, setSnackMeals] = useState([]);
+  const [prompt, setPrompt] = useState('');
+  const fileInputRef = useRef(null);
+  const [calorie_factor, setCalorie_factor] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [mealtype, setMealtype] = useState('');
+  const [calories, setCalories] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [showEditMeal, setShowEditMeal] = useState(false);
+  const [notify, setNotify] = useState(null);
+
+  function MacroPieChart({ protein, carbs, fats }) {
+    const chartRef = useRef(null);
+
+    useEffect(() => {
+      const options = {
+        chart: {
+          type: 'pie',
+          background: 'transparent',
+          width: 110,
+        },
+        labels: ['P', 'C', 'F'],
+        series: [protein, carbs, fats],
+        colors: ['#3b82f6', '#f59e42', '#f87171'],
+
+        dataLabels: { enabled: true, style: { colors: ['#fff'], fontSize: '7px' } },
+        legend: { show: false, width: 0, position: 'bottom', labels: { colors: '#fff' } },
+      };
+
+      const chart = new ApexCharts(chartRef.current, options);
+      chart.render();
+
+      return () => {
+        chart.destroy();
+      };
+    }, [protein, carbs, fats]);
+
+    return <div ref={chartRef} />;
+  }
+
+  useEffect(() => {
+    get_profile();
+    getdinnerMeals();
+    getlaunchMeals();
+    getbreakfastMeals();
+    getsnackMeals();
+  }, [selectedDay, month, year]);
+
+  function get_profile() {
+    api.get('/get_profile').then((response) => {
+      setCalories(response.data.calories);
+      setWeight(response.data.weight);
+    });
+  }
+
+  function deleteMeal(mealId) {
+    api
+      .delete('/delete_meal', {
+        data: {
+          meal_id: mealId,
+        },
+      })
+      .then(() => {
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+        setNotify({ title: 'Delete Meal', type: 'success', message: 'Meal deleted successfully!' });
+        setShowEditMeal(false);
+      })
+      .catch((error) => {
+        console.error('Error deleting meal:', error);
+        setNotify({ title: 'Delete Meal', type: 'error', message: 'Failed to delete meal.' });
+      });
+  }
+
+  function calculateProteinsGoal() {
+    return weight * (2.0).toFixed(0);
+  }
+  function calculateFatsGoal() {
+    return weight * (1.0).toFixed(0);
+  }
+  function calculateCarbsGoal() {
+    return ((calories - (weight * 2.0 * 4 + weight * 1.0 * 9)) / 4).toFixed(0);
+  }
+
+  function getdinnerMeals() {
+    api
+      .get('/get_meal_dinner', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setDinnerMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getlaunchMeals() {
+    api
+      .get('/get_meal_launch', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setLaunchMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getbreakfastMeals() {
+    api
+      .get('/get_meal_breakfast', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setBreakfastMeals(response.data);
+        console.log(response.data);
+      });
+  }
+  function getsnackMeals() {
+    api
+      .get('/get_meal_snack', {
+        params: {
+          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+            .toString()
+            .padStart(2, '0')}`,
+        },
+      })
+      .then((response) => {
+        setSnackMeals(response.data);
+        console.log(response.data);
+      });
+  }
+
+  function calculateCalories() {
+    let total = 0;
+    dinnerMeals.forEach((meal) => {
+      total += meal.calories;
+    });
+    launchMeals.forEach((meal) => {
+      total += meal.calories;
+    });
+    breakfastMeals.forEach((meal) => {
+      total += meal.calories;
+    });
+    snackMeals.forEach((meal) => {
+      total += meal.calories;
+    });
+    return total;
+  }
+
+  function calculateProteins() {
+    let total = 0;
+    dinnerMeals.forEach((meal) => {
+      total += meal.protein;
+    });
+    launchMeals.forEach((meal) => {
+      total += meal.protein;
+    });
+    breakfastMeals.forEach((meal) => {
+      total += meal.protein;
+    });
+    snackMeals.forEach((meal) => {
+      total += meal.protein;
+    });
+    return total;
+  }
+  function calculateCarbs() {
+    let total = 0;
+    dinnerMeals.forEach((meal) => {
+      total += meal.carbs;
+    });
+    launchMeals.forEach((meal) => {
+      total += meal.carbs;
+    });
+    breakfastMeals.forEach((meal) => {
+      total += meal.carbs;
+    });
+    snackMeals.forEach((meal) => {
+      total += meal.carbs;
+    });
+    return total;
+  }
+  function calculateFats() {
+    let total = 0;
+    dinnerMeals.forEach((meal) => {
+      total += meal.fats;
+    });
+    launchMeals.forEach((meal) => {
+      total += meal.fats;
+    });
+    breakfastMeals.forEach((meal) => {
+      total += meal.fats;
+    });
+    snackMeals.forEach((meal) => {
+      total += meal.fats;
+    });
+    return total;
+  }
+
+  function handleMeal(mealtype, image) {
+    console.log('Handling meal:', mealtype, image, prompt);
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('meal_type', mealtype);
+    formData.append('image', image);
+    if (prompt) formData.append('prompt', prompt);
+    console.log(formData);
+    api
+      .post('/calculate_meal', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((response) => {
+        console.log('Meal created:', response.data);
+        setMeal(response.data);
+        setShowFileUpload(false);
+        setShowMeal(true);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error creating meal:', error);
+        setShowFileUpload(false);
+        setLoading(false);
+      });
+  }
+
+  function handleMealSave() {
+    console.log('Saving meal:', meal);
+    api
+      .post('/create_meal', {
+        name: meal.name,
+        calories: meal.calories * (1 + calorie_factor / 100),
+        protein: meal.protein * (1 + calorie_factor / 100),
+        carbs: meal.carbs * (1 + calorie_factor / 100),
+        fats: meal.fats * (1 + calorie_factor / 100),
+        mealtype: mealtype,
+        date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
+          .toString()
+          .padStart(2, '0')}`,
+      })
+      .then(() => {
+        setNotify({ title: 'Add Meal', type: 'success', message: 'Meal added successfully!' });
+        setShowMeal(false);
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+        setCalorie_factor(0);
+      })
+      .catch((error) => {
+        console.error('Error saving meal:', error);
+      });
+  }
+
+  function handleEditMealSave() {
+    api
+      .put('/edit_meal', {
+        meal_id: meal.id,
+        name: meal.name,
+        calories: meal.calories * (1 + calorie_factor / 100),
+        protein: meal.protein * (1 + calorie_factor / 100),
+        carbs: meal.carbs * (1 + calorie_factor / 100),
+        fats: meal.fats * (1 + calorie_factor / 100),
+      })
+      .then((message) => {
+        console.log('Meal edited successfully:', message);
+        setNotify({ title: 'Edit Meal', type: 'success', message: 'Meal edited successfully!' });
+        getdinnerMeals();
+        getlaunchMeals();
+        getbreakfastMeals();
+        getsnackMeals();
+        setShowEditMeal(false);
+        setCalorie_factor(0);
+      })
+      .catch((error) => {
+        console.error('Error editing meal:', error);
+      });
+  }
+
+  function modalMeal() {
+    return (
+      <div>
+        <TemplateModal>
+          <h3 className="font-bold text-lg text-white mb-4">
+            Add {mealtype.charAt(0).toUpperCase() + mealtype.slice(1)}
+          </h3>
+          <div className="flex flex-col space-y-4">
+            <p>{meal.name}</p>
+
+            <input
+              type="range"
+              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              min={-50}
+              max={50}
+              value={calorie_factor}
+              className="range range-xs"
+              style={{ label: 'Calorie Factor' }}
+            />
+            <div className="text-xs text-amber-400  text-center">
+              Calorie Factor: {calorie_factor}
+            </div>
+
+            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
+
+            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <div className="flex flex-row space-x-2 justify-center">
+              <Button
+                border="#3b82f6"
+                onClick={() => {
+                  setShowMeal(false);
+                  handleMealSave();
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </Button>
+              <Button border="#3b82f6" onClick={() => setShowMeal(false)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
+  function handleFileUpload() {
+    return (
+      <div>
+        <TemplateModal>
+          <h3 className="font-bold text-lg text-white mb-4">Nutrition Estimation</h3>
+          <input
+            type="file"
+            accept=".jpeg, .jpg, .png"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={(event) => {
+              const file = event.target.files[0];
+              console.log(file);
+              handleMeal(mealtype, file);
+            }}
+          />
+
+          <div className="flex flex-row justify-center space-x-2 mb-4">
+            {loading ? (
+              <span className="loading loading-bars loading-xl"></span>
+            ) : (
+              <div className="flex flex-row items-center space-x-2">
+                <Input
+                  placeholder="Enter an optional description"
+                  onChange={(e) => setPrompt(e.target.value)}
+                  w={'w-62'}
+                ></Input>
+                <Button
+                  border="#3b82f6"
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                >
+                  <figure className="w-5 h-5 mb-2">
+                    <img
+                      src={'./cam.png'}
+                      className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                    />
+                  </figure>
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className="modal-action items-start justify-start">
+            <Button border="#ef4444" onClick={() => setShowFileUpload(false)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </Button>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
+  const daysInMonth = (month, year) => {
+    if (month === 2) {
+      // Leap year check
+      return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28;
+    }
+    return [4, 6, 9, 11].includes(month) ? 30 : 31;
+  };
+
+  function modalDate() {
+    return (
+      <div>
+        <TemplateModal>
+          <div className="flex flex-col space-y-4">
+            <select
+              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(parseInt(e.target.value))}
+            >
+              {Array.from({ length: daysInMonth(month, year) }).map((_, index) => (
+                <option key={index} value={index + 1}>
+                  {index + 1}
+                </option>
+              ))}
+            </select>
+
+            <select
+              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              value={month}
+              onChange={(e) => setMonth(parseInt(e.target.value))}
+            >
+              {Array.from({ length: 12 }).map((_, index) => (
+                <option key={index} value={index + 1}>
+                  {new Date(0, index).toLocaleString('default', { month: 'long' })}
+                </option>
+              ))}
+            </select>
+            <select
+              className="select select-primary w-auto max-w-xs shadow-lg border border-blue-400 text-white rounded-xl focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid #3b82f6',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              value={year}
+              onChange={(e) => setYear(parseInt(e.target.value))}
+            >
+              {Array.from({ length: 100 }).map((_, index) => (
+                <option key={index} value={2026 - index}>
+                  {2026 - index}
+                </option>
+              ))}
+            </select>
+
+            <Button border="#3b82f6" onClick={() => setShowModal(false)}>
+              OK
+            </Button>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
+  function editMeal() {
+    return (
+      <div>
+        <TemplateModal>
+          <h3 className="font-bold text-lg text-white mb-4">Edit Meal</h3>
+          <div className="flex flex-col space-y-4">
+            <p>{meal.name}</p>
+
+            <input
+              type="range"
+              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              min={-50}
+              max={50}
+              value={calorie_factor}
+              className="range range-xs"
+              style={{ label: 'Calorie Factor' }}
+            />
+            <div className="text-xs text-amber-400  text-center">
+              Calorie Factor: {calorie_factor}
+            </div>
+
+            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
+
+            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <div className="flex flex-row space-x-2 justify-center">
+              <Button
+                border="#3b82f6"
+                onClick={() => {
+                  handleEditMealSave();
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </Button>
+              <Button border="#ef4444" onClick={() => setShowEditMeal(false)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
+  function mealSummary(mealname, meals) {
+    return (
+      <div className="mb-4">
+        <div
+          className="card w-full  sm:w-80 lg:w-80 h-[20dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+          style={{
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+          }}
+        >
+          <div className="card-body">
+            <h2 className="card-title text-blue-400 text-xs">{mealname}</h2>
+            <div className="flex flex-col items-center text-xs overflow-y-auto max-h-18">
+              <div className="flex flex-col items-center">
+                {meals.map((meal, index) => (
+                  <p key={index} className="flex flex-row space-x-0 items-center ">
+                    <div
+                      onClick={() => {
+                        setShowEditMeal(true);
+                        setMeal(meal);
+                      }}
+                      className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
+                    >
+                      <p className="mr-1">{meal.name}</p>
+                      <p className="mr-1">Cal: {meal.calories.toFixed(0)}kcal </p>
+                      <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
+                      <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
+                      <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
+
+                      <button
+                        onClick={() => {
+                          deleteMeal(meal.id);
+                        }}
+                        className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                        style={{
+                          background: 'rgba(30, 41, 59, 0.25)',
+                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                          border: '1.5px solid transparent',
+                          backdropFilter: 'blur(8px)',
+                          WebkitBackdropFilter: 'blur(8px)',
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                        }
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="flex justify-end ">
+              <button
+                onClick={() => {
+                  setShowFileUpload(true);
+                  setMealtype(mealname.toLowerCase());
+                }}
+                className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                style={{
+                  background: 'rgba(30, 41, 59, 0.25)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  border: '1.5px solid #3b82f6',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <Header />
+      <TemplatePage>
+        {showModal && modalDate()}
+        {showFileUpload && handleFileUpload()}
+        {showMeal && modalMeal(meal)}
+        {showEditMeal && editMeal()}
+        {notify && (
+          <Notify
+            title={notify.title}
+            message={notify.message}
+            duration={1500}
+            key={notify.message + notify.title + Date.now()}
+            type={notify.type}
+            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+            onClose={() => setNotify(null)}
+          />
+        )}
+        <div className="">
+          <h1 className="text-2xl font-bold text-white mb-4">Nutrition</h1>
+          <div className="divider divider-primary">
+            <button
+              className="btn btn-outline btn-primary mb-4 shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+              style={{
+                background: 'rgba(30, 41, 59, 0.25)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                border: '1.5px solid transparent',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              onClick={() => setShowModal(true)}
+            >
+              {`${selectedDay.toString().padStart(2, '0')}.${month
+                .toString()
+                .padStart(2, '0')}.${year}`}
+            </button>
+          </div>
+          <div className="overflow-y-auto flex grid lg:grid-cols-2 lg:gap-6 items-center lg:max-h-[65vh] max-h-[35vh]">
+            {mealSummary('Breakfast', breakfastMeals)}
+            {mealSummary('Launch', launchMeals)}
+            {mealSummary('Dinner', dinnerMeals)}
+            {mealSummary('Snacks', snackMeals)}
+          </div>
+          <div className="divider divider-primary"></div>
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-16">
+            <div
+              className="card w-36 sm:w-36 lg:w-72  h-[18dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+              }}
+            >
+              <div className="card-body">
+                <div className="flex flex-col">
+                  <div className="carousel rounded-box w-full">
+                    {calculateCalories() > 0 && (
+                      <div className="carousel-item w-full flex flex-col items-center">
+                        <h1 className="text-blue-400 text-xs text-left lg:text-lg mb-2">Summary</h1>
+
+                        <div
+                          className={`radial-progress text-xs items-center ${
+                            calories - calculateCalories() < 0 ? 'text-red-500' : ''
+                          } items-center justify-center`}
+                          style={
+                            {
+                              '--value': (calculateCalories() / calories) * 100,
+                              '--thickness': '4px',
+                            } /* as React.CSSProperties */
+                          }
+                          aria-valuenow={100}
+                          role="progressbar"
+                        >
+                          {calculateCalories()} kcal
+                        </div>
+                      </div>
+                    )}
+                    <div className="carousel-item w-full">
+                      <div className="text-xs ">
+                        <h1 className="text-blue-400 lg:text-md mb-2">Calories</h1>
+                        <p className="text-white">In: {calculateCalories()}kcal</p>
+
+                        <p className="text-white">Goal: {calories}kcal</p>
+
+                        <p
+                          className={`${calories - calculateCalories() < 0 ? 'text-red-500' : ''}`}
+                        >
+                          Open: {calories - calculateCalories()}kcal
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="card w-36 sm:w-36 lg:w-72 h-[18dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
+              style={{
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+              }}
+            >
+              <div className="card-body">
+                <div className="carousel rounded-box w-full">
+                  <div className="carousel-item w-full ">
+                    <div className="text-left text-xs">
+                      <h2 className="text-blue-400 lg:text-md mb-2">Open Macros</h2>
+                      <p
+                        className={` ${
+                          calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        P: {(calculateProteinsGoal() - calculateProteins()).toFixed(0)}g
+                      </p>
+                      <p
+                        className={` ${
+                          calculateCarbsGoal() - calculateCarbs() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        C: {(calculateCarbsGoal() - calculateCarbs()).toFixed(0)}g
+                      </p>
+                      <p
+                        className={` ${
+                          calculateFatsGoal() - calculateFats() < 0 ? 'text-red-500' : ''
+                        } `}
+                      >
+                        F: {(calculateFatsGoal() - calculateFats()).toFixed(0)}g
+                      </p>
+                    </div>
+                  </div>
+                  <div className="carousel-item w-full ">
+                    <div className="text-left text-xs lg:text-md">
+                      <h2 className="text-blue-400 lg:text-md mb-2">Goals</h2>
+                      <p className=" text-white">P: {calculateProteinsGoal()} g</p>
+                      <p className="text-white">C: {calculateCarbsGoal()} g</p>
+                      <p className="text-white">F: {calculateFatsGoal()} g</p>
+                    </div>
+                  </div>
+                  {calculateCalories() > 0 && (
+                    <div className="carousel-item w-full">
+                      <div className="text-left text-xs lg:text-md">
+                        <h2 className="text-blue-400 lg:text-md mb-2">Macros (kcal)</h2>
+                        <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
+                        <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
+                        <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {calculateCalories() > 0 && (
+                    <div className="carousel-item w-full  flex flex-col items-center">
+                      <h2 className="text-blue-400 lg:text-md mb-2">Macronutrients</h2>
+                      <MacroPieChart
+                        protein={calculateProteins()}
+                        carbs={calculateCarbs()}
+                        fats={calculateFats()}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </TemplatePage>
+    </div>
+  );
+}
+
+export default Nutrition;
