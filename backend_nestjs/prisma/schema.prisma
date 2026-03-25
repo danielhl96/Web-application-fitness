@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model exercises {
+  id              Int            @id @default(autoincrement())
+  user_id         Int
+  workout_plan_id Int?
+  date            DateTime       @db.Date
+  name            String         @db.VarChar
+  sets            Int
+  reps            Int[]
+  weights         Float[]
+  users           users          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workout_plans   workout_plans? @relation(fields: [workout_plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model history_body_metrics {
+  id      Int      @id @default(autoincrement())
+  user_id Int
+  date    DateTime @db.Date
+  weight  Float?
+  waist   Float?
+  hip     Float?
+  bfp     Float?
+  users   users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model meals {
+  id       Int      @id @default(autoincrement())
+  user_id  Int
+  name     String   @db.VarChar
+  date     DateTime @db.Date
+  calories Int?
+  protein  Float?
+  carbs    Float?
+  fats     Float?
+  mealtype String?  @db.VarChar
+  users    users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model plan_exercise_templates {
+  id               Int           @id @default(autoincrement())
+  workout_plan_id  Int
+  name             String        @db.VarChar
+  sets             Int
+  reps_template    Int[]
+  weights_template Float[]
+  date             DateTime      @db.Date
+  workout_plans    workout_plans @relation(fields: [workout_plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id                   Int                    @id @default(autoincrement())
+  email                String                 @unique @db.VarChar
+  password             String                 @db.VarChar
+  height               Float?
+  weight               Float?
+  age                  Int?
+  gender               String?                @db.VarChar
+  waist                Float?
+  hip                  Float?
+  bfp                  Float?
+  activity_level       String?                @db.VarChar
+  goal                 String?                @db.VarChar
+  bmi                  Float?
+  calories             Int?
+  locked               Boolean                @default(false)
+  exercises            exercises[]
+  history_body_metrics history_body_metrics[]
+  meals                meals[]
+  workout_plans        workout_plans[]
+}
+
+model workout_plans {
+  id                      Int                       @id @default(autoincrement())
+  user_id                 Int
+  name                    String                    @db.VarChar
+  exercises               exercises[]
+  plan_exercise_templates plan_exercise_templates[]
+  users                   users                     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

@@ -25,13 +25,11 @@ function LoginForm() {
 
   async function handleLogin() {
     try {
-      const response = await api.get('/login', {
-        params: {
-          email,
-          password,
-        },
+      const response = await api.post('/auth/login', {
+        email,
+        password,
       });
-      console.log(response[0]);
+      console.log(response.data);
 
       navigate('/');
     } catch (error) {
