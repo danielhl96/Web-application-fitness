@@ -215,13 +215,14 @@ def register_user():
     session.commit()
     return jsonify({"message": "User registered successfully!"}), 201
 
-@app.route('/api/login', methods=['GET'])
+@app.route('/api/auth/login', methods=['POST'])
 def login_user():
     print("Login attempt with args:", request.args)
-    if( not request.args.get("email") or not request.args.get("password")):
+    data = request.get_json()
+    if not data.get("email") or not data.get("password"):
         return jsonify({"message": "Email and password are required!"}), 400
-    email = request.args.get("email").lower()
-    password = request.args.get("password")
+    email = data.get("email").lower()
+    password = data.get("password")
     print("Looking for user with email:", email)
     user = session.query(User).filter_by(email=email).first()
     print("User found:", user.email if user else "No user")
