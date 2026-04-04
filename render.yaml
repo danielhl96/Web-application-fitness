@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: fitness-backend
+    runtime: node
+    rootDir: backend_nestjs
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: node dist/main
+    envVars:
+      - key: NODE_ENV
+        value: production
