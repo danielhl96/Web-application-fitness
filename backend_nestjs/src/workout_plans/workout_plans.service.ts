@@ -49,8 +49,8 @@ export class WorkoutPlansService {
       where: { user_id: userId },
       include: {
         exercises: {
-          select: { id: true, name: true, date: true, sets: true, reps: true, weights: true },
           orderBy: { date: 'desc' },
+          where: { user_id: userId },
         },
         plan_exercise_templates: {
           select: { id: true, name: true, sets: true, reps_template: true, weights_template: true },
@@ -60,14 +60,18 @@ export class WorkoutPlansService {
     });
 
     return plans.map((plan) => {
-      const latestDate = plan.exercises[0]?.date ?? null;
+      // For each exercise name, keep only the most recently logged entry
+      const latestByName = new Map<string, (typeof plan.exercises)[0]>();
+      for (const exercise of plan.exercises) {
+        const existing = latestByName.get(exercise.name);
+        if (!existing || exercise.date > existing.date) {
+          latestByName.set(exercise.name, exercise);
+        }
+      }
+
       return {
         ...plan,
-        exercises: latestDate
-          ? plan.exercises.filter(
-              (e) => e.date.toISOString().split('T')[0] === latestDate.toISOString().split('T')[0]
-            )
-          : [],
+        exercises: Array.from(latestByName.values()),
       };
     });
   }
@@ -107,10 +111,14 @@ export class WorkoutPlansService {
       throw new Error('Workout plan not found');
     }
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const exercise = await this.prisma.exercises.findFirst({
       where: {
         workout_plan_id: data.workout_plan_id,
-        date: new Date(),
+        name: data.name,
+        date: today,
       },
     });
 
@@ -118,11 +126,9 @@ export class WorkoutPlansService {
       await this.prisma.exercises.update({
         where: { id: exercise.id },
         data: {
-          name: data.name,
           sets: data.sets,
           reps: data.reps,
           weights: data.weights,
-          date: new Date(),
         },
       });
       return { message: 'Exercise updated successfully' };
@@ -136,7 +142,7 @@ export class WorkoutPlansService {
         weights: data.weights,
         workout_plan_id: data.workout_plan_id,
         user_id: userId,
-        date: new Date(),
+        date: today,
       },
     });
 
