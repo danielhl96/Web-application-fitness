@@ -12,6 +12,96 @@ import ApexCharts from 'apexcharts';
 import Button from '../Components/button.jsx';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
+function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, hip = 0 }) {
+  const male = gender !== 'female';
+  const torsoPath = male
+    ? 'M 26,36 C 24,52 36,68 36,80 C 31,88 31,97 31,104 L 69,104 C 69,97 69,88 64,80 C 64,68 76,52 74,36 Z'
+    : 'M 29,36 C 28,52 38,66 37,78 C 28,87 27,97 27,104 L 73,104 C 73,97 72,87 63,78 C 62,66 72,52 71,36 Z';
+  const color = bmi > 30 ? '#ef4444' : bmi > 25 ? '#f97316' : bmi < 18.5 ? '#facc15' : '#4ade80';
+
+  // Y-positions of measurement levels
+  const waistY = male ? 78 : 74;
+  const hipY = 104;
+
+  return (
+    <svg viewBox="0 0 160 200" className="w-44 h-60 drop-shadow-lg">
+      {/* ── Body (shifted right to visually center it between left edge and labels) ── */}
+      <g fill={color} transform="translate(30, 0)">
+        <ellipse cx="50" cy="12" rx="11" ry="12" />
+        <path d="M 44,24 L 56,24 L 57,34 L 43,34 Z" />
+        <path d="M 26,36 C 19,50 17,68 19,90 L 27,90 C 25,68 26,52 30,38 Z" />
+        <path d="M 74,36 C 81,50 83,68 81,90 L 73,90 C 75,68 74,52 70,38 Z" />
+        <path d={torsoPath} />
+        <path d="M 31,104 C 29,112 26,128 27,150 L 27,178 L 39,178 L 39,150 C 40,128 41,112 42,104 Z" />
+        <path d="M 69,104 C 71,112 74,128 73,150 L 73,178 L 61,178 L 61,150 C 60,128 59,112 58,104 Z" />
+      </g>
+
+      {/* ── Measurement markers (rendered on top of body) ── */}
+      <g stroke="rgba(255,255,255,0.85)" strokeWidth="0.7" fill="none">
+        {/* Height: vertical double-arrow on the right */}
+        {height > 0 && (
+          <g>
+            <line x1="121" y1="2" x2="121" y2="178" />
+            <line x1="118" y1="2" x2="124" y2="2" />
+            <path d="M 119,6 L 121,2 L 123,6" />
+            <line x1="118" y1="178" x2="124" y2="178" />
+            <path d="M 119,174 L 121,178 L 123,174" />
+            <text
+              x="121"
+              y="192"
+              fill="rgba(255,255,255,0.95)"
+              stroke="none"
+              fontSize="8"
+              fontWeight="bold"
+              textAnchor="middle"
+            >
+              {height} cm
+            </text>
+          </g>
+        )}
+
+        {/* Waist: dashed horizontal level line */}
+        {waist > 0 && (
+          <g strokeDasharray="2.5,1.5">
+            <line x1="47" y1={waistY} x2="119" y2={waistY} />
+            <text
+              x="123"
+              y={waistY + 2.5}
+              fill="rgba(255,255,255,0.95)"
+              stroke="none"
+              fontSize="8"
+              fontWeight="bold"
+              textAnchor="start"
+              strokeDasharray="0"
+            >
+              W {waist}cm
+            </text>
+          </g>
+        )}
+
+        {/* Hip: dashed horizontal level line */}
+        {hip > 0 && (
+          <g strokeDasharray="2.5,1.5">
+            <line x1="47" y1={hipY} x2="119" y2={hipY} />
+            <text
+              x="123"
+              y={hipY + 2.5}
+              fill="rgba(255,255,255,0.95)"
+              stroke="none"
+              fontSize="8"
+              fontWeight="bold"
+              textAnchor="start"
+              strokeDasharray="0"
+            >
+              H {hip}cm
+            </text>
+          </g>
+        )}
+      </g>
+    </svg>
+  );
+}
+
 function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
@@ -395,350 +485,6 @@ function Profile() {
     }
   }, [newEmail]);
 
-  const handleEmailModal = () => {
-    return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
-          style={{
-            background: 'rgba(10, 20, 40, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
-          <div className="flex flex-row justify-center items-center  text-xs"></div>
-          <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
-          <div className="flex flex-col space-y-2 mt-2">
-            <EmailInput
-              onChange={setNewEmail}
-              type="email"
-              value={newEmail}
-              placeholder="New email"
-            />
-
-            <PasswordInput
-              onChange={setPassword}
-              type="password"
-              value={password}
-              errorMessage={''}
-              placeholder="Current password"
-            />
-            <div className="divider divider-primary"></div>
-            <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
-                onClick={() => handleChangeEmail()}
-                disabled={!!errorEmailMessage || password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => setEmailModal(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            {errorEmailMessageAPI}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const handleModalforPassword = () => {
-    return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
-          style={{
-            background: 'rgba(10, 20, 40, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
-          <div className="flex flex-row justify-center items-center  text-xs"></div>
-          <h3 className="font-bold text-lg text-amber-50">Change your password</h3>
-          <div className="flex flex-col space-y-2 mt-2">
-            <PasswordInput
-              value={password}
-              type="password"
-              placeholder={'Password'}
-              onChange={setPassword}
-              onError={(error) => console.log('Password error:', error)}
-              errorMessage={
-                'Password must be at least 8 characters uppercase, lowercase, number, and special character.'
-              }
-            />
-            <PasswordInput
-              onChange={setNewPassword}
-              onBlur={() => setInputTouched(true)}
-              type="password"
-              placeholder="New password"
-              value={newPassword}
-              errorMessage={
-                'Password must be at least 8 characters uppercase, lowercase, number, and special character.'
-              }
-            />
-            {passwordError && inputTouched && (
-              <span className="text-red-500 text-xs">
-                Password must be at least 8 characters uppercase, lowercase, number, and special
-                character.
-              </span>
-            )}
-            <PasswordInput
-              onChange={setConfirmNewPassword}
-              type="password"
-              placeholder="Confirm new password"
-              value={confirmNewPassword}
-              errorMessage={'Passwords do not match.'}
-            />
-            {newPassword !== confirmNewPassword && (
-              <span className="text-red-500 text-xs">Passwords do not match.</span>
-            )}
-            <div className="divider divider-primary"></div>
-            <div className="flex flex-row space-x-2 items-center justify-center">
-              <button
-                onClick={() => handleChangePassword()}
-                disabled={passwordError || newPassword !== confirmNewPassword}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border:
-                    passwordError || newPassword !== confirmNewPassword
-                      ? '1.5px solid transparent'
-                      : '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => setModalPassword(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            {message}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const handleModalforAccountDelete = () => {
-    return (
-      <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
-        {notification && (
-          <Notify
-            title={notification.title}
-            message={notification.message}
-            duration={1500}
-            key={notification.message + notification.title + Date.now()}
-            type={notification.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotification(null)}
-          />
-        )}
-        <div
-          className="modal-box border border-blue-500 shadow-xl rounded-xl"
-          style={{
-            background: 'rgba(10, 20, 40, 0.75)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1.5px solid #3b82f6',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          }}
-        >
-          <h3 className="font-bold text-lg text-amber-50">Delete your account</h3>
-          <div className="flex flex-col justify-start  text-xs">
-            <PasswordInput
-              value={password}
-              errorMessage={''}
-              placeholder="Your password"
-              type="password"
-              onChange={setPassword}
-            />
-            <div className="flex flex-row justify-start space-x-2 space-y-2 mt-4">
-              <button
-                onClick={() => handleDeleteAccount()}
-                disabled={password.length === 0}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #3b82f6',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={() => setModalDeleteAccount(false)}
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-4 py-2 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2"
-                style={{
-                  background: 'rgba(30, 41, 59, 0.25)',
-                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                  border: '1.5px solid #f63b3bff',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246, 59, 59, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-              {messageDeleteAccount}
-            </div>
-            <div className="divider divider-primary"></div>
-            <p className="text-amber-50 mt-2 text-center text-xs">
-              Hint: This process will not be returnable. You will be logged out immediately.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   function cardForValues(children) {
     return (
       <div
@@ -827,22 +573,7 @@ function Profile() {
 
         {edit ? (
           <div className="space-y-2 flex flex-col items-center ">
-            <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </div>
+            <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
 
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col space-y-1  h-15">
@@ -1048,53 +779,22 @@ function Profile() {
         ) : (
           !showTrend && (
             <div className="flex flex-col justify-center items-center">
-              <div className="divider  text-amber-50 font-bold mb-2  divider-primary">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-12 h-12 text-amber-50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                {cardForValues(<h1>Weight: {weight.toFixed(1)} kg</h1>)}
-                {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
+              <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
 
-                {cardForValues(<h1>Age: {Math.round(age)} years</h1>)}
+              <HumanSilhouette gender={gender} bmi={bmi} height={height} waist={waist} hip={hip} />
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                {cardForValues(<h1>Age: {age} years</h1>)}
+
                 {cardForValues(
-                  <div className="flex flex-row space-x-2 items-center">
-                    <h1>Gender:</h1>
-                    {gender == 'male' ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M9 1a1 1 0 0 0 0 2h2.586L8.707 5.879a5 5 0 1 0 1.414 1.414L13 4.414V7a1 1 0 0 0 2 0V1H9zM6 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M8 0a5 5 0 0 0 0 10v1H6a.5.5 0 0 0 0 1h2v2a.5.5 0 0 0 1 0v-2h2a.5.5 0 0 0 0-1H9v-1a5 5 0 0 0 0-10zm0 1a4 4 0 1 1 0 8A4 4 0 0 1 8 1z" />
-                      </svg>
-                    )}
+                  <div className="flex flex-row items-center gap-2">
+                    <img
+                      src="/body-weight.png"
+                      alt="weight"
+                      className="w-5 h-5 object-contain invert"
+                    />
+                    <h1>{weight} kg</h1>
                   </div>
                 )}
-                {cardForValues(<h1>Hip: {Math.round(hip)} cm</h1>)}
-                {cardForValues(<h1>Waist: {Math.round(waist)} cm</h1>)}
 
                 {cardForValues(
                   <h1

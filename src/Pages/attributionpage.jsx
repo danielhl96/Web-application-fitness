@@ -145,6 +145,9 @@ function AttributionPage() {
             <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons">
               Chatbot icons created by LAFS - Flaticon
             </a>
+            <a href="https://www.flaticon.com/free-icons/bodyweight" title="bodyweight icons">
+              Bodyweight icons created by Dewi Sari - Flaticon
+            </a>
           </ul>
         </div>
       </TemplatePage>
