@@ -148,6 +148,15 @@ function AttributionPage() {
             <a href="https://www.flaticon.com/free-icons/bodyweight" title="bodyweight icons">
               Bodyweight icons created by Dewi Sari - Flaticon
             </a>
+            <a href="https://www.flaticon.com/free-icons/bmi" title="bmi icons">
+              Bmi icons created by imaginationlol - Flaticon
+            </a>
+            <a href="https://www.flaticon.com/free-icons/goal" title="goal icons">
+              Goal icons created by Freepik - Flaticon
+            </a>
+            <a href="https://www.flaticon.com/free-icons/calories" title="calories icons">
+              Calories icons created by Smashicons - Flaticon
+            </a>
           </ul>
         </div>
       </TemplatePage>

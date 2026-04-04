@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.jsx';
 import Notify from './notify.jsx';
-import PasswordInput from '../Components/passwordinput.jsx';
-import EmailInput from '../Components/emailinput.jsx';
 import Input from '../Components/input.jsx';
 import ApexCharts from 'apexcharts';
 import Button from '../Components/button.jsx';
@@ -24,7 +22,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
   const hipY = 104;
 
   return (
-    <svg viewBox="0 0 160 200" className="w-44 h-60 drop-shadow-lg">
+    <svg viewBox="0 0 160 200" className="w-44 h-50 drop-shadow-lg">
       {/* ── Body (shifted right to visually center it between left edge and labels) ── */}
       <g fill={color} transform="translate(30, 0)">
         <ellipse cx="50" cy="12" rx="11" ry="12" />
@@ -802,14 +800,17 @@ function Profile() {
                       color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
                     }}
                   >
-                    BMI: {Math.round(bmi)}{' '}
-                    {bmi > 30
-                      ? '(Adipoistas)'
-                      : bmi > 25
-                        ? '(Overweight)'
-                        : bmi < 20
-                          ? '(Underweight)'
-                          : '(Normal)'}
+                    <div className="flex flex-row text-xs items-center gap-2">
+                      <img src="/bmi.png" alt="weight" className="w-5 h-5 object-contain invert" />
+                      {Math.round(bmi)}{' '}
+                      {bmi > 30
+                        ? '(Adipoistas)'
+                        : bmi > 25
+                          ? '(Overweight)'
+                          : bmi < 20
+                            ? '(Underweight)'
+                            : '(Normal)'}
+                    </div>
                   </h1>
                 )}
                 {cardForValues(
@@ -829,9 +830,19 @@ function Profile() {
                 {cardForValues(
                   <h1 style={{ color: bfp > 25 ? 'red' : 'green' }}>BFP: {Math.round(bfp)} %</h1>
                 )}
-                {cardForValues(<h1>Calories: {Math.round(calories)} kcal</h1>)}
+                {cardForValues(
+                  <div className="flex flex-row  items-center gap-2">
+                    <img src="/meal.png" alt="weight" className="w-5 h-5 object-contain invert" />
+                    <h1>{Math.round(calories)} kcal</h1>
+                  </div>
+                )}
 
-                {cardForValues(<h1>Goal: {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>)}
+                {cardForValues(
+                  <div className="flex flex-row  items-center gap-2">
+                    <img src="/goal.png" alt="weight" className="w-5 h-5 object-contain invert" />
+                    <h1> {goal == 1 ? 'Cut' : goal == 2 ? 'Hold' : 'Bulk'}</h1>
+                  </div>
+                )}
                 {cardForValues(
                   <h1
                     style={
