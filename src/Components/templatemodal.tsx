@@ -1,4 +1,10 @@
-function TemplateModal({ children, border }) {
+import { JSX } from 'react';
+type TemplateModalProps = {
+  children: React.ReactNode;
+  border?: string;
+};
+
+function TemplateModal({ children, border }: TemplateModalProps): JSX.Element {
   return (
     <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
       <div

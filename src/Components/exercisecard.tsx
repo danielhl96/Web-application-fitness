@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import '../index.css';
 import { useState, useRef, useEffect } from 'react';
+
+type ExerciseCardProps = {
+  ExerciseName: string;
+  Description: string;
+  ExerciseImage: string;
+  onRepsChange?: (reps: number) => void;
+  onSetsChange?: (sets: number) => void;
+  handleRemoveExercise: () => void;
+  changePosition: (direction: 'up' | 'down') => void;
+  reps?: number | number[];
+  sets?: number;
+  ismaximized?: boolean;
+};
 
 function ExerciseCard({
   ExerciseName,
@@ -13,16 +26,16 @@ function ExerciseCard({
   reps,
   sets,
   ismaximized,
-}) {
+}: ExerciseCardProps): JSX.Element {
   const [selectedSets, setSelectedSets] = useState(sets || null);
   const [maximized, setMaximized] = useState(ismaximized || false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedReps, setSelectedReps] = useState(
     reps ? (Array.isArray(reps) ? reps[0] : reps) : null
   );
-  const selectedSetRef = useRef(null);
-  const selectedRepRef = useRef(null);
-  const handleSets = (sets, ref) => {
+  const selectedSetRef = useRef<HTMLTableCellElement | null>(null);
+  const selectedRepRef = useRef<HTMLTableCellElement | null>(null);
+  const handleSets = (sets: number, ref: HTMLTableCellElement | null) => {
     setSelectedSets(sets);
 
     if (ref) {
@@ -32,7 +45,7 @@ function ExerciseCard({
       onSetsChange(sets);
     }
   };
-  const handleReps = (reps, ref) => {
+  const handleReps = (reps: number, ref: HTMLTableCellElement | null) => {
     setSelectedReps(reps);
 
     if (ref) {
@@ -135,7 +148,7 @@ function ExerciseCard({
                       <tr key={index} data-set={set} className={'bg-gray-700'}>
                         <td
                           ref={selectedSets === set ? selectedSetRef : null}
-                          onClick={(e) => handleSets(set, e.target)}
+                          onClick={(e) => handleSets(set, e.currentTarget)}
                           className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
                             selectedSets === set
                               ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
@@ -157,7 +170,7 @@ function ExerciseCard({
                       <tr key={index} data-rep={rep} className={'bg-gray-700'}>
                         <td
                           ref={selectedReps === rep ? selectedRepRef : null}
-                          onClick={(e) => handleReps(rep, e.target)}
+                          onClick={(e) => handleReps(rep, e.currentTarget)}
                           className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
                             selectedReps === rep
                               ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'

@@ -1,6 +1,7 @@
+import { JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Header() {
+function Header(): JSX.Element {
   const navigate = useNavigate();
   return (
     <div>

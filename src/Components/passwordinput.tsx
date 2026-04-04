@@ -1,8 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import '../index.css';
 
-function PasswordInput({ value, onChange, onError, errorMessage, placeholder }) {
+type PasswordInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+  onError?: (error: boolean) => void;
+  errorMessage?: string;
+  placeholder?: string;
+};
+function PasswordInput({
+  value,
+  onChange,
+  onError,
+  errorMessage,
+  placeholder,
+}: PasswordInputProps): JSX.Element {
   const [touched, setTouched] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

@@ -1,4 +1,9 @@
-function WorkoutCard({ children, onClick }) {
+import { JSX } from 'react';
+type WorkoutCardProps = {
+  children: React.ReactNode;
+  onClick?: () => void;
+};
+function WorkoutCard({ children, onClick }: WorkoutCardProps): JSX.Element {
   return (
     <div
       onClick={onClick}

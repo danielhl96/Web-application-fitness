@@ -1,7 +1,10 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useRef, useEffect } from 'react';
-
-function TemplatePage({ children, dockDisabled }) {
+import { useRef, useEffect, JSX } from 'react';
+type TemplatePageProps = {
+  children: React.ReactNode;
+  dockDisabled?: boolean;
+};
+function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const dockRef = useRef(null);

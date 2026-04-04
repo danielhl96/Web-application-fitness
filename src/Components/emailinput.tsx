@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import '../index.css';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
-function EmailInput({ value, onChange, onError }) {
+type EmailInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+  onError?: (error: boolean) => void;
+  errorMessage?: string;
+};
+function EmailInput({ value, onChange, onError, errorMessage }: EmailInputProps): JSX.Element {
   const [touched, setTouched] = useState(false);
 
-  const validEmail = (email) => {
+  const validEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -39,7 +45,9 @@ function EmailInput({ value, onChange, onError }) {
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}
       />
-      {error && touched && <h1 className="text-red-500 text-xs ">Please enter a valid email.</h1>}
+      {error && touched && (
+        <h1 className="text-red-500 text-xs ">{errorMessage || 'Please enter a valid email.'}</h1>
+      )}
     </div>
   );
 }

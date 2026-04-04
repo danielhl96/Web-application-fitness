@@ -1,0 +1,24 @@
+type ButtonProps = {
+  onClick: () => void;
+  disabled?: boolean;
+  border?: string;
+  w?: string;
+  children: React.ReactNode;
+};
+
+const Button = ({ onClick, disabled, border, w, children }: ButtonProps) => {
+  return (
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      className={`btn text-xs btn-outline shadow-lg ${w ?? ''} backdrop-blur-md border text-white px-4 py-2 rounded-xl transition-all duration-100 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-2 ${
+        disabled ? 'border-transparent' : border ? '' : 'border-blue-400'
+      }`}
+      style={border && !disabled ? { border: `1.5px solid ${border}` } : undefined}
+    >
+      {children}
+    </button>
+  );
+};
+
+export default Button;

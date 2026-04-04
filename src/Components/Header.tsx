@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
-function Header() {
+function Header(): JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handlelogout = () => {
+  const handlelogout = (): void => {
     api.post('/auth/logout', {}, { withCredentials: true }).then(() => navigate('/login'));
 
     setMenuOpen(false);
