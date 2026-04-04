@@ -26,7 +26,7 @@ function CreateTraining() {
     }));
 
     await api
-      .post('/create_workout_plan', {
+      .post('workout_plans/create_workout_plan', {
         name: trainingName,
         exercises: selectedExercises,
       })

@@ -1,11 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaClient } from '@prisma/client';
+import { redisClient } from '../redis';
+import { User, JwtPayload } from '../types';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(@Inject('PRISMA_USER') private prisma: PrismaClient) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req) => {
@@ -16,11 +18,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: process.env.JWT_SECRET || 'secret',
       issuer: 'fitness-app',
       audience: 'fitness-users',
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: any) {
-    const user = await this.prisma.users.findUnique({ where: { id: payload.sub } });
-    return user;
+  async validate(req: Request, payload: JwtPayload): Promise<User> {
+    const token = req?.cookies?.jwt;
+    if (token) {
+      const blacklisted = await redisClient.get(`blacklist_${token}`);
+      if (blacklisted) throw new UnauthorizedException('Token has been invalidated');
+    }
+    return { id: payload.sub, email: payload.email };
   }
 }

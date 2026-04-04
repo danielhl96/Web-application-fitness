@@ -69,7 +69,7 @@ function Nutrition() {
   }, [selectedDay, month, year]);
 
   function get_profile() {
-    api.get('/get_profile').then((response) => {
+    api.get('users/profile').then((response) => {
       setCalories(response.data.calories);
       setWeight(response.data.weight);
     });
@@ -77,9 +77,9 @@ function Nutrition() {
 
   function deleteMeal(mealId) {
     api
-      .delete('/delete_meal', {
+      .delete('meals/delete_meal', {
         data: {
-          meal_id: mealId,
+          mealId: mealId,
         },
       })
       .then(() => {
@@ -108,7 +108,7 @@ function Nutrition() {
 
   function getdinnerMeals() {
     api
-      .get('/get_meal_dinner', {
+      .get('meals/get_dinner', {
         params: {
           date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
             .toString()
@@ -122,7 +122,7 @@ function Nutrition() {
   }
   function getlaunchMeals() {
     api
-      .get('/get_meal_launch', {
+      .get('meals/get_lunch', {
         params: {
           date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
             .toString()
@@ -136,7 +136,7 @@ function Nutrition() {
   }
   function getbreakfastMeals() {
     api
-      .get('/get_meal_breakfast', {
+      .get('meals/get_breakfast', {
         params: {
           date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
             .toString()
@@ -150,7 +150,7 @@ function Nutrition() {
   }
   function getsnackMeals() {
     api
-      .get('/get_meal_snack', {
+      .get('meals/get_snack', {
         params: {
           date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
             .toString()
@@ -238,7 +238,7 @@ function Nutrition() {
     if (prompt) formData.append('prompt', prompt);
     console.log(formData);
     api
-      .post('/calculate_meal', formData, {
+      .post('meals/calculate_meal', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((response) => {
@@ -258,7 +258,7 @@ function Nutrition() {
   function handleMealSave() {
     console.log('Saving meal:', meal);
     api
-      .post('/create_meal', {
+      .post('meals/create_meal', {
         name: meal.name,
         calories: meal.calories * (1 + calorie_factor / 100),
         protein: meal.protein * (1 + calorie_factor / 100),
@@ -285,8 +285,8 @@ function Nutrition() {
 
   function handleEditMealSave() {
     api
-      .put('/edit_meal', {
-        meal_id: meal.id,
+      .put('meals/edit_meal', {
+        mealId: meal.id,
         name: meal.name,
         calories: meal.calories * (1 + calorie_factor / 100),
         protein: meal.protein * (1 + calorie_factor / 100),

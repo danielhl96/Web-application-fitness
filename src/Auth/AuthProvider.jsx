@@ -17,13 +17,13 @@ export function AuthProvider({ children }) {
     isCheckingRef.current = true;
     try {
       console.log('Checking authentication...');
-      await api.get('/check_auth');
+      await api.get('/auth/check_auth');
       setIsAuth(true);
     } catch (err) {
       console.log('Auth check failed, trying to refresh token...', err);
       try {
-        await api.post('/refresh_token', {});
-        await api.get('/check_auth');
+        await api.post('/auth/refresh_token', {});
+        await api.get('/auth/check_auth');
         setIsAuth(true);
       } catch {
         setIsAuth(false);

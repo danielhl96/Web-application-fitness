@@ -21,7 +21,7 @@ const EditTrain = () => {
     useState(false);
 
   useEffect(() => {
-    api.get('/get_workout_plans').then((response) => {
+    api.get('/workout_plans/get_workout_plans').then((response) => {
       setData(response.data);
       console.log(response.data);
     });
@@ -30,11 +30,11 @@ const EditTrain = () => {
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
-      acc[plan.name] = plan.templates.map((exercise) => ({
+      acc[plan.name] = plan.plan_exercise_templates.map((exercise) => ({
         exercise: exercise.name,
-        reps: exercise.reps,
+        reps: exercise.reps_template,
         sets: exercise.sets,
-        weight: exercise.weight,
+        weight: exercise.weights_template,
         plan_id: plan.id,
       }));
       return acc;
@@ -68,7 +68,7 @@ const EditTrain = () => {
     console.log('Payload for editing workout plan:', payload);
 
     api
-      .put('/edit_workout_plan', payload)
+      .put('/workout_plans/edit_workout_plan', payload)
       .then((response) => {
         console.log('Workout plans updated successfully:', response.data);
         setNotification({
@@ -137,9 +137,9 @@ const EditTrain = () => {
 
   async function changeWorkoutNameAPI() {
     try {
-      const response = await api.put('/edit_workout_plan_name', {
-        plan_id: selectedExercise[savekey][0]?.plan_id,
-        new_name: WorkoutName,
+      const response = await api.put('/workout_plans/change_workout_plan_name', {
+        planId: selectedExercise[savekey][0]?.plan_id,
+        newName: WorkoutName,
       });
       console.log('Workout name changed successfully:', response.data);
       setNotification({
@@ -332,8 +332,8 @@ const EditTrain = () => {
   const handleRemoveWorkoutAPI = (workoutname) => {
     console.log(workoutname);
     api
-      .delete(`/delete_workout_plan`, {
-        data: { plan_id: selectedExercise[workoutname][0]?.plan_id },
+      .delete(`workout_plans/delete_workout_plan`, {
+        data: { planId: selectedExercise[workoutname][0]?.plan_id },
       })
       .then(() => {
         console.log('Workout plan deleted');

@@ -40,7 +40,7 @@ api.interceptors.response.use(
 
       try {
         // call relative URL so Vite proxy is used (same-origin -> cookie sent)
-        await api.post('/refresh_token', {}, { withCredentials: true });
+        await api.post('/auth/refresh_token', {}, { withCredentials: true });
         processQueue(null);
         isRefreshing = false;
         console.log('refresh succeeded, retry original:', original.url);

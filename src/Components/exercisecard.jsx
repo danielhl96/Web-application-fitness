@@ -70,6 +70,7 @@ function ExerciseCard({
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
+      setMaximized(window.innerWidth >= 768); // Auto-maximize on desktop, allow toggle on mobile
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -79,42 +80,44 @@ function ExerciseCard({
   return (
     <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-4">
       <div
-        className={`card w-full ${maximized ? 'h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:h-[44dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
+        className={`card w-full ${maximized ? 'h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:h-[35dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
       >
         <div className="card-body items-center text-center">
-          <button
-            onClick={() => setMaximized(!maximized)}
-            className="btn btn-xs btn-circle absolute right-2 top-2 bg-black/30 border border-white/20 text-white hover:bg-black/50 focus:ring-2 focus:ring-white"
-          >
-            {maximized ? (
-              // Minus Icon
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-              </svg>
-            ) : (
-              // Plus Icon
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-            )}
-          </button>
+          {isMobile ? (
+            <button
+              onClick={() => setMaximized(!maximized)}
+              className="btn btn-xs btn-circle absolute right-2 top-2 bg-black/30 border border-white/20 text-white hover:bg-black/50 focus:ring-2 focus:ring-white"
+            >
+              {maximized ? (
+                // Minus Icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+              ) : (
+                // Plus Icon
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              )}
+            </button>
+          ) : null}
           <h2 className="text-amber-400 font-bold mb-2">{ExerciseName}</h2>
           <figure className="flex justify-center items-center w-8 h-8">
             <img src={ExerciseImage} alt={ExerciseName} className="rounded-md invert" />

@@ -20,7 +20,7 @@ function RegisterPage() {
 
   const handleRegister = () => {
     api
-      .post('/register', {
+      .post('/auth/register', {
         email,
         password,
       })

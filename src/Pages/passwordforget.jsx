@@ -51,7 +51,7 @@ function PasswordForget() {
 
   const handleCode = () => {
     api
-      .post('/password_forget', { email })
+      .post('/auth/password_forget', { email })
       .then(() => {
         setMessage(<div className="text-green-500">Check your email for the security code.</div>);
         setRequireCode(true);
@@ -63,10 +63,10 @@ function PasswordForget() {
 
   const checkCode = () => {
     api
-      .post('/check_safety_code', {
+      .post('/auth/password_reset', {
         email: email,
-        password: password,
-        safety_code: securityCode,
+        newPassword: password,
+        safetycode: securityCode,
       })
       .then((response) => {
         setMessage(<div className="text-green-500">{response.data.message}</div>);

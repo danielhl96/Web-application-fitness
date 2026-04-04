@@ -7,7 +7,7 @@ function Header() {
   const navigate = useNavigate();
 
   const handlelogout = () => {
-    api.post('/logout', {}, { withCredentials: true }).then(() => navigate('/login'));
+    api.post('/auth/logout', {}, { withCredentials: true }).then(() => navigate('/login'));
 
     setMenuOpen(false);
   };

@@ -16,7 +16,7 @@ function Profile() {
   const navigate = useNavigate();
   const [bmi, setBmi] = useState(0);
   const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
+  const [weight, setWeight] = useState(0.0);
   const [hwr, setHwr] = useState(0);
   const [hip, setHip] = useState(0);
   const [waist, setWaist] = useState(0);
@@ -56,14 +56,12 @@ function Profile() {
     useEffect(() => {
       if (!bodyvalue) return;
 
-      console.log('Rendering chart for bodyvalue:', bodyvalue);
       const dates = bodyvalue.map((e) => e.date);
 
       console.log(dates);
 
       const weights = bodyvalue.map((e) => e[type]);
 
-      console.log('Weights:', weights);
       const options = {
         series: [
           {
@@ -130,7 +128,7 @@ function Profile() {
   };
   useEffect(() => {
     api
-      .get('/get_profile')
+      .get('/users/profile')
       .then((response) => {
         const data = response.data;
         console.log('Fetched profile data:', data);
@@ -151,7 +149,7 @@ function Profile() {
         console.error('Error fetching profile data:', error);
       });
 
-    api.get('/get_history').then((response) => {
+    api.get('/users/get_history').then((response) => {
       const data = response.data;
       console.log('Fetched history data:', data);
       setBodyvalue(data);
@@ -160,11 +158,10 @@ function Profile() {
 
   const handleEdit = () => {
     api
-      .put('/profile', {
+      .put('/users/edit_profile', {
         bmi,
         height,
         weight,
-        hwr,
         hip,
         waist,
         goal,
@@ -172,7 +169,7 @@ function Profile() {
         gender,
         age,
         calories,
-        activity,
+        activity_level: activity,
       })
       .then((response) => {
         console.log('Profile updated successfully:', response.data);
@@ -1068,7 +1065,7 @@ function Profile() {
                 </svg>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                {cardForValues(<h1>Weight: {Math.round(weight)} kg</h1>)}
+                {cardForValues(<h1>Weight: {weight.toFixed(1)} kg</h1>)}
                 {cardForValues(<h1>Height: {Math.round(height)} cm</h1>)}
 
                 {cardForValues(<h1>Age: {Math.round(age)} years</h1>)}

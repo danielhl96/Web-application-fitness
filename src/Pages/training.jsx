@@ -12,7 +12,7 @@ import TemplateModal from '../Components/templatemodal.jsx';
 function StartTraining() {
   const navigate = useNavigate();
   useEffect(() => {
-    api.get('/get_workout_plans').then((response) => {
+    api.get('workout_plans/get_workout_plans').then((response) => {
       console.log('API response:', response.data);
 
       setData(response.data);
@@ -22,11 +22,12 @@ function StartTraining() {
   // map API response -> { PlanName: [ { exercise, reps, sets }, ... ], ... }
   const mapPlans = (plans) =>
     plans.reduce((acc, plan) => {
-      acc[plan.name] = plan.templates.map((exercise) => {
+      console.log('Mapping plan:', plan);
+      acc[plan.name] = plan.plan_exercise_templates.map((exercise) => {
         const matchingExercise = plan.exercises.find((e) => e.name === exercise.name);
         return {
           exercise: exercise.name,
-          reps: exercise.reps,
+          reps: exercise.reps_template,
           sets: exercise.sets,
           weights:
             matchingExercise && matchingExercise.weights !== undefined
@@ -84,7 +85,7 @@ function StartTraining() {
   const postData = (updatedCurrent) => {
     console.log(training1.reps);
     api
-      .post('/create_exercise', {
+      .post('workout_plans/create_exercise', {
         workout_plan_id: updatedCurrent.plan_id,
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,
@@ -575,7 +576,7 @@ function StartTraining() {
             setCurrentExercises(selectedExercise[planName]);
             setCurrentPlan(planName);
             setTraining(selectedExercise[planName][0]);
-
+            console.log(selectedExercise[planName]);
             setSelectedTrainingSite(false);
           }}
         >

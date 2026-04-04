@@ -26,8 +26,8 @@ function CredentialsPage() {
 
   const handleChangeEmail = () => {
     api
-      .put('/change_email', {
-        new_email: newEmail,
+      .put('/users/change_email', {
+        email: newEmail,
         password: password,
       })
       .then(() => {
@@ -38,10 +38,10 @@ function CredentialsPage() {
         });
         setEmailModal(false);
       })
-      .catch(() => {
+      .catch((error) => {
         setNotification({
           title: 'Error',
-          message: 'There was an error changing your email.',
+          message: error?.response?.data?.message || 'There was an error changing your email.',
           type: 'error',
         });
       });
@@ -49,9 +49,9 @@ function CredentialsPage() {
 
   const handleChangePassword = () => {
     api
-      .put('/change_password', {
-        old_password: password,
-        new_password: newPassword,
+      .put('/users/change_password', {
+        oldPassword: password,
+        newPassword: newPassword,
       })
       .then(() => {
         setNotification({
@@ -61,10 +61,10 @@ function CredentialsPage() {
         });
         setModalPassword(false);
       })
-      .catch(() => {
+      .catch((error) => {
         setNotification({
           title: 'Error',
-          message: 'There was an error changing your password.',
+          message: error?.response?.data?.message || 'There was an error changing your password.',
           type: 'error',
         });
       });
@@ -72,7 +72,7 @@ function CredentialsPage() {
 
   const handleDeleteAccount = () => {
     api
-      .delete('/delete_account', {
+      .delete('/users/delete_account', {
         data: { password: password },
       })
       .then(() => {
@@ -84,10 +84,10 @@ function CredentialsPage() {
         // Optionally, redirect to homepage or logout
         navigate('/login');
       })
-      .catch(() => {
+      .catch((error) => {
         setNotification({
           title: 'Error',
-          message: 'There was an error deleting your account.',
+          message: error?.response?.data?.message || 'There was an error deleting your account.',
           type: 'error',
         });
       });
@@ -97,18 +97,6 @@ function CredentialsPage() {
     return (
       <div>
         <TemplateModal>
-          {notification && (
-            <Notify
-              title={notification.title}
-              message={notification.message}
-              duration={1500}
-              key={notification.message + notification.title + Date.now()}
-              type={notification.type}
-              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-              onClose={() => setNotification(null)}
-            />
-          )}
-
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -176,18 +164,6 @@ function CredentialsPage() {
     return (
       <div>
         <TemplateModal>
-          {notification && (
-            <Notify
-              title={notification.title}
-              message={notification.message}
-              duration={1500}
-              key={notification.message + notification.title + Date.now()}
-              type={notification.type}
-              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-              onClose={() => setNotification(null)}
-            />
-          )}
-
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your password</h3>
           <div className="flex flex-col space-y-2 mt-2">
@@ -282,18 +258,6 @@ function CredentialsPage() {
     return (
       <div>
         <TemplateModal>
-          {notification && (
-            <Notify
-              title={notification.title}
-              message={notification.message}
-              duration={1500}
-              key={notification.message + notification.title + Date.now()}
-              type={notification.type}
-              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-              onClose={() => setNotification(null)}
-            />
-          )}
-
           <h3 className="font-bold text-lg text-amber-50">Delete your account</h3>
           <div className="flex flex-col justify-start  text-xs">
             <PasswordInput
@@ -353,6 +317,16 @@ function CredentialsPage() {
   return (
     <div>
       <Header />
+      {notification && (
+        <Notify
+          title={notification.title}
+          message={notification.message}
+          duration={1500}
+          key={notification.message + notification.title + Date.now()}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <TemplatePage>
         <div>
           {emailModal && handleEmailModal()}

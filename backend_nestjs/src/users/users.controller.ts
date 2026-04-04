@@ -3,76 +3,63 @@ import {
   Get,
   Post,
   Body,
-  Param,
   Put,
   Delete,
   Inject,
   UseGuards,
   Req,
+  HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { PrismaClient } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Request } from 'express';
-
+import {
+  EmailChangeDto,
+  PasswordChangeDto,
+  DeleteProfileDto,
+  UpdateProfileDto,
+} from './dto/users.dto';
+import { User } from 'src/types';
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-    @Inject('PRISMA_USER') private prisma: PrismaClient
-  ) {}
-
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  getMe(@Req() req: Request) {
-    return req.user;
-  }
+  constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  async getProfile(@Req() req: Request) {
-    const user = req.user as any;
-    return this.prisma.users.findUnique({
-      where: { id: user.id },
-    });
+  async getProfile(@Req() req: { user: User }) {
+    const user = await this.usersService.findOne(req.user.id);
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('profile')
-  async updateProfile(@Req() req: Request, @Body() data: any) {
-    const user = req.user as any;
-    return this.prisma.users.update({
-      where: { id: user.id },
-      data,
-    });
+  @Put('edit_profile')
+  async updateProfile(@Req() req: { user: User }, @Body() data: UpdateProfileDto) {
+    await Promise.all([
+      this.usersService.update(req.user.id, data),
+      this.usersService.updateHistory(req.user.id, data),
+    ]);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('profile')
-  async deleteProfile(@Req() req: Request) {
-    const user = req.user as any;
-    return this.prisma.users.delete({
-      where: { id: user.id },
-    });
+  @Get('get_history')
+  async getHistory(@Req() req: { user: User }) {
+    return this.usersService.getHistory(req.user.id);
   }
 
-  @Post()
-  async create(@Body() data: any) {
-    return this.prisma.users.create({ data });
+  @UseGuards(JwtAuthGuard)
+  @Put('change_email')
+  async changeEmail(@Req() req: { user: User }, @Body() body: EmailChangeDto) {
+    return this.usersService.changeEmail(req.user.id, body.email);
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() data: any) {
-    return this.prisma.users.update({
-      where: { id: parseInt(id) },
-      data,
-    });
+  @UseGuards(JwtAuthGuard)
+  @Put('change_password')
+  async changePassword(@Req() req: { user: User }, @Body() body: PasswordChangeDto) {
+    return this.usersService.changePassword(req.user.id, body.oldPassword, body.newPassword);
   }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.prisma.users.delete({
-      where: { id: parseInt(id) },
-    });
+  @UseGuards(JwtAuthGuard)
+  @Delete('delete_account')
+  async deleteAccount(@Req() req: { user: User }, @Body() body: DeleteProfileDto) {
+    await this.usersService.remove(req.user.id);
   }
 }

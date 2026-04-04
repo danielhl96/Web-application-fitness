@@ -34,7 +34,7 @@ function AiCoach() {
   }, []);
 
   function fetchUserProfile() {
-    api.get('/get_profile').then((response) => {
+    api.get('users/profile').then((response) => {
       const profile = response.data;
       handleMessage(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm and Fitness goal: ${profile.goal == 3 ? 'Bulk' : profile.goal == 2 ? 'Maintain weight' : profile.goal == 1 ? 'loss weight' : ''}. Please consider this information to analyse.`,
@@ -47,7 +47,7 @@ function AiCoach() {
   }
 
   function fetchWorkouts() {
-    api.get('/get_workout_plans').then((response) => {
+    api.get('workout_plans/get_workout_plans').then((response) => {
       const workoutsData = response.data;
       const newWorkouts = workoutsData.map((workout) => ({
         workouts: workout.exercises,
@@ -63,7 +63,7 @@ function AiCoach() {
     const mealTypes = ['breakfast', 'launch', 'dinner', 'snack'];
     const promises = mealTypes.map((type) =>
       api
-        .get(`/get_meal_${type}`, { params: { date } })
+        .get(`meals/get_${type}`, { params: { date } })
         .then((response) => ({
           type,
           meals: response.data,
@@ -116,7 +116,7 @@ function AiCoach() {
   function handleOpenAIResponse(userMessage) {
     api
       .post(
-        '/aicoach',
+        'aicoach/response',
         { question: userMessage, history: chatHistory },
         {
           headers: {
@@ -125,7 +125,7 @@ function AiCoach() {
         }
       )
       .then((response) => {
-        const aiMessage = response.data.answer;
+        const aiMessage = response.data.message;
         handleMessage(aiMessage, false);
         setIsLoading(false);
       })

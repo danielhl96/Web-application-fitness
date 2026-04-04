@@ -177,13 +177,10 @@ function Statistic() {
       if (!exercise) return;
 
       console.log('Rendering chart for exercise:', exercise);
-      const dates = exercise.entries.map((e) => e.date);
-
-      console.log(dates);
+      const dates = exercise.date;
 
       const weights = exercise.entries.map((e) => Math.max(...e.weights));
 
-      console.log('Weights:', weights);
       const options = {
         series: [
           {
@@ -225,7 +222,7 @@ function Statistic() {
           custom: function ({ series, seriesIndex, dataPointIndex }) {
             const weight = series[seriesIndex][dataPointIndex];
             const repsArray = exercise.entries[dataPointIndex].reps;
-            const date = exercise.entries[dataPointIndex].date;
+            const date = dates[dataPointIndex];
             const repsDisplay = repsArray.join(', ');
             return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${date}</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Weight: </span><span class="apexcharts-tooltip-text-y-value">${weight} kg</span></div><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Reps: </span><span class="apexcharts-tooltip-text-y-value">${repsDisplay}</span></div></div></div>`;
           },
@@ -244,8 +241,17 @@ function Statistic() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    api.get('/statistics').then((response) => {
-      setData(response.data);
+    api.get('/statistics/exercise_statistics').then((response) => {
+      const raw = response.data;
+      const transformed = Object.entries(raw).map(([exercise_name, entries]) => ({
+        exercise_name,
+        entries,
+        date: entries.map((e) => new Date(e.date).toLocaleDateString()),
+        max_weight: Math.max(...entries.flatMap((e) => e.weights)),
+        min_weight: Math.min(...entries.flatMap((e) => e.weights)),
+      }));
+      setData(transformed);
+      console.log('Fetched statistics data:', transformed);
     });
   }, []);
 
