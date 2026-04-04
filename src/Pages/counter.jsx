@@ -24,7 +24,8 @@ function CounterForm() {
   useEffect(() => {
     const totalSeconds = min * 60 + Math.floor(sec / 6); //Whole time in seconds
     setTotalTime(totalSeconds);
-    if (sec == 360) {
+    console.log(totalSeconds);
+    if (totalSeconds == 60) {
       setMin((prevMin) => prevMin + 1);
       setSec(0);
     }
@@ -159,9 +160,7 @@ function CounterForm() {
       <TemplatePage>
         {showModal && settingsModal()}
         <div className="flex flex-col items-center justify-center mt-4">
-          <div className="divider divider-primary text-white font-bold mb-2">
-            Manage your workout rounds
-          </div>
+          <div className="divider divider-primary text-white font-bold mb-2">Stopwatch</div>
           <div className="relative w-60 h-60 border-8 border-gray-400/10 rounded-full bg-gradient-to-b from-gray-900 to-black">
             {marks.map((_, index) => {
               const angle = index * 30;
