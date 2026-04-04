@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 
 async function bootstrap() {
