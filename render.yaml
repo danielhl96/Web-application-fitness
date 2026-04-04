@@ -3,7 +3,7 @@ services:
     name: fitness-backend
     runtime: node
     rootDir: backend_nestjs
-    buildCommand: npm install && npx prisma generate && node --max-old-space-size=512 node_modules/.bin/nest build
+    buildCommand: npm install && npx prisma generate && node_modules/.bin/nest build --builder swc
     startCommand: node dist/main
     envVars:
       - key: NODE_ENV
