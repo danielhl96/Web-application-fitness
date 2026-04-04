@@ -53,7 +53,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
               fontWeight="bold"
               textAnchor="middle"
             >
-              {height} cm
+              Height: {height} cm
             </text>
           </g>
         )}
@@ -72,7 +72,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
               textAnchor="start"
               strokeDasharray="0"
             >
-              W {waist}cm
+              Waist: {waist}cm
             </text>
           </g>
         )}
@@ -91,7 +91,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
               textAnchor="start"
               strokeDasharray="0"
             >
-              H {hip}cm
+              Hip: {hip}cm
             </text>
           </g>
         )}
