@@ -22,7 +22,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
   const hipY = 104;
 
   return (
-    <svg viewBox="0 0 160 200" className="w-44 h-50 drop-shadow-lg">
+    <svg viewBox="0 0 160 200" className="w-66 h-50 drop-shadow-lg">
       {/* ── Body (shifted right to visually center it between left edge and labels) ── */}
       <g fill={color} transform="translate(30, 0)">
         <ellipse cx="50" cy="12" rx="11" ry="12" />
@@ -72,7 +72,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
               textAnchor="start"
               strokeDasharray="0"
             >
-              Waist: {waist}cm
+              Waist: {waist} cm
             </text>
           </g>
         )}
@@ -91,7 +91,7 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
               textAnchor="start"
               strokeDasharray="0"
             >
-              Hip: {hip}cm
+              Hip: {hip} cm
             </text>
           </g>
         )}
