@@ -1,7 +1,7 @@
-import { createClient } from "redis";
+import { createClient } from 'redis';
 
-const redisUrl = process.env.REDIS_HOST || 'redis://redis:6379/0';
+const redisUrl = process.env.REDIS_URL || process.env.REDIS_HOST || 'redis://localhost:6379';
 
 export const redisClient = createClient({ url: redisUrl });
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
-redisClient.connect().catch(console.error);
+redisClient.on('error', (err) => console.error('Redis Client Error:', err.message));
+redisClient.connect().catch((err) => console.error('Redis connection failed:', err.message));

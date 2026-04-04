@@ -4,7 +4,18 @@ services:
     runtime: node
     rootDir: backend_nestjs
     buildCommand: npm install && npx prisma generate && node_modules/.bin/nest build --builder swc
-    startCommand: node dist/main
+    startCommand: node --max-old-space-size=400 dist/main
     envVars:
       - key: NODE_ENV
         value: production
+      - key: REDIS_URL
+        fromService:
+          name: fitness-redis
+          type: redis
+          property: connectionString
+
+databases:
+  - name: fitness-redis
+    type: redis
+    plan: free
+    ipAllowList: []
