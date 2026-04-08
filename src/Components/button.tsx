@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 type ButtonProps = {
   onClick: () => void;
   disabled?: boolean;
@@ -6,7 +7,7 @@ type ButtonProps = {
   children: React.ReactNode;
 };
 
-const Button = ({ onClick, disabled, border, w, children }: ButtonProps) => {
+const Button = ({ onClick, disabled, border, w, children }: ButtonProps): JSX.Element => {
   return (
     <button
       disabled={disabled}

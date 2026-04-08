@@ -22,6 +22,10 @@ function AiCoach() {
     setChatHistory((prev) => [...prev, { message, isUser, refs: null }]);
   }
 
+  const handleQuestionChange = (e) => {
+    setQuestion(e);
+  };
+
   useEffect(() => {
     const ref = refs.current[chatHistory.length - 1];
     if (ref) {
@@ -245,7 +249,7 @@ function AiCoach() {
           <div className="flex flex-row space-x-1 items-center justify-center">
             <Input
               value={question}
-              onChange={(e) => setQuestion(e.target.value)}
+              onChange={handleQuestionChange}
               type="text"
               placeholder="Enter your question..."
             />

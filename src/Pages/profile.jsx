@@ -10,7 +10,7 @@ import ApexCharts from 'apexcharts';
 import Button from '../Components/button.jsx';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
-function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, hip = 0 }) {
+function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, hip = 0, onClick }) {
   const male = gender !== 'female';
   const torsoPath = male
     ? 'M 26,36 C 24,52 36,68 36,80 C 31,88 31,97 31,104 L 69,104 C 69,97 69,88 64,80 C 64,68 76,52 74,36 Z'
@@ -22,7 +22,11 @@ function HumanSilhouette({ gender = 'female', bmi = 22, height = 0, waist = 0, h
   const hipY = 104;
 
   return (
-    <svg viewBox="0 0 160 200" className="w-66 h-50 drop-shadow-lg">
+    <svg
+      onClick={onClick}
+      viewBox="0 0 160 200"
+      className="w-66 h-50 drop-shadow-lg cursor-pointer"
+    >
       {/* ── Body (shifted right to visually center it between left edge and labels) ── */}
       <g fill={color} transform="translate(30, 0)">
         <ellipse cx="50" cy="12" rx="11" ry="12" />
@@ -779,7 +783,16 @@ function Profile() {
             <div className="flex flex-col justify-center items-center">
               <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
 
-              <HumanSilhouette gender={gender} bmi={bmi} height={height} waist={waist} hip={hip} />
+              <HumanSilhouette
+                gender={gender}
+                bmi={bmi}
+                height={height}
+                waist={waist}
+                hip={hip}
+                onClick={() =>
+                  console.log('HumanSilhouette clicked', { gender, bmi, height, waist, hip })
+                }
+              />
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                 {cardForValues(<h1>Age: {age} years</h1>)}
 

@@ -185,7 +185,7 @@ function CreateTraining() {
               type="input"
               placeholder="Workout name"
               id="training-input"
-              onChange={(e) => setWorkoutName(e.target.value)}
+              onChange={(e) => setWorkoutName(e)}
             />
             <Button
               disabled={WorkoutName === ''}
@@ -231,7 +231,7 @@ function CreateTraining() {
               <div className="form-control">
                 <Input
                   value={addExercise}
-                  onChange={(e) => setaddExercise(e.target.value)}
+                  onChange={(e) => setaddExercise(e)}
                   w="w-54"
                   h="h-10"
                   placeholder="Enter an exercise name"
