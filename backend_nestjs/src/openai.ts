@@ -29,8 +29,11 @@ export async function analyzeFoodImage(prompt?: string, imageFile?: MulterFile) 
           {
             type: 'text',
             text:
-              'Analyze the food in the image and estimate its nutritional content. Return the result as a compact JSON object with the following keys: name (short meal name), calories (kcal), protein (g), carbs (g), fats (g). Example: {"name": "Chicken Salad", "calories": 420, "protein": 32, "carbs": 18, "fats": 12}. Do not add any explanation, only the JSON.' +
-              (prompt ? ' ' + prompt : ''),
+              'Analyze the food in the image and estimate its nutritional content.' +
+              (prompt
+                ? ` The user provided the following additional context, use it to improve your estimate: "${prompt}".`
+                : '') +
+              ' Return the result as a compact JSON object with the following keys: name (short meal name), calories (kcal), protein (g), carbs (g), fats (g). Example: {"name": "Chicken Salad", "calories": 420, "protein": 32, "carbs": 18, "fats": 12}. Do not add any explanation, only the JSON.',
           },
         ],
       },
