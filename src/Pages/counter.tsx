@@ -1,13 +1,33 @@
-import React, { JSX, useReducer } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import React, { JSX, useReducer, useEffect, useRef } from 'react';
 import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
+type Action =
+  | {
+      type:
+        | 'SET_SEC'
+        | 'SET_MIN'
+        | 'SET_ROUNDS'
+        | 'SET_COUNT_ROUNDS'
+        | 'SET_BREAKTIME'
+        | 'SET_STARTTIME'
+        | 'SET_ROUNDTIME'
+        | 'SET_TOTALTIME';
+      payload: number;
+    }
+  | {
+      type: 'SET_SHOW_MODAL' | 'SET_IS_BREAK_MODE' | 'SET_IS_START_MODE' | 'SET_IS_STOP_MODE';
+      payload: boolean;
+    }
+  | { type: 'INCREMENT_SEC' };
+
+type NumberActionType = Extract<Action, { payload: number }>['type'];
+
 type TableProps = {
   selectedItem: number;
-  type: string;
-  dispatch: React.Dispatch<any>;
+  type: NumberActionType;
+  dispatch: React.Dispatch<Action>;
   string: string;
 };
 function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
@@ -142,7 +162,7 @@ function CounterForm() {
       if (breaktime > 0) dispatch({ type: 'SET_IS_BREAK_MODE', payload: true });
     }
     if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current ?? undefined);
       dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
       dispatch({ type: 'SET_IS_START_MODE', payload: true });
     }
@@ -170,7 +190,7 @@ function CounterForm() {
     state.isStartmode,
   ]);
 
-  const handleStartMode = (e) => {
+  const handleStartMode = (e: number) => {
     if (e > 0) {
       dispatch({ type: 'SET_IS_START_MODE', payload: true });
     }
@@ -181,7 +201,7 @@ function CounterForm() {
     dispatch({ type: 'SET_STARTTIME', payload: e });
   };
 
-  const handleBreakMode = (e) => {
+  const handleBreakMode = (e: number) => {
     if (e > 0) {
       dispatch({ type: 'SET_BREAKTIME', payload: e });
     }
@@ -195,12 +215,12 @@ function CounterForm() {
   };
 
   const stopCounter = () => {
-    clearInterval(intervalRef.current);
+    clearInterval(intervalRef.current ?? undefined);
     dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
   };
 
   const resetCounter = () => {
-    clearInterval(intervalRef.current);
+    clearInterval(intervalRef.current ?? undefined);
     dispatch({ type: 'SET_SEC', payload: 0 });
     dispatch({ type: 'SET_MIN', payload: 0 });
     dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
