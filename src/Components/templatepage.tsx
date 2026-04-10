@@ -193,9 +193,9 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
               <img
                 src={'./statistic.png'}
                 className="w-6 h-6 mx-auto filter brightness-0 invert"
-                alt="Stats"
+                alt="Statistics"
               />
-              <span className="dock-label">Stats</span>
+              <span className="dock-label">Statistics</span>
             </button>
             <button
               ref={refs['/credentials']}
