@@ -215,7 +215,7 @@ const EditTrain = () => {
             w="w-full"
             h="h-10"
             id="workout-name-input"
-            onChange={(e) => setWorkoutName(e.target.value)}
+            onChange={setWorkoutName}
           />
           <div className="modal-action">
             <Button
@@ -389,7 +389,7 @@ const EditTrain = () => {
             <Input
               placeholder="Add an exercise..."
               value={addExercise}
-              onChange={(e) => setaddExercise(e.target.value)}
+              onChange={setaddExercise}
               id="input-e"
               w="w-54"
               h="h-10"

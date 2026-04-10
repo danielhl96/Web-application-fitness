@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import TemplatePage from '../Components/templatepage';
 import Button from '../Components/button.jsx';
@@ -7,94 +7,158 @@ import TemplateModal from '../Components/templatemodal.jsx';
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
-  const [sec, setSec] = useState(0);
-  const [min, setMin] = useState(0);
-  const [rounds, setRounds] = useState(0);
-  const [countRounds, setCountRounds] = useState(0);
-  const [breaktime, setBreaktime] = useState(0);
-  const [starttime, setStarttime] = useState(0);
-  const [roundtime, setRoundTime] = useState(0);
-  const [totaltime, setTotalTime] = useState(0);
+
   const intervalRef = useRef(null);
-  const [showModal, setShowModal] = useState(false);
-  const [isbreakmode, setIsBreakMode] = useState(false);
-  const [isStartmode, setisStartMode] = useState(false);
-  const [isStopmode, setisStopMode] = useState(false);
+  var totalSeconds = 0;
+  const initalState = {
+    sec: 0,
+    min: 0,
+    rounds: 0,
+    countRounds: 0,
+    breaktime: 0,
+    starttime: 0,
+    roundtime: 0,
+    totaltime: 0,
+    showModal: false,
+    isbreakmode: false,
+    isStartmode: false,
+    isStopmode: false,
+  };
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'SET_SEC':
+        return { ...state, sec: action.payload };
+      case 'SET_MIN':
+        return { ...state, min: action.payload };
+      case 'SET_ROUNDS':
+        return { ...state, rounds: action.payload };
+      case 'SET_COUNT_ROUNDS':
+        return { ...state, countRounds: action.payload };
+      case 'SET_BREAKTIME':
+        return { ...state, breaktime: action.payload };
+      case 'SET_STARTTIME':
+        return { ...state, starttime: action.payload };
+      case 'SET_ROUNDTIME':
+        return { ...state, roundtime: action.payload };
+      case 'SET_TOTALTIME':
+        return { ...state, totaltime: action.payload };
+      case 'SET_SHOW_MODAL':
+        return { ...state, showModal: action.payload };
+      case 'SET_IS_BREAK_MODE':
+        return { ...state, isbreakmode: action.payload };
+      case 'SET_IS_START_MODE':
+        return { ...state, isStartmode: action.payload };
+      case 'SET_IS_STOP_MODE':
+        return { ...state, isStopmode: action.payload };
+      case 'INCREMENT_SEC': {
+        const newSec = state.sec + 6 / 100;
+        if (newSec >= 360) {
+          return { ...state, sec: 0, min: state.min + 1 };
+        }
+        return { ...state, sec: newSec };
+      }
+      default:
+        return state;
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initalState);
 
   useEffect(() => {
-    const totalSeconds = min * 60 + Math.floor(sec / 6); //Whole time in seconds
-    setTotalTime(totalSeconds);
-    console.log(totalSeconds);
-    if (totalSeconds == 60) {
-      setMin((prevMin) => prevMin + 1);
-      setSec(0);
-    }
+    totalSeconds = state.min * 60 + Math.floor(state.sec / 6); //Whole time in seconds
+
+    dispatch({ type: 'SET_TOTALTIME', payload: totalSeconds });
     if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode) {
-      setCountRounds((prevRounds) => prevRounds + 1);
+      dispatch({ type: 'SET_COUNT_ROUNDS', payload: state.countRounds + 1 });
       // Reset for next round
-      setSec(0);
-      setMin(0);
-      if (breaktime > 0) setIsBreakMode(true);
+      dispatch({ type: 'SET_SEC', payload: 0 });
+      dispatch({ type: 'SET_MIN', payload: 0 });
+      dispatch({ type: 'SET_TOTALTIME', payload: 0 });
+      if (breaktime > 0) dispatch({ type: 'SET_IS_BREAK_MODE', payload: true });
     }
     if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
       clearInterval(intervalRef.current);
-      setisStopMode(false);
-      setisStartMode(true);
+      dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
+      dispatch({ type: 'SET_IS_START_MODE', payload: true });
     }
 
     if (totalSeconds == starttime && starttime !== 0 && isStartmode) {
-      setSec(0);
-      setMin(0);
-      setCountRounds(0);
-      setisStartMode(false);
+      dispatch({ type: 'SET_SEC', payload: 0 });
+      dispatch({ type: 'SET_MIN', payload: 0 });
+      dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
+      dispatch({ type: 'SET_IS_START_MODE', payload: false });
     }
     if (totalSeconds == breaktime && breaktime !== 0 && isbreakmode) {
-      setSec(0);
-      setMin(0);
-      setIsBreakMode(false);
+      dispatch({ type: 'SET_SEC', payload: 0 });
+      dispatch({ type: 'SET_MIN', payload: 0 });
+      dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
     }
-  }, [sec, roundtime, countRounds, rounds, min, breaktime, starttime, isbreakmode, isStartmode]);
+  }, [
+    state.sec,
+    state.roundtime,
+    state.countRounds,
+    state.rounds,
+    state.min,
+    state.breaktime,
+    state.starttime,
+    state.isbreakmode,
+    state.isStartmode,
+  ]);
 
   const handleStartMode = (e) => {
     if (e > 0) {
-      setisStartMode(true);
+      dispatch({ type: 'SET_IS_START_MODE', payload: true });
     }
     if (e == 0) {
-      setisStartMode(false);
+      dispatch({ type: 'SET_IS_START_MODE', payload: false });
     }
     console.log(breaktime);
-    setStarttime(e);
+    dispatch({ type: 'SET_STARTTIME', payload: e });
   };
 
   const handleBreakMode = (e) => {
     if (e > 0) {
-      setBreaktime(e);
+      dispatch({ type: 'SET_BREAKTIME', payload: e });
     }
   };
 
   const startCounter = () => {
     intervalRef.current = setInterval(function () {
-      setSec((prevSec) => prevSec + 6 / 100);
+      dispatch({ type: 'INCREMENT_SEC' });
     }, 10); // every 100 ms = 0.1 second
-    setisStopMode(true);
+    dispatch({ type: 'SET_IS_STOP_MODE', payload: true });
   };
 
   const stopCounter = () => {
     clearInterval(intervalRef.current);
-    setisStopMode(false);
+    dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
   };
 
   const resetCounter = () => {
     clearInterval(intervalRef.current);
-    setSec(0);
-    setMin(0);
-    setCountRounds(0);
-    setTotalTime(0);
+    dispatch({ type: 'SET_SEC', payload: 0 });
+    dispatch({ type: 'SET_MIN', payload: 0 });
+    dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
+    dispatch({ type: 'SET_TOTALTIME', payload: 0 });
 
-    setIsBreakMode(false);
-    setisStartMode(false);
-    setisStopMode(false);
+    dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
+    dispatch({ type: 'SET_IS_START_MODE', payload: false });
+    dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
   };
+
+  var {
+    sec,
+    min,
+    roundtime,
+    countRounds,
+    rounds,
+    breaktime,
+    starttime,
+    isbreakmode,
+    isStartmode,
+    isStopmode,
+  } = state;
 
   const settingsModal = () => {
     return (
@@ -109,7 +173,9 @@ function CounterForm() {
               max="100"
               className="range range-xs"
               step="1"
-              onChange={() => setRounds(parseInt(event.target.value))}
+              onChange={() =>
+                dispatch({ type: 'SET_ROUNDS', payload: parseInt(event.target.value) })
+              }
             />
             <h1>Rounds: {rounds}</h1>
             <input
@@ -139,12 +205,17 @@ function CounterForm() {
               max="180"
               className="range range-xs"
               step="1"
-              onChange={() => setRoundTime(parseInt(event.target.value))}
+              onChange={() =>
+                dispatch({ type: 'SET_ROUNDTIME', payload: parseInt(event.target.value) })
+              }
             />
             <h1>Roundtime: {roundtime} s</h1>
           </div>
           <div className="modal-action justify-center">
-            <Button border="#3b82f6" onClick={() => setShowModal(false)}>
+            <Button
+              border="#3b82f6"
+              onClick={() => dispatch({ type: 'SET_SHOW_MODAL', payload: false })}
+            >
               Close
             </Button>
           </div>
@@ -153,12 +224,13 @@ function CounterForm() {
     );
   };
 
-  const totalRotation = -180 + sec;
+  const totalRotation = -180 + state.sec;
+
   return (
     <div>
       <Header />
       <TemplatePage>
-        {showModal && settingsModal()}
+        {state.showModal && settingsModal()}
         <div className="flex flex-col items-center justify-center mt-4">
           <div className="divider divider-primary text-white font-bold mb-2">Stopwatch</div>
           <div className="relative w-60 h-60 border-8 border-gray-400/10 rounded-full bg-gradient-to-b from-gray-900 to-black">
@@ -177,12 +249,13 @@ function CounterForm() {
                   />
                   <h1
                     className={`absolute left-1/2 top-2/3 transform -translate-x-1/2 -translate-y-1/1 ${
-                      roundtime - totaltime <= 5 && 'text-red-500'
-                    } ${isbreakmode && 'text-purple-500'} ${
-                      isStartmode && 'text-yellow-500'
+                      state.roundtime - state.totaltime <= 5 && 'text-red-500'
+                    } ${state.isbreakmode && 'text-purple-500'} ${
+                      state.isStartmode && 'text-yellow-500'
                     } text-xs text-center items-center font-light`}
                   >
-                    {String(min).padStart(2, '0')} : {String(Math.floor(sec / 6)).padStart(2, '0')}
+                    {String(state.min).padStart(2, '0')} :{' '}
+                    {String(Math.floor(state.sec / 6)).padStart(2, '0')}
                   </h1>
                   {/* Number */}
                   <div
@@ -250,7 +323,10 @@ function CounterForm() {
           }
 
           <div className="flex flex-col items-center space-y-2">
-            <Button border="#3b82f6" onClick={() => setShowModal(true)}>
+            <Button
+              border="#3b82f6"
+              onClick={() => dispatch({ type: 'SET_SHOW_MODAL', payload: true })}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mb-1"
