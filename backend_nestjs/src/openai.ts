@@ -15,6 +15,7 @@ export async function analyzeFoodImage(prompt?: string, imageFile?: MulterFile) 
   if (!imageFile) throw new Error('No image file provided');
   const base64 = imageFile.buffer.toString('base64');
   const mimeType = imageFile.mimetype as 'image/jpeg' | 'image/png' | 'image/webp' | 'image/gif';
+  console.log('Prompt for AI analysis:', prompt);
 
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',

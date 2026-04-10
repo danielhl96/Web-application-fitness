@@ -36,11 +36,14 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
 
   useEffect(() => {
     if (selectedItem > 0) {
-      listRef.current?.scrollToRow({
-        index: selectedItem - 1,
-        align: 'center',
-        behavior: 'instant',
+      const raf = requestAnimationFrame(() => {
+        listRef.current?.scrollToRow({
+          index: selectedItem - 1,
+          align: 'center',
+          behavior: 'instant',
+        });
       });
+      return () => cancelAnimationFrame(raf);
     }
   }, []);
 
@@ -54,6 +57,7 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
           if (type === 'SET_STARTTIME' && rep !== 0) {
             dispatch({ type: 'SET_IS_START_MODE', payload: true });
           }
+          listRef.current?.scrollToRow({ index, align: 'center', behavior: 'smooth' });
         }}
         className={`border border-gray-800 text-xs text-center cursor-pointer flex items-center justify-center ${
           selectedItem === rep
@@ -78,7 +82,7 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
     <List
       listRef={listRef}
       rowCount={600}
-      rowHeight={32}
+      rowHeight={50}
       rowComponent={Row}
       rowProps={{}}
       defaultHeight={80}

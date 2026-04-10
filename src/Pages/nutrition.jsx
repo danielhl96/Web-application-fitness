@@ -406,7 +406,7 @@ function Nutrition() {
               <div className="flex flex-row items-center space-x-2">
                 <Input
                   placeholder="Enter an optional description"
-                  onChange={(e) => setPrompt(e.target.value)}
+                  onChange={setPrompt}
                   w={'w-62'}
                 ></Input>
                 <Button
