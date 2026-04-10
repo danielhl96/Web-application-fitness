@@ -31,15 +31,23 @@ type TableProps = {
   string: string;
 };
 function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
+  const selectedRef = useRef<HTMLTableCellElement>(null);
+
+  useEffect(() => {
+    if (selectedRef.current) {
+      selectedRef.current.scrollIntoView({ behavior: 'instant', block: 'center' });
+    }
+  }, []);
+
   return (
-    <div className=" lg:h-40 h-20 lg:w-30 w-30 overflow-y-scroll rounded-xl backdrop-blur-lg bg-gray-700/15 shadow-md border-[1px] border-black/20">
-      <table className="min-w-30 lg:min-w-30 border-collapse">
+    <div className=" lg:h-40 h-20 lg:w-32 w-30 overflow-y-scroll overflow-x-hidden rounded-xl backdrop-blur-lg bg-gray-700/15 shadow-md  border-black/20">
+      <table className="w-30 lg:w-25">
         <tbody>
-          {Array.from({ length: 25 }, (_, i) => i + 1).map((rep, index) => (
+          {Array.from({ length: 600 }, (_, i) => i + 1).map((rep, index) => (
             <tr
               key={index}
               data-round={rep}
-              className=" bg-gradient-to-b from-gray-800 to-black shadow-xl rounded-xl h-15"
+              className="bg-gradient-to-b from-gray-800 to-black shadow-xl  h-20"
               style={{
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
@@ -49,13 +57,25 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
               }}
             >
               <td
+                ref={selectedItem === rep ? selectedRef : null}
                 onClick={(e) => {
                   dispatch({ type: type, payload: rep });
+                  if (type === 'SET_STARTTIME' && rep !== 0) {
+                    dispatch({ type: 'SET_IS_START_MODE', payload: true });
+                  }
                   e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }}
-                className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
+                className={`border border-gray-800 text-center cursor-pointer rounded-md backdrop-blur-lg ${
                   selectedItem === rep
-                    ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
+                    ? type === 'SET_ROUNDS'
+                      ? 'bg-blue-600/60 text-blue-100 shadow-lg border-blue-500'
+                      : type === 'SET_STARTTIME'
+                        ? 'bg-yellow-500/60 text-yellow-100 shadow-lg border-yellow-400'
+                        : type === 'SET_BREAKTIME'
+                          ? 'bg-purple-600/60 text-purple-100 shadow-lg border-purple-500'
+                          : type === 'SET_ROUNDTIME'
+                            ? 'bg-green-600/60 text-green-100 shadow-lg border-green-500'
+                            : 'bg-black/15'
                     : 'bg-black/15'
                 }`}
               >
@@ -110,7 +130,7 @@ function CounterForm() {
       payload?: number | boolean;
     }
   ): typeof initalState {
-    switch (action.type) {
+    switch (action.type as Action['type']) {
       case 'SET_SEC':
         return { ...state, sec: action.payload as number };
       case 'SET_MIN':
@@ -153,7 +173,7 @@ function CounterForm() {
     totalSeconds = state.min * 60 + Math.floor(state.sec / 6); //Whole time in seconds
 
     dispatch({ type: 'SET_TOTALTIME', payload: totalSeconds });
-    if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode) {
+    if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode && !isStartmode) {
       dispatch({ type: 'SET_COUNT_ROUNDS', payload: state.countRounds + 1 });
       // Reset for next round
       dispatch({ type: 'SET_SEC', payload: 0 });
@@ -161,7 +181,7 @@ function CounterForm() {
       dispatch({ type: 'SET_TOTALTIME', payload: 0 });
       if (breaktime > 0) dispatch({ type: 'SET_IS_BREAK_MODE', payload: true });
     }
-    if (rounds !== 0 && countRounds === rounds && !isbreakmode) {
+    if (rounds !== 0 && countRounds === rounds && !isbreakmode && !isStartmode) {
       clearInterval(intervalRef.current ?? undefined);
       dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
       dispatch({ type: 'SET_IS_START_MODE', payload: true });
@@ -173,7 +193,7 @@ function CounterForm() {
       dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
       dispatch({ type: 'SET_IS_START_MODE', payload: false });
     }
-    if (totalSeconds == breaktime && breaktime !== 0 && isbreakmode) {
+    if (totalSeconds == breaktime && breaktime !== 0 && isbreakmode && !isStartmode) {
       dispatch({ type: 'SET_SEC', payload: 0 });
       dispatch({ type: 'SET_MIN', payload: 0 });
       dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
@@ -189,23 +209,6 @@ function CounterForm() {
     state.isbreakmode,
     state.isStartmode,
   ]);
-
-  const handleStartMode = (e: number) => {
-    if (e > 0) {
-      dispatch({ type: 'SET_IS_START_MODE', payload: true });
-    }
-    if (e == 0) {
-      dispatch({ type: 'SET_IS_START_MODE', payload: false });
-    }
-    console.log(breaktime);
-    dispatch({ type: 'SET_STARTTIME', payload: e });
-  };
-
-  const handleBreakMode = (e: number) => {
-    if (e > 0) {
-      dispatch({ type: 'SET_BREAKTIME', payload: e });
-    }
-  };
 
   const startCounter = () => {
     intervalRef.current = setInterval(function () {
@@ -225,9 +228,7 @@ function CounterForm() {
     dispatch({ type: 'SET_MIN', payload: 0 });
     dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
     dispatch({ type: 'SET_TOTALTIME', payload: 0 });
-
     dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
-
     dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
   };
 
@@ -316,7 +317,10 @@ function CounterForm() {
                   />
                   <h1
                     className={`absolute left-1/2 top-2/3 transform -translate-x-1/2 -translate-y-1/1 ${
-                      state.roundtime - state.totaltime <= 5 && 'text-red-500'
+                      state.roundtime - state.totaltime <= 5 &&
+                      !state.isStartmode &&
+                      !state.isbreakmode &&
+                      'text-red-500'
                     } ${state.isbreakmode && 'text-purple-500'} ${
                       state.isStartmode && 'text-yellow-500'
                     } text-xs text-center items-center font-light`}
