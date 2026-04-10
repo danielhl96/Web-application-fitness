@@ -1,7 +1,15 @@
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 
-function Notify({ title, message, type, duration, onClose }) {
-  const [visible, setVisible] = useState(true);
+type NotifyProps = {
+  title: string;
+  message: string;
+  type: 'success' | 'error';
+  duration: number;
+  onClose?: () => void;
+};
+
+function Notify({ title, message, type, duration, onClose }: NotifyProps): JSX.Element | null {
+  const [visible, setVisible] = useState<boolean>(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
