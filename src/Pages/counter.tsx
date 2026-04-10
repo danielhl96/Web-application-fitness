@@ -3,6 +3,7 @@ import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
+import { List, useListRef, RowComponentProps } from 'react-window';
 type Action =
   | {
       type:
@@ -31,61 +32,59 @@ type TableProps = {
   string: string;
 };
 function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
-  const selectedRef = useRef<HTMLTableCellElement>(null);
+  const listRef = useListRef(null);
 
   useEffect(() => {
-    if (selectedRef.current) {
-      selectedRef.current.scrollIntoView({ behavior: 'instant', block: 'center' });
+    if (selectedItem > 0) {
+      listRef.current?.scrollToRow({
+        index: selectedItem - 1,
+        align: 'center',
+        behavior: 'instant',
+      });
     }
   }, []);
 
-  return (
-    <div className=" lg:h-40 h-20 lg:w-32 w-30 overflow-y-scroll overflow-x-hidden rounded-xl backdrop-blur-lg bg-gray-700/15 shadow-md  border-black/20">
-      <table className="w-30 lg:w-25">
-        <tbody>
-          {Array.from({ length: 600 }, (_, i) => i + 1).map((rep, index) => (
-            <tr
-              key={index}
-              data-round={rep}
-              className="bg-gradient-to-b from-gray-800 to-black shadow-xl  h-20"
-              style={{
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                border: 'rgba(255,255,255,0.2) 1.5px solid',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                scrollbarColor: 'rgba(255,255,255,0.2) transparent',
-              }}
-            >
-              <td
-                ref={selectedItem === rep ? selectedRef : null}
-                onClick={(e) => {
-                  dispatch({ type: type, payload: rep });
-                  if (type === 'SET_STARTTIME' && rep !== 0) {
-                    dispatch({ type: 'SET_IS_START_MODE', payload: true });
-                  }
-                  e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }}
-                className={`border border-gray-800 text-center cursor-pointer rounded-md backdrop-blur-lg ${
-                  selectedItem === rep
-                    ? type === 'SET_ROUNDS'
-                      ? 'bg-blue-600/60 text-blue-100 shadow-lg border-blue-500'
-                      : type === 'SET_STARTTIME'
-                        ? 'bg-yellow-500/60 text-yellow-100 shadow-lg border-yellow-400'
-                        : type === 'SET_BREAKTIME'
-                          ? 'bg-purple-600/60 text-purple-100 shadow-lg border-purple-500'
-                          : type === 'SET_ROUNDTIME'
-                            ? 'bg-green-600/60 text-green-100 shadow-lg border-green-500'
-                            : 'bg-black/15'
+  const Row = ({ index, style }: RowComponentProps) => {
+    const rep = index + 1;
+    return (
+      <div
+        style={style}
+        onClick={() => {
+          dispatch({ type: type, payload: rep });
+          if (type === 'SET_STARTTIME' && rep !== 0) {
+            dispatch({ type: 'SET_IS_START_MODE', payload: true });
+          }
+        }}
+        className={`border border-gray-800 text-xs text-center cursor-pointer flex items-center justify-center ${
+          selectedItem === rep
+            ? type === 'SET_ROUNDS'
+              ? 'bg-blue-600/60 text-blue-100 shadow-lg border-blue-500'
+              : type === 'SET_STARTTIME'
+                ? 'bg-yellow-500/60 text-yellow-100 shadow-lg border-yellow-400'
+                : type === 'SET_BREAKTIME'
+                  ? 'bg-purple-600/60 text-purple-100 shadow-lg border-purple-500'
+                  : type === 'SET_ROUNDTIME'
+                    ? 'bg-green-600/60 text-green-100 shadow-lg border-green-500'
                     : 'bg-black/15'
-                }`}
-              >
-                {string + rep + (string === 'Rounds: ' ? ' ' : 's')}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+            : 'bg-black/15 hover:bg-white/10'
+        }`}
+      >
+        {string + rep + (string === 'Rounds: ' ? '' : 's')}
+      </div>
+    );
+  };
+
+  return (
+    <List
+      listRef={listRef}
+      rowCount={600}
+      rowHeight={32}
+      rowComponent={Row}
+      rowProps={{}}
+      defaultHeight={80}
+      className="h-20 lg:h-40 w-30 rounded-xl bg-gray-700/15 shadow-md"
+      style={{ scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
+    />
   );
 }
 
