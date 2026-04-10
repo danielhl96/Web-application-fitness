@@ -6,7 +6,7 @@ import TemplatePage from '../Components/templatepage.jsx';
 import WorkoutCard from '../Components/workoutcard.jsx';
 import api from '../Utils/api';
 import Button from '../Components/button.jsx';
-import Notify from './notify.jsx';
+import Notify from '../Components/notify.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
 
 function StartTraining() {

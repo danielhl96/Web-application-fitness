@@ -7,7 +7,7 @@ import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.jsx';
 import WorkoutCard from '../Components/workoutcard.jsx';
 import ExerciseCard from '../Components/exercisecard.jsx';
-import Notify from './notify.jsx';
+import Notify from '../Components/notify.jsx';
 import Input from '../Components/input.jsx';
 import Button from '../Components/button.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.jsx';
-import Notify from './notify.jsx';
+import Notify from '../Components/notify.jsx';
 import Input from '../Components/input.jsx';
 import ApexCharts from 'apexcharts';
 import Button from '../Components/button.jsx';

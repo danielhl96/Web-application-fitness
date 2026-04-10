@@ -1,7 +1,7 @@
 import TemplatePage from '../Components/templatepage';
 import Header from '../Components/Header.jsx';
 import WorkoutCard from '../Components/workoutcard.jsx';
-import Notify from './notify.jsx';
+import Notify from '../Components/notify.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import api from '../Utils/api.js';

@@ -2,7 +2,7 @@ import TemplatePage from '../Components/templatepage';
 import api from '../Utils/api.js';
 import Input from '../Components/input.jsx';
 import ApexCharts from 'apexcharts';
-import Notify from './notify.jsx';
+import Notify from '../Components/notify.jsx';
 import Button from '../Components/button.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
 
