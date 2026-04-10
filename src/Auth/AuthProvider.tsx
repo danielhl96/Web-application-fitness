@@ -1,18 +1,24 @@
-import React, { createContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useState, useEffect, useRef, JSX } from 'react';
 import api from '../Utils/api';
-
-export const AuthContext = createContext({
+type AuthContextType = {
+  isAuth: boolean;
+  loading: boolean;
+  refresh: () => Promise<void>;
+};
+export const AuthContext = createContext<AuthContextType>({
   isAuth: false,
   loading: true,
   refresh: async () => {},
 });
+type AuthProviderProps = {
+  children: React.ReactNode;
+};
+export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const isCheckingRef = useRef<boolean>(false);
 
-export function AuthProvider({ children }) {
-  const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const isCheckingRef = useRef(false);
-
-  const checkAuth = async () => {
+  const checkAuth = async (): Promise<void> => {
     if (isCheckingRef.current) return; // Prevent concurrent checks
     isCheckingRef.current = true;
     try {

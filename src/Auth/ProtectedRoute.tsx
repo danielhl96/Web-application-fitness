@@ -1,11 +1,13 @@
-import { useContext } from 'react';
+import { JSX, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
 
-function ProtectedRoute({ children }) {
-  const { isAuth, loading } = useContext(AuthContext);
+type ProtectedRouteProps = {
+  children: React.ReactNode;
+};
+function ProtectedRoute({ children }: ProtectedRouteProps): JSX.Element {
+  const { isAuth, loading } = useContext<{ isAuth: boolean; loading: boolean }>(AuthContext);
 
-  console.log(isAuth, loading);
   if (loading)
     return (
       <div className="min-h-[100dvh] bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center">
@@ -13,7 +15,7 @@ function ProtectedRoute({ children }) {
       </div>
     );
   if (!isAuth) return <Navigate to="/login" replace />;
-  return children;
+  return <>{children}</>;
 }
 
 export default ProtectedRoute;
