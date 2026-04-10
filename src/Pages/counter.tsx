@@ -1,56 +1,120 @@
-import React, { useReducer } from 'react';
+import React, { JSX, useReducer } from 'react';
 import { useState, useEffect, useRef } from 'react';
-import TemplatePage from '../Components/templatepage';
-import Button from '../Components/button.jsx';
-import Header from '../Components/Header.jsx';
-import TemplateModal from '../Components/templatemodal.jsx';
+import TemplatePage from '../Components/templatepage.js';
+import Button from '../Components/button.js';
+import Header from '../Components/Header.js';
+import TemplateModal from '../Components/templatemodal.js';
+type TableProps = {
+  selectedItem: number;
+  type: string;
+  dispatch: React.Dispatch<any>;
+  string: string;
+};
+function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
+  return (
+    <div className=" lg:h-40 h-20 lg:w-30 w-30 overflow-y-scroll rounded-xl backdrop-blur-lg bg-gray-700/15 shadow-md border-[1px] border-black/20">
+      <table className="min-w-30 lg:min-w-30 border-collapse">
+        <tbody>
+          {Array.from({ length: 25 }, (_, i) => i + 1).map((rep, index) => (
+            <tr
+              key={index}
+              data-round={rep}
+              className=" bg-gradient-to-b from-gray-800 to-black shadow-xl rounded-xl h-15"
+              style={{
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: 'rgba(255,255,255,0.2) 1.5px solid',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                scrollbarColor: 'rgba(255,255,255,0.2) transparent',
+              }}
+            >
+              <td
+                onClick={(e) => {
+                  dispatch({ type: type, payload: rep });
+                  e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }}
+                className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
+                  selectedItem === rep
+                    ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
+                    : 'bg-black/15'
+                }`}
+              >
+                {string + rep + (string === 'Rounds: ' ? ' ' : 's')}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function CounterForm() {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
 
-  const intervalRef = useRef(null);
-  var totalSeconds = 0;
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  var totalSeconds: number = 0;
   const initalState = {
-    sec: 0,
-    min: 0,
-    rounds: 0,
-    countRounds: 0,
-    breaktime: 0,
-    starttime: 0,
-    roundtime: 0,
-    totaltime: 0,
-    showModal: false,
-    isbreakmode: false,
-    isStartmode: false,
-    isStopmode: false,
+    sec: 0 as number,
+    min: 0 as number,
+    rounds: 0 as number,
+    countRounds: 0 as number,
+    breaktime: 0 as number,
+    starttime: 0 as number,
+    roundtime: 0 as number,
+    totaltime: 0 as number,
+    showModal: false as boolean,
+    isbreakmode: false as boolean,
+    isStartmode: false as boolean,
+    isStopmode: false as boolean,
   };
 
-  function reducer(state, action) {
+  function reducer(
+    state: typeof initalState,
+    action: {
+      type:
+        | 'SET_SEC'
+        | 'SET_MIN'
+        | 'SET_ROUNDS'
+        | 'SET_COUNT_ROUNDS'
+        | 'SET_BREAKTIME'
+        | 'SET_STARTTIME'
+        | 'SET_ROUNDTIME'
+        | 'SET_TOTALTIME'
+        | 'SET_SHOW_MODAL'
+        | 'SET_IS_BREAK_MODE'
+        | 'SET_IS_START_MODE'
+        | 'SET_IS_STOP_MODE'
+        | 'INCREMENT_SEC';
+      payload?: number | boolean;
+    }
+  ): typeof initalState {
     switch (action.type) {
       case 'SET_SEC':
-        return { ...state, sec: action.payload };
+        return { ...state, sec: action.payload as number };
       case 'SET_MIN':
-        return { ...state, min: action.payload };
+        return { ...state, min: action.payload as number };
       case 'SET_ROUNDS':
-        return { ...state, rounds: action.payload };
+        return { ...state, rounds: action.payload as number };
       case 'SET_COUNT_ROUNDS':
-        return { ...state, countRounds: action.payload };
+        return { ...state, countRounds: action.payload as number };
       case 'SET_BREAKTIME':
-        return { ...state, breaktime: action.payload };
+        return { ...state, breaktime: action.payload as number };
       case 'SET_STARTTIME':
-        return { ...state, starttime: action.payload };
+        return { ...state, starttime: action.payload as number };
       case 'SET_ROUNDTIME':
-        return { ...state, roundtime: action.payload };
+        return { ...state, roundtime: action.payload as number };
       case 'SET_TOTALTIME':
-        return { ...state, totaltime: action.payload };
+        return { ...state, totaltime: action.payload as number };
       case 'SET_SHOW_MODAL':
-        return { ...state, showModal: action.payload };
+        return { ...state, showModal: action.payload as boolean };
       case 'SET_IS_BREAK_MODE':
-        return { ...state, isbreakmode: action.payload };
+        return { ...state, isbreakmode: action.payload as boolean };
       case 'SET_IS_START_MODE':
-        return { ...state, isStartmode: action.payload };
+        return { ...state, isStartmode: action.payload as boolean };
       case 'SET_IS_STOP_MODE':
-        return { ...state, isStopmode: action.payload };
+        return { ...state, isStopmode: action.payload as boolean };
       case 'INCREMENT_SEC': {
         const newSec = state.sec + 6 / 100;
         if (newSec >= 360) {
@@ -63,7 +127,7 @@ function CounterForm() {
     }
   }
 
-  const [state, dispatch] = useReducer(reducer, initalState);
+  const [state, dispatch] = useReducer(reducer, initalState as typeof initalState);
 
   useEffect(() => {
     totalSeconds = state.min * 60 + Math.floor(state.sec / 6); //Whole time in seconds
@@ -143,13 +207,11 @@ function CounterForm() {
     dispatch({ type: 'SET_TOTALTIME', payload: 0 });
 
     dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
-    dispatch({ type: 'SET_IS_START_MODE', payload: false });
+
     dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
   };
 
   var {
-    sec,
-    min,
     roundtime,
     countRounds,
     rounds,
@@ -160,56 +222,41 @@ function CounterForm() {
     isStopmode,
   } = state;
 
-  const settingsModal = () => {
+  const settingsModal = (): JSX.Element => {
     return (
       <div>
         <TemplateModal>
           <div className="divider divider-primary text-amber-50 font-bold mb-6">Settings</div>
-          <div className="flex flex-col justify-center items-center space-y-4 text-xs">
-            <input
-              type="range"
-              defaultValue={rounds}
-              min="0"
-              max="100"
-              className="range range-xs"
-              step="1"
-              onChange={() =>
-                dispatch({ type: 'SET_ROUNDS', payload: parseInt(event.target.value) })
-              }
-            />
-            <h1>Rounds: {rounds}</h1>
-            <input
-              type="range"
-              defaultValue={starttime}
-              min="0"
-              max="60"
-              className="range range-xs"
-              step="1"
-              onChange={() => handleStartMode(parseInt(event.target.value))}
-            />
-            <h1> Starttime: {starttime} s </h1>
-            <input
-              type="range"
-              defaultValue={breaktime}
-              min="0"
-              max="180"
-              className="range range-xs"
-              step="1"
-              onChange={() => handleBreakMode(parseInt(event.target.value))}
-            />
-            <h1>Breaktime: {breaktime} s </h1>
-            <input
-              type="range"
-              defaultValue={roundtime}
-              min="0"
-              max="180"
-              className="range range-xs"
-              step="1"
-              onChange={() =>
-                dispatch({ type: 'SET_ROUNDTIME', payload: parseInt(event.target.value) })
-              }
-            />
-            <h1>Roundtime: {roundtime} s</h1>
+          <div className="flex flex-col items-center space-y-2 ">
+            <div className="grid grid-cols-1 lg:grid-cols-2  text-xs gap-4">
+              <Table
+                selectedItem={rounds}
+                type="SET_ROUNDS"
+                dispatch={dispatch}
+                string="Rounds: "
+              />
+
+              <Table
+                selectedItem={starttime}
+                type="SET_STARTTIME"
+                dispatch={dispatch}
+                string="Starttime: "
+              />
+
+              <Table
+                selectedItem={breaktime}
+                type="SET_BREAKTIME"
+                dispatch={dispatch}
+                string="Breaktime: "
+              />
+
+              <Table
+                selectedItem={roundtime}
+                type="SET_ROUNDTIME"
+                dispatch={dispatch}
+                string="Roundtime: "
+              />
+            </div>
           </div>
           <div className="modal-action justify-center">
             <Button

@@ -7,7 +7,7 @@ import StartTraining from './Pages/training.jsx';
 import Profile from './Pages/profile.jsx';
 import RegisterPage from './Pages/register.jsx';
 import PasswordForget from './Pages/passwordforget.jsx';
-import Counter from './Pages/counter.jsx';
+import Counter from './Pages/counter.tsx';
 import ProtectedRoute from './Auth/ProtectedRoute.jsx';
 import PrivacyPolicy from './Pages/privacypolicy.jsx';
 import Impressum from './Pages/imprint.jsx';
