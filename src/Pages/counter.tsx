@@ -33,7 +33,11 @@ type TableProps = {
 };
 function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
   const listRef = useListRef(null);
-
+  // Scroll to the selected item when the component mounts
+  // We use requestAnimationFrame to ensure the DOM is ready before scrolling
+  // We also check if selectedItem is greater than 0 to avoid scrolling to index -1
+  // This ensures that when the modal opens, the list will automatically scroll to the currently selected item, providing a better user experience.
+  // We also return a cleanup function to cancel the animation frame if the component unmounts before the scroll happens, preventing potential memory leaks.
   useEffect(() => {
     if (selectedItem > 0) {
       const raf = requestAnimationFrame(() => {
@@ -92,7 +96,7 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
   );
 }
 
-function CounterForm() {
+function CounterForm(): JSX.Element {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
 
