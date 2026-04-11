@@ -2,7 +2,7 @@ import '../index.css';
 import Header from '../Components/Header';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import exercise from '../Components/exercises.jsx';
+import exercise from '../Components/exercises.ts';
 import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.jsx';
 import WorkoutCard from '../Components/workoutcard.jsx';

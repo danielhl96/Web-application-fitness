@@ -1,29 +1,32 @@
-import TemplatePage from '../Components/templatepage.jsx';
-import Button from '../Components/button.jsx';
-import Input from '../Components/input.jsx';
-import { useEffect, useState, useRef, use } from 'react';
-import Header from '../Components/Header.jsx';
+import TemplatePage from '../Components/templatepage.js';
+import Button from '../Components/button.js';
+import Input from '../Components/input.js';
+import { useEffect, useState, useRef, JSX } from 'react';
+import Header from '../Components/Header.js';
 import api from '../Utils/api.js';
-import TemplateModal from '../Components/templatemodal.jsx';
+import TemplateModal from '../Components/templatemodal.js';
+import { Workout, Profile, Meal } from './types.js';
 function AiCoach() {
-  const [question, setQuestion] = useState('');
-  const refs = useRef({});
-  const [workouts, setWorkouts] = useState([]);
-  const [chatHistory, setChatHistory] = useState([
+  const [question, setQuestion] = useState<string>('');
+  const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [workouts, setWorkouts] = useState<{ workouts: Workout[]; name: string }[]>([]);
+  const [chatHistory, setChatHistory] = useState<
+    { message: string; isUser: boolean; refs: HTMLDivElement | null }[]
+  >([
     {
       message: 'Hi, im your fitness coach! How can I assist you today?',
       isUser: false,
       refs: null,
     },
   ]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  function handleMessage(message, isUser) {
+  function handleMessage(message: string, isUser: boolean) {
     setChatHistory((prev) => [...prev, { message, isUser, refs: null }]);
   }
 
-  const handleQuestionChange = (e) => {
-    setQuestion(e);
+  const handleQuestionChange = (value: string) => {
+    setQuestion(value);
   };
 
   useEffect(() => {
@@ -38,7 +41,7 @@ function AiCoach() {
   }, []);
 
   function fetchUserProfile() {
-    api.get('users/profile').then((response) => {
+    api.get('users/profile').then((response: { data: Profile }) => {
       const profile = response.data;
       handleMessage(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm and Fitness goal: ${profile.goal == 3 ? 'Bulk' : profile.goal == 2 ? 'Maintain weight' : profile.goal == 1 ? 'loss weight' : ''}. Please consider this information to analyse.`,
@@ -51,14 +54,16 @@ function AiCoach() {
   }
 
   function fetchWorkouts() {
-    api.get('workout_plans/get_workout_plans').then((response) => {
-      const workoutsData = response.data;
-      const newWorkouts = workoutsData.map((workout) => ({
-        workouts: workout.exercises,
-        name: workout.name,
-      }));
-      setWorkouts(newWorkouts);
-    });
+    api
+      .get('workout_plans/get_workout_plans')
+      .then((response: { data: { exercises: Workout[]; name: string }[] }) => {
+        const workoutsData = response.data;
+        const newWorkouts = workoutsData.map((workout) => ({
+          workouts: workout.exercises,
+          name: workout.name,
+        }));
+        setWorkouts(newWorkouts);
+      });
   }
 
   function fetchLastMeal() {
@@ -68,7 +73,7 @@ function AiCoach() {
     const promises = mealTypes.map((type) =>
       api
         .get(`meals/get_${type}`, { params: { date } })
-        .then((response) => ({
+        .then((response: { data: Meal[] }) => ({
           type,
           meals: response.data,
         }))
@@ -103,13 +108,13 @@ function AiCoach() {
         handleMessage(allMealsMessage, true);
         handleOpenAIResponse(aiMessage);
       })
-      .catch((error) => {
+      .catch((_error: unknown) => {
         handleMessage('Sorry, there was an error fetching your meals.', false);
         setIsLoading(false);
       });
   }
 
-  function openModal() {
+  function openModal(): JSX.Element {
     return (
       <TemplateModal>
         <span className="loading loading-bars loading-xl"></span>
@@ -117,7 +122,7 @@ function AiCoach() {
     );
   }
 
-  function handleOpenAIResponse(userMessage) {
+  function handleOpenAIResponse(userMessage: string): void {
     api
       .post(
         'aicoach/response',
@@ -133,13 +138,18 @@ function AiCoach() {
         handleMessage(aiMessage, false);
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch((_error: unknown) => {
         handleMessage('Sorry, there was an error processing your request.', false);
         setIsLoading(false);
       });
   }
 
-  function createBubble(message, isUser, index, ref) {
+  function createBubble(
+    message: string,
+    isUser: boolean,
+    index: number,
+    ref: (el: HTMLDivElement | null) => void
+  ): JSX.Element {
     return (
       <div className={`chat ${isUser ? 'chat-end' : 'chat-start'}`} key={index} ref={ref}>
         <div
@@ -250,7 +260,6 @@ function AiCoach() {
             <Input
               value={question}
               onChange={handleQuestionChange}
-              type="text"
               placeholder="Enter your question..."
             />
             <Button

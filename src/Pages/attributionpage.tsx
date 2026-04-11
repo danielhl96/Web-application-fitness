@@ -1,6 +1,7 @@
-import Header from '../Components/HeaderLogout.jsx';
-import TemplatePage from '../Components/templatepage.jsx';
-function AttributionPage() {
+import { JSX } from 'react';
+import Header from '../Components/HeaderLogout.js';
+import TemplatePage from '../Components/templatepage.js';
+function AttributionPage(): JSX.Element {
   return (
     <div>
       <Header />

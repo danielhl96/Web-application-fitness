@@ -1,22 +1,25 @@
 import '../index.css';
-import Header from '../Components/Header';
-import { useEffect, useState } from 'react';
+import Header from '../Components/Header.js';
+import { JSX, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
-import exercise from '../Components/exercises.jsx';
-import TemplatePage from '../Components/templatepage.jsx';
-import ExerciseCard from '../Components/exercisecard.jsx';
-import Notify from '../Components/notify.jsx';
-import Input from '../Components/input.jsx';
-import Button from '../Components/button.jsx';
-function CreateTraining() {
+import api from '../Utils/api.js';
+import exercise from '../Components/exercises.ts';
+import TemplatePage from '../Components/templatepage.js';
+import ExerciseCard from '../Components/exercisecard.js';
+import Notify from '../Components/notify.js';
+import Input from '../Components/input.js';
+import Button from '../Components/button.js';
+import { Exercise, ExerciseTemplate, Notification } from './types.js';
+function CreateTraining(): JSX.Element {
   const navigate = useNavigate();
-  const [WorkoutName, setWorkoutName] = useState('');
-  const [WorkoutNameSet, setWorkoutNameSet] = useState(false);
-  const [notification, setNotification] = useState(null);
-  const handleSaveTraining = async () => {
-    const trainingName = WorkoutName || document.getElementById('training-input').value;
-    const selectedExercises = selectedExercise.map((exercise) => ({
+  const [WorkoutName, setWorkoutName] = useState<string>('');
+  const [WorkoutNameSet, setWorkoutNameSet] = useState<boolean>(false);
+  const [notification, setNotification] = useState<Notification | null>(null);
+
+  const handleSaveTraining = async (): Promise<void> => {
+    const trainingName =
+      WorkoutName || (document.getElementById('training-input') as HTMLInputElement).value;
+    const selectedExercises = selectedExercise.map((exercise: Exercise) => ({
       name: exercise.name,
       sets: exercise.sets,
       reps: exercise.reps,
@@ -30,7 +33,7 @@ function CreateTraining() {
         name: trainingName,
         exercises: selectedExercises,
       })
-      .then((response) => {
+      .then(() => {
         setMessage('Training saved successfully!');
         setNotification({
           title: 'Training Saved',
@@ -42,7 +45,7 @@ function CreateTraining() {
         setWorkoutNameSet(false);
         setSelectedExercise([]);
       })
-      .catch((error) => {
+      .catch(() => {
         setMessage('Error saving training.');
         setNotification({
           title: 'Error',
@@ -56,12 +59,12 @@ function CreateTraining() {
     setExerciseExists(exercise);
   }, []);
 
-  const [selectedExercise, setSelectedExercise] = useState([]);
+  const [selectedExercise, setSelectedExercise] = useState<Exercise[]>([]);
   const [addExercise, setaddExercise] = useState('');
-  const [exerciseExists, setExerciseExists] = useState([]);
+  const [exerciseExists, setExerciseExists] = useState<ExerciseTemplate[]>([]);
   const [Message, setMessage] = useState('');
 
-  function changePosition(element, direction) {
+  function changePosition(element: Exercise, direction: 'up' | 'down'): void {
     const index = selectedExercise.findIndex((ex) => ex.name === element.name);
     if (direction === 'up' && index > 0) {
       const newExercises = [...selectedExercise];
@@ -80,14 +83,12 @@ function CreateTraining() {
     }
   }
 
-  function handleExerciseChange(e) {
+  function handleExerciseChange(e: string): void {
     const selectedName = e;
 
     const found = exercise.find((item) => item.name === selectedName);
     if (found) {
-      // Add the found exercise to the selectedExercise state
       setSelectedExercise((prev) => {
-        // Check if the exercise is already in the list before adding
         if (!prev.some((item) => item.name === found.name)) {
           setNotification({
             title: 'Exercise Added',
@@ -95,35 +96,30 @@ function CreateTraining() {
             type: 'success',
           });
           setaddExercise('');
-          return [...prev, found];
+          return [
+            ...prev,
+            {
+              ...found,
+              sets: 1,
+              reps: [8],
+              weights: [0],
+              date: new Date().toISOString().split('T')[0],
+            },
+          ];
         }
         setNotification({
           title: 'Exercise Exists',
           message: `${found.name} is already in your workout.`,
-          type: 'info',
+          type: 'error',
         });
-        return prev; // Don't add if already in the list
+        return prev;
       });
     }
-    if (found) {
-      // Update the sets and reps for the found exercise
 
-      const updatedExercise = {
-        ...found,
-        sets: 1,
-        reps: 1,
-        weights: 0,
-
-        date: new Date().toISOString().split('T')[0],
-      };
-      setSelectedExercise((prev) => prev.map((item) => (item.name === e ? updatedExercise : item)));
-    }
-
-    document.getElementById('input-e').value = '';
     setaddExercise('');
   }
 
-  const handleRemoveExercise = (name) => {
+  const handleRemoveExercise = (name: string) => {
     setSelectedExercise((prev) => prev.filter((item) => item.name !== name));
     setNotification({
       title: 'Exercise Removed',
@@ -132,7 +128,7 @@ function CreateTraining() {
     });
   };
 
-  const handleRepsChange = (exerciseName, reps) => {
+  const handleRepsChange = (exerciseName: string, reps: number) => {
     setSelectedExercise((prev) =>
       prev.map((item) =>
         item.name === exerciseName
@@ -141,7 +137,7 @@ function CreateTraining() {
       )
     );
   };
-  const handleSetsChange = (exerciseName, sets) => {
+  const handleSetsChange = (exerciseName: string, sets: number) => {
     setSelectedExercise((prev) =>
       prev.map((item) =>
         item.name === exerciseName
@@ -182,7 +178,6 @@ function CreateTraining() {
             <Input
               value={WorkoutName}
               onDisable={WorkoutNameSet}
-              type="input"
               placeholder="Workout name"
               id="training-input"
               onChange={(e) => setWorkoutName(e)}
@@ -235,7 +230,6 @@ function CreateTraining() {
                   w="w-54"
                   h="h-10"
                   placeholder="Enter an exercise name"
-                  className="input input-bordered w-54 h-10 bg-slate-900 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   id="input-e"
                 />
               </div>
@@ -254,7 +248,7 @@ function CreateTraining() {
               .filter(
                 (prev) =>
                   prev.name.toLowerCase().includes(addExercise.toLowerCase()) &&
-                  !selectedExercise.some((ex) => ex.exercise === prev.name)
+                  !selectedExercise.some((ex) => ex.name === prev.name)
               )
               .map((item, index) => (
                 <div
@@ -301,8 +295,6 @@ function CreateTraining() {
                       ExerciseImage={exercise.img}
                       reps={exercise.reps}
                       sets={exercise.sets}
-                      weights={exercise.weights}
-                      onRemove={() => handleRemoveExercise(exercise.name)}
                       // Callback for Prop passed
                       onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
                       onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
