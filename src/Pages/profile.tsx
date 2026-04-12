@@ -8,6 +8,7 @@ import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
 import { UI_STATE } from './types.ts';
+import { User } from './types.ts';
 function Profile() {
   const [bmi, setBmi] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
@@ -34,7 +35,8 @@ function Profile() {
     message: string;
     type: 'success' | 'error';
   } | null>(null);
-  const [user, setUser] = useState<UI_STATE<any>>({ type: 'loading' });
+
+  const [user, setUser] = useState<UI_STATE<User>>({ type: 'loading' });
   const [showTrend, setShowTrend] = useState<boolean>(false);
   const [bodyvalue, setBodyvalue] = useState<any>(null);
   const [selectedBodyValue, setSelectedBodyValue] = useState<string>('weight');
@@ -60,11 +62,11 @@ function Profile() {
     });
   };
 
-  const getProfile = () => {
+  const getProfile = (): void => {
     setUser({ type: 'loading' });
     api
       .get('/users/profile')
-      .then((response) => {
+      .then((response: { data: User }) => {
         const data = response.data;
         setUser({ type: 'success', data: data });
         setBmi(data.bmi);
@@ -85,7 +87,7 @@ function Profile() {
       });
   };
 
-  const handleEdit = () => {
+  const handleEdit = (): void => {
     api
       .put('/users/edit_profile', {
         bmi,

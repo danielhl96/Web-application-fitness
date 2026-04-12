@@ -4,7 +4,7 @@ export type Workout = {
   reps: number[];
   weights: number[];
 };
-export type Profile = {
+export type User = {
   age: number;
   weight: number;
   height: number;

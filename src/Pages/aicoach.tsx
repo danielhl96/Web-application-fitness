@@ -5,7 +5,7 @@ import { useEffect, useState, useRef, JSX } from 'react';
 import Header from '../Components/Header.js';
 import api from '../Utils/api.js';
 import TemplateModal from '../Components/templatemodal.js';
-import { Workout, Profile, Meal } from './types.js';
+import { Workout, User, Meal } from './types.js';
 function AiCoach() {
   const [question, setQuestion] = useState<string>('');
   const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
@@ -41,7 +41,7 @@ function AiCoach() {
   }, []);
 
   function fetchUserProfile() {
-    api.get('users/profile').then((response: { data: Profile }) => {
+    api.get('users/profile').then((response: { data: User }) => {
       const profile = response.data;
       handleMessage(
         `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm and Fitness goal: ${profile.goal == 3 ? 'Bulk' : profile.goal == 2 ? 'Maintain weight' : profile.goal == 1 ? 'loss weight' : ''}. Please consider this information to analyse.`,
