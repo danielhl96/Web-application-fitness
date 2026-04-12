@@ -18,6 +18,18 @@ export type Profile = {
   bfp: number;
 };
 
+export type UI_STATE<T> =
+  | {
+      type: 'loading';
+    }
+  | {
+      type: 'error';
+      error: string;
+    }
+  | {
+      type: 'success';
+      data: T;
+    };
 export type Meal = {
   name: string;
   calories: number;
