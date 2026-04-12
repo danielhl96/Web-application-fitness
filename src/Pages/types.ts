@@ -27,10 +27,7 @@ export type Meal = {
   fats: number;
 };
 
-export type ApiResponse<T> = {
-  message: string;
-  data: T;
-};
+type ApiResponse<T> = { status: 'success'; data: T } | { status: 'error'; message: string };
 
 export type ExerciseTemplate = {
   name: string;

@@ -306,7 +306,7 @@ function Profile() {
   };
 
   const handleHeight = (e) => {
-    const value = parseFloat(e.target.value);
+    const value = parseFloat(e);
 
     if (value < 100 || isNaN(value)) {
       setFailureHeight(true);
@@ -317,7 +317,7 @@ function Profile() {
   };
 
   const handleWeight = (e) => {
-    const value = parseFloat(e.target.value);
+    const value = parseFloat(e);
     if (value < 20 || isNaN(value)) {
       setFailureWeight(true);
     } else {
@@ -332,7 +332,7 @@ function Profile() {
   };
 
   const handleHip = (e) => {
-    const value = parseFloat(e.target.value);
+    const value = parseFloat(e);
     if (value < 50 || isNaN(value)) {
       setFailureHip(true);
     } else {
@@ -343,7 +343,7 @@ function Profile() {
   };
 
   const handleWaist = (e) => {
-    const value = parseFloat(e.target.value);
+    const value = parseFloat(e);
     if (value < 20 || isNaN(value)) {
       setFailureWaist(true);
     } else {
@@ -362,7 +362,7 @@ function Profile() {
   };
 
   const handleBFP = (e) => {
-    const value = parseFloat(e.target.value);
+    const value = parseFloat(e);
     if (value <= 0 || isNaN(value)) {
       setFailureBFP(true);
     } else {
