@@ -1,13 +1,7 @@
 import Button from './button';
 import { JSX, useEffect } from 'react';
 import ApexCharts from 'apexcharts';
-type UserHistory = {
-  date: string;
-  weight: number;
-  waist: number;
-  hip: number;
-  bfp: number;
-};
+import { UserHistory } from '../Pages/types.ts';
 
 type HistoryProps = {
   bodyvalue: UserHistory[];

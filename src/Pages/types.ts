@@ -18,6 +18,14 @@ export type User = {
   bfp: number;
 };
 
+export type UserHistory = {
+  date: string;
+  weight: number;
+  waist: number;
+  hip: number;
+  bfp: number;
+};
+
 export type UI_STATE<T> =
   | {
       type: 'loading';

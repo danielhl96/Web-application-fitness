@@ -7,8 +7,9 @@ import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
-import { UI_STATE } from './types.ts';
+import { UI_STATE, UserHistory } from './types.ts';
 import { User } from './types.ts';
+
 function Profile() {
   const [bmi, setBmi] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
@@ -38,7 +39,7 @@ function Profile() {
 
   const [user, setUser] = useState<UI_STATE<User>>({ type: 'loading' });
   const [showTrend, setShowTrend] = useState<boolean>(false);
-  const [bodyvalue, setBodyvalue] = useState<any>(null);
+  const [bodyvalue, setBodyvalue] = useState<UserHistory[] | null>(null);
   const [selectedBodyValue, setSelectedBodyValue] = useState<string>('weight');
 
   useEffect(() => {
@@ -53,11 +54,9 @@ function Profile() {
     '2.0': 'Very active',
   };
 
-  const get_history = () => {
-    api.get('/users/get_history').then((response) => {
+  const get_history = (): void => {
+    api.get('/users/get_history').then((response: { data: UserHistory[] }) => {
       const data = response.data;
-
-      console.log('Fetched history data:', data);
       setBodyvalue(data);
     });
   };
@@ -102,8 +101,8 @@ function Profile() {
         calories,
         activity_level: activity,
       })
-      .then((response: { data: any }) => {
-        console.log('Profile updated successfully:', response.data);
+      .then(() => {
+        console.log('Profile updated successfully:');
         setNotification({
           title: 'Profile Updated',
           message: 'Your profile has been updated successfully.',
@@ -111,8 +110,8 @@ function Profile() {
         });
         setEdit(false);
       })
-      .catch((error: any) => {
-        console.error('Error updating profile:', error);
+      .catch(() => {
+        console.error('Error updating profile:');
         setNotification({
           title: 'Error',
           message: 'There was an error updating your profile.',
