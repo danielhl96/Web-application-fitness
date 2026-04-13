@@ -123,6 +123,7 @@ function RegisterPage() {
             disabled={
               !checkEmail(email) ||
               passwordError ||
+              checkConfirmPassword(confirmPassword, password) ||
               email.length === 0 ||
               password.length === 0 ||
               confirmPassword.length === 0 ||
