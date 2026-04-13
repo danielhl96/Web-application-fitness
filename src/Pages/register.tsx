@@ -11,9 +11,7 @@ function RegisterPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-
   const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [succesRegister, setSuccesRegister] = useState<boolean>(false);
@@ -125,7 +123,6 @@ function RegisterPage() {
             disabled={
               !checkEmail(email) ||
               passwordError ||
-              confirmPasswordError ||
               email.length === 0 ||
               password.length === 0 ||
               confirmPassword.length === 0 ||
