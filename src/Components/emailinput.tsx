@@ -6,8 +6,15 @@ type EmailInputProps = {
   onChange: (value: string) => void;
   onError?: (error: boolean) => void;
   errorMessage?: string;
+  disabled?: boolean;
 };
-function EmailInput({ value, onChange, onError, errorMessage }: EmailInputProps): JSX.Element {
+function EmailInput({
+  value,
+  onChange,
+  onError,
+  errorMessage,
+  disabled,
+}: EmailInputProps): JSX.Element {
   const [touched, setTouched] = useState(false);
 
   const validEmail = (email: string) => {
@@ -30,6 +37,7 @@ function EmailInput({ value, onChange, onError, errorMessage }: EmailInputProps)
       <EnvelopeIcon className="absolute left-2 top-2.5 h-5 w-5 text-white-100" />
       <input
         placeholder="E-Mail"
+        disabled={disabled}
         type="text"
         className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400

@@ -8,6 +8,7 @@ type PasswordInputProps = {
   onError?: (error: boolean) => void;
   errorMessage?: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 function PasswordInput({
   value,
@@ -15,6 +16,7 @@ function PasswordInput({
   onError,
   errorMessage,
   placeholder,
+  disabled,
 }: PasswordInputProps): JSX.Element {
   const [touched, setTouched] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -46,6 +48,7 @@ function PasswordInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         onBlur={() => setTouched(true)}
+        disabled={disabled}
         className={`w-full px-4 py-2 pl-9 pr-4 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400
       placeholder:text-blue-200${error && touched ? 'border-red-500' : ''}`}

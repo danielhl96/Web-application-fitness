@@ -1,6 +1,6 @@
 import '../index.css';
-import Header from '../Components/HeaderLogout.jsx';
-import TemplatePage from '../Components/templatepage.jsx';
+import Header from '../Components/HeaderLogout.js';
+import TemplatePage from '../Components/templatepage.js';
 function Imprint() {
   return (
     <div>

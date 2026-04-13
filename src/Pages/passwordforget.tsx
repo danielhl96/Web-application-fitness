@@ -1,36 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
-import Header from '../Components/HeaderLogout.jsx';
-import TemplatePage from '../Components/templatepage.jsx';
-import EmailInput from '../Components/emailinput.jsx';
-import PasswordInput from '../Components/passwordinput.jsx';
-import Button from '../Components/button.jsx';
-import Input from '../Components/input.jsx';
+import api from '../Utils/api.js';
+import Header from '../Components/HeaderLogout.js';
+import TemplatePage from '../Components/templatepage.js';
+import EmailInput from '../Components/emailinput.js';
+import PasswordInput from '../Components/passwordinput.js';
+import Button from '../Components/button.js';
+import Input from '../Components/input.js';
 function PasswordForget() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [securityCode, setSecurityCode] = useState('');
-  const [message, setMessage] = useState('');
-  const [requireCode, setRequireCode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
-  const [successfully, setSuccessfully] = useState(false);
-  const [emailError, setEmailError] = useState(true);
-  const [passwordError, setPasswordError] = useState(true);
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
-
-  const checkEmail = (email) => {
+  const [email, setEmail] = useState<string>('');
+  const [securityCode, setSecurityCode] = useState<string>('');
+  const [message, setMessage] = useState<JSX.Element | null>(null);
+  const [requireCode, setRequireCode] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
+  const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+  const [successfully, setSuccessfully] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(true);
+  const [passwordError, setPasswordError] = useState<boolean>(true);
+  const [passwordMatchError, setPasswordMatchError] = useState<boolean>(false);
+  const checkEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   useEffect(() => {
     setEmailError(!checkEmail(email));
-    console.log(emailError);
-    console.log(email);
-    console.log(passwordError);
-    console.log(passwordMatchError);
   }, [email]);
 
   useEffect(() => {
@@ -49,7 +44,7 @@ function PasswordForget() {
     );
   }, [password]);
 
-  const handleCode = () => {
+  const handleCode = (): void => {
     api
       .post('/auth/password_forget', { email })
       .then(() => {
@@ -57,11 +52,13 @@ function PasswordForget() {
         setRequireCode(true);
       })
       .catch(() => {
-        setMessage(<div className="text-green-500">Check your email for the security code.</div>);
+        setMessage(
+          <div className="text-red-500">Error sending security code. Please try again.</div>
+        );
       });
   };
 
-  const checkCode = () => {
+  const checkCode = (): void => {
     api
       .post('/auth/password_reset', {
         email: email,
@@ -82,20 +79,20 @@ function PasswordForget() {
       });
   };
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = (): void => {
     checkCode();
   };
 
-  const handleEmail = (value) => {
+  const handleEmail = (value: string): void => {
     setEmail(value);
   };
-  const handleSafetyCode = (value) => {
+  const handleSafetyCode = (value: string): void => {
     setSecurityCode(value);
   };
-  const handlePasswordRepeat = (value) => {
+  const handlePasswordRepeat = (value: string): void => {
     setPasswordRepeat(value);
   };
-  const handlePassword = (value) => {
+  const handlePassword = (value: string): void => {
     setPassword(value);
   };
   return (
@@ -119,10 +116,8 @@ function PasswordForget() {
             <>
               <h1 className="text-shadow-lg font-mono">Security-Code</h1>
               <Input
-                type="text"
                 placeholder={'Security-Code '}
-                className="input input-primary"
-                onChange={(e) => handleSafetyCode(e.target.value)}
+                onChange={handleSafetyCode}
                 value={securityCode}
                 w="w-full"
               />

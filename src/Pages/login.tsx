@@ -1,35 +1,34 @@
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Header from '../Components/HeaderLogout.jsx';
+import { useState, useEffect, JSX } from 'react';
+import Header from '../Components/HeaderLogout.js';
 import api from '../Utils/api.js';
-import TemplatePage from '../Components/templatepage.jsx';
-import EmailInput from '../Components/emailinput.jsx';
-import PasswordInput from '../Components/passwordinput.jsx';
-import Button from '../Components/button.jsx';
+import TemplatePage from '../Components/templatepage.js';
+import EmailInput from '../Components/emailinput.js';
+import PasswordInput from '../Components/passwordinput.js';
+import Button from '../Components/button.js';
 
-function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [message, setMessage] = useState('');
+function LoginForm(): JSX.Element {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleEmailChange = (value) => {
+  const handleEmailChange = (value: string) => {
     setEmail(value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e);
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
   };
 
-  async function handleLogin() {
+  async function handleLogin(): Promise<void> {
     try {
       const response = await api.post('/auth/login', {
         email,
         password,
       });
-      console.log(response.data);
 
       navigate('/');
     } catch (error) {
@@ -60,16 +59,7 @@ function LoginForm() {
           <div>
             <PasswordInput
               value={password}
-              type="password"
               placeholder={'Password'}
-              className="w-full px-4 py-2 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-blue-200"
-              style={{
-                background: 'rgba(30, 41, 59, 0.25)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                border: '1.5px solid rgba(59, 130, 246, 0.25)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-              }}
               onChange={handlePasswordChange}
               onError={(error) => console.log('Password error:', error)}
               errorMessage={''}

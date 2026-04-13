@@ -1,24 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
-import Header from '../Components/HeaderLogout.jsx';
-import TemplatePage from '../Components/templatepage.jsx';
-import EmailInput from '../Components/emailinput.jsx';
-import PasswordInput from '../Components/passwordinput.jsx';
-import Button from '../Components/button.jsx';
+import api from '../Utils/api.js';
+import Header from '../Components/HeaderLogout.js';
+import TemplatePage from '../Components/templatepage.js';
+import EmailInput from '../Components/emailinput.js';
+import PasswordInput from '../Components/passwordinput.js';
+import Button from '../Components/button.js';
 function RegisterPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
-  const [message, setMessage] = useState('');
-  const [succesRegister, setSuccesRegister] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
 
-  const handleRegister = () => {
+  const [message, setMessage] = useState<string>('');
+  const [succesRegister, setSuccesRegister] = useState<boolean>(false);
+
+  const handleRegister = (): void => {
     api
       .post('/auth/register', {
         email,
@@ -29,25 +29,23 @@ function RegisterPage() {
         setSuccesRegister(true);
       })
       .catch((err) => {
-        console.log(err);
         setMessage(err.response.data.message);
       });
   };
 
-  const handleEmailChange = (value) => {
+  const handleEmailChange = (value: string): void => {
     setEmail(value);
   };
 
-  const handlePasswordChange = (value) => {
-    console.log('Password changed:', value);
+  const handlePasswordChange = (value: string): void => {
     setPassword(value);
   };
 
-  const handleConfirmPasswordChange = (value) => {
+  const handleConfirmPasswordChange = (value: string): void => {
     setConfirmPassword(value);
   };
 
-  const checkEmail = (email) => {
+  const checkEmail = (email: string): boolean => {
     // Simple email regex for validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -85,13 +83,7 @@ function RegisterPage() {
             disabled={succesRegister}
             onChange={handlePasswordChange}
             errorMessage={
-              <ul className="list-disc text-xs pl-4 text-left">
-                <li>At least 8 characters</li>
-                <li>One uppercase letter</li>
-                <li>One lowercase letter</li>
-                <li>One number</li>
-                <li>One special character</li>
-              </ul>
+              'Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.'
             }
             onError={(error) => setPasswordError(error)}
             placeholder={'Password:'}

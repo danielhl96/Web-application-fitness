@@ -1,30 +1,44 @@
-import TemplatePage from '../Components/templatepage';
-import Header from '../Components/Header.jsx';
-import WorkoutCard from '../Components/workoutcard.jsx';
-import Notify from '../Components/notify.jsx';
+import TemplatePage from '../Components/templatepage.js';
+import Header from '../Components/Header.js';
+import WorkoutCard from '../Components/workoutcard.js';
+import Notify from '../Components/notify.js';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import api from '../Utils/api.js';
-import EmailInput from '../Components/emailinput.jsx';
-import PasswordInput from '../Components/passwordinput.jsx';
-import Button from '../Components/button.jsx';
-import TemplateModal from '../Components/templatemodal.jsx';
+import EmailInput from '../Components/emailinput.js';
+import PasswordInput from '../Components/passwordinput.js';
+import Button from '../Components/button.js';
+import TemplateModal from '../Components/templatemodal.js';
 function CredentialsPage() {
-  const [emailModal, setEmailModal] = useState(false);
-  const [modalPassword, setModalPassword] = useState(false);
-  const [modalDeleteAccount, setModalDeleteAccount] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [inputTouched, setInputTouched] = useState(false);
-  const [notification, setNotification] = useState(null);
-  const [errorEmailMessage, setErrorEmailMessage] = useState(null);
-  const [passwordError, setPasswordError] = useState(false);
+  const [emailModal, setEmailModal] = useState<boolean>(false);
+  const [modalPassword, setModalPassword] = useState<boolean>(false);
+  const [modalDeleteAccount, setModalDeleteAccount] = useState<boolean>(false);
+  const [newEmail, setNewEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
+  const [inputTouched, setInputTouched] = useState<boolean>(false);
+  const [notification, setNotification] = useState<{
+    title: string;
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
+  const [errorEmailMessage, setErrorEmailMessage] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const handleChangeEmail = () => {
+  const resetData = (): void => {
+    setNewEmail('');
+    setPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+    setInputTouched(false);
+    setErrorEmailMessage(null);
+    setPasswordError(false);
+  };
+
+  const handleChangeEmail = (): void => {
     api
       .put('/users/change_email', {
         email: newEmail,
@@ -37,6 +51,7 @@ function CredentialsPage() {
           type: 'success',
         });
         setEmailModal(false);
+        resetData();
       })
       .catch((error) => {
         setNotification({
@@ -47,7 +62,7 @@ function CredentialsPage() {
       });
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = (): void => {
     api
       .put('/users/change_password', {
         oldPassword: password,
@@ -60,6 +75,7 @@ function CredentialsPage() {
           type: 'success',
         });
         setModalPassword(false);
+        resetData();
       })
       .catch((error) => {
         setNotification({
@@ -70,7 +86,7 @@ function CredentialsPage() {
       });
   };
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = (): void => {
     api
       .delete('/users/delete_account', {
         data: { password: password },
@@ -81,7 +97,7 @@ function CredentialsPage() {
           message: 'Your account has been deleted successfully.',
           type: 'success',
         });
-        // Optionally, redirect to homepage or logout
+
         navigate('/login');
       })
       .catch((error) => {
@@ -93,34 +109,30 @@ function CredentialsPage() {
       });
   };
 
-  const handleEmailModal = () => {
+  const handleEmailModal = (): JSX.Element => {
     return (
       <div>
         <TemplateModal>
           <div className="flex flex-row justify-center items-center  text-xs"></div>
           <h3 className="font-bold text-lg text-amber-50">Change your email</h3>
           <div className="flex flex-col space-y-2 mt-2">
-            <EmailInput
-              onChange={setNewEmail}
-              type="email"
-              value={newEmail}
-              placeholder="New email"
-            />
+            <EmailInput errorMessage={errorEmailMessage} onChange={setNewEmail} value={newEmail} />
 
             <PasswordInput
               onChange={setPassword}
-              type="password"
               value={password}
               errorMessage={''}
               placeholder="Current password"
-              setPasswordError={setPasswordError}
+              onError={setPasswordError}
             />
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
-                onClick={() => handleChangeEmail()}
+                onClick={() => {
+                  handleChangeEmail();
+                }}
                 disabled={!!errorEmailMessage || password.length === 0}
-                border="#3b82f6"
+                border="#3b82f6 "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +149,13 @@ function CredentialsPage() {
                   />
                 </svg>
               </Button>
-              <Button onClick={() => setEmailModal(false)} border="#ef4444">
+              <Button
+                onClick={() => {
+                  setEmailModal(false);
+                  resetData();
+                }}
+                border="#ef4444"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -160,7 +178,7 @@ function CredentialsPage() {
     );
   };
 
-  const handleModalforPassword = () => {
+  const handleModalforPassword = (): JSX.Element => {
     return (
       <div>
         <TemplateModal>
@@ -169,7 +187,6 @@ function CredentialsPage() {
           <div className="flex flex-col space-y-2 mt-2">
             <PasswordInput
               value={password}
-              type="password"
               placeholder={'Password'}
               onChange={setPassword}
               onError={setPasswordError}
@@ -179,8 +196,6 @@ function CredentialsPage() {
             />
             <PasswordInput
               onChange={setNewPassword}
-              onBlur={() => setInputTouched(true)}
-              type="password"
               placeholder="New password"
               value={newPassword}
               errorMessage={
@@ -195,7 +210,6 @@ function CredentialsPage() {
             )}
             <PasswordInput
               onChange={setConfirmNewPassword}
-              type="password"
               placeholder="Confirm new password"
               value={confirmNewPassword}
               errorMessage={'Passwords do not match.'}
@@ -206,7 +220,9 @@ function CredentialsPage() {
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
-                onClick={() => handleChangePassword()}
+                onClick={() => {
+                  handleChangePassword();
+                }}
                 disabled={
                   passwordError ||
                   newPassword !== confirmNewPassword ||
@@ -231,7 +247,13 @@ function CredentialsPage() {
                   />
                 </svg>
               </Button>
-              <Button onClick={() => setModalPassword(false)} border="#ef4444">
+              <Button
+                onClick={() => {
+                  setModalPassword(false);
+                  resetData();
+                }}
+                border="#ef4444"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"
@@ -254,7 +276,7 @@ function CredentialsPage() {
     );
   };
 
-  const handleModalforAccountDelete = () => {
+  const handleModalforAccountDelete = (): JSX.Element => {
     return (
       <div>
         <TemplateModal>
@@ -264,7 +286,6 @@ function CredentialsPage() {
               value={password}
               errorMessage={''}
               placeholder="Your password"
-              type="password"
               onChange={setPassword}
             />
             <div className="flex flex-row justify-start space-x-2 space-y-2 mt-4">
@@ -288,7 +309,13 @@ function CredentialsPage() {
                   />
                 </svg>
               </Button>
-              <Button onClick={() => setModalDeleteAccount(false)} border="#ef4444">
+              <Button
+                onClick={() => {
+                  setModalDeleteAccount(false);
+                  resetData();
+                }}
+                border="#ef4444"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-4 h-4"

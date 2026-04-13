@@ -1,7 +1,8 @@
 import '../index.css';
-import TemplatePage from '../Components/templatepage.jsx';
-import Header from '../Components/HeaderLogout.jsx';
-function PrivacyPolicy() {
+import TemplatePage from '../Components/templatepage.js';
+import Header from '../Components/HeaderLogout.js';
+import { JSX } from 'react';
+function PrivacyPolicy(): JSX.Element {
   return (
     <div>
       <Header />
