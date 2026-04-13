@@ -19,6 +19,7 @@ function PasswordForget() {
   const [emailError, setEmailError] = useState<boolean>(true);
   const [passwordError, setPasswordError] = useState<boolean>(true);
   const [passwordMatchError, setPasswordMatchError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const checkEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -45,13 +46,16 @@ function PasswordForget() {
   }, [password]);
 
   const handleCode = (): void => {
+    setIsLoading(true);
     api
       .post('/auth/password_forget', { email })
       .then(() => {
         setMessage(<div className="text-green-500">Check your email for the security code.</div>);
         setRequireCode(true);
+        setIsLoading(false);
       })
       .catch(() => {
+        setIsLoading(false);
         setMessage(
           <div className="text-red-500">Error sending security code. Please try again.</div>
         );
@@ -59,6 +63,7 @@ function PasswordForget() {
   };
 
   const checkCode = (): void => {
+    setIsLoading(true);
     api
       .post('/auth/password_reset', {
         email: email,
@@ -67,10 +72,12 @@ function PasswordForget() {
       })
       .then((response) => {
         setMessage(<div className="text-green-500">{response.data.message}</div>);
+        setIsLoading(false);
 
         setSuccessfully(false);
       })
       .catch((e) => {
+        setIsLoading(false);
         setMessage(
           <div className="text-xs text-red-500">
             {e.response?.data?.message || 'Error changing password.'}
@@ -155,6 +162,7 @@ function PasswordForget() {
         </div>
         <div className="flex space-x-2 items-center justify-start">
           <Button
+            isLoading={isLoading}
             disabled={
               email.length === 0 ||
               emailError ||

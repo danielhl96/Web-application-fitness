@@ -12,6 +12,7 @@ function LoginForm(): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailError, setEmailError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const navigate = useNavigate();
 
@@ -24,14 +25,16 @@ function LoginForm(): JSX.Element {
   };
 
   async function handleLogin(): Promise<void> {
+    setIsLoading(true);
     try {
       const response = await api.post('/auth/login', {
         email,
         password,
       });
-
+      setIsLoading(false);
       navigate('/');
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
       setMessage(error.response?.data?.message || 'An error occurred during login.');
     }
@@ -67,7 +70,12 @@ function LoginForm(): JSX.Element {
           </div>
           <h1 className="text-red-500 text-sm ">{message}</h1>
 
-          <Button onClick={() => handleLogin()} disabled={false} border="#08ad4dff">
+          <Button
+            isLoading={isLoading}
+            onClick={() => handleLogin()}
+            disabled={false}
+            border="#08ad4dff"
+          >
             Login
           </Button>
           <div className="space-y-0 flex flex-col items-center">

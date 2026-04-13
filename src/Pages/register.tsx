@@ -14,11 +14,12 @@ function RegisterPage() {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [succesRegister, setSuccesRegister] = useState<boolean>(false);
 
   const handleRegister = (): void => {
+    setIsLoading(true);
     api
       .post('/auth/register', {
         email,
@@ -29,6 +30,7 @@ function RegisterPage() {
         setSuccesRegister(true);
       })
       .catch((err) => {
+        setIsLoading(false);
         setMessage(err.response.data.message);
       });
   };
@@ -121,6 +123,7 @@ function RegisterPage() {
         <div className="divider divider-primary"></div>
         <div className="flex flex-row space-x-2 items-center justify-center">
           <Button
+            isLoading={isLoading}
             onClick={() => handleRegister()}
             disabled={
               emailError ||

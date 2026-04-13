@@ -25,6 +25,7 @@ function CredentialsPage() {
   } | null>(null);
   const [errorEmailMessage, setErrorEmailMessage] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -54,6 +55,7 @@ function CredentialsPage() {
         resetData();
       })
       .catch((error) => {
+        setIsLoading(false);
         setNotification({
           title: 'Error',
           message: error?.response?.data?.message || 'There was an error changing your email.',
@@ -63,6 +65,7 @@ function CredentialsPage() {
   };
 
   const handleChangePassword = (): void => {
+    setIsLoading(true);
     api
       .put('/users/change_password', {
         oldPassword: password,
@@ -75,9 +78,11 @@ function CredentialsPage() {
           type: 'success',
         });
         setModalPassword(false);
+        setIsLoading(false);
         resetData();
       })
       .catch((error) => {
+        setIsLoading(false);
         setNotification({
           title: 'Error',
           message: error?.response?.data?.message || 'There was an error changing your password.',
@@ -128,6 +133,7 @@ function CredentialsPage() {
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
+                isLoading={isLoading}
                 onClick={() => {
                   handleChangeEmail();
                 }}
@@ -220,6 +226,7 @@ function CredentialsPage() {
             <div className="divider divider-primary"></div>
             <div className="flex flex-row space-x-2 items-center justify-center">
               <Button
+                isLoading={isLoading}
                 onClick={() => {
                   handleChangePassword();
                 }}

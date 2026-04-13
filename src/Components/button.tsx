@@ -5,9 +5,17 @@ type ButtonProps = {
   border?: string;
   w?: string;
   children: React.ReactNode;
+  isLoading?: boolean;
 };
 
-const Button = ({ onClick, disabled, border, w, children }: ButtonProps): JSX.Element => {
+const Button = ({
+  onClick,
+  disabled,
+  border,
+  w,
+  children,
+  isLoading,
+}: ButtonProps): JSX.Element => {
   return (
     <button
       disabled={disabled}
@@ -17,7 +25,11 @@ const Button = ({ onClick, disabled, border, w, children }: ButtonProps): JSX.El
       }`}
       style={border && !disabled ? { border: `1.5px solid ${border}` } : undefined}
     >
-      {children}
+      {isLoading ? (
+        <span className="loading loading-spinner text-white loading-xs"></span>
+      ) : (
+        children
+      )}
     </button>
   );
 };
