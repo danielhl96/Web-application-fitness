@@ -85,7 +85,7 @@ function AiCoach() {
 
     //Wait for all meal fetches to complete
     Promise.all(promises)
-      .then((results) => {
+      .then((results: { type: string; meals: Meal[] }[]) => {
         let allMealsMessage = 'My meals today: ';
         let aiMessage = 'My meals today: ';
         let hasMeals = false;
