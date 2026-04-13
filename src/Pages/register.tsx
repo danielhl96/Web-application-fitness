@@ -11,7 +11,7 @@ function RegisterPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [emailError, setEmailError] = useState<boolean>(false);
+
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,6 +28,7 @@ function RegisterPage() {
       .then(() => {
         setMessage('Registration successful! You can now log in.');
         setSuccesRegister(true);
+        setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -53,13 +54,9 @@ function RegisterPage() {
     return emailRegex.test(email);
   };
 
-  useEffect(() => {
-    setEmailError(!checkEmail(email));
-  }, [email]);
-
-  useEffect(() => {
-    setConfirmPasswordError(confirmPassword !== password);
-  }, [confirmPassword, password]);
+  const checkConfirmPassword = (confirmPassword: string, password: string): boolean => {
+    return confirmPassword === password;
+  };
 
   return (
     <div>
@@ -75,7 +72,7 @@ function RegisterPage() {
             value={email}
             disabled={succesRegister}
             onChange={handleEmailChange}
-            onError={(error) => setEmailError(error)}
+            onError={() => checkEmail(email)}
           />
         </div>
         <div>
@@ -98,11 +95,11 @@ function RegisterPage() {
             disabled={succesRegister}
             errorMessage={''}
             onChange={handleConfirmPasswordChange}
-            onError={(error) => setConfirmPasswordError(confirmPassword !== password)}
+            onError={() => checkConfirmPassword(confirmPassword, password)}
             placeholder={'Repeat your password:'}
           />
 
-          {confirmPasswordError && (
+          {!checkConfirmPassword(confirmPassword, password) && (
             <h1 className="text-red-500 text-xs ">Passwords do not match.</h1>
           )}
         </div>
@@ -126,7 +123,7 @@ function RegisterPage() {
             isLoading={isLoading}
             onClick={() => handleRegister()}
             disabled={
-              emailError ||
+              !checkEmail(email) ||
               passwordError ||
               confirmPasswordError ||
               email.length === 0 ||
