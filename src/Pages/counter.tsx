@@ -4,24 +4,8 @@ import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
 import { List, useListRef, RowComponentProps } from 'react-window';
-type Action =
-  | {
-      type:
-        | 'SET_SEC'
-        | 'SET_MIN'
-        | 'SET_ROUNDS'
-        | 'SET_COUNT_ROUNDS'
-        | 'SET_BREAKTIME'
-        | 'SET_STARTTIME'
-        | 'SET_ROUNDTIME'
-        | 'SET_TOTALTIME';
-      payload: number;
-    }
-  | {
-      type: 'SET_IS_BREAK_MODE' | 'SET_IS_START_MODE' | 'SET_IS_STOP_MODE';
-      payload: boolean;
-    }
-  | { type: 'INCREMENT_SEC' };
+import useCounter from './useCounter.ts';
+import { Action } from './types.ts';
 
 type NumberActionType = Extract<Action, { payload: number }>['type'];
 
@@ -100,153 +84,7 @@ function CounterForm(): JSX.Element {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
   const [showModal, setShowModal] = React.useState(false);
-
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  var totalSeconds: number = 0;
-  const initalState = {
-    sec: 0 as number,
-    min: 0 as number,
-    rounds: 0 as number,
-    countRounds: 0 as number,
-    breaktime: 0 as number,
-    starttime: 0 as number,
-    roundtime: 0 as number,
-    totaltime: 0 as number,
-    showModal: false as boolean,
-    isbreakmode: false as boolean,
-    isStartmode: false as boolean,
-    isStopmode: false as boolean,
-  };
-
-  function reducer(
-    state: typeof initalState,
-    action: {
-      type:
-        | 'SET_SEC'
-        | 'SET_MIN'
-        | 'SET_ROUNDS'
-        | 'SET_COUNT_ROUNDS'
-        | 'SET_BREAKTIME'
-        | 'SET_STARTTIME'
-        | 'SET_ROUNDTIME'
-        | 'SET_TOTALTIME'
-        | 'SET_IS_BREAK_MODE'
-        | 'SET_IS_START_MODE'
-        | 'SET_IS_STOP_MODE'
-        | 'INCREMENT_SEC';
-      payload?: number | boolean;
-    }
-  ): typeof initalState {
-    switch (action.type as Action['type']) {
-      case 'SET_SEC':
-        return { ...state, sec: action.payload as number };
-      case 'SET_MIN':
-        return { ...state, min: action.payload as number };
-      case 'SET_ROUNDS':
-        return { ...state, rounds: action.payload as number };
-      case 'SET_COUNT_ROUNDS':
-        return { ...state, countRounds: action.payload as number };
-      case 'SET_BREAKTIME':
-        return { ...state, breaktime: action.payload as number };
-      case 'SET_STARTTIME':
-        return { ...state, starttime: action.payload as number };
-      case 'SET_ROUNDTIME':
-        return { ...state, roundtime: action.payload as number };
-      case 'SET_TOTALTIME':
-        return { ...state, totaltime: action.payload as number };
-      case 'SET_IS_BREAK_MODE':
-        return { ...state, isbreakmode: action.payload as boolean };
-      case 'SET_IS_START_MODE':
-        return { ...state, isStartmode: action.payload as boolean };
-      case 'SET_IS_STOP_MODE':
-        return { ...state, isStopmode: action.payload as boolean };
-      case 'INCREMENT_SEC': {
-        const newSec = state.sec + 6 / 100;
-        if (newSec >= 360) {
-          return { ...state, sec: 0, min: state.min + 1 };
-        }
-        return { ...state, sec: newSec };
-      }
-      default:
-        return state;
-    }
-  }
-
-  const [state, dispatch] = useReducer(reducer, initalState as typeof initalState);
-
-  useEffect(() => {
-    totalSeconds = state.min * 60 + Math.floor(state.sec / 6); //Whole time in seconds
-
-    dispatch({ type: 'SET_TOTALTIME', payload: totalSeconds });
-    if (totalSeconds == roundtime && roundtime !== 0 && !isbreakmode && !isStartmode) {
-      dispatch({ type: 'SET_COUNT_ROUNDS', payload: state.countRounds + 1 });
-      // Reset for next round
-      dispatch({ type: 'SET_SEC', payload: 0 });
-      dispatch({ type: 'SET_MIN', payload: 0 });
-      dispatch({ type: 'SET_TOTALTIME', payload: 0 });
-      if (breaktime > 0) dispatch({ type: 'SET_IS_BREAK_MODE', payload: true });
-    }
-    if (rounds !== 0 && countRounds === rounds && !isbreakmode && !isStartmode) {
-      clearInterval(intervalRef.current ?? undefined);
-      dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
-      dispatch({ type: 'SET_IS_START_MODE', payload: true });
-    }
-
-    if (totalSeconds == starttime && starttime !== 0 && isStartmode) {
-      dispatch({ type: 'SET_SEC', payload: 0 });
-      dispatch({ type: 'SET_MIN', payload: 0 });
-      dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
-      dispatch({ type: 'SET_IS_START_MODE', payload: false });
-    }
-    if (totalSeconds == breaktime && breaktime !== 0 && isbreakmode && !isStartmode) {
-      dispatch({ type: 'SET_SEC', payload: 0 });
-      dispatch({ type: 'SET_MIN', payload: 0 });
-      dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
-    }
-  }, [
-    state.sec,
-    state.roundtime,
-    state.countRounds,
-    state.rounds,
-    state.min,
-    state.breaktime,
-    state.starttime,
-    state.isbreakmode,
-    state.isStartmode,
-  ]);
-
-  const startCounter = () => {
-    intervalRef.current = setInterval(function () {
-      dispatch({ type: 'INCREMENT_SEC' });
-    }, 10); // every 100 ms = 0.1 second
-    dispatch({ type: 'SET_IS_STOP_MODE', payload: true });
-  };
-
-  const stopCounter = () => {
-    clearInterval(intervalRef.current ?? undefined);
-    dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
-  };
-
-  const resetCounter = () => {
-    clearInterval(intervalRef.current ?? undefined);
-    dispatch({ type: 'SET_SEC', payload: 0 });
-    dispatch({ type: 'SET_MIN', payload: 0 });
-    dispatch({ type: 'SET_COUNT_ROUNDS', payload: 0 });
-    dispatch({ type: 'SET_TOTALTIME', payload: 0 });
-    dispatch({ type: 'SET_IS_BREAK_MODE', payload: false });
-    dispatch({ type: 'SET_IS_STOP_MODE', payload: false });
-  };
-
-  var {
-    roundtime,
-    countRounds,
-    rounds,
-    breaktime,
-    starttime,
-    isbreakmode,
-    isStartmode,
-    isStopmode,
-  } = state;
+  const counter = useCounter();
 
   const settingsModal = (): JSX.Element => {
     return (
@@ -256,30 +94,30 @@ function CounterForm(): JSX.Element {
           <div className="flex flex-col items-center space-y-2 ">
             <div className="grid grid-cols-1 lg:grid-cols-2  text-xs gap-4">
               <Table
-                selectedItem={rounds}
+                selectedItem={counter.rounds}
                 type="SET_ROUNDS"
-                dispatch={dispatch}
+                dispatch={counter.dispatch}
                 string="Rounds: "
               />
 
               <Table
-                selectedItem={starttime}
+                selectedItem={counter.starttime}
                 type="SET_STARTTIME"
-                dispatch={dispatch}
+                dispatch={counter.dispatch}
                 string="Starttime: "
               />
 
               <Table
-                selectedItem={breaktime}
+                selectedItem={counter.breaktime}
                 type="SET_BREAKTIME"
-                dispatch={dispatch}
+                dispatch={counter.dispatch}
                 string="Breaktime: "
               />
 
               <Table
-                selectedItem={roundtime}
+                selectedItem={counter.roundtime}
                 type="SET_ROUNDTIME"
-                dispatch={dispatch}
+                dispatch={counter.dispatch}
                 string="Roundtime: "
               />
             </div>
@@ -294,7 +132,7 @@ function CounterForm(): JSX.Element {
     );
   };
 
-  const totalRotation = -180 + state.sec;
+  const totalRotation = -180 + counter.sec;
 
   return (
     <div>
@@ -319,16 +157,16 @@ function CounterForm(): JSX.Element {
                   />
                   <h1
                     className={`absolute left-1/2 top-2/3 transform -translate-x-1/2 -translate-y-1/1 ${
-                      state.roundtime - state.totaltime <= 5 &&
-                      !state.isStartmode &&
-                      !state.isbreakmode &&
+                      counter.roundtime - counter.totaltime <= 5 &&
+                      !counter.isStartmode &&
+                      !counter.isbreakmode &&
                       'text-red-500'
-                    } ${state.isbreakmode && 'text-purple-500'} ${
-                      state.isStartmode && 'text-yellow-500'
+                    } ${counter.isbreakmode && 'text-purple-500'} ${
+                      counter.isStartmode && 'text-yellow-500'
                     } text-xs text-center items-center font-light`}
                   >
-                    {String(state.min).padStart(2, '0')} :{' '}
-                    {String(Math.floor(state.sec / 6)).padStart(2, '0')}
+                    {String(counter.min).padStart(2, '0')} :{' '}
+                    {String(Math.floor(counter.sec / 6)).padStart(2, '0')}
                   </h1>
                   {/* Number */}
                   <div
@@ -368,7 +206,7 @@ function CounterForm(): JSX.Element {
             {/* Secondspointer */}
             <div
               className={`absolute left-1/2 top-1/2 w-1 ${
-                isbreakmode ? 'bg-purple-500' : 'bg-red-500'
+                counter.isbreakmode ? 'bg-purple-500' : 'bg-red-500'
               } flex items-center justify-center`}
               style={{
                 height: `100px`,
@@ -391,7 +229,7 @@ function CounterForm(): JSX.Element {
 
           {
             <h1 className="text font-light mt-2">
-              Rounds: {countRounds} / {rounds}
+              Rounds: {counter.countRounds} / {counter.rounds}
             </h1>
           }
 
@@ -427,11 +265,11 @@ function CounterForm(): JSX.Element {
           <div className="divider divider-primary text font-lightfont-bold mb-2"></div>
           <div className="flex- flex row space-x-2 ">
             <Button
-              disabled={rounds === 0}
+              disabled={counter.rounds === 0}
               border="#3b82f6"
-              onClick={() => (isStopmode ? stopCounter() : startCounter())}
+              onClick={() => (counter.isStopmode ? counter.stopCounter() : counter.startCounter())}
             >
-              {isStopmode ? (
+              {counter.isStopmode ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 mb-1"
@@ -475,7 +313,7 @@ function CounterForm(): JSX.Element {
                 </svg>
               )}
             </Button>
-            <Button border="#f63b3b" onClick={() => resetCounter()}>
+            <Button border="#f63b3b" onClick={() => counter.resetCounter()}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mb-1"

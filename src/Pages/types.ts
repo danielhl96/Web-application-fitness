@@ -84,3 +84,21 @@ export type Notification = {
   message: string;
   type: 'success' | 'error';
 };
+export type Action =
+  | {
+      type:
+        | 'SET_SEC'
+        | 'SET_MIN'
+        | 'SET_ROUNDS'
+        | 'SET_COUNT_ROUNDS'
+        | 'SET_BREAKTIME'
+        | 'SET_STARTTIME'
+        | 'SET_ROUNDTIME'
+        | 'SET_TOTALTIME';
+      payload: number;
+    }
+  | {
+      type: 'SET_IS_BREAK_MODE' | 'SET_IS_START_MODE' | 'SET_IS_STOP_MODE';
+      payload: boolean;
+    }
+  | { type: 'INCREMENT_SEC' };

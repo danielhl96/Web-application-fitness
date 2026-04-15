@@ -12,13 +12,13 @@ import Button from '../Components/button.js';
 import { Exercise, ExerciseTemplate, Notification } from './types.js';
 function CreateTraining(): JSX.Element {
   const navigate = useNavigate();
-  const [WorkoutName, setWorkoutName] = useState<string>('');
-  const [WorkoutNameSet, setWorkoutNameSet] = useState<boolean>(false);
+  const [workoutName, setWorkoutName] = useState<string>('');
+  const [workoutNameSet, setWorkoutNameSet] = useState<boolean>(false);
   const [notification, setNotification] = useState<Notification | null>(null);
 
   const handleSaveTraining = async (): Promise<void> => {
     const trainingName =
-      WorkoutName || (document.getElementById('training-input') as HTMLInputElement).value;
+      workoutName || (document.getElementById('training-input') as HTMLInputElement).value;
     const selectedExercises = selectedExercise.map((exercise: Exercise) => ({
       name: exercise.name,
       sets: exercise.sets,
@@ -176,18 +176,18 @@ function CreateTraining(): JSX.Element {
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
             <Input
-              value={WorkoutName}
-              onDisable={WorkoutNameSet}
+              value={workoutName}
+              onDisable={workoutNameSet}
               placeholder="Workout name"
               id="training-input"
               onChange={(e) => setWorkoutName(e)}
             />
             <Button
-              disabled={WorkoutName === ''}
+              disabled={workoutName === ''}
               onClick={() => setWorkoutNameSet((prev) => !prev)}
-              border={WorkoutNameSet ? '#10B981' : '#3b82f6'}
+              border={workoutNameSet ? '#10B981' : '#3b82f6'}
             >
-              {WorkoutNameSet ? (
+              {workoutNameSet ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -220,7 +220,7 @@ function CreateTraining(): JSX.Element {
               )}
             </Button>
           </div>
-          {WorkoutNameSet === true && (
+          {workoutNameSet === true && (
             <div className="flex flex-col items-center space-y-2">
               <h1 className="text-slate-400">Search your exercise:</h1>
               <div className="form-control">
@@ -281,7 +281,7 @@ function CreateTraining(): JSX.Element {
               ))}
           </div>
           {/* Render selected exercises */}
-          {WorkoutNameSet ? (
+          {workoutNameSet ? (
             <div className={'items-center justify-center'}>
               <div
                 className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-80 gap-0 items-center pt-2 overflow-y-auto max-md:h-auto`}
@@ -311,10 +311,10 @@ function CreateTraining(): JSX.Element {
           <div className="flex flex-row items-center gap-4 mt-4">
             <Button
               disabled={
-                WorkoutName === '' || selectedExercise.length === 0 || WorkoutNameSet === false
+                workoutName === '' || selectedExercise.length === 0 || workoutNameSet === false
               }
               onClick={() => handleSaveTraining()}
-              border={WorkoutNameSet ? '#10B981' : '#3b82f6'}
+              border={workoutNameSet ? '#10B981' : '#3b82f6'}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

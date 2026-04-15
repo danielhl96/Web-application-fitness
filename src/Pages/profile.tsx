@@ -7,8 +7,7 @@ import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
-import { UI_STATE, UserHistory } from './types.ts';
-import { User } from './types.ts';
+import { UI_STATE, UserHistory, User } from './types.ts';
 
 function Profile() {
   const [bmi, setBmi] = useState<number>(0);
@@ -82,7 +81,7 @@ function Profile() {
         setActivity(data.activity_level);
       })
       .catch((error) => {
-        console.error('Error fetching profile data:', error);
+        setUser({ type: 'error', error: error.message || 'Error fetching user data' });
       });
   };
 
@@ -102,7 +101,6 @@ function Profile() {
         activity_level: activity,
       })
       .then(() => {
-        console.log('Profile updated successfully:');
         setNotification({
           title: 'Profile Updated',
           message: 'Your profile has been updated successfully.',
@@ -111,7 +109,6 @@ function Profile() {
         setEdit(false);
       })
       .catch(() => {
-        console.error('Error updating profile:');
         setNotification({
           title: 'Error',
           message: 'There was an error updating your profile.',
@@ -159,7 +156,6 @@ function Profile() {
       setFailureWeight(true);
     } else {
       setWeight(value);
-      console.log(value);
       setFailureWeight(false);
     }
   };
@@ -179,7 +175,7 @@ function Profile() {
     }
   };
 
-  const handleWaist = (e) => {
+  const handleWaist = (e: string): void => {
     const value = parseFloat(e);
     if (value < 20 || isNaN(value)) {
       setFailureWaist(true);
