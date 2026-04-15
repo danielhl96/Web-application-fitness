@@ -5,7 +5,7 @@ import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
 import { List, useListRef, RowComponentProps } from 'react-window';
 import useCounter from './useCounter.ts';
-import { Action } from '../types.ts';
+import { Action } from '../types';
 
 type NumberActionType = Extract<Action, { payload: number }>['type'];
 

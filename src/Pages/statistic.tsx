@@ -4,7 +4,7 @@ import { useState, useEffect, JSX } from 'react';
 import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
-import { UI_STATE } from '../types.js';
+import { UI_STATE } from '../types';
 
 type ExerciseEntry = {
   date: string;

@@ -84,6 +84,32 @@ export type Notification = {
   message: string;
   type: 'success' | 'error';
 };
+
+export type ProfileForm = {
+  bmi: number;
+  height: number;
+  weight: number;
+  hwr: number;
+  hip: number;
+  waist: number;
+  goal: number;
+  bfp: number;
+  gender: string;
+  age: number;
+  calories: number;
+  activity: string;
+  bri: number;
+};
+
+export type ProfileFormErrors = {
+  height: boolean;
+  weight: boolean;
+  hip: boolean;
+  waist: boolean;
+  age: boolean;
+  bfp: boolean;
+};
+
 export type Action =
   | {
       type:

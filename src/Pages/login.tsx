@@ -27,7 +27,7 @@ function LoginForm(): JSX.Element {
   async function handleLogin(): Promise<void> {
     setIsLoading(true);
     try {
-      const response = await api.post('/auth/login', {
+      await api.post('/auth/login', {
         email,
         password,
       });

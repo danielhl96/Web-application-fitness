@@ -9,7 +9,7 @@ import ExerciseCard from '../Components/exercisecard.js';
 import Notify from '../Components/notify.js';
 import Input from '../Components/input.js';
 import Button from '../Components/button.js';
-import { Exercise, ExerciseTemplate, Notification } from '../types.js';
+import { Exercise, ExerciseTemplate, Notification } from '../types';
 function CreateTraining(): JSX.Element {
   const navigate = useNavigate();
   const [workoutName, setWorkoutName] = useState<string>('');

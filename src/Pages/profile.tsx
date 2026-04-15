@@ -7,34 +7,41 @@ import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
-import { UI_STATE, UserHistory, User } from '../types.ts';
+import {
+  UI_STATE,
+  UserHistory,
+  User,
+  Notification,
+  ProfileForm,
+  ProfileFormErrors,
+} from '../types';
 
 function Profile() {
-  const [bmi, setBmi] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
-  const [weight, setWeight] = useState<number>(0.0);
-  const [hwr, setHwr] = useState<number>(0);
-  const [hip, setHip] = useState<number>(0);
-  const [waist, setWaist] = useState<number>(0);
-  const [goal, setGoal] = useState<number>(0);
-  const [bfp, setBFP] = useState<number>(0);
-  const [gender, setGender] = useState<string>('');
-  const [age, setAge] = useState<number>(0);
-  const [calories, setCalories] = useState<number>(0.0);
-  const [activity, setActivity] = useState<string>('');
-  const [failureHeight, setFailureHeight] = useState<boolean>(false);
-  const [failureWeight, setFailureWeight] = useState<boolean>(false);
-  const [failureHip, setFailureHip] = useState<boolean>(false);
-  const [failureWaist, setFailureWaist] = useState<boolean>(false);
-  const [failureAge, setFailureAge] = useState<boolean>(false);
-  const [failureBFP, setFailureBFP] = useState<boolean>(false);
+  const [form, setForm] = useState<ProfileForm>({
+    bmi: 0,
+    height: 0,
+    weight: 0,
+    hwr: 0,
+    hip: 0,
+    waist: 0,
+    goal: 0,
+    bfp: 0,
+    gender: '',
+    age: 0,
+    calories: 0,
+    activity: '',
+    bri: 0,
+  });
+  const [formErrors, setFormErrors] = useState<ProfileFormErrors>({
+    height: false,
+    weight: false,
+    hip: false,
+    waist: false,
+    age: false,
+    bfp: false,
+  });
   const [edit, setEdit] = useState<boolean>(false);
-  const [bri, setBri] = useState<number>(0);
-  const [notification, setNotification] = useState<{
-    title: string;
-    message: string;
-    type: 'success' | 'error';
-  } | null>(null);
+  const [notification, setNotification] = useState<Notification | null>(null);
 
   const [user, setUser] = useState<UI_STATE<User>>({ type: 'loading' });
   const [showTrend, setShowTrend] = useState<boolean>(false);
@@ -67,18 +74,21 @@ function Profile() {
       .then((response: { data: User }) => {
         const data = response.data;
         setUser({ type: 'success', data: data });
-        setBmi(data.bmi);
-        setHeight(data.height);
-        setWeight(data.weight);
-        setHwr(data.waist / data.hip);
-        setHip(data.hip);
-        setWaist(data.waist);
-        setGoal(data.goal);
-        setBFP(data.bfp);
-        setGender(data.gender);
-        setAge(data.age);
-        setCalories(data.calories);
-        setActivity(data.activity_level);
+        setForm({
+          bmi: data.bmi,
+          height: data.height,
+          weight: data.weight,
+          hwr: data.waist / data.hip,
+          hip: data.hip,
+          waist: data.waist,
+          goal: data.goal,
+          bfp: data.bfp,
+          gender: data.gender,
+          age: data.age,
+          calories: data.calories,
+          activity: data.activity_level,
+          bri: 0,
+        });
       })
       .catch((error) => {
         setUser({ type: 'error', error: error.message || 'Error fetching user data' });
@@ -88,17 +98,17 @@ function Profile() {
   const handleEdit = (): void => {
     api
       .put('/users/edit_profile', {
-        bmi,
-        height,
-        weight,
-        hip,
-        waist,
-        goal,
-        bfp,
-        gender,
-        age,
-        calories,
-        activity_level: activity,
+        bmi: form.bmi,
+        height: form.height,
+        weight: form.weight,
+        hip: form.hip,
+        waist: form.waist,
+        goal: form.goal,
+        bfp: form.bfp,
+        gender: form.gender,
+        age: form.age,
+        calories: form.calories,
+        activity_level: form.activity,
       })
       .then(() => {
         setNotification({
@@ -118,122 +128,128 @@ function Profile() {
   };
 
   const handleBmi = (): void => {
-    setBmi(weight / (((height / 100) * height) / 100));
+    setForm((prev) => ({
+      ...prev,
+      bmi: prev.weight / ((prev.height / 100) * (prev.height / 100)),
+    }));
   };
 
   const handleAge = (e: string): void => {
     const value = parseFloat(e);
     if (value <= 0 || isNaN(value)) {
-      setFailureAge(true);
+      setFormErrors((prev) => ({ ...prev, age: true }));
     } else {
-      setAge(value);
-      setFailureAge(false);
+      setForm((prev) => ({ ...prev, age: value }));
+      setFormErrors((prev) => ({ ...prev, age: false }));
     }
   };
-  const handleActivity = (activity: string) => {
-    setActivity(activity);
+  const handleActivity = (activity: string): void => {
+    setForm((prev) => ({ ...prev, activity }));
   };
 
   const handleBri = (): void => {
-    if (height === 0 || waist === 0) return; // Vermeide Division durch 0
-    setBri(364.2 - 365.5 * Math.sqrt(1 - Math.pow(waist / Math.PI / height, 2)));
+    if (form.height === 0 || form.waist === 0) return;
+    setForm((prev) => ({
+      ...prev,
+      bri: 364.2 - 365.5 * Math.sqrt(1 - Math.pow(prev.waist / Math.PI / prev.height, 2)),
+    }));
   };
 
   const handleHeight = (e: string): void => {
     const value = parseFloat(e);
-
     if (value < 100 || isNaN(value)) {
-      setFailureHeight(true);
+      setFormErrors((prev) => ({ ...prev, height: true }));
     } else {
-      setHeight(value);
-      setFailureHeight(false);
+      setForm((prev) => ({ ...prev, height: value }));
+      setFormErrors((prev) => ({ ...prev, height: false }));
     }
   };
 
   const handleWeight = (e: string): void => {
     const value = parseFloat(e);
     if (value < 20 || isNaN(value)) {
-      setFailureWeight(true);
+      setFormErrors((prev) => ({ ...prev, weight: true }));
     } else {
-      setWeight(value);
-      setFailureWeight(false);
+      setForm((prev) => ({ ...prev, weight: value }));
+      setFormErrors((prev) => ({ ...prev, weight: false }));
     }
   };
 
   const handleHwr = (): void => {
-    setHwr(waist / hip);
+    setForm((prev) => ({ ...prev, hwr: prev.waist / prev.hip }));
   };
 
   const handleHip = (e: string): void => {
     const value = parseFloat(e);
     if (value < 50 || isNaN(value)) {
-      setFailureHip(true);
+      setFormErrors((prev) => ({ ...prev, hip: true }));
     } else {
-      setHip(value);
-      handleHwr();
-      setFailureHip(false);
+      setForm((prev) => ({ ...prev, hip: value, hwr: prev.waist / value }));
+      setFormErrors((prev) => ({ ...prev, hip: false }));
     }
   };
 
   const handleWaist = (e: string): void => {
     const value = parseFloat(e);
     if (value < 20 || isNaN(value)) {
-      setFailureWaist(true);
+      setFormErrors((prev) => ({ ...prev, waist: true }));
     } else {
-      setWaist(value);
-      handleHwr();
-      setFailureWaist(false);
+      setForm((prev) => ({ ...prev, waist: value, hwr: value / prev.hip }));
+      setFormErrors((prev) => ({ ...prev, waist: false }));
     }
   };
 
-  const handleGender = (gender: string) => {
-    setGender(gender);
+  const handleGender = (gender: string): void => {
+    setForm((prev) => ({ ...prev, gender }));
   };
 
   const handleGoal = (goal: string): void => {
-    setGoal(parseInt(goal, 10));
+    setForm((prev) => ({ ...prev, goal: parseInt(goal, 10) }));
   };
 
   const handleBFP = (e: string): void => {
     const value = parseFloat(e);
     if (value <= 0 || isNaN(value)) {
-      setFailureBFP(true);
+      setFormErrors((prev) => ({ ...prev, bfp: true }));
     } else {
-      setBFP(value);
-      setFailureBFP(false);
+      setForm((prev) => ({ ...prev, bfp: value }));
+      setFormErrors((prev) => ({ ...prev, bfp: false }));
     }
   };
 
-  const calcCalories = () => {
-    let l = 0;
-    if (goal == 1) {
-      l -= weight * 0.01 * 1000;
-    }
-    if (goal == 3) {
-      l += 200;
-    }
-    if (gender == 'male') {
-      setCalories((weight * 10 + 6.25 * height - 5 * age + 5) * parseFloat(activity) + l);
-    } else if (gender == 'female') {
-      setCalories((weight * 10 + 6.25 * height - 5 * age - 161) * parseFloat(activity) + l);
-    }
+  const calcCalories = (): void => {
+    setForm((prev) => {
+      let l = 0;
+      if (prev.goal === 1) l -= prev.weight * 0.01 * 1000;
+      if (prev.goal === 3) l += 200;
+      if (prev.gender === 'male') {
+        return {
+          ...prev,
+          calories:
+            (prev.weight * 10 + 6.25 * prev.height - 5 * prev.age + 5) * parseFloat(prev.activity) +
+            l,
+        };
+      } else if (prev.gender === 'female') {
+        return {
+          ...prev,
+          calories:
+            (prev.weight * 10 + 6.25 * prev.height - 5 * prev.age - 161) *
+              parseFloat(prev.activity) +
+            l,
+        };
+      }
+      return prev;
+    });
   };
 
   useEffect(() => {
-    if (edit) {
-      calcCalories();
-    }
+    if (edit) calcCalories();
     handleBri();
-  }, [gender, weight, height, age, activity, goal]);
+  }, [form.gender, form.weight, form.height, form.age, form.activity, form.goal]);
 
   useEffect(() => {
     handleBmi();
-  }, [height, weight]);
-  useEffect(() => {
-    if (edit) {
-      handleHwr();
-    }
-  }, [hip, waist]);
+  }, [form.height, form.weight]);
 
   return (
     <div>
@@ -262,24 +278,24 @@ function Profile() {
 
         {edit ? (
           <EditProfile
-            bmi={bmi}
-            height={height}
-            weight={weight}
-            hwr={hwr}
-            hip={hip}
-            waist={waist}
-            goal={goal.toString()}
-            bfp={bfp}
-            failureAge={failureAge}
-            failureWeight={failureWeight}
-            failureHeight={failureHeight}
-            failureWaist={failureWaist}
-            failureHip={failureHip}
-            failureBFP={failureBFP}
-            gender={gender}
-            age={age}
-            calories={calories}
-            activity={activity}
+            bmi={form.bmi}
+            height={form.height}
+            weight={form.weight}
+            hwr={form.hwr}
+            hip={form.hip}
+            waist={form.waist}
+            goal={form.goal.toString()}
+            bfp={form.bfp}
+            failureAge={formErrors.age}
+            failureWeight={formErrors.weight}
+            failureHeight={formErrors.height}
+            failureWaist={formErrors.waist}
+            failureHip={formErrors.hip}
+            failureBFP={formErrors.bfp}
+            gender={form.gender}
+            age={form.age}
+            calories={form.calories}
+            activity={form.activity}
             handleAge={handleAge}
             handleWeight={handleWeight}
             handleHeight={handleHeight}
@@ -296,19 +312,19 @@ function Profile() {
           !showTrend &&
           (user.type === 'success' ? (
             <ViewProfile
-              bmi={bmi}
-              height={height}
-              weight={weight}
-              hwr={hwr}
-              hip={hip}
-              waist={waist}
-              goal={goal}
-              bfp={bfp}
-              gender={gender}
-              age={age}
-              calories={calories}
-              activity={activityLevels[activity] || 'Unknown'}
-              bri={bri}
+              bmi={form.bmi}
+              height={form.height}
+              weight={form.weight}
+              hwr={form.hwr}
+              hip={form.hip}
+              waist={form.waist}
+              goal={form.goal}
+              bfp={form.bfp}
+              gender={form.gender}
+              age={form.age}
+              calories={form.calories}
+              activity={activityLevels[form.activity] || 'Unknown'}
+              bri={form.bri}
               setShowTrend={setShowTrend}
               setEdit={setEdit}
             />
