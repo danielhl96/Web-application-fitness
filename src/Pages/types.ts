@@ -3,7 +3,7 @@ export type WorkoutPlan = {
   id: number;
   plan_exercise_templates: {
     reps_template: number[];
-    sets: number[];
+    sets: number;
     weights_template: number[];
     name: string;
   }[];

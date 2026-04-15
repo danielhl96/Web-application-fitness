@@ -7,13 +7,13 @@ export default function Workouts({
   exercise,
   handleShowModal,
   setConfirmationModalforWorkoutDelete,
-  setKey,
+  setSaveKey,
   selectedExercise,
 }: {
   exercise: string;
   handleShowModal: (exercise: string) => void;
   setConfirmationModalforWorkoutDelete: (value: boolean) => void;
-  setKey: (key: string) => void;
+  setSaveKey: (key: string) => void;
   selectedExercise: WorkoutPlanMap;
 }): JSX.Element {
   return (
@@ -38,7 +38,7 @@ export default function Workouts({
             </svg>
           </Button>
           <Button
-            onClick={() => (setConfirmationModalforWorkoutDelete(true), setKey(exercise))}
+            onClick={() => (setConfirmationModalforWorkoutDelete(true), setSaveKey(exercise))}
             border="#ef4444"
           >
             <svg

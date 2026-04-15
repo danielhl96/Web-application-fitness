@@ -6,7 +6,7 @@ import { JSX } from 'react';
 
 function EditWorkoutPage({
   addExercise,
-  setaddExercise,
+  setAddExercise,
   selectedExercise,
   savekey,
   handleAddExercise,
@@ -16,7 +16,7 @@ function EditWorkoutPage({
   changePosition,
 }: {
   addExercise: string;
-  setaddExercise: (value: string) => void;
+  setAddExercise: (value: string) => void;
   selectedExercise: any;
   savekey: string;
   handleAddExercise: (exerciseName: string) => void;
@@ -32,7 +32,7 @@ function EditWorkoutPage({
           <Input
             placeholder="Add an exercise..."
             value={addExercise}
-            onChange={setaddExercise}
+            onChange={setAddExercise}
             id="input-e"
             w="w-54"
             h="h-10"
