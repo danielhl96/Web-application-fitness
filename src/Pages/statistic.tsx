@@ -1,22 +1,58 @@
-import api from '../Utils/api';
+import api from '../Utils/api.js';
 import ApexCharts from 'apexcharts';
-import { useState, useEffect } from 'react';
-import TemplatePage from '../Components/templatepage';
-import Button from '../Components/button.jsx';
-import Header from '../Components/Header.jsx';
-function Statistic() {
-  const [showOverview, setShowOverview] = useState(true);
-  const [selectedExercise, setSelectedExercise] = useState(null);
+import { useState, useEffect, JSX } from 'react';
+import TemplatePage from '../Components/templatepage.js';
+import Button from '../Components/button.js';
+import Header from '../Components/Header.js';
+import { UI_STATE } from './types.js';
 
-  // Das Input-Feld wird immer angezeigt, unabhängig von showOverview
-  function ExerciseCards() {
+type ExerciseEntry = {
+  date: string;
+  weights: number[];
+  reps: number[];
+};
+
+type ExerciseData = {
+  exercise_name: string;
+  entries: ExerciseEntry[];
+  date: string[];
+  max_weight: number;
+  min_weight: number;
+};
+
+function calculateProgress(item: ExerciseData): number {
+  let progress = 0;
+  if (item.entries && item.entries.length >= 2) {
+    const first = item.entries[0];
+    const last = item.entries[item.entries.length - 1];
+    const firstWeight =
+      first.weights && first.weights.length > 0 ? first.weights.reduce((a, b) => a + b, 0) : 0;
+    const lastWeight =
+      last.weights && last.weights.length > 0 ? last.weights.reduce((a, b) => a + b, 0) : 0;
+    const firstReps =
+      first.reps && first.reps.length > 0 ? first.reps.reduce((a, b) => a + b, 0) : 0;
+    const lastReps = last.reps && last.reps.length > 0 ? last.reps.reduce((a, b) => a + b, 0) : 0;
+    if (firstWeight > 0 && firstReps > 0) {
+      progress =
+        ((lastWeight * lastReps - firstWeight * firstReps) / (firstWeight * firstReps)) * 100;
+    }
+  }
+  return progress;
+}
+
+function Statistic(): JSX.Element {
+  const [showOverview, setShowOverview] = useState<boolean>(true);
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseData | null>(null);
+  const [statistics, setStatistics] = useState<UI_STATE<Record<string, any>>>({ type: 'loading' });
+
+  function ExerciseCards(): JSX.Element {
     return (
       <div className="flex flex-col items-center justify-center w-full">
         <div className="divider divider-primary  text-white font-bold mb-2">Your statistics</div>
 
-        {showOverview ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-3 w-full items-center mt-4 text-xs overflow-y-auto overflow-x-hidden max-h-130">
-            {data.map((item, index) => (
+        {showOverview && statistics.type === 'success' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-2 w-full items-center mt-4 text-xs overflow-y-auto overflow-x-hidden max-h-130">
+            {statistics.data.map((item, index) => (
               <div
                 key={index}
                 className="flex flex-col items-center justify-center cursor-pointer"
@@ -48,31 +84,12 @@ function Statistic() {
                   </figure>
                   <div className="flex flex-row space-x-4">
                     {(() => {
-                      let progress = 0;
-                      if (item.entries && item.entries.length >= 2) {
-                        const first = item.entries[0];
-                        const last = item.entries[item.entries.length - 1];
-                        const firstWeight =
-                          first.weights && first.weights.length > 0
-                            ? Math.max(...first.weights)
-                            : 0;
-                        const lastWeight =
-                          last.weights && last.weights.length > 0 ? Math.max(...last.weights) : 0;
-                        const firstReps =
-                          first.reps && first.reps.length > 0 ? Math.max(...first.reps) : 0;
-                        const lastReps =
-                          last.reps && last.reps.length > 0 ? Math.max(...last.reps) : 0;
-                        if (firstWeight > 0 && firstReps > 0) {
-                          progress =
-                            ((lastWeight * lastReps - firstWeight * firstReps) /
-                              (firstWeight * firstReps)) *
-                            100;
-                        }
-                      }
+                      const progress = calculateProgress(item);
                       const progressText = `${progress.toFixed(1)} %`;
                       let progressClass = 'text-slate-300';
                       if (progress > 0) progressClass = 'text-green-500';
                       else if (progress < 0) progressClass = 'text-red-500';
+
                       return (
                         <p className={`text-xs ${progressClass}`}>
                           Progress:{' '}
@@ -88,7 +105,7 @@ function Statistic() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : statistics.type === 'success' ? (
           <div className="flex flex-col w-full">
             <div id="chart" className="w-full"></div>
             <div className="divider my-4"></div>
@@ -112,11 +129,13 @@ function Statistic() {
               </Button>
               <div className="flex space-x-1">
                 <Button
-                  disabled={data.findIndex((e) => e === selectedExercise) === 0}
+                  disabled={statistics.data.findIndex((e) => e === selectedExercise) === 0}
                   onClick={() =>
                     setSelectedExercise(
-                      data.findIndex((e) => e === selectedExercise) - 1 >= 0
-                        ? data[data.findIndex((e) => e === selectedExercise) - 1]
+                      statistics.data.findIndex((e) => e === selectedExercise) - 1 >= 0
+                        ? statistics.data[
+                            statistics.data.findIndex((e) => e === selectedExercise) - 1
+                          ]
                         : selectedExercise
                     )
                   }
@@ -138,11 +157,17 @@ function Statistic() {
                   </svg>
                 </Button>
                 <Button
-                  disabled={data.findIndex((e) => e === selectedExercise) === data.length - 1}
+                  disabled={
+                    statistics.data.findIndex((e) => e === selectedExercise) ===
+                    statistics.data.length - 1
+                  }
                   onClick={() =>
                     setSelectedExercise(
-                      data.findIndex((e) => e === selectedExercise) + 1 < data.length
-                        ? data[data.findIndex((e) => e === selectedExercise) + 1]
+                      statistics.data.findIndex((e) => e === selectedExercise) + 1 <
+                        statistics.data.length
+                        ? statistics.data[
+                            statistics.data.findIndex((e) => e === selectedExercise) + 1
+                          ]
                         : selectedExercise
                     )
                   }
@@ -166,26 +191,35 @@ function Statistic() {
               </div>
             </div>
           </div>
+        ) : null}
+        {statistics.type === 'loading' && (
+          <div className="flex flex-col justify-center items-center">
+            <span className="loading loading-bars loading-xl"></span>
+            <div className="text-gray-500 mt-4">Loading statistics...</div>
+          </div>
+        )}
+        {statistics.type === 'error' && (
+          <div className="flex flex-col justify-center items-center mt-8 gap-3">
+            <span className="text-red-400">Error loading statistics</span>
+          </div>
         )}
       </div>
     );
   }
 
-  // Neu: Chart-Komponente mit useEffect
-  function ChartRenderer({ exercise }) {
+  function ChartRenderer({ exercise }: { exercise: ExerciseData }): JSX.Element {
     useEffect(() => {
       if (!exercise) return;
 
-      console.log('Rendering chart for exercise:', exercise);
       const dates = exercise.date;
-
-      const weights = exercise.entries.map((e) => Math.max(...e.weights));
+      const values = exercise.entries.map((e) => Math.max(...e.weights));
+      const allWeightsonDate = exercise.entries.map((e) => e.weights);
 
       const options = {
         series: [
           {
             name: 'Weight (kg)',
-            data: weights,
+            data: values,
           },
         ],
         chart: {
@@ -219,8 +253,9 @@ function Statistic() {
             fontSize: '12px',
             color: '#000000',
           },
-          custom: function ({ series, seriesIndex, dataPointIndex }) {
-            const weight = series[seriesIndex][dataPointIndex];
+          custom: function ({ dataPointIndex }) {
+            const weight = allWeightsonDate[dataPointIndex].join(', ');
+
             const repsArray = exercise.entries[dataPointIndex].reps;
             const date = dates[dataPointIndex];
             const repsDisplay = repsArray.join(', ');
@@ -238,21 +273,20 @@ function Statistic() {
     return null;
   }
 
-  const [data, setData] = useState([]);
-
   useEffect(() => {
-    api.get('/statistics/exercise_statistics').then((response) => {
-      const raw = response.data;
-      const transformed = Object.entries(raw).map(([exercise_name, entries]) => ({
-        exercise_name,
-        entries,
-        date: entries.map((e) => new Date(e.date).toLocaleDateString()),
-        max_weight: Math.max(...entries.flatMap((e) => e.weights)),
-        min_weight: Math.min(...entries.flatMap((e) => e.weights)),
-      }));
-      setData(transformed);
-      console.log('Fetched statistics data:', transformed);
-    });
+    api
+      .get('/statistics/exercise_statistics')
+      .then((response: { data: Record<string, ExerciseEntry[]> }) => {
+        const transformed = Object.entries(response.data).map(([exercise_name, entries]) => ({
+          exercise_name,
+          entries,
+          date: entries.map((e) => new Date(e.date).toLocaleDateString()),
+          max_weight: Math.max(...entries.flatMap((e) => e.weights)),
+          min_weight: Math.min(...entries.flatMap((e) => e.weights)),
+        }));
+
+        setStatistics({ type: 'success', data: transformed });
+      });
   }, []);
 
   return (

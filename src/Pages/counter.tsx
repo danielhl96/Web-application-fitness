@@ -18,7 +18,7 @@ type Action =
       payload: number;
     }
   | {
-      type: 'SET_SHOW_MODAL' | 'SET_IS_BREAK_MODE' | 'SET_IS_START_MODE' | 'SET_IS_STOP_MODE';
+      type: 'SET_IS_BREAK_MODE' | 'SET_IS_START_MODE' | 'SET_IS_STOP_MODE';
       payload: boolean;
     }
   | { type: 'INCREMENT_SEC' };
@@ -99,6 +99,7 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
 function CounterForm(): JSX.Element {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
+  const [showModal, setShowModal] = React.useState(false);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   var totalSeconds: number = 0;
@@ -129,7 +130,6 @@ function CounterForm(): JSX.Element {
         | 'SET_STARTTIME'
         | 'SET_ROUNDTIME'
         | 'SET_TOTALTIME'
-        | 'SET_SHOW_MODAL'
         | 'SET_IS_BREAK_MODE'
         | 'SET_IS_START_MODE'
         | 'SET_IS_STOP_MODE'
@@ -154,8 +154,6 @@ function CounterForm(): JSX.Element {
         return { ...state, roundtime: action.payload as number };
       case 'SET_TOTALTIME':
         return { ...state, totaltime: action.payload as number };
-      case 'SET_SHOW_MODAL':
-        return { ...state, showModal: action.payload as boolean };
       case 'SET_IS_BREAK_MODE':
         return { ...state, isbreakmode: action.payload as boolean };
       case 'SET_IS_START_MODE':
@@ -287,10 +285,7 @@ function CounterForm(): JSX.Element {
             </div>
           </div>
           <div className="modal-action justify-center">
-            <Button
-              border="#3b82f6"
-              onClick={() => dispatch({ type: 'SET_SHOW_MODAL', payload: false })}
-            >
+            <Button border="#3b82f6" onClick={() => setShowModal(false)}>
               Close
             </Button>
           </div>
@@ -305,7 +300,7 @@ function CounterForm(): JSX.Element {
     <div>
       <Header />
       <TemplatePage>
-        {state.showModal && settingsModal()}
+        {showModal && settingsModal()}
         <div className="flex flex-col items-center justify-center mt-4">
           <div className="divider divider-primary text-white font-bold mb-2">Stopwatch</div>
           <div className="relative w-60 h-60 border-8 border-gray-400/10 rounded-full bg-gradient-to-b from-gray-900 to-black">
@@ -403,7 +398,9 @@ function CounterForm(): JSX.Element {
           <div className="flex flex-col items-center space-y-2">
             <Button
               border="#3b82f6"
-              onClick={() => dispatch({ type: 'SET_SHOW_MODAL', payload: true })}
+              onClick={() => {
+                setShowModal(true);
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
