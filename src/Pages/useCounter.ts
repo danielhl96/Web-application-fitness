@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react';
-import { Action } from './types';
+import { Action } from '../types';
 type CounterReturn = {
   sec: number;
   min: number;

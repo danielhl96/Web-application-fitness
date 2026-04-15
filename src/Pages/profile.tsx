@@ -7,7 +7,7 @@ import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
-import { UI_STATE, UserHistory, User } from './types.ts';
+import { UI_STATE, UserHistory, User } from '../types.ts';
 
 function Profile() {
   const [bmi, setBmi] = useState<number>(0);

@@ -1,6 +1,6 @@
 import Button from './button';
 import WorkoutCard from './workoutcard';
-import { WorkoutPlanMap } from '../Pages/types';
+import { WorkoutPlanMap } from '../types';
 import { JSX } from 'react';
 
 export default function Workouts({

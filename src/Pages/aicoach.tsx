@@ -5,7 +5,7 @@ import { useEffect, useState, useRef, JSX } from 'react';
 import Header from '../Components/Header.js';
 import api from '../Utils/api.js';
 import TemplateModal from '../Components/templatemodal.js';
-import { Exercise, User, Meal } from './types.js';
+import { Exercise, User, Meal } from '../types.js';
 function AiCoach() {
   const [question, setQuestion] = useState<string>('');
   const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
