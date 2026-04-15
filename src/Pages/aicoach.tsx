@@ -5,11 +5,11 @@ import { useEffect, useState, useRef, JSX } from 'react';
 import Header from '../Components/Header.js';
 import api from '../Utils/api.js';
 import TemplateModal from '../Components/templatemodal.js';
-import { Workout, User, Meal } from './types.js';
+import { Exercise, User, Meal } from './types.js';
 function AiCoach() {
   const [question, setQuestion] = useState<string>('');
   const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const [workouts, setWorkouts] = useState<{ workouts: Workout[]; name: string }[]>([]);
+  const [workouts, setWorkouts] = useState<{ workouts: Exercise[]; name: string }[]>([]);
   const [chatHistory, setChatHistory] = useState<
     { message: string; isUser: boolean; refs: HTMLDivElement | null }[]
   >([
@@ -56,7 +56,7 @@ function AiCoach() {
   function fetchWorkouts() {
     api
       .get('workout_plans/get_workout_plans')
-      .then((response: { data: { exercises: Workout[]; name: string }[] }) => {
+      .then((response: { data: { exercises: Exercise[]; name: string }[] }) => {
         const workoutsData = response.data;
         const newWorkouts = workoutsData.map((workout) => ({
           workouts: workout.exercises,

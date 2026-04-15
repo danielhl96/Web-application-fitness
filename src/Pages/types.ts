@@ -1,9 +1,24 @@
-export type Workout = {
+export type WorkoutPlan = {
   name: string;
-  sets: number;
-  reps: number[];
-  weights: number[];
+  id: number;
+  plan_exercise_templates: {
+    reps_template: number[];
+    sets: number[];
+    weights_template: number[];
+    name: string;
+  }[];
 };
+
+export type SelectedExercise = {
+  exercise: string;
+  plan_id: number | null;
+  sets: number;
+  reps: number | number[];
+  weights?: number[];
+};
+
+export type WorkoutPlanMap = Record<string, SelectedExercise[]>;
+
 export type User = {
   age: number;
   weight: number;
