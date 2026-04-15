@@ -7,7 +7,7 @@ const activityLevels = {
   1.2: 'Not active',
   1.4: 'Lightly active',
   1.7: 'Moderately active',
-  '2.0': 'Very active',
+  2.0: 'Very active',
 };
 
 type HumanSilhouetteProps = {
@@ -24,7 +24,7 @@ type HumanSilhouetteProps = {
 function cardForValues(children: React.ReactNode): JSX.Element {
   return (
     <div
-      className="card w-full items-center justify-center  lg:w-40 h-[5dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
+      className="card w-full items-center justify-center text-xs lg:w-40 h-[5dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg"
       style={{
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
         border: '1px solid rgba(255, 255, 255, 0.18)',
@@ -255,10 +255,12 @@ function ViewProfile(props: ViewProfileProps): JSX.Element {
                 ? { color: 'red' }
                 : parseFloat(activity) >= 1.5
                   ? { color: 'green' }
-                  : { color: 'orange' }
+                  : parseFloat(activity) > 1.2 && parseFloat(activity) < 1.5
+                    ? { color: 'yellow' }
+                    : { color: 'orange' }
             }
           >
-            Activity: {activityLevels[activity] ?? 'UNS'}
+            {activityLevels[activity] ?? 'UNS'}
           </h1>
         )}
       </div>

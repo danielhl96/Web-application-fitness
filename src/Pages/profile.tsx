@@ -53,13 +53,6 @@ function Profile() {
     get_history();
   }, [edit]);
 
-  const activityLevels = {
-    1.2: 'Not active',
-    1.4: 'Lightly active',
-    1.7: 'Moderately active',
-    '2.0': 'Very active',
-  };
-
   const get_history = (): void => {
     api.get('/users/get_history').then((response: { data: UserHistory[] }) => {
       const data = response.data;
@@ -73,7 +66,8 @@ function Profile() {
       .get('/users/profile')
       .then((response: { data: User }) => {
         const data = response.data;
-        setUser({ type: 'success', data: data });
+        console.log('Fetched user data:', data);
+        setUser({ type: 'success', data });
         setForm({
           bmi: data.bmi,
           height: data.height,
@@ -103,7 +97,7 @@ function Profile() {
         weight: form.weight,
         hip: form.hip,
         waist: form.waist,
-        goal: form.goal,
+        goal: form.goal.toString(),
         bfp: form.bfp,
         gender: form.gender,
         age: form.age,
@@ -323,7 +317,7 @@ function Profile() {
               gender={form.gender}
               age={form.age}
               calories={form.calories}
-              activity={activityLevels[form.activity] || 'Unknown'}
+              activity={form.activity}
               bri={form.bri}
               setShowTrend={setShowTrend}
               setEdit={setEdit}
