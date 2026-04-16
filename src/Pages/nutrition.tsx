@@ -250,12 +250,26 @@ function Nutrition() {
                 </Button>
                 <Button
                   border="#3b82f6"
-                  children
                   onClick={() => {
                     setShowAudioModal(true);
                     setShowFileUpload(false);
                   }}
-                ></Button>
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
+                    />
+                  </svg>
+                </Button>
               </div>
             )}
           </div>
