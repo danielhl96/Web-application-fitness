@@ -19,7 +19,8 @@ function Nutrition() {
     setMonth,
     year,
     setYear,
-    calories,
+    loading,
+    loadingMeals,
     dinnerMeals,
     launchMeals,
     breakfastMeals,
@@ -40,7 +41,7 @@ function Nutrition() {
     setShowEditMeal,
     prompt,
     setPrompt,
-    loading,
+    loadingProfile,
     notification,
     setNotification,
     deleteMeal,
@@ -189,8 +190,8 @@ function Nutrition() {
           />
 
           <div className="flex flex-row justify-center space-x-2 mb-4">
-            {loading ? (
-              <span className="loading loading-bars loading-xl"></span>
+            {loading.type === 'loading' ? (
+              <span className="loading loading-bars loading-xl text-white-400"></span>
             ) : (
               <div className="flex flex-row items-center space-x-2">
                 <Input
@@ -386,59 +387,65 @@ function Nutrition() {
           <div className="card-body">
             <h2 className="card-title text-blue-400 text-xs">{mealname}</h2>
             <div className="flex flex-col items-center text-xs overflow-y-auto max-h-18">
-              <div className="flex flex-col items-center">
-                {meals.map((meal, index) => (
-                  <p key={index} className="flex flex-row space-x-0 items-center ">
-                    <div
-                      onClick={() => {
-                        setShowEditMeal(true);
-                        setMeal(meal);
-                      }}
-                      className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
-                    >
-                      <p className="mr-1">{meal.name}</p>
-                      <p className="mr-1">Cal: {meal.calories.toFixed(0)}kcal </p>
-                      <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
-                      <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
-                      <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
-
-                      <button
+              <div className="flex flex-col items-center w-full">
+                {loadingMeals.type === 'loading' ? (
+                  <div className="flex justify-center items-center w-full h-10">
+                    <span className="loading loading-bars loading-sm text-white-400" />
+                  </div>
+                ) : (
+                  meals.map((meal, index) => (
+                    <p key={index} className="flex flex-row space-x-0 items-center ">
+                      <div
                         onClick={() => {
-                          deleteMeal(meal.id);
+                          setShowEditMeal(true);
+                          setMeal(meal);
                         }}
-                        className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
-                        style={{
-                          background: 'rgba(30, 41, 59, 0.25)',
-                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                          border: '1.5px solid transparent',
-                          backdropFilter: 'blur(8px)',
-                          WebkitBackdropFilter: 'blur(8px)',
-                        }}
-                        onMouseEnter={(e: MouseEvent<HTMLButtonElement>) =>
-                          (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
-                        }
-                        onMouseLeave={(e: MouseEvent<HTMLButtonElement>) =>
-                          (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
-                        }
+                        className="card w-full bg-black/20 border border-blue-500 shadow-xl rounded-xl mb-2 p-2 flex flex-row justify-between items-center"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          className="w-4 h-4"
+                        <p className="mr-1">{meal.name}</p>
+                        <p className="mr-1">Cal: {meal.calories.toFixed(0)}kcal </p>
+                        <p className="mr-1">P: {meal.protein.toFixed(0)}g</p>
+                        <p className="mr-1">C: {meal.carbs.toFixed(0)}g</p>
+                        <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
+
+                        <button
+                          onClick={() => {
+                            deleteMeal(meal.id);
+                          }}
+                          className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
+                          style={{
+                            background: 'rgba(30, 41, 59, 0.25)',
+                            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                            border: '1.5px solid transparent',
+                            backdropFilter: 'blur(8px)',
+                            WebkitBackdropFilter: 'blur(8px)',
+                          }}
+                          onMouseEnter={(e: MouseEvent<HTMLButtonElement>) =>
+                            (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                          }
+                          onMouseLeave={(e: MouseEvent<HTMLButtonElement>) =>
+                            (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                          }
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </p>
-                ))}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </p>
+                  ))
+                )}
               </div>
             </div>
             <div className="flex justify-end ">
@@ -531,46 +538,68 @@ function Nutrition() {
             >
               <div className="card-body">
                 <div className="flex flex-col">
-                  <div className="carousel rounded-box w-full">
-                    {calculateCalories() > 0 && (
-                      <div className="carousel-item w-full flex flex-col items-center">
-                        <h1 className="text-blue-400 text-xs text-left lg:text-lg mb-2">Summary</h1>
+                  {loadingProfile.type === 'loading' ? (
+                    <div className="flex flex-1 justify-center items-center w-full h-full">
+                      <span className="loading loading-bars loading-sm text-white-400" />
+                    </div>
+                  ) : (
+                    <div className="carousel rounded-box w-full">
+                      {calculateCalories() > 0 && (
+                        <div className="carousel-item w-full flex flex-col items-center">
+                          <h1 className="text-blue-400 text-xs text-left lg:text-lg mb-2">
+                            Summary
+                          </h1>
 
-                        <div
-                          className={`radial-progress text-xs items-center ${
-                            calories - calculateCalories() < 0 ? 'text-red-500' : ''
-                          } items-center justify-center`}
-                          style={
-                            {
-                              '--value': (calculateCalories() / calories) * 100,
-                              '--thickness': '4px',
-                            } as CSSProperties
-                          }
-                          aria-valuenow={100}
-                          role="progressbar"
-                        >
-                          {calculateCalories()} kcal
+                          <div
+                            className={`radial-progress text-xs items-center ${
+                              loadingProfile.type === 'success' &&
+                              loadingProfile.data.calories - calculateCalories() < 0
+                                ? 'text-red-500'
+                                : ''
+                            } items-center justify-center`}
+                            style={
+                              {
+                                '--value':
+                                  loadingProfile.type === 'success'
+                                    ? (calculateCalories() / loadingProfile.data.calories) * 100
+                                    : 0,
+                                '--thickness': '4px',
+                              } as CSSProperties
+                            }
+                            aria-valuenow={100}
+                            role="progressbar"
+                          >
+                            {calculateCalories()} kcal
+                          </div>
+                        </div>
+                      )}
+                      <div className="carousel-item w-full">
+                        <div className="text-xs ">
+                          <h1 className="text-blue-400 lg:text-md mb-2">Calories</h1>
+                          <p className="text-white">In: {calculateCalories()}kcal</p>
+                          <p className="text-white">
+                            Goal:{' '}
+                            {loadingProfile.type === 'success' ? loadingProfile.data.calories : 0}
+                            kcal
+                          </p>
+                          <p
+                            className={`${loadingProfile.type === 'success' && loadingProfile.data.calories - calculateCalories() < 0 ? 'text-red-500' : ''}`}
+                          >
+                            Open:{' '}
+                            {loadingProfile.type === 'success'
+                              ? loadingProfile.data.calories - calculateCalories()
+                              : 0}
+                            kcal
+                          </p>
                         </div>
                       </div>
-                    )}
-                    <div className="carousel-item w-full">
-                      <div className="text-xs ">
-                        <h1 className="text-blue-400 lg:text-md mb-2">Calories</h1>
-                        <p className="text-white">In: {calculateCalories()}kcal</p>
-
-                        <p className="text-white">Goal: {calories}kcal</p>
-
-                        <p
-                          className={`${calories - calculateCalories() < 0 ? 'text-red-500' : ''}`}
-                        >
-                          Open: {calories - calculateCalories()}kcal
-                        </p>
-                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
+
+            {/* Macros card */}
             <div
               className="card w-36 sm:w-36 lg:w-72 h-[18dvh] bg-black/20 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg cursor-pointer active:bg-blue-500 transition-colors duration-200"
               style={{
@@ -579,61 +608,71 @@ function Nutrition() {
               }}
             >
               <div className="card-body">
-                <div className="carousel rounded-box w-full">
-                  <div className="carousel-item w-full ">
-                    <div className="text-left text-xs">
-                      <h2 className="text-blue-400 lg:text-md mb-2">Open Macros</h2>
-                      <p
-                        className={` ${
-                          calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
-                        } `}
-                      >
-                        P: {(calculateProteinsGoal() - calculateProteins()).toFixed(0)}g
-                      </p>
-                      <p
-                        className={` ${
-                          calculateCarbsGoal() - calculateCarbs() < 0 ? 'text-red-500' : ''
-                        } `}
-                      >
-                        C: {(calculateCarbsGoal() - calculateCarbs()).toFixed(0)}g
-                      </p>
-                      <p
-                        className={` ${
-                          calculateFatsGoal() - calculateFats() < 0 ? 'text-red-500' : ''
-                        } `}
-                      ></p>
-                    </div>
+                {loadingProfile.type === 'loading' ? (
+                  <div className="flex flex-1 justify-center items-center w-full h-full">
+                    <span className="loading loading-bars loading-sm text-white-400" />
                   </div>
-                  <div className="carousel-item w-full ">
-                    <div className="text-left text-xs lg:text-md">
-                      <h2 className="text-blue-400 lg:text-md mb-2">Goals</h2>
-                      <p className=" text-white">P: {calculateProteinsGoal().toFixed(0)} g</p>
-                      <p className="text-white">C: {calculateCarbsGoal().toFixed(0)} g</p>
-                      <p className="text-white">F: {calculateFatsGoal().toFixed(0)} g</p>
-                    </div>
-                  </div>
-                  {calculateCalories() > 0 && (
-                    <div className="carousel-item w-full">
-                      <div className="text-left text-xs lg:text-md">
-                        <h2 className="text-blue-400 lg:text-md mb-2">Macros (kcal)</h2>
-                        <p className="text-white">P: {(calculateProteins() * 4).toFixed(0)} kcal</p>
-                        <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
-                        <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
+                ) : (
+                  <div className="carousel rounded-box w-full">
+                    <div className="carousel-item w-full ">
+                      <div className="text-left text-xs">
+                        <h2 className="text-blue-400 lg:text-md mb-2">Open Macros</h2>
+                        <p
+                          className={` ${
+                            calculateProteinsGoal() - calculateProteins() < 0 ? 'text-red-500' : ''
+                          } `}
+                        >
+                          P: {(calculateProteinsGoal() - calculateProteins()).toFixed(0)}g
+                        </p>
+                        <p
+                          className={` ${
+                            calculateCarbsGoal() - calculateCarbs() < 0 ? 'text-red-500' : ''
+                          } `}
+                        >
+                          C: {(calculateCarbsGoal() - calculateCarbs()).toFixed(0)}g
+                        </p>
+                        <p
+                          className={` ${
+                            calculateFatsGoal() - calculateFats() < 0 ? 'text-red-500' : ''
+                          } `}
+                        >
+                          F: {(calculateFatsGoal() - calculateFats()).toFixed(0)}g
+                        </p>
                       </div>
                     </div>
-                  )}
-
-                  {calculateCalories() > 0 && (
-                    <div className="carousel-item w-full  flex flex-col items-center">
-                      <h2 className="text-blue-400 lg:text-md mb-2">Macronutrients</h2>
-                      <MacroPieChart
-                        protein={calculateProteins()}
-                        carbs={calculateCarbs()}
-                        fats={calculateFats()}
-                      />
+                    <div className="carousel-item w-full ">
+                      <div className="text-left text-xs lg:text-md">
+                        <h2 className="text-blue-400 lg:text-md mb-2">Goals</h2>
+                        <p className=" text-white">P: {calculateProteinsGoal().toFixed(0)} g</p>
+                        <p className="text-white">C: {calculateCarbsGoal().toFixed(0)} g</p>
+                        <p className="text-white">F: {calculateFatsGoal().toFixed(0)} g</p>
+                      </div>
                     </div>
-                  )}
-                </div>
+                    {calculateCalories() > 0 && (
+                      <div className="carousel-item w-full">
+                        <div className="text-left text-xs lg:text-md">
+                          <h2 className="text-blue-400 lg:text-md mb-2">Macros (kcal)</h2>
+                          <p className="text-white">
+                            P: {(calculateProteins() * 4).toFixed(0)} kcal
+                          </p>
+                          <p className="text-white">C: {(calculateCarbs() * 4).toFixed(0)} kcal</p>
+                          <p className="text-white">F: {(calculateFats() * 9).toFixed(0)} kcal</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {calculateCalories() > 0 && (
+                      <div className="carousel-item w-full  flex flex-col items-center">
+                        <h2 className="text-blue-400 lg:text-md mb-2">Macronutrients</h2>
+                        <MacroPieChart
+                          protein={calculateProteins()}
+                          carbs={calculateCarbs()}
+                          fats={calculateFats()}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

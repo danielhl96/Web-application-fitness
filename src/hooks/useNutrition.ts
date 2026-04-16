@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from '../Utils/api.js';
-import { Meal, NotificationState } from '../types';
+import { Meal, NotificationState, UI_STATE } from '../types';
 
 export default function useNutrition() {
   const [selectedDay, setSelectedDay] = useState<number>(new Date().getDate());
   const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
-
-  const [calories, setCalories] = useState<number>(0);
-  const [weight, setWeight] = useState<number>(0);
 
   const [dinnerMeals, setDinnerMeals] = useState<Meal[]>([]);
   const [launchMeals, setLaunchMeals] = useState<Meal[]>([]);
@@ -25,7 +22,11 @@ export default function useNutrition() {
   const [showEditMeal, setShowEditMeal] = useState<boolean>(false);
 
   const [prompt, setPrompt] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<UI_STATE<Meal>>({ type: 'loading' });
+  const [loadingMeals, setLoadingMeals] = useState<UI_STATE<Meal[]>>({ type: 'loading' });
+  const [loadingProfile, setLoadingProfile] = useState<
+    UI_STATE<{ calories: number; weight: number }>
+  >({ type: 'loading' });
   const [notification, setNotification] = useState<NotificationState>(null);
 
   const dateString = `${year}-${month.toString().padStart(2, '0')}-${selectedDay
@@ -34,16 +35,16 @@ export default function useNutrition() {
 
   useEffect(() => {
     getProfile();
-    getDinnerMeals();
-    getLunchMeals();
-    getBreakfastMeals();
-    getSnackMeals();
+    refreshAllMeals();
   }, [selectedDay, month, year]);
 
   function getProfile() {
+    setLoadingProfile({ type: 'loading' });
     api.get('users/profile').then((response) => {
-      setCalories(response.data.calories);
-      setWeight(response.data.weight);
+      setLoadingProfile({
+        type: 'success',
+        data: { calories: response.data.calories, weight: response.data.weight },
+      });
     });
   }
 
@@ -71,11 +72,10 @@ export default function useNutrition() {
       .then((response) => setSnackMeals(response.data));
   }
 
-  function refreshAllMeals() {
-    getDinnerMeals();
-    getLunchMeals();
-    getBreakfastMeals();
-    getSnackMeals();
+  async function refreshAllMeals() {
+    setLoadingMeals({ type: 'loading' });
+    await Promise.all([getDinnerMeals(), getLunchMeals(), getBreakfastMeals(), getSnackMeals()]);
+    setLoadingMeals({ type: 'success', data: [] });
   }
 
   function deleteMeal(mealId: number) {
@@ -96,9 +96,13 @@ export default function useNutrition() {
       });
   }
 
+  function resetPrompt() {
+    setPrompt('');
+  }
+
   function handleMeal(mealTypeArg: string, image: File | null) {
     if (!image) return;
-    setLoading(true);
+
     const formData = new FormData();
     formData.append('meal_type', mealTypeArg);
     formData.append('image', image);
@@ -111,12 +115,18 @@ export default function useNutrition() {
         setMeal(response.data);
         setShowFileUpload(false);
         setShowMeal(true);
-        setLoading(false);
+        setLoading({ type: 'success', data: response.data });
+        resetPrompt();
       })
-      .catch((error) => {
-        console.error('Error creating meal:', error);
+      .catch(() => {
         setShowFileUpload(false);
-        setLoading(false);
+        setLoading({ type: 'error', error: 'Failed to calculate meal.' });
+        setNotification({
+          title: 'Calculate Meal',
+          type: 'error',
+          message: 'Failed to calculate meal.',
+        });
+        resetPrompt();
       });
   }
 
@@ -191,13 +201,17 @@ export default function useNutrition() {
   }
 
   function calculateProteinsGoal(): number {
-    return weight * 2.0;
+    return loadingProfile.type === 'success' ? loadingProfile.data.weight * 2.0 : 0;
   }
   function calculateFatsGoal(): number {
-    return weight * 1.0;
+    return loadingProfile.type === 'success' ? loadingProfile.data.weight * 1.0 : 0;
   }
   function calculateCarbsGoal(): number {
-    return (calories - (weight * 2.0 * 4 + weight * 1.0 * 9)) / 4;
+    return loadingProfile.type === 'success'
+      ? (loadingProfile.data.calories -
+          (loadingProfile.data.weight * 2.0 * 4 + loadingProfile.data.weight * 1.0 * 9)) /
+          4
+      : 0;
   }
 
   return {
@@ -210,8 +224,7 @@ export default function useNutrition() {
     setYear,
     dateString,
     // Profile
-    calories,
-    weight,
+    loadingProfile,
     // Meals
     dinnerMeals,
     launchMeals,
@@ -236,6 +249,7 @@ export default function useNutrition() {
     prompt,
     setPrompt,
     loading,
+    loadingMeals,
     notification,
     setNotification,
     // API actions
