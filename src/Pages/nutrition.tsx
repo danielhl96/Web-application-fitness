@@ -601,9 +601,7 @@ function Nutrition() {
                         className={` ${
                           calculateFatsGoal() - calculateFats() < 0 ? 'text-red-500' : ''
                         } `}
-                      >
-                        F: {(calculateFatsGoal() - calculateFats()).toFixed(0)}g
-                      </p>
+                      ></p>
                     </div>
                   </div>
                   <div className="carousel-item w-full ">
