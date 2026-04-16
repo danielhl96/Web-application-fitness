@@ -41,6 +41,12 @@ export type UserHistory = {
   bfp: number;
 };
 
+export type NotificationState = {
+  title: string;
+  message: string;
+  type: 'success' | 'error';
+} | null;
+
 export type UI_STATE<T> =
   | {
       type: 'loading';
@@ -54,6 +60,7 @@ export type UI_STATE<T> =
       data: T;
     };
 export type Meal = {
+  id: number;
   name: string;
   calories: number;
   type: string;

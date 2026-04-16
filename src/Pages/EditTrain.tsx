@@ -9,7 +9,7 @@ import Button from '../Components/button.js';
 import TemplateModal from '../Components/templatemodal.js';
 import Workouts from '../Components/workouts.js';
 import EditWorkoutPage from '../Components/editworkout.tsx';
-import { useEditTrain } from './useEditTrain.ts';
+import { useEditTrain } from '../hooks/useEditTrain.ts';
 
 const EditTrain = (): JSX.Element => {
   const navigate = useNavigate();

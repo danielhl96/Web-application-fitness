@@ -1,38 +1,74 @@
-import TemplatePage from '../Components/templatepage';
-import api from '../Utils/api.js';
-import Input from '../Components/input.jsx';
+import { useRef, useEffect } from 'react';
+import type { FC, CSSProperties, MouseEvent } from 'react';
 import ApexCharts from 'apexcharts';
+
+import TemplatePage from '../Components/templatepage';
+import Input from '../Components/input.jsx';
 import Notify from '../Components/notify.jsx';
 import Button from '../Components/button.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
-
-import { useState, useRef, useEffect, use } from 'react';
 import Header from '../Components/Header.jsx';
+import useNutrition from '../hooks/useNutrition.js';
+import type { Meal } from '../types';
 
 function Nutrition() {
-  const [selectedDay, setSelectedDay] = useState(new Date().getDate());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [showModal, setShowModal] = useState(false);
-  const [showMeal, setShowMeal] = useState(false);
-  const [showFileUpload, setShowFileUpload] = useState(false);
-  const [meal, setMeal] = useState(null);
-  const [dinnerMeals, setDinnerMeals] = useState([]);
-  const [launchMeals, setLaunchMeals] = useState([]);
-  const [breakfastMeals, setBreakfastMeals] = useState([]);
-  const [snackMeals, setSnackMeals] = useState([]);
-  const [prompt, setPrompt] = useState('');
-  const fileInputRef = useRef(null);
-  const [calorie_factor, setCalorie_factor] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [mealtype, setMealtype] = useState('');
-  const [calories, setCalories] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [showEditMeal, setShowEditMeal] = useState(false);
-  const [notify, setNotify] = useState(null);
+  const {
+    selectedDay,
+    setSelectedDay,
+    month,
+    setMonth,
+    year,
+    setYear,
+    calories,
+    dinnerMeals,
+    launchMeals,
+    breakfastMeals,
+    snackMeals,
+    meal,
+    setMeal,
+    mealtype,
+    setMealtype,
+    calorieFactor,
+    setCalorieFactor,
+    showModal,
+    setShowModal,
+    showMeal,
+    setShowMeal,
+    showFileUpload,
+    setShowFileUpload,
+    showEditMeal,
+    setShowEditMeal,
+    prompt,
+    setPrompt,
+    loading,
+    notification,
+    setNotification,
+    deleteMeal,
+    handleMeal,
+    handleMealSave,
+    handleEditMealSave,
+    calculateCalories,
+    calculateProteins,
+    calculateCarbs,
+    calculateFats,
+    calculateProteinsGoal,
+    calculateFatsGoal,
+    calculateCarbsGoal,
+  } = useNutrition();
 
-  function MacroPieChart({ protein, carbs, fats }) {
-    const chartRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // ── Sub-components ───────────────────────────────────────────────────────────
+  function MacroPieChart({
+    protein,
+    carbs,
+    fats,
+  }: {
+    protein: number;
+    carbs: number;
+    fats: number;
+  }) {
+    const chartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const options = {
@@ -60,254 +96,13 @@ function Nutrition() {
     return <div ref={chartRef} />;
   }
 
-  useEffect(() => {
-    get_profile();
-    getdinnerMeals();
-    getlaunchMeals();
-    getbreakfastMeals();
-    getsnackMeals();
-  }, [selectedDay, month, year]);
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+  const daysInMonth = (m: number, y: number): number => {
+    if (m === 2) return y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0) ? 29 : 28;
+    return [4, 6, 9, 11].includes(m) ? 30 : 31;
+  };
 
-  function get_profile() {
-    api.get('users/profile').then((response) => {
-      setCalories(response.data.calories);
-      setWeight(response.data.weight);
-    });
-  }
-
-  function deleteMeal(mealId) {
-    api
-      .delete('meals/delete_meal', {
-        data: {
-          mealId: mealId,
-        },
-      })
-      .then(() => {
-        getdinnerMeals();
-        getlaunchMeals();
-        getbreakfastMeals();
-        getsnackMeals();
-        setNotify({ title: 'Delete Meal', type: 'success', message: 'Meal deleted successfully!' });
-        setShowEditMeal(false);
-      })
-      .catch((error) => {
-        console.error('Error deleting meal:', error);
-        setNotify({ title: 'Delete Meal', type: 'error', message: 'Failed to delete meal.' });
-      });
-  }
-
-  function calculateProteinsGoal() {
-    return weight * (2.0).toFixed(0);
-  }
-  function calculateFatsGoal() {
-    return weight * (1.0).toFixed(0);
-  }
-  function calculateCarbsGoal() {
-    return ((calories - (weight * 2.0 * 4 + weight * 1.0 * 9)) / 4).toFixed(0);
-  }
-
-  function getdinnerMeals() {
-    api
-      .get('meals/get_dinner', {
-        params: {
-          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
-            .toString()
-            .padStart(2, '0')}`,
-        },
-      })
-      .then((response) => {
-        setDinnerMeals(response.data);
-        console.log(response.data);
-      });
-  }
-  function getlaunchMeals() {
-    api
-      .get('meals/get_lunch', {
-        params: {
-          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
-            .toString()
-            .padStart(2, '0')}`,
-        },
-      })
-      .then((response) => {
-        setLaunchMeals(response.data);
-        console.log(response.data);
-      });
-  }
-  function getbreakfastMeals() {
-    api
-      .get('meals/get_breakfast', {
-        params: {
-          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
-            .toString()
-            .padStart(2, '0')}`,
-        },
-      })
-      .then((response) => {
-        setBreakfastMeals(response.data);
-        console.log(response.data);
-      });
-  }
-  function getsnackMeals() {
-    api
-      .get('meals/get_snack', {
-        params: {
-          date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
-            .toString()
-            .padStart(2, '0')}`,
-        },
-      })
-      .then((response) => {
-        setSnackMeals(response.data);
-        console.log(response.data);
-      });
-  }
-
-  function calculateCalories() {
-    let total = 0;
-    dinnerMeals.forEach((meal) => {
-      total += meal.calories;
-    });
-    launchMeals.forEach((meal) => {
-      total += meal.calories;
-    });
-    breakfastMeals.forEach((meal) => {
-      total += meal.calories;
-    });
-    snackMeals.forEach((meal) => {
-      total += meal.calories;
-    });
-    return total;
-  }
-
-  function calculateProteins() {
-    let total = 0;
-    dinnerMeals.forEach((meal) => {
-      total += meal.protein;
-    });
-    launchMeals.forEach((meal) => {
-      total += meal.protein;
-    });
-    breakfastMeals.forEach((meal) => {
-      total += meal.protein;
-    });
-    snackMeals.forEach((meal) => {
-      total += meal.protein;
-    });
-    return total;
-  }
-  function calculateCarbs() {
-    let total = 0;
-    dinnerMeals.forEach((meal) => {
-      total += meal.carbs;
-    });
-    launchMeals.forEach((meal) => {
-      total += meal.carbs;
-    });
-    breakfastMeals.forEach((meal) => {
-      total += meal.carbs;
-    });
-    snackMeals.forEach((meal) => {
-      total += meal.carbs;
-    });
-    return total;
-  }
-  function calculateFats() {
-    let total = 0;
-    dinnerMeals.forEach((meal) => {
-      total += meal.fats;
-    });
-    launchMeals.forEach((meal) => {
-      total += meal.fats;
-    });
-    breakfastMeals.forEach((meal) => {
-      total += meal.fats;
-    });
-    snackMeals.forEach((meal) => {
-      total += meal.fats;
-    });
-    return total;
-  }
-
-  function handleMeal(mealtype, image) {
-    console.log('Handling meal:', mealtype, image, prompt);
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('meal_type', mealtype);
-    formData.append('image', image);
-    if (prompt) formData.append('prompt', prompt);
-    console.log(formData);
-    api
-      .post('meals/calculate_meal', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .then((response) => {
-        console.log('Meal created:', response.data);
-        setMeal(response.data);
-        setShowFileUpload(false);
-        setShowMeal(true);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error creating meal:', error);
-        setShowFileUpload(false);
-        setLoading(false);
-      });
-  }
-
-  function handleMealSave() {
-    console.log('Saving meal:', meal);
-    api
-      .post('meals/create_meal', {
-        name: meal.name,
-        calories: meal.calories * (1 + calorie_factor / 100),
-        protein: meal.protein * (1 + calorie_factor / 100),
-        carbs: meal.carbs * (1 + calorie_factor / 100),
-        fats: meal.fats * (1 + calorie_factor / 100),
-        mealtype: mealtype,
-        date: `${year}-${month.toString().padStart(2, '0')}-${selectedDay
-          .toString()
-          .padStart(2, '0')}`,
-      })
-      .then(() => {
-        setNotify({ title: 'Add Meal', type: 'success', message: 'Meal added successfully!' });
-        setShowMeal(false);
-        getdinnerMeals();
-        getlaunchMeals();
-        getbreakfastMeals();
-        getsnackMeals();
-        setCalorie_factor(0);
-      })
-      .catch((error) => {
-        console.error('Error saving meal:', error);
-      });
-  }
-
-  function handleEditMealSave() {
-    api
-      .put('meals/edit_meal', {
-        mealId: meal.id,
-        name: meal.name,
-        calories: meal.calories * (1 + calorie_factor / 100),
-        protein: meal.protein * (1 + calorie_factor / 100),
-        carbs: meal.carbs * (1 + calorie_factor / 100),
-        fats: meal.fats * (1 + calorie_factor / 100),
-      })
-      .then((message) => {
-        console.log('Meal edited successfully:', message);
-        setNotify({ title: 'Edit Meal', type: 'success', message: 'Meal edited successfully!' });
-        getdinnerMeals();
-        getlaunchMeals();
-        getbreakfastMeals();
-        getsnackMeals();
-        setShowEditMeal(false);
-        setCalorie_factor(0);
-      })
-      .catch((error) => {
-        console.error('Error editing meal:', error);
-      });
-  }
-
+  // ── Modals ───────────────────────────────────────────────────────────────────
   function modalMeal() {
     return (
       <div>
@@ -317,25 +112,21 @@ function Nutrition() {
           </h3>
           <div className="flex flex-col space-y-4">
             <p>{meal.name}</p>
-
             <input
               type="range"
-              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              onChange={(e) => setCalorieFactor(Number(e.target.value))}
               min={-50}
               max={50}
-              value={calorie_factor}
+              value={calorieFactor}
               className="range range-xs"
-              style={{ label: 'Calorie Factor' }}
             />
-            <div className="text-xs text-amber-400  text-center">
-              Calorie Factor: {calorie_factor}
+            <div className="text-xs text-amber-400 text-center">
+              Calorie Factor: {calorieFactor}
             </div>
-
-            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
-
-            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
-            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
-            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p>Calories: {(meal.calories * (1 + calorieFactor / 100)).toFixed(2)} kcal</p>
+            <p>Protein: {(meal.protein * (1 + calorieFactor / 100)).toFixed(2)} g</p>
+            <p>Carbs: {(meal.carbs * (1 + calorieFactor / 100)).toFixed(2)} g</p>
+            <p>Fats: {(meal.fats * (1 + calorieFactor / 100)).toFixed(2)} g</p>
             <div className="flex flex-row space-x-2 justify-center">
               <Button
                 border="#3b82f6"
@@ -392,11 +183,9 @@ function Nutrition() {
             accept=".jpeg, .jpg, .png"
             ref={fileInputRef}
             style={{ display: 'none' }}
-            onChange={(event) => {
-              const file = event.target.files[0];
-              console.log(file);
-              handleMeal(mealtype, file);
-            }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleMeal(mealtype, e.target.files?.[0] ?? null)
+            }
           />
 
           <div className="flex flex-row justify-center space-x-2 mb-4">
@@ -408,6 +197,7 @@ function Nutrition() {
                   placeholder="Enter an optional description"
                   onChange={setPrompt}
                   w={'w-62'}
+                  value={prompt}
                 ></Input>
                 <Button
                   border="#3b82f6"
@@ -445,14 +235,6 @@ function Nutrition() {
       </div>
     );
   }
-
-  const daysInMonth = (month, year) => {
-    if (month === 2) {
-      // Leap year check
-      return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28;
-    }
-    return [4, 6, 9, 11].includes(month) ? 30 : 31;
-  };
 
   function modalDate() {
     return (
@@ -531,25 +313,21 @@ function Nutrition() {
           <h3 className="font-bold text-lg text-white mb-4">Edit Meal</h3>
           <div className="flex flex-col space-y-4">
             <p>{meal.name}</p>
-
             <input
               type="range"
-              onChange={(e) => setCalorie_factor(Number(e.target.value))}
+              onChange={(e) => setCalorieFactor(Number(e.target.value))}
               min={-50}
               max={50}
-              value={calorie_factor}
+              value={calorieFactor}
               className="range range-xs"
-              style={{ label: 'Calorie Factor' }}
             />
-            <div className="text-xs text-amber-400  text-center">
-              Calorie Factor: {calorie_factor}
+            <div className="text-xs text-amber-400 text-center">
+              Calorie Factor: {calorieFactor}
             </div>
-
-            <p> Calories: {(meal.calories * (1 + calorie_factor / 100)).toFixed(2)} kcal</p>
-
-            <p> Protein: {(meal.protein * (1 + calorie_factor / 100)).toFixed(2)} g</p>
-            <p> Carbs: {(meal.carbs * (1 + calorie_factor / 100)).toFixed(2)} g</p>
-            <p> Fats: {(meal.fats * (1 + calorie_factor / 100)).toFixed(2)} g</p>
+            <p>Calories: {(meal.calories * (1 + calorieFactor / 100)).toFixed(2)} kcal</p>
+            <p>Protein: {(meal.protein * (1 + calorieFactor / 100)).toFixed(2)} g</p>
+            <p>Carbs: {(meal.carbs * (1 + calorieFactor / 100)).toFixed(2)} g</p>
+            <p>Fats: {(meal.fats * (1 + calorieFactor / 100)).toFixed(2)} g</p>
             <div className="flex flex-row space-x-2 justify-center">
               <Button
                 border="#3b82f6"
@@ -595,7 +373,7 @@ function Nutrition() {
     );
   }
 
-  function mealSummary(mealname, meals) {
+  function mealSummary(mealname: string, meals: Meal[]) {
     return (
       <div className="mb-4">
         <div
@@ -636,10 +414,10 @@ function Nutrition() {
                           backdropFilter: 'blur(8px)',
                           WebkitBackdropFilter: 'blur(8px)',
                         }}
-                        onMouseEnter={(e) =>
+                        onMouseEnter={(e: MouseEvent<HTMLButtonElement>) =>
                           (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
                         }
-                        onMouseLeave={(e) =>
+                        onMouseLeave={(e: MouseEvent<HTMLButtonElement>) =>
                           (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
                         }
                       >
@@ -677,8 +455,12 @@ function Nutrition() {
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+                onMouseEnter={(e: MouseEvent<HTMLButtonElement>) =>
+                  (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+                }
+                onMouseLeave={(e: MouseEvent<HTMLButtonElement>) =>
+                  (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+                }
               >
                 +
               </button>
@@ -695,17 +477,16 @@ function Nutrition() {
       <TemplatePage>
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}
-        {showMeal && modalMeal(meal)}
+        {showMeal && modalMeal()}
         {showEditMeal && editMeal()}
-        {notify && (
+        {notification && (
           <Notify
-            title={notify.title}
-            message={notify.message}
+            title={notification.title}
+            message={notification.message}
             duration={1500}
-            key={notify.message + notify.title + Date.now()}
-            type={notify.type}
-            // Notify handles its own visibility, but we clear notification after duration to allow re-showing
-            onClose={() => setNotify(null)}
+            key={notification.message + notification.title + Date.now()}
+            type={notification.type}
+            onClose={() => setNotification(null)}
           />
         )}
         <div className="">
@@ -720,8 +501,12 @@ function Nutrition() {
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')}
+              onMouseEnter={(e: MouseEvent<HTMLButtonElement>) =>
+                (e.currentTarget.style.background = 'rgba(59, 130, 246, 0.3)')
+              }
+              onMouseLeave={(e: MouseEvent<HTMLButtonElement>) =>
+                (e.currentTarget.style.background = 'rgba(30, 41, 59, 0.25)')
+              }
               onClick={() => setShowModal(true)}
             >
               {`${selectedDay.toString().padStart(2, '0')}.${month
@@ -729,9 +514,9 @@ function Nutrition() {
                 .padStart(2, '0')}.${year}`}
             </button>
           </div>
-          <div className="overflow-y-auto flex grid lg:grid-cols-2 lg:gap-6 items-center lg:max-h-[65vh] max-h-[35vh]">
+          <div className="overflow-y-auto grid lg:grid-cols-2 lg:gap-6 items-center lg:max-h-[65vh] max-h-[35vh]">
             {mealSummary('Breakfast', breakfastMeals)}
-            {mealSummary('Launch', launchMeals)}
+            {mealSummary('Lunch', launchMeals)}
             {mealSummary('Dinner', dinnerMeals)}
             {mealSummary('Snacks', snackMeals)}
           </div>
@@ -759,7 +544,7 @@ function Nutrition() {
                             {
                               '--value': (calculateCalories() / calories) * 100,
                               '--thickness': '4px',
-                            } /* as React.CSSProperties */
+                            } as CSSProperties
                           }
                           aria-valuenow={100}
                           role="progressbar"
@@ -824,9 +609,9 @@ function Nutrition() {
                   <div className="carousel-item w-full ">
                     <div className="text-left text-xs lg:text-md">
                       <h2 className="text-blue-400 lg:text-md mb-2">Goals</h2>
-                      <p className=" text-white">P: {calculateProteinsGoal()} g</p>
-                      <p className="text-white">C: {calculateCarbsGoal()} g</p>
-                      <p className="text-white">F: {calculateFatsGoal()} g</p>
+                      <p className=" text-white">P: {calculateProteinsGoal().toFixed(0)} g</p>
+                      <p className="text-white">C: {calculateCarbsGoal().toFixed(0)} g</p>
+                      <p className="text-white">F: {calculateFatsGoal().toFixed(0)} g</p>
                     </div>
                   </div>
                   {calculateCalories() > 0 && (

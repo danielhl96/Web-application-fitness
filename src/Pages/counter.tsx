@@ -1,10 +1,10 @@
-import React, { JSX, useReducer, useEffect, useRef } from 'react';
+import React, { JSX, useEffect, useRef } from 'react';
 import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
 import { List, useListRef, RowComponentProps } from 'react-window';
-import useCounter from './useCounter.ts';
+import useCounter from '../hooks/useCounter.ts';
 import { Action } from '../types';
 
 type NumberActionType = Extract<Action, { payload: number }>['type'];
@@ -84,7 +84,23 @@ function CounterForm(): JSX.Element {
   const marks = Array.from({ length: 12 }, (_, i) => i); // 0–11
   const marks2 = Array.from({ length: 48 }, (_, i) => i); // 0–11
   const [showModal, setShowModal] = React.useState(false);
-  const counter = useCounter();
+  const {
+    rounds,
+    starttime,
+    breaktime,
+    roundtime,
+    sec,
+    min,
+    totaltime,
+    countRounds,
+    isStopmode,
+    isbreakmode,
+    isStartmode,
+    dispatch,
+    startCounter,
+    stopCounter,
+    resetCounter,
+  } = useCounter();
 
   const settingsModal = (): JSX.Element => {
     return (
@@ -94,30 +110,30 @@ function CounterForm(): JSX.Element {
           <div className="flex flex-col items-center space-y-2 ">
             <div className="grid grid-cols-1 lg:grid-cols-2  text-xs gap-4">
               <Table
-                selectedItem={counter.rounds}
+                selectedItem={rounds}
                 type="SET_ROUNDS"
-                dispatch={counter.dispatch}
+                dispatch={dispatch}
                 string="Rounds: "
               />
 
               <Table
-                selectedItem={counter.starttime}
+                selectedItem={starttime}
                 type="SET_STARTTIME"
-                dispatch={counter.dispatch}
+                dispatch={dispatch}
                 string="Starttime: "
               />
 
               <Table
-                selectedItem={counter.breaktime}
+                selectedItem={breaktime}
                 type="SET_BREAKTIME"
-                dispatch={counter.dispatch}
+                dispatch={dispatch}
                 string="Breaktime: "
               />
 
               <Table
-                selectedItem={counter.roundtime}
+                selectedItem={roundtime}
                 type="SET_ROUNDTIME"
-                dispatch={counter.dispatch}
+                dispatch={dispatch}
                 string="Roundtime: "
               />
             </div>
@@ -132,7 +148,7 @@ function CounterForm(): JSX.Element {
     );
   };
 
-  const totalRotation = -180 + counter.sec;
+  const totalRotation = -180 + sec;
 
   return (
     <div>
@@ -157,16 +173,12 @@ function CounterForm(): JSX.Element {
                   />
                   <h1
                     className={`absolute left-1/2 top-2/3 transform -translate-x-1/2 -translate-y-1/1 ${
-                      counter.roundtime - counter.totaltime <= 5 &&
-                      !counter.isStartmode &&
-                      !counter.isbreakmode &&
-                      'text-red-500'
-                    } ${counter.isbreakmode && 'text-purple-500'} ${
-                      counter.isStartmode && 'text-yellow-500'
+                      roundtime - totaltime <= 5 && !isStartmode && !isbreakmode && 'text-red-500'
+                    } ${isbreakmode && 'text-purple-500'} ${
+                      isStartmode && 'text-yellow-500'
                     } text-xs text-center items-center font-light`}
                   >
-                    {String(counter.min).padStart(2, '0')} :{' '}
-                    {String(Math.floor(counter.sec / 6)).padStart(2, '0')}
+                    {String(min).padStart(2, '0')} : {String(Math.floor(sec / 6)).padStart(2, '0')}
                   </h1>
                   {/* Number */}
                   <div
@@ -206,7 +218,7 @@ function CounterForm(): JSX.Element {
             {/* Secondspointer */}
             <div
               className={`absolute left-1/2 top-1/2 w-1 ${
-                counter.isbreakmode ? 'bg-purple-500' : 'bg-red-500'
+                isbreakmode ? 'bg-purple-500' : 'bg-red-500'
               } flex items-center justify-center`}
               style={{
                 height: `100px`,
@@ -229,7 +241,7 @@ function CounterForm(): JSX.Element {
 
           {
             <h1 className="text font-light mt-2">
-              Rounds: {counter.countRounds} / {counter.rounds}
+              Rounds: {countRounds} / {rounds}
             </h1>
           }
 
@@ -265,11 +277,11 @@ function CounterForm(): JSX.Element {
           <div className="divider divider-primary text font-lightfont-bold mb-2"></div>
           <div className="flex- flex row space-x-2 ">
             <Button
-              disabled={counter.rounds === 0}
+              disabled={rounds === 0}
               border="#3b82f6"
-              onClick={() => (counter.isStopmode ? counter.stopCounter() : counter.startCounter())}
+              onClick={() => (isStopmode ? stopCounter() : startCounter())}
             >
-              {counter.isStopmode ? (
+              {isStopmode ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6 mb-1"
@@ -313,7 +325,7 @@ function CounterForm(): JSX.Element {
                 </svg>
               )}
             </Button>
-            <Button border="#f63b3b" onClick={() => counter.resetCounter()}>
+            <Button border="#f63b3b" onClick={() => resetCounter()}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 mb-1"
