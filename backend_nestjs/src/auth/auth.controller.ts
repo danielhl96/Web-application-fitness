@@ -36,7 +36,7 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600000,
+      maxAge: 3600000 * 3, // 3 hours
     });
     return { message: 'Logged in successfully' };
   }

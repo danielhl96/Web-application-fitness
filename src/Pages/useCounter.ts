@@ -9,7 +9,7 @@ type CounterReturn = {
   starttime: number;
   roundtime: number;
   totaltime: number;
-  showModal: boolean;
+
   isbreakmode: boolean;
   isStartmode: boolean;
   isStopmode: boolean;
@@ -47,7 +47,7 @@ export default function useCounter(): CounterReturn {
     starttime: 0 as number,
     roundtime: 0 as number,
     totaltime: 0 as number,
-    showModal: false as boolean,
+
     isbreakmode: false as boolean,
     isStartmode: false as boolean,
     isStopmode: false as boolean,
@@ -191,7 +191,7 @@ export default function useCounter(): CounterReturn {
     starttime: state.starttime,
     roundtime: state.roundtime,
     totaltime: state.totaltime,
-    showModal: state.showModal,
+
     isbreakmode: state.isbreakmode,
     isStartmode: state.isStartmode,
     isStopmode: state.isStopmode,
