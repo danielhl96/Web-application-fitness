@@ -22,7 +22,7 @@ export default function useNutrition() {
   const [showEditMeal, setShowEditMeal] = useState<boolean>(false);
 
   const [prompt, setPrompt] = useState<string>('');
-  const [loading, setLoading] = useState<UI_STATE<Meal>>({ type: 'loading' });
+  const [loading, setLoading] = useState<UI_STATE<Meal>>({ type: 'success', data: null });
   const [loadingMeals, setLoadingMeals] = useState<UI_STATE<Meal[]>>({ type: 'loading' });
   const [loadingProfile, setLoadingProfile] = useState<
     UI_STATE<{ calories: number; weight: number }>
@@ -107,6 +107,7 @@ export default function useNutrition() {
     formData.append('meal_type', mealTypeArg);
     formData.append('image', image);
     if (prompt) formData.append('prompt', prompt);
+    setLoading({ type: 'loading' });
     api
       .post('meals/calculate_meal', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
