@@ -1,0 +1,198 @@
+import { useEffect } from 'react';
+import useAudioRecorder from '../hooks/useAudioRecorder';
+
+function formatDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, '0');
+  const s = (seconds % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+export default function AudioRecorder() {
+  const {
+    recorderState,
+    audioUrl,
+    duration,
+    canvasRef,
+    start,
+    stop,
+    pause,
+    resume,
+    reset,
+    isSupported,
+    error,
+  } = useAudioRecorder();
+
+  // Resize canvas to match its display size
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const observer = new ResizeObserver(() => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    });
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, [canvasRef]);
+
+  if (!isSupported) {
+    return (
+      <p className="text-red-400 text-xs">Audio recording is not supported in this browser.</p>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-4 w-full">
+      {/* Waveform canvas */}
+      <div
+        className="w-full rounded-xl overflow-hidden border border-blue-500"
+        style={{
+          height: '80px',
+          background: 'rgba(15, 23, 42, 0.6)',
+          boxShadow: '0 4px 24px 0 rgba(59, 130, 246, 0.15)',
+        }}
+      >
+        <canvas ref={canvasRef} className="w-full h-full" />
+      </div>
+
+      {/* Duration */}
+      <span className="text-blue-400 text-sm font-mono">{formatDuration(duration)}</span>
+
+      {/* Controls */}
+      <div className="flex flex-row gap-3">
+        {/* Start */}
+        {recorderState === 'idle' && (
+          <button
+            onClick={start}
+            className="btn btn-outline btn-primary px-4 py-2 rounded-xl text-xs"
+            style={{ border: '1.5px solid #3b82f6', background: 'rgba(30,41,59,0.25)' }}
+          >
+            {/* Mic icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* Pause / Resume */}
+        {recorderState === 'recording' && (
+          <button
+            onClick={pause}
+            className="btn btn-outline btn-warning px-4 py-2 rounded-xl text-xs"
+            style={{ border: '1.5px solid #f59e0b', background: 'rgba(30,41,59,0.25)' }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 9v6m4-6v6"
+              />
+            </svg>
+          </button>
+        )}
+        {recorderState === 'paused' && (
+          <button
+            onClick={resume}
+            className="btn btn-outline btn-success px-4 py-2 rounded-xl text-xs"
+            style={{ border: '1.5px solid #22c55e', background: 'rgba(30,41,59,0.25)' }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14.752 11.168l-5.197-3.03A1 1 0 008 9v6a1 1 0 001.555.832l5.197-3.03a1 1 0 000-1.664z"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* Stop */}
+        {(recorderState === 'recording' || recorderState === 'paused') && (
+          <button
+            onClick={stop}
+            className="btn btn-outline btn-error px-4 py-2 rounded-xl text-xs"
+            style={{ border: '1.5px solid #ef4444', background: 'rgba(30,41,59,0.25)' }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 6h12v12H6z"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* Reset */}
+        {recorderState === 'stopped' && (
+          <button
+            onClick={reset}
+            className="btn btn-outline btn-primary px-4 py-2 rounded-xl text-xs"
+            style={{ border: '1.5px solid #3b82f6', background: 'rgba(30,41,59,0.25)' }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h5M20 20v-5h-5M4 9a9 9 0 0114.65-3.65M20 15A9 9 0 015.35 18.65"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {/* Playback */}
+      {audioUrl && recorderState === 'stopped' && (
+        <audio
+          controls
+          src={audioUrl}
+          className="w-full mt-2"
+          style={{ filter: 'invert(1) hue-rotate(180deg)' }}
+        />
+      )}
+
+      {/* Error */}
+      {error && <p className="text-red-400 text-xs">{error}</p>}
+    </div>
+  );
+}

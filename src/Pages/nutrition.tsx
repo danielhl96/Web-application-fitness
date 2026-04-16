@@ -10,7 +10,7 @@ import TemplateModal from '../Components/templatemodal.jsx';
 import Header from '../Components/Header.jsx';
 import useNutrition from '../hooks/useNutrition.js';
 import type { Meal } from '../types';
-
+import AudioRecorder from '../Components/AudioRecorder.js';
 function Nutrition() {
   const {
     selectedDay,
@@ -37,6 +37,8 @@ function Nutrition() {
     setShowMeal,
     showFileUpload,
     setShowFileUpload,
+    setShowAudioModal,
+    showAudioModal,
     showEditMeal,
     setShowEditMeal,
     prompt,
@@ -174,11 +176,46 @@ function Nutrition() {
     );
   }
 
+  function modalAudio() {
+    return (
+      <div>
+        <TemplateModal>
+          <h3 className="font-bold text-lg text-white mb-4">Nutrition Estimation</h3>
+          <AudioRecorder />
+          <div className="modal-action items-start justify-start">
+            <Button
+              border="#ef4444"
+              onClick={() => {
+                setShowAudioModal(false);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </Button>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
   function handleFileUpload() {
     return (
       <div>
         <TemplateModal>
           <h3 className="font-bold text-lg text-white mb-4">Nutrition Estimation</h3>
+
           <input
             type="file"
             accept=".jpeg, .jpg, .png"
@@ -211,6 +248,14 @@ function Nutrition() {
                     />
                   </figure>
                 </Button>
+                <Button
+                  border="#3b82f6"
+                  children
+                  onClick={() => {
+                    setShowAudioModal(true);
+                    setShowFileUpload(false);
+                  }}
+                ></Button>
               </div>
             )}
           </div>
@@ -482,6 +527,7 @@ function Nutrition() {
     <div>
       <Header />
       <TemplatePage>
+        {showAudioModal && modalAudio()}
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}
         {showMeal && modalMeal()}

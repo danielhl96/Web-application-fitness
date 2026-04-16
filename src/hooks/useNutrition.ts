@@ -11,7 +11,7 @@ export default function useNutrition() {
   const [launchMeals, setLaunchMeals] = useState<Meal[]>([]);
   const [breakfastMeals, setBreakfastMeals] = useState<Meal[]>([]);
   const [snackMeals, setSnackMeals] = useState<Meal[]>([]);
-
+  const [showAudioModal, setShowAudioModal] = useState<boolean>(false);
   const [meal, setMeal] = useState<Meal | null>(null);
   const [mealtype, setMealtype] = useState<string>('');
   const [calorieFactor, setCalorieFactor] = useState<number>(0);
@@ -246,6 +246,8 @@ export default function useNutrition() {
     setShowFileUpload,
     showEditMeal,
     setShowEditMeal,
+    setShowAudioModal,
+    showAudioModal,
     // Input
     prompt,
     setPrompt,
