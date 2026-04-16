@@ -50,10 +50,8 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
-        <p className="text-lg font-semibold">Bitte Gerät drehen</p>
-        <p className="text-sm text-gray-400 mt-1">
-          Diese App ist für den Hochformat-Modus optimiert.
-        </p>
+        <p className="text-lg font-semibold">Please rotate your device</p>
+        <p className="text-sm text-gray-400 mt-1">This app is optimized for portrait mode.</p>
       </div>
       <style>{`
         @media (orientation: landscape) and (max-width: 1024px) {
