@@ -86,6 +86,25 @@ export class SttGateway implements OnGatewayConnection, OnGatewayDisconnect {
     session.chunks.push(Buffer.isBuffer(data) ? data : Buffer.from(data));
   }
 
+  /** Client requests a partial transcription of chunks received so far */
+  @SubscribeMessage('stt:partial')
+  async handlePartial(@ConnectedSocket() client: Socket) {
+    const session = this.sessions.get(client.id);
+    if (!session || session.chunks.length === 0) return;
+
+    try {
+      const audioBuffer = Buffer.concat(session.chunks);
+      this.logger.log(
+        `[STT] Partial transcription: ${audioBuffer.byteLength} bytes for ${client.id}`
+      );
+      const transcript = await speechToText(audioBuffer, session.mimeType);
+      client.emit('stt:partial_transcript', { transcript });
+    } catch (err) {
+      // Silently ignore partial errors — session continues
+      this.logger.warn(`[STT] Partial error for ${client.id}: ${err}`);
+    }
+  }
+
   /** Client signals end of recording — triggers Whisper transcription */
   @SubscribeMessage('stt:stop')
   async handleStop(@ConnectedSocket() client: Socket) {

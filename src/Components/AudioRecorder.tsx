@@ -24,6 +24,7 @@ export default function AudioRecorder() {
     error,
     transcript,
     transcriptLoading,
+    partialTranscriptLoading,
   } = useAudioRecorder();
 
   // Resize canvas to match its display size
@@ -182,6 +183,23 @@ export default function AudioRecorder() {
           </button>
         )}
       </div>
+
+      {/* Live partial transcript while recording */}
+      {partialTranscriptLoading && recorderState === 'recording' && (
+        <div className="flex items-center gap-2 text-blue-400 text-xs mt-2">
+          <span className="loading loading-dots loading-sm" />
+          Live-Transkription…
+        </div>
+      )}
+      {transcript && recorderState === 'recording' && !partialTranscriptLoading && (
+        <div
+          className="w-full rounded-xl p-3 mt-2 text-xs text-white border border-blue-500 opacity-70"
+          style={{ background: 'rgba(15, 23, 42, 0.6)' }}
+        >
+          <p className="text-blue-400 mb-1 font-semibold">Live ✦</p>
+          <p className="leading-relaxed">{transcript}</p>
+        </div>
+      )}
 
       {/* Playback */}
       {audioUrl && recorderState === 'stopped' && (

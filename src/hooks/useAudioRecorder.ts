@@ -52,6 +52,8 @@ export interface UseAudioRecorderReturn {
   transcript: string | null;
   /** True while transcription is in progress */
   transcriptLoading: boolean;
+  /** True while a partial (live) transcription is in progress */
+  partialTranscriptLoading: boolean;
 }
 
 export default function useAudioRecorder(): UseAudioRecorderReturn {
@@ -63,6 +65,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<string | null>(null);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
+  const [partialTranscriptLoading, setPartialTranscriptLoading] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -71,6 +74,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const durationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const partialIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const mimeType = getSupportedMimeType();
@@ -142,11 +146,19 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     }
   }, []);
 
+  const stopPartialInterval = useCallback(() => {
+    if (partialIntervalRef.current !== null) {
+      clearInterval(partialIntervalRef.current);
+      partialIntervalRef.current = null;
+    }
+  }, []);
+
   // ── Cleanup on unmount ────────────────────────────────────────────────────
   useEffect(() => {
     return () => {
       stopAnimation();
       stopDurationCounter();
+      stopPartialInterval();
       streamRef.current?.getTracks().forEach((t) => t.stop());
       audioContextRef.current?.close();
       if (audioUrl) URL.revokeObjectURL(audioUrl);
@@ -195,14 +207,25 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       socket.on('stt:transcript', ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
         setTranscriptLoading(false);
+        setPartialTranscriptLoading(false);
+      });
+      socket.on('stt:partial_transcript', ({ transcript: text }: { transcript: string }) => {
+        setTranscript(text);
+        setPartialTranscriptLoading(false);
       });
       socket.on('stt:transcribing', () => setTranscriptLoading(true));
       socket.on('stt:error', ({ message }: { message: string }) => {
         setError(message);
         setTranscriptLoading(false);
+        setPartialTranscriptLoading(false);
       });
       socket.on('connect', () => {
         socket.emit('stt:start', { mimeType: mimeType || 'audio/webm' });
+        // Partial transcription every 5 seconds while recording
+        partialIntervalRef.current = setInterval(() => {
+          setPartialTranscriptLoading(true);
+          socket.emit('stt:partial');
+        }, 5000);
       });
 
       // MediaRecorder
@@ -258,12 +281,13 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
 
   // ── Stop ──────────────────────────────────────────────────────────────────
   const stop = useCallback(() => {
+    stopPartialInterval();
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
     // Signal backend to start transcription
     socketRef.current?.emit('stt:stop');
-  }, []);
+  }, [stopPartialInterval]);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
   const pause = useCallback(() => {
@@ -272,8 +296,9 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       setRecorderState('paused');
       stopAnimation();
       stopDurationCounter();
+      stopPartialInterval();
     }
-  }, [stopAnimation, stopDurationCounter]);
+  }, [stopAnimation, stopDurationCounter, stopPartialInterval]);
 
   // ── Resume ────────────────────────────────────────────────────────────────
   const resume = useCallback(() => {
@@ -284,6 +309,10 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       durationIntervalRef.current = setInterval(() => {
         setDuration((prev) => prev + 1);
       }, 1000);
+      partialIntervalRef.current = setInterval(() => {
+        setPartialTranscriptLoading(true);
+        socketRef.current?.emit('stt:partial');
+      }, 5000);
     }
   }, [drawWaveform]);
 
@@ -291,6 +320,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const reset = useCallback(() => {
     stopAnimation();
     stopDurationCounter();
+    stopPartialInterval();
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
@@ -310,13 +340,14 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     setError(null);
     setTranscript(null);
     setTranscriptLoading(false);
+    setPartialTranscriptLoading(false);
 
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
     }
-  }, [audioUrl, stopAnimation, stopDurationCounter]);
+  }, [audioUrl, stopAnimation, stopDurationCounter, stopPartialInterval]);
 
   return {
     recorderState,
@@ -335,5 +366,6 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     error,
     transcript,
     transcriptLoading,
+    partialTranscriptLoading,
   };
 }
