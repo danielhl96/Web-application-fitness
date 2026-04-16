@@ -221,11 +221,11 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       });
       socket.on('connect', () => {
         socket.emit('stt:start', { mimeType: mimeType || 'audio/webm' });
-        // Partial transcription every 5 seconds while recording
+        // Partial transcription every 1 second while recording
         partialIntervalRef.current = setInterval(() => {
           setPartialTranscriptLoading(true);
           socket.emit('stt:partial');
-        }, 5000);
+        }, 1000);
       });
 
       // MediaRecorder
@@ -312,7 +312,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       partialIntervalRef.current = setInterval(() => {
         setPartialTranscriptLoading(true);
         socketRef.current?.emit('stt:partial');
-      }, 5000);
+      }, 1000);
     }
   }, [drawWaveform]);
 
