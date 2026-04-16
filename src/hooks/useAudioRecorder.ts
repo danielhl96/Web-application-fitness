@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 // Supported MIME types ordered by preference
 const SUPPORTED_MIME_TYPES = [
@@ -47,6 +48,10 @@ export interface UseAudioRecorderReturn {
   mimeType: string;
   /** Error message if something went wrong */
   error: string | null;
+  /** Transcribed text from OpenAI Whisper (null until available) */
+  transcript: string | null;
+  /** True while transcription is in progress */
+  transcriptLoading: boolean;
 }
 
 export default function useAudioRecorder(): UseAudioRecorderReturn {
@@ -56,6 +61,8 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const [duration, setDuration] = useState(0);
   const [waveformData, setWaveformData] = useState<Uint8Array>(new Uint8Array(0));
   const [error, setError] = useState<string | null>(null);
+  const [transcript, setTranscript] = useState<string | null>(null);
+  const [transcriptLoading, setTranscriptLoading] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -65,6 +72,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const animationFrameRef = useRef<number | null>(null);
   const durationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const socketRef = useRef<Socket | null>(null);
   const mimeType = getSupportedMimeType();
   const isSupported =
     typeof MediaRecorder !== 'undefined' && !!navigator?.mediaDevices?.getUserMedia;
@@ -142,6 +150,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       streamRef.current?.getTracks().forEach((t) => t.stop());
       audioContextRef.current?.close();
       if (audioUrl) URL.revokeObjectURL(audioUrl);
+      socketRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -173,6 +182,29 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       source.connect(analyser);
       analyserRef.current = analyser;
 
+      // Connect WebSocket for STT
+      const WS_URL =
+        (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL ||
+        'http://localhost:3000';
+      const socket = io(`${WS_URL}/stt`, {
+        withCredentials: true,
+        transports: ['websocket'],
+      });
+      socketRef.current = socket;
+
+      socket.on('stt:transcript', ({ transcript: text }: { transcript: string }) => {
+        setTranscript(text);
+        setTranscriptLoading(false);
+      });
+      socket.on('stt:transcribing', () => setTranscriptLoading(true));
+      socket.on('stt:error', ({ message }: { message: string }) => {
+        setError(message);
+        setTranscriptLoading(false);
+      });
+      socket.on('connect', () => {
+        socket.emit('stt:start', { mimeType: mimeType || 'audio/webm' });
+      });
+
       // MediaRecorder
       const options: MediaRecorderOptions = mimeType ? { mimeType } : {};
       const recorder = new MediaRecorder(stream, options);
@@ -181,6 +213,10 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       recorder.ondataavailable = (e: BlobEvent) => {
         if (e.data && e.data.size > 0) {
           chunksRef.current.push(e.data);
+          // Stream chunk to backend via WebSocket
+          e.data.arrayBuffer().then((buf) => {
+            socketRef.current?.emit('stt:chunk', buf);
+          });
         }
       };
 
@@ -225,6 +261,8 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
+    // Signal backend to start transcription
+    socketRef.current?.emit('stt:stop');
   }, []);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
@@ -256,6 +294,8 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
+    socketRef.current?.disconnect();
+    socketRef.current = null;
     if (audioUrl) URL.revokeObjectURL(audioUrl);
     chunksRef.current = [];
     mediaRecorderRef.current = null;
@@ -268,6 +308,8 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     setDuration(0);
     setWaveformData(new Uint8Array(0));
     setError(null);
+    setTranscript(null);
+    setTranscriptLoading(false);
 
     const canvas = canvasRef.current;
     if (canvas) {
@@ -291,5 +333,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     isSupported,
     mimeType,
     error,
+    transcript,
+    transcriptLoading,
   };
 }

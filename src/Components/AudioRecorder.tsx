@@ -22,6 +22,8 @@ export default function AudioRecorder() {
     reset,
     isSupported,
     error,
+    transcript,
+    transcriptLoading,
   } = useAudioRecorder();
 
   // Resize canvas to match its display size
@@ -189,6 +191,23 @@ export default function AudioRecorder() {
           className="w-full mt-2"
           style={{ filter: 'invert(1) hue-rotate(180deg)' }}
         />
+      )}
+
+      {/* Transcript */}
+      {transcriptLoading && (
+        <div className="flex items-center gap-2 text-blue-400 text-xs mt-2">
+          <span className="loading loading-dots loading-sm" />
+          Transcribing…
+        </div>
+      )}
+      {transcript && !transcriptLoading && (
+        <div
+          className="w-full rounded-xl p-3 mt-2 text-xs text-white border border-blue-500"
+          style={{ background: 'rgba(15, 23, 42, 0.6)' }}
+        >
+          <p className="text-blue-400 mb-1 font-semibold">Transcript</p>
+          <p className="leading-relaxed">{transcript}</p>
+        </div>
       )}
 
       {/* Error */}

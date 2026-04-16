@@ -69,3 +69,20 @@ export async function aiCoach(question: string, history: { isUser: boolean; mess
 
   return response.choices[0].message.content ?? '';
 }
+
+export async function speechToText(audioBuffer: Buffer, mimeType: string): Promise<string> {
+  const { toFile } = await import('openai');
+  const ext = mimeType.includes('webm')
+    ? 'webm'
+    : mimeType.includes('ogg')
+      ? 'ogg'
+      : mimeType.includes('mp4')
+        ? 'mp4'
+        : 'webm';
+  const file = await toFile(audioBuffer, `audio.${ext}`, { type: mimeType });
+  const transcription = await openai.audio.transcriptions.create({
+    file,
+    model: 'whisper-1',
+  });
+  return transcription.text;
+}

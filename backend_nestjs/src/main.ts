@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,6 +36,9 @@ async function bootstrap() {
 
   // Use cookie parser
   app.use(cookieParser());
+
+  // WebSocket adapter (socket.io)
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   // Rate limiting
   app.use(

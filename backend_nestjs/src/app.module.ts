@@ -7,6 +7,7 @@ import { WorkoutPlansModule } from './workout_plans/workout_plans.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { MealsModule } from './meals/meals.module';
 import { AicoachModule } from './aicoach/aicoach.module';
+import { SttModule } from './stt/stt.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AicoachModule } from './aicoach/aicoach.module';
     StatisticsModule,
     MealsModule,
     AicoachModule,
+    SttModule,
   ],
   providers: [],
 })
