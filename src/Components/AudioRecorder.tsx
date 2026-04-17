@@ -201,16 +201,6 @@ export default function AudioRecorder() {
         </div>
       )}
 
-      {/* Playback */}
-      {audioUrl && recorderState === 'stopped' && (
-        <audio
-          controls
-          src={audioUrl}
-          className="w-full mt-2"
-          style={{ filter: 'invert(1) hue-rotate(180deg)' }}
-        />
-      )}
-
       {/* Transcript */}
       {transcriptLoading && (
         <div className="flex items-center gap-2 text-blue-400 text-xs mt-2">
