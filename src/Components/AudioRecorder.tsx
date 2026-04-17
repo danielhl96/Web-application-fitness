@@ -9,7 +9,7 @@ function formatDuration(seconds: number): string {
   return `${m}:${s}`;
 }
 
-export default function AudioRecorder() {
+export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const {
     recorderState,
     audioUrl,
@@ -25,7 +25,7 @@ export default function AudioRecorder() {
     transcript,
     transcriptLoading,
     partialTranscriptLoading,
-  } = useAudioRecorder();
+  } = useAudioRecorder({ onTranscript });
 
   // Resize canvas to match its display size
   useEffect(() => {

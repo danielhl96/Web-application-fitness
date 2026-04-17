@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateMealDto, EditMealDto } from './dto/meals_dto';
-import { analyzeFoodImage, MulterFile } from 'src/openai';
+import { analyzeFoodImage, analyzeFoodText, MulterFile } from 'src/openai';
 @Injectable()
 export class MealsService {
   constructor(@Inject('PRISMA_USER') private prismaUser: PrismaClient) {}
@@ -63,6 +63,22 @@ export class MealsService {
     console.log('Meal analysis result:', result);
     return {
       message: 'Meal calculated successfully',
+      name: result.name,
+      calories: result.calories,
+      carbs: result.carbs,
+      protein: result.protein,
+      fats: result.fats,
+    };
+  }
+
+  async analyzeFoodText(text: string) {
+    const result = await analyzeFoodText(text);
+    if (!result) {
+      throw new Error('Could not analyze the meal. Please try again with a clearer description.');
+    }
+    console.log('Meal analysis result:', result);
+    return {
+      message: 'Meal analyzed successfully',
       name: result.name,
       calories: result.calories,
       carbs: result.carbs,

@@ -100,6 +100,26 @@ export default function useNutrition() {
     setPrompt('');
   }
 
+  function handleMealFromText(text: string) {
+    if (!text.trim()) return;
+    setLoading({ type: 'loading' });
+    api
+      .post('meals/analyze_food_text', { text })
+      .then((response) => {
+        setMeal(response.data);
+        setShowMeal(true);
+        setLoading({ type: 'success', data: response.data });
+      })
+      .catch(() => {
+        setLoading({ type: 'error', error: 'Failed to analyze meal from text.' });
+        setNotification({
+          title: 'Analyze Meal',
+          type: 'error',
+          message: 'Failed to analyze meal from text.',
+        });
+      });
+  }
+
   function handleMeal(mealTypeArg: string, image: File | null) {
     if (!image) return;
 
@@ -258,6 +278,7 @@ export default function useNutrition() {
     // API actions
     deleteMeal,
     handleMeal,
+    handleMealFromText,
     handleMealSave,
     handleEditMealSave,
     // Berechnungen

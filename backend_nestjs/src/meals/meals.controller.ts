@@ -36,6 +36,12 @@ export class MealsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('analyze_food_text')
+  async analyzeFoodText(@Body('text') text: string) {
+    return this.mealsService.analyzeFoodText(text);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete('delete_meal')
   async deleteMeal(@Req() req: { user: User }, @Body() body: { mealId: number }) {
     return this.mealsService.deleteMeal(req.user.id, body.mealId);

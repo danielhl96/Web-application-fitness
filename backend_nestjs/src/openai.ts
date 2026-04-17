@@ -11,6 +11,33 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+export async function analyzeFoodText(text: string): Promise<{
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+} | null> {
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o',
+    messages: [
+      {
+        role: 'user',
+        content:
+          'Analyze the food described in the following text and estimate its nutritional content. ' +
+          `Text: "${text}". ` +
+          'Return the result as a compact JSON object with the following keys: name (short meal name), calories (kcal), protein (g), carbs (g), fats (g). ' +
+          'Example: {"name": "Chicken Salad", "calories": 420, "protein": 32, "carbs": 18, "fats": 12}. ' +
+          'Do not add any explanation, only the JSON.',
+      },
+    ],
+  });
+
+  const content = response.choices[0].message.content ?? '';
+  const json = content.match(/\{.*\}/s)?.[0];
+  return json ? JSON.parse(json) : null;
+}
+
 export async function analyzeFoodImage(prompt?: string, imageFile?: MulterFile) {
   if (!imageFile) throw new Error('No image file provided');
   const base64 = imageFile.buffer.toString('base64');

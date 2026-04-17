@@ -48,6 +48,7 @@ function Nutrition() {
     setNotification,
     deleteMeal,
     handleMeal,
+    handleMealFromText,
     handleMealSave,
     handleEditMealSave,
     calculateCalories,
@@ -181,7 +182,7 @@ function Nutrition() {
       <div>
         <TemplateModal>
           <h3 className="font-bold text-lg text-white mb-4">Nutrition Estimation</h3>
-          <AudioRecorder />
+          <AudioRecorder onTranscript={handleMealFromText} />
           <div className="modal-action items-start justify-start">
             <Button
               border="#ef4444"

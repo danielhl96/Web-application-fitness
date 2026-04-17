@@ -56,7 +56,10 @@ export interface UseAudioRecorderReturn {
   partialTranscriptLoading: boolean;
 }
 
-export default function useAudioRecorder(): UseAudioRecorderReturn {
+export default function useAudioRecorder(options?: {
+  /** Called with the final transcript when Whisper finishes */
+  onTranscript?: (text: string) => void;
+}): UseAudioRecorderReturn {
   const [recorderState, setRecorderState] = useState<RecorderState>('idle');
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -78,6 +81,10 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
+  const onTranscriptRef = useRef(options?.onTranscript);
+  useEffect(() => {
+    onTranscriptRef.current = options?.onTranscript;
+  });
   const mimeType = getSupportedMimeType();
   const isSupported =
     typeof MediaRecorder !== 'undefined' && !!navigator?.mediaDevices?.getUserMedia;
@@ -249,6 +256,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
         setTranscript(text);
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
+        onTranscriptRef.current?.(text);
       });
       socket.on('stt:partial_transcript', ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
