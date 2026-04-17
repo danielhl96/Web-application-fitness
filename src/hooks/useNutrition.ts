@@ -171,6 +171,7 @@ export default function useNutrition() {
           message: 'Meal added successfully!',
         });
         setShowMeal(false);
+        setShowAudioModal(false);
         refreshAllMeals();
         setCalorieFactor(0);
       })
