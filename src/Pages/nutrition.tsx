@@ -206,6 +206,7 @@ function Nutrition() {
               </svg>
             </button>
           </div>
+
           <div className="flex flex-row gap-3 justify-center">
             {/* Image analysis */}
             <button
@@ -213,7 +214,7 @@ function Nutrition() {
                 setShowInputSelect(false);
                 setShowFileUpload(true);
               }}
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105 w-20"
+              className="flex flex-col w-full items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105 w-20"
               style={{ background: 'rgba(30,41,59,0.35)', backdropFilter: 'blur(8px)' }}
             >
               <svg
@@ -238,7 +239,7 @@ function Nutrition() {
                 setShowInputSelect(false);
                 setShowAudioModal(true);
               }}
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105 w-20"
+              className="flex flex-col w-full items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105"
               style={{ background: 'rgba(30,41,59,0.35)', backdropFilter: 'blur(8px)' }}
             >
               <svg

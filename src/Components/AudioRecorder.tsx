@@ -4,8 +4,7 @@ import useAudioRecorder from '../hooks/useAudioRecorder';
 export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const {
     recorderState,
-    audioUrl,
-    duration,
+
     canvasRef,
     start,
     stop,
@@ -15,7 +14,7 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
     isSupported,
     error,
     transcript,
-    transcriptLoading,
+
     partialTranscriptLoading,
   } = useAudioRecorder({ onTranscript });
 

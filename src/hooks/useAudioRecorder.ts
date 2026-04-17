@@ -238,7 +238,48 @@ export default function useAudioRecorder(options?: {
         setDuration((prev) => prev + 1);
       }, 1000);
 
-      // Start waveform loop
+      // Start partial transcription interval only after recorder is running
+      partialIntervalRef.current = setInterval(() => {
+        setPartialTranscriptLoading(true);
+        socketRef.current?.emit('stt:partial');
+      }, 1000);
+
+      // ── VAD: auto-stop after 1.5 s of silence ────────────────────────────
+      const VAD_THRESHOLD = 0.01; // RMS below this = silence
+      const VAD_SILENCE_MS = 1500; // ms of continuous silence before stop
+      const vadBuffer = new Uint8Array(analyser.frequencyBinCount);
+
+      const vadLoop = () => {
+        analyser.getByteTimeDomainData(vadBuffer);
+        let sum = 0;
+        for (let i = 0; i < vadBuffer.length; i++) {
+          const v = (vadBuffer[i] - 128) / 128;
+          sum += v * v;
+        }
+        const rms = Math.sqrt(sum / vadBuffer.length);
+
+        if (rms < VAD_THRESHOLD) {
+          if (silenceTimerRef.current === null) {
+            silenceTimerRef.current = setTimeout(() => {
+              stopPartialInterval();
+              stopAnimation();
+              stopDurationCounter();
+              mediaRecorderRef.current?.stop();
+              streamRef.current?.getTracks().forEach((t) => t.stop());
+              streamRef.current = null;
+              audioContextRef.current?.close();
+              audioContextRef.current = null;
+              analyserRef.current = null;
+            }, VAD_SILENCE_MS);
+          }
+        } else {
+          stopSilenceTimer();
+        }
+
+        animationFrameRef.current = requestAnimationFrame(vadLoop);
+      };
+
+      animationFrameRef.current = requestAnimationFrame(vadLoop);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Microphone access denied.';
       setError(msg);
