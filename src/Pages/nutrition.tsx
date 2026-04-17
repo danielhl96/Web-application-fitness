@@ -185,7 +185,7 @@ function Nutrition() {
         <TemplateModal>
           {/* Header with close button */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-base text-white">Input Method</h3>
+            <div className="font-bold text-lg text-white">Input</div>
             <button
               onClick={() => setShowInputSelect(false)}
               className="text-white/50 hover:text-white transition-colors"
@@ -287,7 +287,7 @@ function Nutrition() {
               </svg>
             </button>
           </div>
-          <div className="divider divider-primary mb-4">Audio</div>
+
           <AudioRecorder onTranscript={handleMealFromText} />
         </TemplateModal>
       </div>
@@ -300,10 +300,7 @@ function Nutrition() {
         <TemplateModal>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-lg text-white">Nutrition Estimation</h3>
-            <button
-              onClick={() => setShowFileUpload(false)}
-              className="text-white/50 hover:text-white transition-colors"
-            >
+            <Button border="#ef4444" onClick={() => setShowFileUpload(false)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-4 h-4"
@@ -318,7 +315,7 @@ function Nutrition() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
 
           <input
