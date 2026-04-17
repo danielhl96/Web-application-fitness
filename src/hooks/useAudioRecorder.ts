@@ -75,6 +75,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   const animationFrameRef = useRef<number | null>(null);
   const durationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const partialIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const mimeType = getSupportedMimeType();
@@ -92,6 +93,38 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     const dataArray = new Uint8Array(bufferLength);
     analyser.getByteTimeDomainData(dataArray);
     setWaveformData(new Uint8Array(dataArray));
+
+    // ── Voice Activity Detection ──────────────────────────────────────────
+    // RMS over time-domain data (128 = silence baseline)
+    let sumSq = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const norm = (dataArray[i] - 128) / 128;
+      sumSq += norm * norm;
+    }
+    const rms = Math.sqrt(sumSq / bufferLength);
+    const SILENCE_THRESHOLD = 0.01;
+
+    if (rms < SILENCE_THRESHOLD) {
+      // Start silence timer if not already running
+      if (silenceTimerRef.current === null && mediaRecorderRef.current?.state === 'recording') {
+        silenceTimerRef.current = setTimeout(() => {
+          if (mediaRecorderRef.current?.state === 'recording') {
+            // Auto-stop: trigger the same stop flow
+            stopPartialInterval();
+            mediaRecorderRef.current.stop();
+            streamRef.current?.getTracks().forEach((t) => t.stop());
+            audioContextRef.current?.close();
+            socketRef.current?.emit('stt:stop');
+          }
+        }, 1500);
+      }
+    } else {
+      // Voice detected — cancel silence timer
+      if (silenceTimerRef.current !== null) {
+        clearTimeout(silenceTimerRef.current);
+        silenceTimerRef.current = null;
+      }
+    }
 
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -153,12 +186,20 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     }
   }, []);
 
+  const stopSilenceTimer = useCallback(() => {
+    if (silenceTimerRef.current !== null) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  }, []);
+
   // ── Cleanup on unmount ────────────────────────────────────────────────────
   useEffect(() => {
     return () => {
       stopAnimation();
       stopDurationCounter();
       stopPartialInterval();
+      stopSilenceTimer();
       streamRef.current?.getTracks().forEach((t) => t.stop());
       audioContextRef.current?.close();
       if (audioUrl) URL.revokeObjectURL(audioUrl);
@@ -282,12 +323,13 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
   // ── Stop ──────────────────────────────────────────────────────────────────
   const stop = useCallback(() => {
     stopPartialInterval();
+    stopSilenceTimer();
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
     // Signal backend to start transcription
     socketRef.current?.emit('stt:stop');
-  }, [stopPartialInterval]);
+  }, [stopPartialInterval, stopSilenceTimer]);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
   const pause = useCallback(() => {
@@ -297,8 +339,9 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
       stopAnimation();
       stopDurationCounter();
       stopPartialInterval();
+      stopSilenceTimer();
     }
-  }, [stopAnimation, stopDurationCounter, stopPartialInterval]);
+  }, [stopAnimation, stopDurationCounter, stopPartialInterval, stopSilenceTimer]);
 
   // ── Resume ────────────────────────────────────────────────────────────────
   const resume = useCallback(() => {
@@ -321,6 +364,7 @@ export default function useAudioRecorder(): UseAudioRecorderReturn {
     stopAnimation();
     stopDurationCounter();
     stopPartialInterval();
+    stopSilenceTimer();
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     audioContextRef.current?.close();
