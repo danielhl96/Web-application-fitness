@@ -47,20 +47,32 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      {/* Waveform canvas */}
-      <div
-        className="w-full rounded-xl overflow-hidden border border-blue-500"
-        style={{
-          height: '80px',
-          background: 'rgba(15, 23, 42, 0.6)',
-          boxShadow: '0 4px 24px 0 rgba(59, 130, 246, 0.15)',
-        }}
-      >
-        <canvas ref={canvasRef} className="w-full h-full" />
-      </div>
-
-      {/* Duration */}
-      <span className="text-blue-400 text-sm font-mono">{formatDuration(duration)}</span>
+      {/* Live transcript box – only visible while recording */}
+      {(recorderState === 'recording' || recorderState === 'paused') && (
+        <div
+          className="w-full rounded-xl overflow-y-auto border border-blue-500 p-3 text-xs text-white"
+          style={{
+            minHeight: '80px',
+            background: 'rgba(15, 23, 42, 0.6)',
+            boxShadow: '0 4px 24px 0 rgba(59, 130, 246, 0.15)',
+          }}
+        >
+          {transcript ? (
+            <>
+              <p className="text-blue-400 mb-1 font-semibold flex items-center gap-2">
+                Live ✦
+                {partialTranscriptLoading && <span className="loading loading-dots loading-xs" />}
+              </p>
+              <p className="leading-relaxed">{transcript}</p>
+            </>
+          ) : (
+            <div className="flex items-center gap-2 text-blue-400/50 italic">
+              {partialTranscriptLoading && <span className="loading loading-dots loading-xs" />}
+              Gesprochener Text erscheint hier…
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Controls */}
       <div className="flex flex-row gap-3">
@@ -183,40 +195,6 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
           </button>
         )}
       </div>
-
-      {/* Live partial transcript while recording */}
-      {partialTranscriptLoading && recorderState === 'recording' && (
-        <div className="flex items-center gap-2 text-blue-400 text-xs mt-2">
-          <span className="loading loading-dots loading-sm" />
-          Live-Transkription…
-        </div>
-      )}
-      {transcript && recorderState === 'recording' && !partialTranscriptLoading && (
-        <div
-          className="w-full rounded-xl p-3 mt-2 text-xs text-white border border-blue-500 opacity-70"
-          style={{ background: 'rgba(15, 23, 42, 0.6)' }}
-        >
-          <p className="text-blue-400 mb-1 font-semibold">Live ✦</p>
-          <p className="leading-relaxed">{transcript}</p>
-        </div>
-      )}
-
-      {/* Transcript */}
-      {transcriptLoading && (
-        <div className="flex items-center gap-2 text-blue-400 text-xs mt-2">
-          <span className="loading loading-dots loading-sm" />
-          Transcribing…
-        </div>
-      )}
-      {transcript && !transcriptLoading && (
-        <div
-          className="w-full rounded-xl p-3 mt-2 text-xs text-white border border-blue-500"
-          style={{ background: 'rgba(15, 23, 42, 0.6)' }}
-        >
-          <p className="text-blue-400 mb-1 font-semibold">Transcript</p>
-          <p className="leading-relaxed">{transcript}</p>
-        </div>
-      )}
 
       {/* Error */}
       {error && <p className="text-red-400 text-xs">{error}</p>}
