@@ -81,6 +81,7 @@ export default function useAudioRecorder(options?: {
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
+  const pendingChunkSendsRef = useRef<Promise<void>[]>([]);
   const onTranscriptRef = useRef(options?.onTranscript);
   useEffect(() => {
     onTranscriptRef.current = options?.onTranscript;
@@ -88,89 +89,6 @@ export default function useAudioRecorder(options?: {
   const mimeType = getSupportedMimeType();
   const isSupported =
     typeof MediaRecorder !== 'undefined' && !!navigator?.mediaDevices?.getUserMedia;
-
-  // ── Waveform drawing loop ─────────────────────────────────────────────────
-  const drawWaveform = useCallback(() => {
-    const analyser = analyserRef.current;
-    const canvas = canvasRef.current;
-
-    if (!analyser) return;
-
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    analyser.getByteTimeDomainData(dataArray);
-    setWaveformData(new Uint8Array(dataArray));
-
-    // ── Voice Activity Detection ──────────────────────────────────────────
-    // RMS over time-domain data (128 = silence baseline)
-    let sumSq = 0;
-    for (let i = 0; i < bufferLength; i++) {
-      const norm = (dataArray[i] - 128) / 128;
-      sumSq += norm * norm;
-    }
-    const rms = Math.sqrt(sumSq / bufferLength);
-    const SILENCE_THRESHOLD = 0.01;
-
-    if (rms < SILENCE_THRESHOLD) {
-      // Start silence timer if not already running
-      if (silenceTimerRef.current === null && mediaRecorderRef.current?.state === 'recording') {
-        silenceTimerRef.current = setTimeout(() => {
-          if (mediaRecorderRef.current?.state === 'recording') {
-            // Auto-stop: trigger the same stop flow
-            stopPartialInterval();
-            mediaRecorderRef.current.stop();
-            streamRef.current?.getTracks().forEach((t) => t.stop());
-            audioContextRef.current?.close();
-            socketRef.current?.emit('stt:stop');
-          }
-        }, 1500);
-      }
-    } else {
-      // Voice detected — cancel silence timer
-      if (silenceTimerRef.current !== null) {
-        clearTimeout(silenceTimerRef.current);
-        silenceTimerRef.current = null;
-      }
-    }
-
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const { width, height } = canvas;
-        ctx.clearRect(0, 0, width, height);
-
-        // Background
-        ctx.fillStyle = 'rgba(15, 23, 42, 0)';
-        ctx.fillRect(0, 0, width, height);
-
-        // Wave line
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#3b82f6';
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = '#3b82f6';
-        ctx.beginPath();
-
-        const sliceWidth = width / bufferLength;
-        let x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-          const v = dataArray[i] / 128.0;
-          const y = (v * height) / 2;
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-          x += sliceWidth;
-        }
-
-        ctx.lineTo(width, height / 2);
-        ctx.stroke();
-      }
-    }
-
-    animationFrameRef.current = requestAnimationFrame(drawWaveform);
-  }, []);
 
   const stopAnimation = useCallback(() => {
     if (animationFrameRef.current !== null) {
@@ -321,22 +239,22 @@ export default function useAudioRecorder(options?: {
       }, 1000);
 
       // Start waveform loop
-      animationFrameRef.current = requestAnimationFrame(drawWaveform);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Microphone access denied.';
       setError(msg);
     }
-  }, [isSupported, mimeType, drawWaveform, stopAnimation, stopDurationCounter]);
+  }, [isSupported, mimeType, stopAnimation, stopDurationCounter]);
 
   // ── Stop ──────────────────────────────────────────────────────────────────
   const stop = useCallback(() => {
     stopPartialInterval();
     stopSilenceTimer();
-    mediaRecorderRef.current?.stop();
+    mediaRecorderRef.current?.stop(); // stt:stop is sent from recorder.onstop after last chunk
     streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
     audioContextRef.current?.close();
-    // Signal backend to start transcription
-    socketRef.current?.emit('stt:stop');
+    audioContextRef.current = null;
+    analyserRef.current = null;
   }, [stopPartialInterval, stopSilenceTimer]);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
@@ -356,7 +274,7 @@ export default function useAudioRecorder(options?: {
     if (mediaRecorderRef.current?.state === 'paused') {
       mediaRecorderRef.current.resume();
       setRecorderState('recording');
-      animationFrameRef.current = requestAnimationFrame(drawWaveform);
+
       durationIntervalRef.current = setInterval(() => {
         setDuration((prev) => prev + 1);
       }, 1000);
@@ -365,7 +283,7 @@ export default function useAudioRecorder(options?: {
         socketRef.current?.emit('stt:partial');
       }, 1000);
     }
-  }, [drawWaveform]);
+  }, []);
 
   // ── Reset ─────────────────────────────────────────────────────────────────
   const reset = useCallback(() => {
@@ -373,17 +291,22 @@ export default function useAudioRecorder(options?: {
     stopDurationCounter();
     stopPartialInterval();
     stopSilenceTimer();
-    mediaRecorderRef.current?.stop();
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    audioContextRef.current?.close();
-    socketRef.current?.disconnect();
-    socketRef.current = null;
-    if (audioUrl) URL.revokeObjectURL(audioUrl);
-    chunksRef.current = [];
+    if (mediaRecorderRef.current?.state !== 'inactive') {
+      mediaRecorderRef.current?.stop();
+    }
     mediaRecorderRef.current = null;
+    streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    if (audioContextRef.current?.state !== 'closed') {
+      audioContextRef.current?.close();
+    }
     audioContextRef.current = null;
     analyserRef.current = null;
+    socketRef.current?.disconnect();
+    socketRef.current = null;
+    pendingChunkSendsRef.current = [];
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    chunksRef.current = [];
     setRecorderState('idle');
     setAudioBlob(null);
     setAudioUrl(null);
