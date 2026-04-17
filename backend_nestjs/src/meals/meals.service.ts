@@ -22,7 +22,7 @@ export class MealsService {
         carbs: mealData.carbs,
         protein: mealData.protein,
         fats: mealData.fats,
-        date: this.today(),
+        date: mealData.date ? new Date(mealData.date) : this.today(),
       },
     });
     return { message: 'Meal created successfully' };
@@ -117,7 +117,7 @@ export class MealsService {
     return this.prismaUser.meals.findMany({
       where: {
         user_id: userId,
-        mealtype: 'launch',
+        mealtype: 'lunch',
         ...(date && { date: new Date(date) }),
       },
       orderBy: { date: 'desc' },
