@@ -300,7 +300,10 @@ function Nutrition() {
         <TemplateModal>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-lg text-white">Nutrition Estimation</h3>
-            <Button border="#ef4444" onClick={() => setShowFileUpload(false)}>
+            <button
+              className="text-white/50 hover:text-white transition-colors"
+              onClick={() => setShowFileUpload(false)}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-4 h-4"
@@ -315,7 +318,7 @@ function Nutrition() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </Button>
+            </button>
           </div>
 
           <input
