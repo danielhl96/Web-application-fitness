@@ -39,6 +39,8 @@ function Nutrition() {
     setShowFileUpload,
     setShowAudioModal,
     showAudioModal,
+    showInputSelect,
+    setShowInputSelect,
     showEditMeal,
     setShowEditMeal,
     prompt,
@@ -177,6 +179,89 @@ function Nutrition() {
     );
   }
 
+  function modalInputSelect() {
+    return (
+      <div>
+        <TemplateModal>
+          {/* Header with close button */}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-base text-white">Input Method</h3>
+            <button
+              onClick={() => setShowInputSelect(false)}
+              className="text-white/50 hover:text-white transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="flex flex-row gap-3 justify-center">
+            {/* Image analysis */}
+            <button
+              onClick={() => {
+                setShowInputSelect(false);
+                setShowFileUpload(true);
+              }}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105 w-20"
+              style={{ background: 'rgba(30,41,59,0.35)', backdropFilter: 'blur(8px)' }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-blue-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 7h2l2-3h10l2 3h2a1 1 0 011 1v11a1 1 0 01-1 1H3a1 1 0 01-1-1V8a1 1 0 011-1zm9 3a4 4 0 100 8 4 4 0 000-8z"
+                />
+              </svg>
+            </button>
+
+            {/* Audio analysis */}
+            <button
+              onClick={() => {
+                setShowInputSelect(false);
+                setShowAudioModal(true);
+              }}
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-blue-500 text-white text-xs transition-all duration-200 hover:scale-105 w-20"
+              style={{ background: 'rgba(30,41,59,0.35)', backdropFilter: 'blur(8px)' }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-blue-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
+                />
+              </svg>
+            </button>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
   function modalAudio() {
     return (
       <div>
@@ -242,23 +327,9 @@ function Nutrition() {
                   border="#3b82f6"
                   onClick={() => fileInputRef.current && fileInputRef.current.click()}
                 >
-                  <figure className="w-5 h-5 mb-2">
-                    <img
-                      src={'./cam.png'}
-                      className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                    />
-                  </figure>
-                </Button>
-                <Button
-                  border="#3b82f6"
-                  onClick={() => {
-                    setShowAudioModal(true);
-                    setShowFileUpload(false);
-                  }}
-                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
+                    className="w-5 h-5 text-blue-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -267,7 +338,7 @@ function Nutrition() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
+                      d="M3 7h2l2-3h10l2 3h2a1 1 0 011 1v11a1 1 0 01-1 1H3a1 1 0 01-1-1V8a1 1 0 011-1zm9 3a4 4 0 100 8 4 4 0 000-8z"
                     />
                   </svg>
                 </Button>
@@ -511,7 +582,7 @@ function Nutrition() {
             <div className="flex justify-end ">
               <button
                 onClick={() => {
-                  setShowFileUpload(true);
+                  setShowInputSelect(true);
                   setMealtype(mealname.toLowerCase());
                 }}
                 className="btn btn-outline btn-primary w-2 h-6 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1 rounded-xl transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
@@ -542,6 +613,7 @@ function Nutrition() {
     <div>
       <Header />
       <TemplatePage>
+        {showInputSelect && modalInputSelect()}
         {showAudioModal && modalAudio()}
         {showModal && modalDate()}
         {showFileUpload && handleFileUpload()}

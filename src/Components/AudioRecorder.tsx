@@ -1,14 +1,6 @@
 import { useEffect } from 'react';
 import useAudioRecorder from '../hooks/useAudioRecorder';
 
-function formatDuration(seconds: number): string {
-  const m = Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, '0');
-  const s = (seconds % 60).toString().padStart(2, '0');
-  return `${m}:${s}`;
-}
-
 export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const {
     recorderState,
@@ -68,7 +60,7 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
           ) : (
             <div className="flex items-center gap-2 text-blue-400/50 italic">
               {partialTranscriptLoading && <span className="loading loading-dots loading-xs" />}
-              Gesprochener Text erscheint hier…
+              <p>Listening...</p>
             </div>
           )}
         </div>
