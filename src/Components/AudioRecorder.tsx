@@ -54,7 +54,21 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
                 Live ✦
                 {partialTranscriptLoading && <span className="loading loading-dots loading-xs" />}
               </p>
-              <p className="leading-relaxed">{transcript}</p>
+              <p
+                key={transcript}
+                className="leading-relaxed"
+                style={{
+                  animation: 'fadeSlideIn 0.4s ease both',
+                }}
+              >
+                {transcript}
+              </p>
+              <style>{`
+                @keyframes fadeSlideIn {
+                  from { opacity: 0; transform: translateY(4px); }
+                  to   { opacity: 1; transform: translateY(0); }
+                }
+              `}</style>
             </>
           ) : (
             <div className="flex items-center gap-2 text-blue-400/50 italic">
