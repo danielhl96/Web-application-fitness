@@ -104,13 +104,13 @@ export default function useNutrition() {
   function handleMealFromText(text: string) {
     if (!text.trim()) return;
     setLoading({ type: 'loading' });
-    setShowAudioModal(false);
+
     api
       .post('meals/analyze_food_text', { text })
       .then((response) => {
         setMeal(response.data);
         setShowMeal(true);
-
+        setShowAudioModal(false);
         setLoading({ type: 'success', data: response.data });
       })
       .catch(() => {
