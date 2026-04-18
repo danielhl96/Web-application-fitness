@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import type { FC, CSSProperties, MouseEvent } from 'react';
 import ApexCharts from 'apexcharts';
 
@@ -63,6 +63,7 @@ function Nutrition() {
   } = useNutrition();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [mealToDelete, setMealToDelete] = useState<number | null>(null);
 
   // ── Sub-components ───────────────────────────────────────────────────────────
   function MacroPieChart({
@@ -507,6 +508,61 @@ function Nutrition() {
     );
   }
 
+  function modalDeleteConfirm() {
+    return (
+      <div>
+        <TemplateModal border="red 1.5px solid">
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-white text-sm text-center">
+              <div className="divider font-bold divider-primary">Delete Meal</div>
+              Are you sure you want to delete this meal?
+            </p>
+            <div className="flex flex-row gap-3">
+              <Button
+                border="#ef4444"
+                onClick={() => {
+                  if (mealToDelete !== null) deleteMeal(mealToDelete);
+                  setMealToDelete(null);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </Button>
+              <Button border="#3b82f6" onClick={() => setMealToDelete(null)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
+        </TemplateModal>
+      </div>
+    );
+  }
+
   function mealSummary(mealname: string, meals: Meal[]) {
     return (
       <div className="mb-4">
@@ -542,8 +598,9 @@ function Nutrition() {
                         <p className="mr-1">F: {meal.fats.toFixed(0)}g</p>
 
                         <button
-                          onClick={() => {
-                            deleteMeal(meal.id);
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMealToDelete(meal.id);
                           }}
                           className="btn btn-outline btn-primary w-8 h-5 shadow-lg backdrop-blur-md border border-blue-400 text-white px-2 py-1  transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-400"
                           style={{
@@ -621,6 +678,7 @@ function Nutrition() {
         {showFileUpload && handleFileUpload()}
         {showMeal && modalMeal()}
         {showEditMeal && editMeal()}
+        {mealToDelete !== null && modalDeleteConfirm()}
         {notification && (
           <Notify
             title={notification.title}
