@@ -245,9 +245,9 @@ export default function useAudioRecorder(options?: {
         setDuration((prev) => prev + 1);
       }, 1000);
 
-      // ── VAD: auto-stop after 1.5 s of silence ────────────────────────────
+      // ── VAD: auto-stop after 2.5 s of silence ────────────────────────────
       const VAD_THRESHOLD = 0.01; // RMS below this = silence
-      const VAD_SILENCE_MS = 1500; // ms of continuous silence before stop
+      const VAD_SILENCE_MS = 2500; // ms of continuous silence before stop
       const vadBuffer = new Uint8Array(analyser.frequencyBinCount);
 
       const vadLoop = () => {
