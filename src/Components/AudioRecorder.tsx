@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAudioRecorder from '../hooks/useAudioRecorder';
 
-export default function AudioRecorder({
-  onTranscript,
-  onStop,
-}: {
-  onTranscript?: (text: string) => void;
-  onStop?: () => void;
-}) {
+export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const {
     recorderState,
 
@@ -22,18 +16,6 @@ export default function AudioRecorder({
     partialTranscriptLoading,
   } = useAudioRecorder({ onTranscript });
 
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    if (recorderState === 'stopped') {
-      onStop?.();
-      const t = setTimeout(() => setVisible(false), 400);
-      return () => clearTimeout(t);
-    } else {
-      setVisible(true);
-    }
-  }, [recorderState, onStop]);
-
   // Resize canvas to match its display size
 
   if (!isSupported) {
@@ -41,8 +23,6 @@ export default function AudioRecorder({
       <p className="text-red-400 text-xs">Audio recording is not supported in this browser.</p>
     );
   }
-
-  if (!visible) return null;
 
   return (
     <div

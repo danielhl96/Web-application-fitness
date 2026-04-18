@@ -296,10 +296,7 @@ function Nutrition() {
               <p className="text-xs text-blue-400/70">Analyzing...</p>
             </div>
           ) : (
-            <AudioRecorder
-              onTranscript={handleMealFromText}
-              onStop={() => setShowAudioModal(false)}
-            />
+            <AudioRecorder onTranscript={handleMealFromText} />
           )}
         </TemplateModal>
       </div>
