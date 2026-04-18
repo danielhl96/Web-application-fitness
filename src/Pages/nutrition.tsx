@@ -11,6 +11,7 @@ import Header from '../Components/Header.jsx';
 import useNutrition from '../hooks/useNutrition.js';
 import type { Meal } from '../types';
 import AudioRecorder from '../Components/AudioRecorder.js';
+import { use } from 'passport';
 function Nutrition() {
   const {
     selectedDay,
@@ -268,7 +269,7 @@ function Nutrition() {
     return (
       <div>
         <TemplateModal>
-          <div className="flex justify-end mb-2 ml-20">
+          <div className="flex justify-end mb-4 w-20  ml-30">
             <button
               onClick={() => setShowAudioModal(false)}
               className="text-white/50 hover:text-white transition-colors"

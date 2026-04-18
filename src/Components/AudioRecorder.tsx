@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useAudioRecorder from '../hooks/useAudioRecorder';
+import Button from './button';
 
 export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const {
@@ -15,8 +16,6 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
     transcript,
     partialTranscriptLoading,
   } = useAudioRecorder({ onTranscript });
-
-  // Resize canvas to match its display size
 
   if (!isSupported) {
     return (
@@ -35,7 +34,7 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
       {/* Live transcript box – only visible while recording */}
       {(recorderState === 'recording' || recorderState === 'paused') && (
         <div
-          className="w-full rounded-xl overflow-y-auto border border-blue-500 p-3 text-xs text-white"
+          className="w-50 h-35 rounded-xl overflow-y-auto border border-blue-500/50 p-3 text-xs text-white"
           style={{
             minHeight: '80px',
             background: 'rgba(15, 23, 42, 0.6)',
@@ -77,27 +76,27 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
       <div className="flex flex-row gap-3">
         {/* Start */}
         {recorderState === 'idle' && (
-          <button
-            onClick={start}
-            className="btn btn-outline btn-primary px-4 py-2 rounded-xl text-xs"
-            style={{ border: '1.5px solid #3b82f6', background: 'rgba(30,41,59,0.25)' }}
-          >
-            {/* Mic icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
-              />
-            </svg>
-          </button>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex gap-2">
+              <Button onClick={start} border="#3b82f6">
+                {/* Mic icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm0 15a8 8 0 008-8H4a8 8 0 008 8zm0 0v3m-3 0h6"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
         )}
 
         {/* Pause / Resume */}
@@ -172,11 +171,7 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
 
         {/* Reset */}
         {recorderState === 'stopped' && (
-          <button
-            onClick={reset}
-            className="btn btn-outline btn-primary px-4 py-2 rounded-xl text-xs"
-            style={{ border: '1.5px solid #3b82f6', background: 'rgba(30,41,59,0.25)' }}
-          >
+          <Button onClick={reset} border="#3b82f6" w="w-0" isLoading={false}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-4 h-4"
@@ -191,7 +186,7 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
                 d="M4 4v5h5M20 20v-5h-5M4 9a9 9 0 0114.65-3.65M20 15A9 9 0 015.35 18.65"
               />
             </svg>
-          </button>
+          </Button>
         )}
       </div>
 
