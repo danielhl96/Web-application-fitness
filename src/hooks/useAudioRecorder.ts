@@ -172,6 +172,7 @@ export default function useAudioRecorder(options?: {
 
       socket.on('stt:transcript', ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
+        console.log('Final transcript received:', text);
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
         onTranscriptRef.current?.(text);
@@ -203,10 +204,10 @@ export default function useAudioRecorder(options?: {
       recorder.ondataavailable = (e: BlobEvent) => {
         if (e.data && e.data.size > 0) {
           chunksRef.current.push(e.data);
-          // Stream chunk to backend via WebSocket
-          e.data.arrayBuffer().then((buf) => {
+          const p = e.data.arrayBuffer().then((buf) => {
             socketRef.current?.emit('stt:chunk', buf);
           });
+          pendingChunkSendsRef.current.push(p);
         }
       };
 
@@ -227,6 +228,12 @@ export default function useAudioRecorder(options?: {
           const ctx = canvas.getContext('2d');
           ctx?.clearRect(0, 0, canvas.width, canvas.height);
         }
+
+        // Wait for all pending stt:chunk sends, then signal backend to transcribe
+        Promise.all(pendingChunkSendsRef.current).then(() => {
+          socketRef.current?.emit('stt:stop');
+          pendingChunkSendsRef.current = [];
+        });
       };
 
       recorder.start(100); // collect chunks every 100ms
@@ -236,12 +243,6 @@ export default function useAudioRecorder(options?: {
       // Duration counter
       durationIntervalRef.current = setInterval(() => {
         setDuration((prev) => prev + 1);
-      }, 1000);
-
-      // Start partial transcription interval only after recorder is running
-      partialIntervalRef.current = setInterval(() => {
-        setPartialTranscriptLoading(true);
-        socketRef.current?.emit('stt:partial');
       }, 1000);
 
       // ── VAD: auto-stop after 1.5 s of silence ────────────────────────────
