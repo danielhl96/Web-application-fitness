@@ -292,11 +292,14 @@ function Nutrition() {
 
           {loading.type === 'loading' ? (
             <div className="flex flex-col items-center gap-3 py-4">
-              <progress className="progress progress-primary w-48" />
+              <span className="loading loading-bars loading-lg"></span>
               <p className="text-xs text-blue-400/70">Analyzing...</p>
             </div>
           ) : (
-            <AudioRecorder onTranscript={handleMealFromText} />
+            <AudioRecorder
+              onTranscript={handleMealFromText}
+              onStop={() => setShowAudioModal(false)}
+            />
           )}
         </TemplateModal>
       </div>

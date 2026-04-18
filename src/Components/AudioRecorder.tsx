@@ -1,11 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAudioRecorder from '../hooks/useAudioRecorder';
 
-export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: string) => void }) {
+export default function AudioRecorder({
+  onTranscript,
+  onStop,
+}: {
+  onTranscript?: (text: string) => void;
+  onStop?: () => void;
+}) {
   const {
     recorderState,
 
-    canvasRef,
     start,
     stop,
     pause,
@@ -14,21 +19,22 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
     isSupported,
     error,
     transcript,
-
     partialTranscriptLoading,
   } = useAudioRecorder({ onTranscript });
 
-  // Resize canvas to match its display size
+  const [visible, setVisible] = useState(true);
+
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const observer = new ResizeObserver(() => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    });
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, [canvasRef]);
+    if (recorderState === 'stopped') {
+      onStop?.();
+      const t = setTimeout(() => setVisible(false), 400);
+      return () => clearTimeout(t);
+    } else {
+      setVisible(true);
+    }
+  }, [recorderState, onStop]);
+
+  // Resize canvas to match its display size
 
   if (!isSupported) {
     return (
@@ -36,8 +42,16 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
     );
   }
 
+  if (!visible) return null;
+
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
+    <div
+      className="flex flex-col items-center gap-4 w-full"
+      style={{
+        transition: 'opacity 0.4s ease',
+        opacity: recorderState === 'stopped' ? 0 : 1,
+      }}
+    >
       {/* Live transcript box – only visible while recording */}
       {(recorderState === 'recording' || recorderState === 'paused') && (
         <div
