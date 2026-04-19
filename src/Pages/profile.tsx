@@ -7,6 +7,7 @@ import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';
 import EditProfile from '../Components/editprofile.tsx';
 import ViewProfile from '../Components/viewprofile.tsx';
+import loadingComponente from '../Components/loading.tsx';
 import {
   UI_STATE,
   UserHistory,
@@ -330,9 +331,8 @@ function Profile() {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center">
-              <span className="loading loading-bars loading-xl"></span>
-              <div className="text-gray-500 mt-4">Loading profile...</div>
+            <div className="flex flex-col justify-center items-center h-[60vh]">
+              {loadingComponente('Loading profile...')}
             </div>
           ))
         )}

@@ -11,7 +11,7 @@ import Header from '../Components/Header.jsx';
 import useNutrition from '../hooks/useNutrition.js';
 import type { Meal } from '../types';
 import AudioRecorder from '../Components/AudioRecorder.js';
-
+import loadingComponente from '../Components/loading.js';
 function Nutrition() {
   const {
     selectedDay,
@@ -587,7 +587,7 @@ function Nutrition() {
               <div className="flex flex-col items-center w-full">
                 {loadingMeals.type === 'loading' ? (
                   <div className="flex justify-center items-center w-full h-10">
-                    <span className="loading loading-bars loading-sm text-white-400" />
+                    {loadingComponente('Loading meals...')}
                   </div>
                 ) : (
                   meals.map((meal, index) => (
@@ -741,7 +741,7 @@ function Nutrition() {
                 <div className="flex flex-col">
                   {loadingProfile.type === 'loading' ? (
                     <div className="flex flex-1 justify-center items-center w-full h-full">
-                      <span className="loading loading-bars loading-sm text-white-400" />
+                      {loadingComponente('Loading data...')}
                     </div>
                   ) : (
                     <div className="carousel rounded-box w-full">
@@ -811,7 +811,7 @@ function Nutrition() {
               <div className="card-body">
                 {loadingProfile.type === 'loading' ? (
                   <div className="flex flex-1 justify-center items-center w-full h-full">
-                    <span className="loading loading-bars loading-sm text-white-400" />
+                    {loadingComponente('Loading macros...')}
                   </div>
                 ) : (
                   <div className="carousel rounded-box w-full">

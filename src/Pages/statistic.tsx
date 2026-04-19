@@ -5,7 +5,7 @@ import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import { UI_STATE } from '../types';
-
+import loadingComponente from '../Components/loading.js';
 type ExerciseEntry = {
   date: string;
   weights: number[];
@@ -193,9 +193,8 @@ function Statistic(): JSX.Element {
           </div>
         ) : null}
         {statistics.type === 'loading' && (
-          <div className="flex flex-col justify-center items-center">
-            <span className="loading loading-bars loading-xl"></span>
-            <div className="text-gray-500 mt-4">Loading statistics...</div>
+          <div className="flex flex-col justify-center items-center h-[60vh]">
+            {loadingComponente('Loading statistics...')}
           </div>
         )}
         {statistics.type === 'error' && (

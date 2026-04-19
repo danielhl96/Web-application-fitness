@@ -10,6 +10,7 @@ import TemplateModal from '../Components/templatemodal.js';
 import Workouts from '../Components/workouts.js';
 import EditWorkoutPage from '../Components/editworkout.tsx';
 import { useEditTrain } from '../hooks/useEditTrain.ts';
+import loadingComponente from '../Components/loading.tsx';
 
 const EditTrain = (): JSX.Element => {
   const navigate = useNavigate();
@@ -216,8 +217,7 @@ const EditTrain = (): JSX.Element => {
               </>
             ) : (
               <div className="min-h-[50dvh] flex items-center justify-center flex-col">
-                <span className="loading loading-bars loading-xl"></span>
-                <div className="text-white font-bold text-xs ml-4">Loading workout plans...</div>
+                {loadingComponente('Loading your workout plans')}
               </div>
             )}
           </div>
