@@ -171,22 +171,25 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
 
         {/* Reset */}
         {recorderState === 'stopped' && (
-          <Button onClick={reset} border="#3b82f6" w="w-0" isLoading={false}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h5M20 20v-5h-5M4 9a9 9 0 0114.65-3.65M20 15A9 9 0 015.35 18.65"
-              />
-            </svg>
-          </Button>
+          <>
+            <Button onClick={reset} border="#3b82f6" w="w-0" isLoading={false}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h5M20 20v-5h-5M4 9a9 9 0 0114.65-3.65M20 15A9 9 0 015.35 18.65"
+                />
+              </svg>
+            </Button>
+            <div className="flex items-center gap-2 text-green-400">Recording finished</div>
+          </>
         )}
       </div>
 

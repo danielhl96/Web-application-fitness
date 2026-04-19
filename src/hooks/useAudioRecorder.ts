@@ -61,6 +61,7 @@ export default function useAudioRecorder(options?: {
   onTranscript?: (text: string) => void;
 }): UseAudioRecorderReturn {
   const [recorderState, setRecorderState] = useState<RecorderState>('idle');
+
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
