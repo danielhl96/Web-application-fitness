@@ -293,7 +293,7 @@ function Nutrition() {
 
           {loading.type === 'loading' ? (
             <div className="flex flex-col items-center gap-3 py-4">
-              <span className="loading loading-bars loading-lg"></span>
+              {loadingComponente('Analyzing...')}
               <p className="text-xs text-blue-400/70">Analyzing...</p>
             </div>
           ) : (
@@ -343,7 +343,7 @@ function Nutrition() {
 
           <div className="flex flex-row justify-center space-x-2 mb-4">
             {loading.type === 'loading' ? (
-              <span className="loading loading-bars loading-xl text-white-400"></span>
+              loadingComponente('Analyzing...')
             ) : (
               <div className="flex flex-row items-center space-x-2">
                 <Input
