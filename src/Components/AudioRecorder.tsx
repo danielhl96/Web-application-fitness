@@ -202,9 +202,6 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
                 />
               </svg>
             </Button>
-            {showFinished && (
-              <div className="flex items-center gap-2 text-green-400">Recording finished</div>
-            )}
           </>
         )}
       </div>

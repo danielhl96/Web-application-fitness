@@ -293,7 +293,7 @@ function Nutrition() {
 
           {loading.type === 'loading' ? (
             <div className="flex flex-col items-center gap-3 py-4">
-              {loadingComponente('Analyzing...')}
+              {loadingComponente('Recording is finished. Just Analyzing...')}
             </div>
           ) : (
             <AudioRecorder onTranscript={handleMealFromText} />
