@@ -294,7 +294,6 @@ function Nutrition() {
           {loading.type === 'loading' ? (
             <div className="flex flex-col items-center gap-3 py-4">
               {loadingComponente('Analyzing...')}
-              <p className="text-xs text-blue-400/70">Analyzing...</p>
             </div>
           ) : (
             <AudioRecorder onTranscript={handleMealFromText} />
