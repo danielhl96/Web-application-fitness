@@ -26,10 +26,6 @@ export interface UseAudioRecorderReturn {
   audioBlob: Blob | null;
   /** Object URL for the recorded audio (use as <audio src> ) */
   audioUrl: string | null;
-  /** Duration in seconds while recording / total duration after stop */
-  duration: number;
-  /** Waveform amplitude data (0–255) for the current frame — update via animationRef */
-  waveformData: Uint8Array;
   /** Canvas ref to attach to <canvas> element for waveform drawing */
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   /** Start recording */
@@ -64,8 +60,7 @@ export default function useAudioRecorder(options?: {
 
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [duration, setDuration] = useState(0);
-  const [waveformData, setWaveformData] = useState<Uint8Array>(new Uint8Array(0));
+
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<string | null>(null);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
@@ -77,7 +72,7 @@ export default function useAudioRecorder(options?: {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const durationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const partialIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -90,20 +85,6 @@ export default function useAudioRecorder(options?: {
   const mimeType = getSupportedMimeType();
   const isSupported =
     typeof MediaRecorder !== 'undefined' && !!navigator?.mediaDevices?.getUserMedia;
-
-  const stopAnimation = useCallback(() => {
-    if (animationFrameRef.current !== null) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-  }, []);
-
-  const stopDurationCounter = useCallback(() => {
-    if (durationIntervalRef.current !== null) {
-      clearInterval(durationIntervalRef.current);
-      durationIntervalRef.current = null;
-    }
-  }, []);
 
   const stopPartialInterval = useCallback(() => {
     if (partialIntervalRef.current !== null) {
@@ -119,11 +100,16 @@ export default function useAudioRecorder(options?: {
     }
   }, []);
 
+  const stopAnimation = useCallback(() => {
+    if (animationFrameRef.current !== null) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+  }, []);
+
   // ── Cleanup on unmount ────────────────────────────────────────────────────
   useEffect(() => {
     return () => {
-      stopAnimation();
-      stopDurationCounter();
       stopPartialInterval();
       stopSilenceTimer();
       streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -220,8 +206,6 @@ export default function useAudioRecorder(options?: {
         setAudioBlob(blob);
         setAudioUrl(url);
         setRecorderState('stopped');
-        stopAnimation();
-        stopDurationCounter();
 
         // Clear canvas
         const canvas = canvasRef.current;
@@ -239,12 +223,6 @@ export default function useAudioRecorder(options?: {
 
       recorder.start(100); // collect chunks every 100ms
       setRecorderState('recording');
-      setDuration(0);
-
-      // Duration counter
-      durationIntervalRef.current = setInterval(() => {
-        setDuration((prev) => prev + 1);
-      }, 1000);
 
       // ── VAD: auto-stop after 2.5 s of silence ────────────────────────────
       const VAD_THRESHOLD = 0.01; // RMS below this = silence
@@ -264,8 +242,7 @@ export default function useAudioRecorder(options?: {
           if (silenceTimerRef.current === null) {
             silenceTimerRef.current = setTimeout(() => {
               stopPartialInterval();
-              stopAnimation();
-              stopDurationCounter();
+
               mediaRecorderRef.current?.stop();
               streamRef.current?.getTracks().forEach((t) => t.stop());
               streamRef.current = null;
@@ -286,19 +263,20 @@ export default function useAudioRecorder(options?: {
       const msg = err instanceof Error ? err.message : 'Microphone access denied.';
       setError(msg);
     }
-  }, [isSupported, mimeType, stopAnimation, stopDurationCounter]);
+  }, [isSupported, mimeType]);
 
   // ── Stop ──────────────────────────────────────────────────────────────────
   const stop = useCallback(() => {
     stopPartialInterval();
     stopSilenceTimer();
+    stopAnimation();
     mediaRecorderRef.current?.stop(); // stt:stop is sent from recorder.onstop after last chunk
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     audioContextRef.current?.close();
     audioContextRef.current = null;
     analyserRef.current = null;
-  }, [stopPartialInterval, stopSilenceTimer]);
+  }, [stopPartialInterval, stopSilenceTimer, stopAnimation]);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
   const pause = useCallback(() => {
@@ -306,11 +284,10 @@ export default function useAudioRecorder(options?: {
       mediaRecorderRef.current.pause();
       setRecorderState('paused');
       stopAnimation();
-      stopDurationCounter();
       stopPartialInterval();
       stopSilenceTimer();
     }
-  }, [stopAnimation, stopDurationCounter, stopPartialInterval, stopSilenceTimer]);
+  }, [stopAnimation, stopPartialInterval, stopSilenceTimer]);
 
   // ── Resume ────────────────────────────────────────────────────────────────
   const resume = useCallback(() => {
@@ -318,9 +295,6 @@ export default function useAudioRecorder(options?: {
       mediaRecorderRef.current.resume();
       setRecorderState('recording');
 
-      durationIntervalRef.current = setInterval(() => {
-        setDuration((prev) => prev + 1);
-      }, 1000);
       partialIntervalRef.current = setInterval(() => {
         setPartialTranscriptLoading(true);
         socketRef.current?.emit('stt:partial');
@@ -331,7 +305,6 @@ export default function useAudioRecorder(options?: {
   // ── Reset ─────────────────────────────────────────────────────────────────
   const reset = useCallback(() => {
     stopAnimation();
-    stopDurationCounter();
     stopPartialInterval();
     stopSilenceTimer();
     if (mediaRecorderRef.current?.state !== 'inactive') {
@@ -353,8 +326,7 @@ export default function useAudioRecorder(options?: {
     setRecorderState('idle');
     setAudioBlob(null);
     setAudioUrl(null);
-    setDuration(0);
-    setWaveformData(new Uint8Array(0));
+
     setError(null);
     setTranscript(null);
     setTranscriptLoading(false);
@@ -365,14 +337,13 @@ export default function useAudioRecorder(options?: {
       const ctx = canvas.getContext('2d');
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
     }
-  }, [audioUrl, stopAnimation, stopDurationCounter, stopPartialInterval]);
+  }, [audioUrl, stopPartialInterval]);
 
   return {
     recorderState,
     audioBlob,
     audioUrl,
-    duration,
-    waveformData,
+
     canvasRef,
     start,
     stop,

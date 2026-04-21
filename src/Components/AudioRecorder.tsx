@@ -17,6 +17,16 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
     partialTranscriptLoading,
   } = useAudioRecorder({ onTranscript });
 
+  const [showFinished, setShowFinished] = useState(false);
+
+  useEffect(() => {
+    if (recorderState === 'stopped') {
+      setShowFinished(true);
+      const t = setTimeout(() => setShowFinished(false), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [recorderState]);
+
   if (!isSupported) {
     return (
       <p className="text-red-400 text-xs">Audio recording is not supported in this browser.</p>
@@ -34,11 +44,15 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
       {/* Live transcript box – only visible while recording */}
       {(recorderState === 'recording' || recorderState === 'paused') && (
         <div
-          className="w-50 h-35 rounded-xl overflow-y-auto border border-blue-500/50 p-3 text-xs text-white"
+          className="w-full rounded-xl overflow-y-auto border border-blue-500/60 p-4 text-sm text-white"
           style={{
-            minHeight: '80px',
-            background: 'rgba(15, 23, 42, 0.6)',
-            boxShadow: '0 4px 24px 0 rgba(59, 130, 246, 0.15)',
+            minHeight: '140px',
+            maxHeight: '220px',
+            background: 'rgba(10, 18, 38, 0.85)',
+            boxShadow: '0 8px 32px 0 rgba(59, 130, 246, 0.25)',
+            backdropFilter: 'blur(12px)',
+            zIndex: 50,
+            position: 'relative',
           }}
         >
           {transcript ? (
@@ -188,7 +202,9 @@ export default function AudioRecorder({ onTranscript }: { onTranscript?: (text: 
                 />
               </svg>
             </Button>
-            <div className="flex items-center gap-2 text-green-400">Recording finished</div>
+            {showFinished && (
+              <div className="flex items-center gap-2 text-green-400">Recording finished</div>
+            )}
           </>
         )}
       </div>
