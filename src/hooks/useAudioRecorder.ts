@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import hark, { Harker } from 'hark';
+import hark from 'hark';
+import type { Harker } from 'hark';
 
 // ── STT WebSocket event contracts ─────────────────────────────────────────────
 
