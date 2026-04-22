@@ -191,10 +191,34 @@ const EditTrain = (): JSX.Element => {
                   selectedExercise={selectedExercise}
                   savekey={savekey}
                   handleAddExercise={handleAddExercise}
-                  setSelectedExercise={setSelectedExercise}
                   handleEditWorkout={handleEditWorkout}
                   handleShowModal={handleShowModal}
                   changePosition={changePosition}
+                  onRepsChange={(index, reps) =>
+                    setSelectedExercise((prev) => {
+                      const updated = { ...prev };
+                      updated[savekey] = updated[savekey].map((ex, i) =>
+                        i === index ? { ...ex, reps } : ex
+                      );
+                      return updated;
+                    })
+                  }
+                  onSetsChange={(index, sets) =>
+                    setSelectedExercise((prev) => {
+                      const updated = { ...prev };
+                      updated[savekey] = updated[savekey].map((ex, i) =>
+                        i === index ? { ...ex, sets } : ex
+                      );
+                      return updated;
+                    })
+                  }
+                  onRemoveExercise={(index) =>
+                    setSelectedExercise((prev) => {
+                      const updated = { ...prev };
+                      updated[savekey] = updated[savekey].filter((_, i) => i !== index);
+                      return updated;
+                    })
+                  }
                 />
               </div>
             ) : showState.type === 'success' ? (
