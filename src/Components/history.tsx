@@ -3,6 +3,20 @@ import { JSX, useEffect } from 'react';
 import ApexCharts from 'apexcharts';
 import { UserHistory } from '../types';
 
+// OCP: add a new body metric here — chart formatter and select options update automatically
+interface BodyValueOption {
+  value: string;
+  label: string;
+  unit: string;
+}
+
+const bodyValueOptions: BodyValueOption[] = [
+  { value: 'weight', label: 'Weight', unit: ' kg' },
+  { value: 'bfp', label: 'Body Fat Percentage', unit: ' %' },
+  { value: 'waist', label: 'Waist Circumference', unit: ' cm' },
+  { value: 'hip', label: 'Hip Circumference', unit: ' cm' },
+];
+
 type HistoryProps = {
   bodyvalue: UserHistory[];
   selectedBodyValue: string;
@@ -53,17 +67,10 @@ function ChartRenderer({
       yaxis: {
         labels: {
           style: { colors: '#FFFFFF' },
-          formatter: (value) =>
-            value +
-            (type === 'weight'
-              ? ' kg'
-              : type === 'waist'
-                ? ' cm'
-                : type === 'hip'
-                  ? ' cm'
-                  : type === 'bfp'
-                    ? ' %'
-                    : ''),
+          formatter: (value) => {
+            const unit = bodyValueOptions.find((o) => o.value === type)?.unit ?? '';
+            return value + unit;
+          },
         },
       },
       tooltip: {
@@ -116,10 +123,11 @@ export default function History({
           <option disabled selected>
             Select Body Value
           </option>
-          <option value="weight">Weight</option>
-          <option value="bfp">Body Fat Percentage</option>
-          <option value="waist">Waist Circumference</option>
-          <option value="hip">Hip Circumference</option>
+          {bodyValueOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
         <Button border="#f63b3bff" onClick={() => setShowTrend(false)}>
           Close{' '}

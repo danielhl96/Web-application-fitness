@@ -1,16 +1,133 @@
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
+import { useHeader } from '../hooks/useHeader';
+
+// OCP: add a new route here — no JSX changes needed
+interface NavItem {
+  to: string;
+  label: string;
+  icon: JSX.Element;
+}
+
+const navItems: NavItem[] = [
+  {
+    to: '/createtrain',
+    label: 'Create Workout',
+    icon: (
+      <img
+        src="/plan.png"
+        className="h-5 w-5 object-cover rounded-md"
+        alt="Create Training Icon"
+        style={{ filter: 'brightness(0) invert(1)' }}
+      />
+    ),
+  },
+  {
+    to: '/edittrain',
+    label: 'Edit Workout',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-6 w-6 text-amber-50"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+        />
+      </svg>
+    ),
+  },
+  {
+    to: '/training',
+    label: 'Start Workout',
+    icon: (
+      <img
+        src="./pullup.png"
+        className="w-6 h-6 mr-1 filter brightness-0 invert"
+        alt="Start Workout"
+      />
+    ),
+  },
+  {
+    to: '/nutrition',
+    label: 'Nutrition',
+    icon: (
+      <img
+        src="./nutrition-plan.png"
+        className="w-5 h-5 object-cover rounded-md filter brightness-0 invert"
+        alt="Nutrition"
+      />
+    ),
+  },
+  {
+    to: '/aicoach',
+    label: 'AI-Coach',
+    icon: (
+      <img
+        src="./aicoach.png"
+        className="w-5 h-5 object-cover rounded-md filter brightness-0 invert"
+        alt="AI-Coach"
+      />
+    ),
+  },
+  {
+    to: '/profile',
+    label: 'Profile',
+    icon: (
+      <img src="./scale.png" className="w-6 h-6 mr-1 filter brightness-0 invert" alt="Profile" />
+    ),
+  },
+  {
+    to: '/counter',
+    label: 'Stopwatch',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-6 w-6 text-amber-50"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
+  },
+  {
+    to: '/statistic',
+    label: 'Statistic',
+    icon: (
+      <img
+        src="./statistic.png"
+        className="w-5 h-5 object-cover rounded-md filter brightness-0 invert"
+        alt="Statistic"
+      />
+    ),
+  },
+  {
+    to: '/credentials',
+    label: 'Credentials',
+    icon: (
+      <img
+        src="./credentials.png"
+        className="w-5 h-5 object-cover rounded-md filter brightness-0 invert"
+        alt="Credentials"
+      />
+    ),
+  },
+];
+
 function Header(): JSX.Element {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handlelogout = (): void => {
-    api.post('/auth/logout', {}, { withCredentials: true }).then(() => navigate('/login'));
-
-    setMenuOpen(false);
-  };
+  const { menuOpen, toggleMenu, closeMenu, handleLogout } = useHeader();
 
   return (
     <div>
@@ -19,26 +136,22 @@ function Header(): JSX.Element {
           <Link to="/" className="btn btn-ghost text-white text-lg font-bold flex items-center">
             <figure className="w-9 h-9 mb-2">
               <img
-                src={'./squats.png'}
+                src="./squats.png"
                 className="w-full h-full object-cover rounded-md filter brightness-0 invert"
+                alt="Logo"
               />
             </figure>
           </Link>
+
+          {/* Hamburger toggle (mobile) */}
           <div className="lg:hidden">
             <button
               className="btn btn-ghost text-white"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={toggleMenu}
               aria-label="Toggle menu"
             >
               {menuOpen ? (
-                // X-Icon
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -47,14 +160,7 @@ function Header(): JSX.Element {
                   />
                 </svg>
               ) : (
-                // Hamburger-Icon
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -65,149 +171,20 @@ function Header(): JSX.Element {
               )}
             </button>
           </div>
+
+          {/* Nav links */}
           <div
-            className={`flex-col lg:flex lg:flex-row lg:items-center lg:static absolute top-full left-0 w-full lg:w-auto bg-black lg:bg-transparent z-40 transition-all duration-200 ${
-              menuOpen ? 'flex' : 'hidden'
-            }`}
+            className={`flex-col lg:flex lg:flex-row lg:items-center lg:static absolute top-full left-0 w-full lg:w-auto bg-black lg:bg-transparent z-40 transition-all duration-200 ${menuOpen ? 'flex' : 'hidden'}`}
           >
-            <Link
-              to="/createtrain"
-              className="btn btn-ghost text-white"
-              onClick={() => setMenuOpen(false)}
-            >
-              <div className="flex justify-center my-4">
-                <img
-                  src="/plan.png"
-                  className="h-5 w-5 object-cover rounded-md"
-                  alt="Create Training Icon"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-              </div>
-              Create Workout
-            </Link>
-            <Link
-              to="/edittrain"
-              className="btn btn-ghost text-white"
-              onClick={() => setMenuOpen(false)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-amber-50" // <-- Klasse für Größe und Farbe hinzugefügt
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-              Edit Workout
-            </Link>
-            <Link
-              to="/training"
-              className="btn btn-ghost text-white"
-              onClick={() => setMenuOpen(false)}
-            >
-              <img src={'./pullup.png'} className="w-6 h-6 mr-1 filter brightness-0 invert" />
-              Start Workout
-            </Link>
+            {navItems.map(({ to, label, icon }) => (
+              <Link key={to} to={to} className="btn btn-ghost text-white" onClick={closeMenu}>
+                {icon}
+                {label}
+              </Link>
+            ))}
 
-            <Link
-              to="/nutrition"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./nutrition-plan.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-              Nutrition
-            </Link>
-
-            <Link
-              to="/aicoach"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./aicoach.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-              AI-Coach
-            </Link>
-
-            <Link
-              to="/profile"
-              className="btn btn-ghost text-white"
-              onClick={() => setMenuOpen(false)}
-            >
-              <img src={'./scale.png'} className="w-6 h-6 mr-1 filter brightness-0 invert" />
-              Profile
-            </Link>
-
-            <Link
-              to="/counter"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-amber-50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Stopwatch
-            </Link>
-            <Link
-              to="/statistic"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./statistic.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-              Statistic
-            </Link>
-
-            <Link
-              to="/credentials"
-              className="btn btn-ghost text-white md:ml-4"
-              onClick={() => setMenuOpen(false)}
-            >
-              <figure className="w-5 h-5 mb-2">
-                <img
-                  src={'./credentials.png'}
-                  className="w-full h-full object-cover rounded-md filter brightness-0 invert"
-                />
-              </figure>
-              Credentials
-            </Link>
-            <button className="btn btn-ghost text-white md:ml-4" onClick={() => handlelogout()}>
-              <svg
-                className="h-6 w-6 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+            <button className="btn btn-ghost text-white md:ml-4" onClick={handleLogout}>
+              <svg className="h-6 w-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

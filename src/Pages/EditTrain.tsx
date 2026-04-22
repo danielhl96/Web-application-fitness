@@ -227,8 +227,10 @@ const EditTrain = (): JSX.Element => {
                   exercise={workout}
                   key={index}
                   handleShowModal={handleShowModal}
-                  setConfirmationModalforWorkoutDelete={setConfirmationModalforWorkoutDelete}
-                  setSaveKey={setSaveKey}
+                  onDelete={(key) => {
+                    setConfirmationModalforWorkoutDelete(true);
+                    setSaveKey(key);
+                  }}
                   selectedExercise={selectedExercise}
                 />
               ))
