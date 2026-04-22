@@ -239,7 +239,9 @@ export default function useAudioRecorder(options?: {
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
       });
-      socket.on(SttEvent.STARTED, () => {
+      // socket.once: fires exactly once — guards against duplicate MediaRecorder creation
+      // if the server were to emit stt:started more than once.
+      socket.once(SttEvent.STARTED, () => {
         // ── Flow Control: Recorder startet erst wenn Server-Session bestätigt ──
         // Garantiert: stt:start wurde verarbeitet, alle folgenden Chunks haben
         // eine gültige Session auf dem Server.
