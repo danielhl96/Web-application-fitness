@@ -11,7 +11,6 @@ interface RecorderControlsProps {
   reset: () => void;
 }
 
-// OCP: To add a new control, add an entry here — no changes to the JSX needed.
 interface ControlConfig {
   show: (state: RecorderState) => boolean;
   onClick: () => void;
@@ -19,7 +18,7 @@ interface ControlConfig {
   extraClass?: string;
   icon: React.ReactNode;
 }
-
+// OCP: To add a new control, add an entry here — no changes to the JSX needed.
 function buildControls(
   start: () => void,
   stop: () => void,

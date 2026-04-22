@@ -1,6 +1,7 @@
 import Button from './button';
 import Input from './input';
-import { JSX, useEffect } from 'react';
+import { JSX } from 'react';
+import HealthMetrics from './HealthMetrics';
 
 type EditProfileProps = {
   age: number;
@@ -33,6 +34,16 @@ type EditProfileProps = {
   failureBFP?: boolean;
   gender: string;
 };
+// OCP: To add a new profile field, add an entry here — no JSX changes needed.
+interface FieldConfig {
+  label: string;
+  placeholder: string;
+  id?: string;
+  onChange: (value: string) => void;
+  failure?: boolean;
+  failureMsg: string;
+}
+
 function EditProfile({
   age,
   weight,
@@ -64,80 +75,73 @@ function EditProfile({
   handleEdit,
   setEdit,
 }: EditProfileProps): JSX.Element {
+  const fieldConfigs: FieldConfig[] = [
+    {
+      label: 'Age',
+      placeholder: `${age} years`,
+      onChange: handleAge,
+      failure: failureAge,
+      failureMsg: 'Please enter a valid age',
+    },
+    {
+      label: 'Weight',
+      placeholder: `${weight} kg`,
+      onChange: handleWeight,
+      failure: failureWeight,
+      failureMsg: 'Please enter a valid weight',
+    },
+    {
+      label: 'Height',
+      placeholder: `${height} cm`,
+      onChange: handleHeight,
+      failure: failureHeight,
+      failureMsg: 'Please enter a valid height',
+    },
+    {
+      label: 'Waist',
+      placeholder: `${waist} cm`,
+      onChange: handleWaist,
+      failure: failureWaist,
+      failureMsg: 'Please enter a valid waist',
+      id: 'waist',
+    },
+    {
+      label: 'Hip',
+      placeholder: `${hip} cm`,
+      onChange: handleHip,
+      failure: failureHip,
+      failureMsg: 'Please enter a valid hip',
+      id: 'hip',
+    },
+    {
+      label: 'BFP',
+      placeholder: `${bfp} %`,
+      onChange: handleBFP,
+      failure: failureBFP,
+      failureMsg: 'Please enter a valid bfp',
+      id: 'bfp',
+    },
+  ];
+
   return (
     <div className="space-y-2 flex flex-col items-center ">
       <div className="divider  text-amber-50 font-bold mb-2  divider-primary">Profile</div>
 
       <div className="grid grid-cols-3 gap-4">
-        <div className="flex flex-col space-y-1  h-15">
-          <h1>Age</h1>
-          <Input placeholder={age + ' years'} value={null} onChange={handleAge} w="w-24" h="h-8" />
-          {failureAge && <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid age</h1>}
-        </div>
-        <div className="flex flex-col space-y-1 h-15">
-          <h1>Weight</h1>
-          <Input
-            placeholder={weight + ' kg'}
-            value={null}
-            onChange={handleWeight}
-            w="w-24"
-            h="h-8"
-          />
-          {failureWeight && (
-            <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid weight</h1>
-          )}
-        </div>
-        <div className="flex flex-col space-y-1  h-15">
-          <h1>Height</h1>
-          <Input
-            placeholder={height + ' cm'}
-            value={null}
-            onChange={handleHeight}
-            w="w-24"
-            h="h-8"
-          />
-          {failureHeight && (
-            <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid height</h1>
-          )}
-        </div>
-        <div className="flex flex-col space-y-1  h-15">
-          <h1>Waist</h1>
-          <Input
-            placeholder={waist + ' cm'}
-            id={'waist'}
-            value={null}
-            onChange={handleWaist}
-            w="w-24"
-            h="h-8"
-          />
-          {failureWaist && (
-            <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid waist</h1>
-          )}
-        </div>
-        <div className="flex flex-col space-y-1  h-15">
-          <h1>Hip</h1>
-          <Input
-            placeholder={hip + ' cm'}
-            id={'hip'}
-            value={null}
-            onChange={handleHip}
-            w="w-24"
-            h="h-8"
-          />
-          {failureHip && <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid hip</h1>}
-        </div>
-        <div className="flex flex-col space-y-1  h-15">
-          <h1>BFP</h1>
-          <Input
-            placeholder={bfp + ' %'}
-            id={'bfp'}
-            value={null}
-            onChange={handleBFP}
-            w="w-24"
-            h="h-8"
-          />
-          {failureBFP && <h1 style={{ color: 'red', fontSize: 8 }}>Please enter a valid bfp</h1>}
-        </div>
+        {fieldConfigs.map(({ label, placeholder, id, onChange, failure, failureMsg }) => (
+          <div key={label} className="flex flex-col space-y-1 h-15">
+            <h1>{label}</h1>
+            <Input
+              placeholder={placeholder}
+              id={id}
+              value={null}
+              onChange={onChange}
+              w="w-24"
+              h="h-8"
+            />
+            {failure && <h1 style={{ color: 'red', fontSize: 8 }}>{failureMsg}</h1>}
+          </div>
+        ))}
       </div>
 
       <div className="flex flex-row space-x-2  items-center justify-center">
@@ -193,39 +197,26 @@ function EditProfile({
 
       <div className="divider divider-primary">Your goals:</div>
       <div className="flex flex-row space-x-2 items-center justify-center">
-        <Button border={goal === '1' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('1')}>
-          Cut
-        </Button>
-        <Button border={goal === '2' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('2')}>
-          Hold
-        </Button>
-        <Button border={goal === '3' ? '#3b82f6' : '#64748b'} onClick={() => handleGoal('3')}>
-          Bulk
-        </Button>
+        {/* OCP: new goal = new entry here, no JSX changes needed */}
+        {(
+          [
+            { value: '1', label: 'Cut' },
+            { value: '2', label: 'Hold' },
+            { value: '3', label: 'Bulk' },
+          ] as const
+        ).map(({ value, label }) => (
+          <Button
+            key={value}
+            border={goal === value ? '#3b82f6' : '#64748b'}
+            onClick={() => handleGoal(value)}
+          >
+            {label}
+          </Button>
+        ))}
       </div>
       <div className="divider divider-primary">Important values</div>
       <div className="flex justify-center">
-        <div className="flex flex-col space-y-2 items-center justify-center">
-          <h1>Your calories: {calories} kcal</h1>
-          <h1
-            style={{
-              color: bmi > 30 ? 'red' : bmi > 25 ? 'orange' : bmi < 20 ? 'yellow' : 'green',
-            }}
-          >
-            Your BMI:{' '}
-            {bmi > 30
-              ? 'Adipoistas'
-              : bmi > 25
-                ? 'Overweight'
-                : bmi < 20
-                  ? 'Underweight'
-                  : 'Normal'}{' '}
-            ({Math.round(bmi)}){' '}
-          </h1>
-          <h1 style={{ color: hwr >= 0.85 ? 'red' : 'green' }}>
-            Your WHR: {hwr >= 0.85 ? 'Risk' : 'Good'}
-          </h1>
-        </div>
+        <HealthMetrics calories={calories} bmi={bmi} hwr={hwr} />
       </div>
       <div className="flex flex-row space-x-2 items-center justify-center">
         <Button
