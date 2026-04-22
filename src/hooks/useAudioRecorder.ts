@@ -1,5 +1,61 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
+import hark, { Harker } from 'hark';
+
+// ── STT WebSocket event contracts ─────────────────────────────────────────────
+
+/** Events emitted **from the server** to the client */
+interface SttServerToClientEvents {
+  /** Session was successfully started */
+  'stt:started': () => void;
+  /** Server is running Whisper on the full recording */
+  'stt:transcribing': () => void;
+  /** Final transcript after full recording */
+  'stt:transcript': (payload: { transcript: string }) => void;
+  /** Partial (live) transcript while recording */
+  'stt:partial_transcript': (payload: { transcript: string }) => void;
+  /** Error from the STT pipeline */
+  'stt:error': (payload: { message: string }) => void;
+}
+
+/** Events emitted **from the client** to the server */
+interface SttClientToServerEvents {
+  /** Signal the start of a new recording session */
+  'stt:start': (payload: { mimeType: string }) => void;
+  /** Send a raw audio chunk (ArrayBuffer) */
+  'stt:chunk': (chunk: ArrayBuffer) => void;
+  /** Request a partial (live) transcription of buffered chunks */
+  'stt:partial': () => void;
+  /** Signal that recording is finished — triggers final Whisper call */
+  'stt:stop': () => void;
+}
+
+/** Typed socket for the /stt namespace */
+type SttSocket = Socket<SttServerToClientEvents, SttClientToServerEvents>;
+
+/** All WebSocket event name constants for the /stt namespace */
+export const SttEvent = {
+  // ── client → server ──────────────────────────────────────────────────────
+  /** Signal the start of a recording session */
+  START: 'stt:start',
+  /** Send a raw audio chunk */
+  CHUNK: 'stt:chunk',
+  /** Request a live partial transcription */
+  PARTIAL: 'stt:partial',
+  /** Signal end of recording — triggers final Whisper call */
+  STOP: 'stt:stop',
+  // ── server → client ──────────────────────────────────────────────────────
+  /** Session acknowledged by server */
+  STARTED: 'stt:started',
+  /** Server began the full Whisper call */
+  TRANSCRIBING: 'stt:transcribing',
+  /** Final transcript delivered */
+  TRANSCRIPT: 'stt:transcript',
+  /** Live partial transcript delivered */
+  PARTIAL_TRANSCRIPT: 'stt:partial_transcript',
+  /** Error from the STT pipeline */
+  ERROR: 'stt:error',
+} as const satisfies Record<string, keyof SttServerToClientEvents | keyof SttClientToServerEvents>;
 
 // Supported MIME types ordered by preference
 const SUPPORTED_MIME_TYPES = [
@@ -76,7 +132,8 @@ export default function useAudioRecorder(options?: {
   const partialIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<SttSocket | null>(null);
+  const harkRef = useRef<Harker | null>(null);
   const pendingChunkSendsRef = useRef<Promise<void>[]>([]);
   const onTranscriptRef = useRef(options?.onTranscript);
   useEffect(() => {
@@ -127,6 +184,10 @@ export default function useAudioRecorder(options?: {
       return;
     }
 
+    if (recorderState === 'recording' || recorderState === 'paused') {
+      return;
+    }
+
     try {
       setError(null);
       chunksRef.current = [];
@@ -151,114 +212,156 @@ export default function useAudioRecorder(options?: {
       const WS_URL =
         (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL ||
         'http://localhost:3000';
-      const socket = io(`${WS_URL}/stt`, {
+      const socket: SttSocket = io(`${WS_URL}/stt`, {
         withCredentials: true,
         transports: ['websocket'],
+        // Keine automatische Neuverbindung — ein unterbrochener STT-Stream
+        // kann nicht wiederhergestellt werden; der Nutzer muss die Aufnahme
+        // manuell neu starten, damit stt:start + alle Chunks korrekt gesendet werden.
+        reconnection: false,
       });
       socketRef.current = socket;
 
-      socket.on('stt:transcript', ({ transcript: text }: { transcript: string }) => {
+      socket.on(SttEvent.TRANSCRIPT, ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
         console.log('Final transcript received:', text);
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
         onTranscriptRef.current?.(text);
       });
-      socket.on('stt:partial_transcript', ({ transcript: text }: { transcript: string }) => {
+      socket.on(SttEvent.PARTIAL_TRANSCRIPT, ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
         setPartialTranscriptLoading(false);
       });
-      socket.on('stt:transcribing', () => setTranscriptLoading(true));
-      socket.on('stt:error', ({ message }: { message: string }) => {
+      socket.on(SttEvent.TRANSCRIBING, () => setTranscriptLoading(true));
+      socket.on(SttEvent.ERROR, ({ message }: { message: string }) => {
         setError(message);
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
       });
+      socket.on(SttEvent.STARTED, () => {
+        // ── Flow Control: Recorder startet erst wenn Server-Session bestätigt ──
+        // Garantiert: stt:start wurde verarbeitet, alle folgenden Chunks haben
+        // eine gültige Session auf dem Server.
+        const recorderOptions: MediaRecorderOptions = mimeType ? { mimeType } : {};
+        const recorder = new MediaRecorder(stream, recorderOptions);
+        mediaRecorderRef.current = recorder;
+
+        recorder.ondataavailable = (e: BlobEvent) => {
+          if (e.data && e.data.size > 0) {
+            chunksRef.current.push(e.data);
+            const p = e.data.arrayBuffer().then((buf) => {
+              socketRef.current?.emit(SttEvent.CHUNK, buf);
+            });
+            pendingChunkSendsRef.current.push(p);
+          }
+        };
+
+        recorder.onstop = () => {
+          const blob = new Blob(chunksRef.current, {
+            type: mimeType || 'audio/webm',
+          });
+          const url = URL.createObjectURL(blob);
+          setAudioBlob(blob);
+          setAudioUrl(url);
+          setRecorderState('stopped');
+
+          // Clear canvas
+          const canvas = canvasRef.current;
+          if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
+          }
+
+          // Wait for all pending stt:chunk sends, then signal backend to transcribe
+          Promise.all(pendingChunkSendsRef.current).then(() => {
+            socketRef.current?.emit(SttEvent.STOP);
+            pendingChunkSendsRef.current = [];
+          });
+        };
+
+        recorder.start(100); // collect chunks every 100ms
+        setRecorderState('recording');
+
+        // ── VAD: auto-stop after 2.5 s of silence via hark ─────────────────
+        const speechEvents = hark(stream, {
+          interval: 100, // ms between energy checks
+          threshold: -50, // dB — below this = silence
+          history: 25,
+        });
+        harkRef.current = speechEvents;
+
+        speechEvents.on('stopped_speaking', () => {
+          // Debounce: only stop after 2.5 s of continuous silence
+          if (silenceTimerRef.current !== null) return;
+          silenceTimerRef.current = setTimeout(() => {
+            silenceTimerRef.current = null;
+            stopPartialInterval();
+            harkRef.current?.stop();
+            harkRef.current = null;
+            mediaRecorderRef.current?.stop();
+            streamRef.current?.getTracks().forEach((t) => t.stop());
+            streamRef.current = null;
+            audioContextRef.current?.close();
+            audioContextRef.current = null;
+            analyserRef.current = null;
+          }, 2500);
+        });
+
+        speechEvents.on('speaking', () => {
+          // User started speaking again — cancel pending silence timer
+          stopSilenceTimer();
+        });
+      });
+
       socket.on('connect', () => {
-        socket.emit('stt:start', { mimeType: mimeType || 'audio/webm' });
+        socket.emit(SttEvent.START, { mimeType: mimeType || 'audio/webm' });
         // Partial transcription every 1 second while recording
         partialIntervalRef.current = setInterval(() => {
           setPartialTranscriptLoading(true);
-          socket.emit('stt:partial');
+          socket.emit(SttEvent.PARTIAL);
         }, 1000);
       });
 
-      // MediaRecorder
-      const options: MediaRecorderOptions = mimeType ? { mimeType } : {};
-      const recorder = new MediaRecorder(stream, options);
-      mediaRecorderRef.current = recorder;
+      /** Fired when the transport-level connection fails before the first connect */
+      socket.on('connect_error', (err: Error) => {
+        setError(`STT-Verbindung fehlgeschlagen: ${err.message}`);
+        setTranscriptLoading(false);
+        setPartialTranscriptLoading(false);
+        stopPartialInterval();
+        stopSilenceTimer();
+        stopAnimation();
+        harkRef.current?.stop();
+        harkRef.current = null;
+        // Clean up media resources so the mic indicator disappears
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+        audioContextRef.current?.close();
+        audioContextRef.current = null;
+        analyserRef.current = null;
+        socket.disconnect();
+      });
 
-      recorder.ondataavailable = (e: BlobEvent) => {
-        if (e.data && e.data.size > 0) {
-          chunksRef.current.push(e.data);
-          const p = e.data.arrayBuffer().then((buf) => {
-            socketRef.current?.emit('stt:chunk', buf);
-          });
-          pendingChunkSendsRef.current.push(p);
-        }
-      };
+      /** Fired when an established connection is lost — attempt one reconnect,
+       *  then give up to avoid an infinite reconnect loop */
+      socket.on('disconnect', (reason: string) => {
+        // 'io client disconnect' means we called socket.disconnect() ourselves — ignore
+        if (reason === 'io client disconnect') return;
+        setError(`STT-Verbindung getrennt (${reason}). Bitte Aufnahme neu starten.`);
+        stopPartialInterval();
+        stopSilenceTimer();
+        stopAnimation();
+        harkRef.current?.stop();
+        harkRef.current = null;
+        mediaRecorderRef.current?.stop();
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+        audioContextRef.current?.close();
+        audioContextRef.current = null;
+        analyserRef.current = null;
+      });
 
-      recorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, {
-          type: mimeType || 'audio/webm',
-        });
-        const url = URL.createObjectURL(blob);
-        setAudioBlob(blob);
-        setAudioUrl(url);
-        setRecorderState('stopped');
-
-        // Clear canvas
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          ctx?.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        // Wait for all pending stt:chunk sends, then signal backend to transcribe
-        Promise.all(pendingChunkSendsRef.current).then(() => {
-          socketRef.current?.emit('stt:stop');
-          pendingChunkSendsRef.current = [];
-        });
-      };
-
-      recorder.start(100); // collect chunks every 100ms
-      setRecorderState('recording');
-
-      // ── VAD: auto-stop after 2.5 s of silence ────────────────────────────
-      const VAD_THRESHOLD = 0.01; // RMS below this = silence
-      const VAD_SILENCE_MS = 2500; // ms of continuous silence before stop
-      const vadBuffer = new Uint8Array(analyser.frequencyBinCount);
-
-      const vadLoop = () => {
-        analyser.getByteTimeDomainData(vadBuffer);
-        let sum = 0;
-        for (let i = 0; i < vadBuffer.length; i++) {
-          const v = (vadBuffer[i] - 128) / 128;
-          sum += v * v;
-        }
-        const rms = Math.sqrt(sum / vadBuffer.length);
-
-        if (rms < VAD_THRESHOLD) {
-          if (silenceTimerRef.current === null) {
-            silenceTimerRef.current = setTimeout(() => {
-              stopPartialInterval();
-
-              mediaRecorderRef.current?.stop();
-              streamRef.current?.getTracks().forEach((t) => t.stop());
-              streamRef.current = null;
-              audioContextRef.current?.close();
-              audioContextRef.current = null;
-              analyserRef.current = null;
-            }, VAD_SILENCE_MS);
-          }
-        } else {
-          stopSilenceTimer();
-        }
-
-        animationFrameRef.current = requestAnimationFrame(vadLoop);
-      };
-
-      animationFrameRef.current = requestAnimationFrame(vadLoop);
+      // MediaRecorder + VAD are initialized inside stt:started to enforce flow control
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Microphone access denied.';
       setError(msg);
@@ -270,7 +373,9 @@ export default function useAudioRecorder(options?: {
     stopPartialInterval();
     stopSilenceTimer();
     stopAnimation();
-    mediaRecorderRef.current?.stop(); // stt:stop is sent from recorder.onstop after last chunk
+    harkRef.current?.stop();
+    harkRef.current = null;
+    mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     audioContextRef.current?.close();
@@ -297,7 +402,7 @@ export default function useAudioRecorder(options?: {
 
       partialIntervalRef.current = setInterval(() => {
         setPartialTranscriptLoading(true);
-        socketRef.current?.emit('stt:partial');
+        socketRef.current?.emit(SttEvent.PARTIAL);
       }, 1000);
     }
   }, []);
@@ -307,6 +412,8 @@ export default function useAudioRecorder(options?: {
     stopAnimation();
     stopPartialInterval();
     stopSilenceTimer();
+    harkRef.current?.stop();
+    harkRef.current = null;
     if (mediaRecorderRef.current?.state !== 'inactive') {
       mediaRecorderRef.current?.stop();
     }
