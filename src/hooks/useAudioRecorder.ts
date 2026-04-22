@@ -82,8 +82,6 @@ export interface UseAudioRecorderReturn {
   audioBlob: Blob | null;
   /** Object URL for the recorded audio (use as <audio src> ) */
   audioUrl: string | null;
-  /** Canvas ref to attach to <canvas> element for waveform drawing */
-  canvasRef: React.RefObject<HTMLCanvasElement | null>;
   /** Start recording */
   start: () => Promise<void>;
   /** Stop recording */
@@ -125,13 +123,9 @@ export default function useAudioRecorder(options?: {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
 
   const partialIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const socketRef = useRef<SttSocket | null>(null);
   const harkRef = useRef<Harker | null>(null);
   const pendingChunkSendsRef = useRef<Promise<void>[]>([]);
@@ -157,20 +151,12 @@ export default function useAudioRecorder(options?: {
     }
   }, []);
 
-  const stopAnimation = useCallback(() => {
-    if (animationFrameRef.current !== null) {
-      cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-  }, []);
-
   // ── Cleanup on unmount ────────────────────────────────────────────────────
   useEffect(() => {
     return () => {
       stopPartialInterval();
       stopSilenceTimer();
       streamRef.current?.getTracks().forEach((t) => t.stop());
-      audioContextRef.current?.close();
       if (audioUrl) URL.revokeObjectURL(audioUrl);
       socketRef.current?.disconnect();
     };
@@ -194,18 +180,6 @@ export default function useAudioRecorder(options?: {
 
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-
-      const AudioContextClass =
-        window.AudioContext ||
-        (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const audioContext = new AudioContextClass();
-      audioContextRef.current = audioContext;
-
-      const source = audioContext.createMediaStreamSource(stream);
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
-      source.connect(analyser);
-      analyserRef.current = analyser;
 
       // Connect WebSocket for STT
       const WS_URL =
@@ -272,13 +246,6 @@ export default function useAudioRecorder(options?: {
           setAudioUrl(url);
           setRecorderState('stopped');
 
-          // Clear canvas
-          const canvas = canvasRef.current;
-          if (canvas) {
-            const ctx = canvas.getContext('2d');
-            ctx?.clearRect(0, 0, canvas.width, canvas.height);
-          }
-
           // Wait for all pending stt:chunk sends, then signal backend to transcribe
           Promise.all(pendingChunkSendsRef.current).then(() => {
             socketRef.current?.emit(SttEvent.STOP);
@@ -324,9 +291,6 @@ export default function useAudioRecorder(options?: {
             mediaRecorderRef.current?.stop();
             streamRef.current?.getTracks().forEach((t) => t.stop());
             streamRef.current = null;
-            audioContextRef.current?.close();
-            audioContextRef.current = null;
-            analyserRef.current = null;
           }, VAD_SILENCE_DEBOUNCE_MS);
         });
 
@@ -343,15 +307,11 @@ export default function useAudioRecorder(options?: {
         setPartialTranscriptLoading(false);
         stopPartialInterval();
         stopSilenceTimer();
-        stopAnimation();
         harkRef.current?.stop();
         harkRef.current = null;
         // Clean up media resources so the mic indicator disappears
         streamRef.current?.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
-        audioContextRef.current?.close();
-        audioContextRef.current = null;
-        analyserRef.current = null;
         socket.disconnect();
       });
 
@@ -363,15 +323,11 @@ export default function useAudioRecorder(options?: {
         setError(`STT-Verbindung getrennt (${reason}). Bitte Aufnahme neu starten.`);
         stopPartialInterval();
         stopSilenceTimer();
-        stopAnimation();
         harkRef.current?.stop();
         harkRef.current = null;
         mediaRecorderRef.current?.stop();
         streamRef.current?.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
-        audioContextRef.current?.close();
-        audioContextRef.current = null;
-        analyserRef.current = null;
       });
 
       // MediaRecorder + VAD are initialized inside stt:started to enforce flow control
@@ -385,27 +341,22 @@ export default function useAudioRecorder(options?: {
   const stop = useCallback(() => {
     stopPartialInterval();
     stopSilenceTimer();
-    stopAnimation();
     harkRef.current?.stop();
     harkRef.current = null;
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
-    audioContextRef.current?.close();
-    audioContextRef.current = null;
-    analyserRef.current = null;
-  }, [stopPartialInterval, stopSilenceTimer, stopAnimation]);
+  }, [stopPartialInterval, stopSilenceTimer]);
 
   // ── Pause ─────────────────────────────────────────────────────────────────
   const pause = useCallback(() => {
     if (mediaRecorderRef.current?.state === 'recording') {
       mediaRecorderRef.current.pause();
       setRecorderState('paused');
-      stopAnimation();
       stopPartialInterval();
       stopSilenceTimer();
     }
-  }, [stopAnimation, stopPartialInterval, stopSilenceTimer]);
+  }, [stopPartialInterval, stopSilenceTimer]);
 
   // ── Resume ────────────────────────────────────────────────────────────────
   const resume = useCallback(() => {
@@ -422,7 +373,6 @@ export default function useAudioRecorder(options?: {
 
   // ── Reset ─────────────────────────────────────────────────────────────────
   const reset = useCallback(() => {
-    stopAnimation();
     stopPartialInterval();
     stopSilenceTimer();
     harkRef.current?.stop();
@@ -433,11 +383,6 @@ export default function useAudioRecorder(options?: {
     mediaRecorderRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
-    if (audioContextRef.current?.state !== 'closed') {
-      audioContextRef.current?.close();
-    }
-    audioContextRef.current = null;
-    analyserRef.current = null;
     socketRef.current?.disconnect();
     socketRef.current = null;
     pendingChunkSendsRef.current = [];
@@ -450,19 +395,12 @@ export default function useAudioRecorder(options?: {
     setTranscript(null);
     setTranscriptLoading(false);
     setPartialTranscriptLoading(false);
-
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    }
   }, [audioUrl, stopPartialInterval]);
 
   return {
     recorderState,
     audioBlob,
     audioUrl,
-    canvasRef,
     start,
     stop,
     pause,
