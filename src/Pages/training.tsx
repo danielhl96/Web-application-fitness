@@ -1,16 +1,23 @@
 import '../index.css';
+import type { RefObject } from 'react';
 import Header from '../Components/Header.jsx';
 import TemplatePage from '../Components/templatepage.jsx';
 import WorkoutCard from '../Components/workoutcard.jsx';
 import Button from '../Components/button.jsx';
 import Notify from '../Components/notify.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
-import useTraining from '../hooks/useTraining.js';
+import useTraining from '../hooks/useTraining';
+import type { TrainingExercise } from '../types';
 
 // ── Inline modal / sub-view components ───────────────────────────────────────
 // These are tightly coupled to the training UI and intentionally kept here.
 
-function LastTrainingModal({ training1, onClose }) {
+interface LastTrainingModalProps {
+  training1: TrainingExercise;
+  onClose: () => void;
+}
+
+function LastTrainingModal({ training1, onClose }: LastTrainingModalProps) {
   return (
     <TemplateModal>
       <div className="flex flex-col justify-center items-center space-y-2 text-xs">
@@ -41,6 +48,18 @@ function LastTrainingModal({ training1, onClose }) {
   );
 }
 
+interface WeightModalProps {
+  scrollRef: RefObject<HTMLDivElement | null>;
+  scrollRef2: RefObject<HTMLDivElement | null>;
+  selectedWeight1: number[];
+  selectedWeight2: number[];
+  idx: number;
+  handleWeightSelect: (weight: number) => void;
+  handleWeightSelect2: (weight: number) => void;
+  changeWeight: (index: number, flag: boolean) => void;
+  onClose: () => void;
+}
+
 function WeightModal({
   scrollRef,
   scrollRef2,
@@ -51,7 +70,7 @@ function WeightModal({
   handleWeightSelect2,
   changeWeight,
   onClose,
-}) {
+}: WeightModalProps) {
   return (
     <TemplateModal>
       <div>
@@ -176,7 +195,21 @@ function WeightModal({
   );
 }
 
-function BreakTimeModal({ breakTime, counterisRunning, startCounter, stopCounter, onClose }) {
+interface BreakTimeModalProps {
+  breakTime: number;
+  counterisRunning: boolean;
+  startCounter: () => void;
+  stopCounter: () => void;
+  onClose: () => void;
+}
+
+function BreakTimeModal({
+  breakTime,
+  counterisRunning,
+  startCounter,
+  stopCounter,
+  onClose,
+}: BreakTimeModalProps) {
   return (
     <TemplateModal>
       <div className="flex flex-col justify-center items-center text-xs">
@@ -210,7 +243,19 @@ function BreakTimeModal({ breakTime, counterisRunning, startCounter, stopCounter
   );
 }
 
-function ExerciseListModal({ currentExercises, training1, onSelect, onClose }) {
+interface ExerciseListModalProps {
+  currentExercises: TrainingExercise[];
+  training1: TrainingExercise;
+  onSelect: (index: number) => void;
+  onClose: () => void;
+}
+
+function ExerciseListModal({
+  currentExercises,
+  training1,
+  onSelect,
+  onClose,
+}: ExerciseListModalProps) {
   return (
     <TemplateModal>
       <form method="dialog">
@@ -416,7 +461,7 @@ function StartTraining() {
                 <div className="flex flex-top justify-end">
                   <Button
                     onClick={() => {
-                      const updated = { ...training1, isFinished: false };
+                      const updated: TrainingExercise = { ...training1, isFinished: false };
                       setTraining(updated);
                       setCurrentExercises((prev) => {
                         const upd = [...prev];
@@ -618,13 +663,15 @@ function StartTraining() {
                     Reps Estimation
                   </h2>
                   <div className="grid grid-cols-1 gap-1 text-xs px-1">
-                    {[
-                      ['RM: 1', 1],
-                      ['RM: 3-4', 0.9],
-                      ['RM: 5-6', 0.85],
-                      ['RM: 8-10', 0.8],
-                      ['RM: 12-15', 0.7],
-                    ].map(([label, factor]) => (
+                    {(
+                      [
+                        ['RM: 1', 1],
+                        ['RM: 3-4', 0.9],
+                        ['RM: 5-6', 0.85],
+                        ['RM: 8-10', 0.8],
+                        ['RM: 12-15', 0.7],
+                      ] as [string, number][]
+                    ).map(([label, factor]) => (
                       <div key={label} className="flex justify-between">
                         <span>{label}</span>
                         <span className="font-mono text-blue-300">
@@ -676,7 +723,9 @@ function StartTraining() {
                   </svg>
                 </Button>
                 <Button onClick={handleExercise} border="#3b82f6">
-                  {Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished) ? (
+                  {Object.keys(currentExercises).every(
+                    (ex) => currentExercises[Number(ex)].isFinished
+                  ) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4"

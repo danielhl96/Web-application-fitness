@@ -24,7 +24,8 @@
 
     /* Allow JSX files to coexist during migration */
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["vite-plugin-pwa/client"]
   },
   "include": ["src"]
 }

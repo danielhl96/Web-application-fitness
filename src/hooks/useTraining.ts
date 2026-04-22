@@ -1,21 +1,25 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../Utils/api';
-/** @typedef {import('../types').UI_STATE<import('../types').WorkoutPlanMap>} PlanUIState */
+import type { WorkoutPlan, TrainingExercise, Notification, UI_STATE } from '../types';
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+type PlanMap = Record<string, TrainingExercise[]>;
+type PlanUIState = UI_STATE<PlanMap>;
 
 // ── API helpers ───────────────────────────────────────────────────────────────
 
-/** Map raw API response into { PlanName: [ exerciseObj, ... ] } */
-const mapPlans = (plans) =>
-  plans.reduce((acc, plan) => {
-    acc[plan.name] = plan.plan_exercise_templates.map((exercise) => {
-      const match = plan.exercises.find((e) => e.name === exercise.name);
+const mapPlans = (plans: WorkoutPlan[]): PlanMap =>
+  plans.reduce<PlanMap>((acc, plan) => {
+    acc[plan.name] = plan.plan_exercise_templates.map((template) => {
+      const match = plan.exercises.find((e) => e.name === template.name);
       return {
-        exercise: exercise.name,
-        reps: exercise.reps_template,
-        sets: exercise.sets,
-        weights: match?.weights ?? Array(exercise.sets).fill(0),
-        previousReps: match?.reps ?? Array(exercise.sets).fill(0),
+        exercise: template.name,
+        reps: template.reps_template,
+        sets: template.sets,
+        weights: match?.weights ?? Array<number>(template.sets).fill(0),
+        previousReps: match?.reps ?? Array<number>(template.sets).fill(0),
         plan_id: plan.id,
         isFinished: false,
       };
@@ -29,46 +33,45 @@ export default function useTraining() {
   const navigate = useNavigate();
 
   // ── State ──────────────────────────────────────────────────────────────────
-  /** @type {[PlanUIState, React.Dispatch<React.SetStateAction<PlanUIState>>]} */
-  const [planState, setPlanState] = useState({ type: 'loading' });
-  const [currentExercises, setCurrentExercises] = useState([]);
-  const [currentPlan, setCurrentPlan] = useState(null);
+  const [planState, setPlanState] = useState<PlanUIState>({ type: 'loading' });
+  const [currentExercises, setCurrentExercises] = useState<TrainingExercise[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
 
-  const [training1, setTraining] = useState();
-  const [idxExercise, setidx] = useState(0);
-  const [inputValue, setInputValue] = useState([]);
+  const [training1, setTraining] = useState<TrainingExercise | undefined>();
+  const [idxExercise, setidx] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<number[]>([]);
 
-  const [selectedTrainingSite, setSelectedTrainingSite] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [exerciseList, setExerciseList] = useState(false);
-  const [showRepsInfo, setShowRepsInfo] = useState(false);
-  const [lastTrainingModalValue, setLastTrainingModal] = useState(false);
+  const [selectedTrainingSite, setSelectedTrainingSite] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [exerciseList, setExerciseList] = useState<boolean>(false);
+  const [showRepsInfo, setShowRepsInfo] = useState<boolean>(false);
+  const [lastTrainingModalValue, setLastTrainingModal] = useState<boolean>(false);
 
-  const [breakModal, setBreakModal] = useState(false);
-  const [breakTime, setBreakTime] = useState(0);
-  const [counterisRunning, setCounterisRunning] = useState(false);
+  const [breakModal, setBreakModal] = useState<boolean>(false);
+  const [breakTime, setBreakTime] = useState<number>(0);
+  const [counterisRunning, setCounterisRunning] = useState<boolean>(false);
 
-  const [selectedWeight1, setSelectedWeight1] = useState([3]);
-  const [selectedWeight2, setSelectedWeight2] = useState([3]);
-  const [idx, setWeightidx] = useState(0);
+  const [selectedWeight1, setSelectedWeight1] = useState<number[]>([3]);
+  const [selectedWeight2, setSelectedWeight2] = useState<number[]>([3]);
+  const [idx, setWeightidx] = useState<number>(0);
 
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] = useState<Notification | null>(null);
 
   // ── Refs ───────────────────────────────────────────────────────────────────
-  const intervalRef = useRef();
-  const scrollRef = useRef(null);
-  const scrollRef2 = useRef(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef2 = useRef<HTMLDivElement | null>(null);
 
   // ── Fetch workout plans on mount ───────────────────────────────────────────
   useEffect(() => {
     setPlanState({ type: 'loading' });
     api
-      .get('workout_plans/get_workout_plans')
+      .get<WorkoutPlan[]>('workout_plans/get_workout_plans')
       .then((response) => {
         const mapped = response.data?.length > 0 ? mapPlans(response.data) : {};
         setPlanState({ type: 'success', data: mapped });
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         setPlanState({ type: 'error', error: err?.message ?? 'Failed to load workouts' });
       });
   }, []);
@@ -90,7 +93,9 @@ export default function useTraining() {
         return updated;
       });
       if (isNaN(wholePart)) wholePart = 0;
-      const row = scrollRef.current.querySelector(`tr[data-weight="${wholePart}"]`);
+      const row = scrollRef.current.querySelector<HTMLTableRowElement>(
+        `tr[data-weight="${wholePart}"]`
+      );
       row?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [showModal, idx]);
@@ -104,24 +109,27 @@ export default function useTraining() {
         return updated;
       });
       if (isNaN(decimalPart)) decimalPart = 0;
-      const row = scrollRef2.current.querySelector(`tr[data-weight2="${decimalPart}"]`);
+      const row = scrollRef2.current.querySelector<HTMLTableRowElement>(
+        `tr[data-weight2="${decimalPart}"]`
+      );
       row?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [showModal, idx]);
 
   // ── API: save exercise ─────────────────────────────────────────────────────
-  const postData = (updatedCurrent) => {
+  const postData = (updatedCurrent: TrainingExercise): void => {
+    if (!training1) return;
     api
       .post('workout_plans/create_exercise', {
         workout_plan_id: updatedCurrent.plan_id,
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,
         reps:
-          updatedCurrent.reps &&
+          Array.isArray(updatedCurrent.reps) &&
           updatedCurrent.reps.length === updatedCurrent.sets &&
           updatedCurrent.reps.every((r) => r != null)
             ? updatedCurrent.reps
-            : Array(updatedCurrent.sets).fill(training1.reps[0]),
+            : Array<number>(updatedCurrent.sets).fill(training1.reps[0]),
         weights: updatedCurrent.weights,
       })
       .then(() => {
@@ -135,18 +143,21 @@ export default function useTraining() {
   };
 
   // ── Exercise navigation ────────────────────────────────────────────────────
-  const handleExercise = () => {
+  const handleExercise = (): void => {
     const isLast = idxExercise === currentExercises.length - 1;
 
     if (isLast) {
-      const updatedCurrent = { ...currentExercises[idxExercise], reps: inputValue };
+      const updatedCurrent: TrainingExercise = {
+        ...currentExercises[idxExercise],
+        reps: inputValue,
+      };
       if (!updatedCurrent.isFinished) postData(updatedCurrent);
       const updatedExercises = [...currentExercises];
       updatedExercises[idxExercise] = { ...updatedCurrent, isFinished: true };
       setCurrentExercises(updatedExercises);
     }
 
-    if (Object.keys(currentExercises).every((ex) => currentExercises[ex].isFinished)) {
+    if (Object.keys(currentExercises).every((ex) => currentExercises[Number(ex)].isFinished)) {
       setNotification({
         title: 'Workout Complete',
         message: 'Congratulations! You have completed the workout.',
@@ -156,23 +167,26 @@ export default function useTraining() {
     }
 
     if (!isLast) {
-      const updatedCurrent = { ...currentExercises[idxExercise], reps: inputValue };
+      const updatedCurrent: TrainingExercise = {
+        ...currentExercises[idxExercise],
+        reps: inputValue,
+      };
       if (!updatedCurrent.isFinished) postData(updatedCurrent);
-      const finishedCurrent = { ...updatedCurrent, isFinished: true };
+      const finishedCurrent: TrainingExercise = { ...updatedCurrent, isFinished: true };
       const updatedExercises = [...currentExercises];
       updatedExercises[idxExercise] = finishedCurrent;
       setCurrentExercises(updatedExercises);
 
       setPlanState((prev) =>
-        prev.type === 'success'
+        prev.type === 'success' && currentPlan
           ? { ...prev, data: { ...prev.data, [currentPlan]: updatedExercises } }
           : prev
       );
 
       const newIdx = idxExercise + 1;
-      const nextExercise = { ...updatedExercises[newIdx] };
+      const nextExercise: TrainingExercise = { ...updatedExercises[newIdx] };
       if (!nextExercise.reps || nextExercise.reps.length !== nextExercise.sets) {
-        nextExercise.reps = Array(nextExercise.sets).fill(0);
+        nextExercise.reps = Array<number>(nextExercise.sets).fill(0);
       }
       setidx(newIdx);
       setTraining(nextExercise);
@@ -185,12 +199,12 @@ export default function useTraining() {
     }
   };
 
-  const handleExerciseBack = () => {
+  const handleExerciseBack = (): void => {
     if (idxExercise > 0) {
       const newIdx = idxExercise - 1;
-      const prevExercise = { ...currentExercises[newIdx] };
+      const prevExercise: TrainingExercise = { ...currentExercises[newIdx] };
       if (!prevExercise.reps || prevExercise.reps.length !== prevExercise.sets) {
-        prevExercise.reps = Array(prevExercise.sets).fill(0);
+        prevExercise.reps = Array<number>(prevExercise.sets).fill(0);
       }
       setidx(newIdx);
       setTraining(prevExercise);
@@ -204,7 +218,7 @@ export default function useTraining() {
   };
 
   // ── Plan selection ─────────────────────────────────────────────────────────
-  const selectPlan = (planName) => {
+  const selectPlan = (planName: string): void => {
     if (planState.type !== 'success') return;
     setCurrentExercises(planState.data[planName]);
     setCurrentPlan(planName);
@@ -213,16 +227,17 @@ export default function useTraining() {
   };
 
   // ── Reps input ─────────────────────────────────────────────────────────────
-  const addInput = (value, index) => {
+  const addInput = (value: number, index: number): void => {
     const updated = [...inputValue];
     updated[index] = value;
     setInputValue(updated);
-    setTraining((prev) => ({ ...prev, reps: updated }));
+    setTraining((prev) => (prev ? { ...prev, reps: updated } : prev));
   };
 
   // ── Sets ───────────────────────────────────────────────────────────────────
-  const handleAddSets = () => {
-    const updatedExercise = {
+  const handleAddSets = (): void => {
+    if (!training1) return;
+    const updatedExercise: TrainingExercise = {
       ...training1,
       sets: training1.sets + 1,
       weights: [...training1.weights, 0],
@@ -236,9 +251,10 @@ export default function useTraining() {
     setTraining(updatedExercise);
   };
 
-  const handleReduceSets = () => {
+  const handleReduceSets = (): void => {
+    if (!training1) return;
     const updatedSets = training1.sets - 1;
-    const updatedExercise = {
+    const updatedExercise: TrainingExercise = {
       ...training1,
       sets: updatedSets,
       reps: training1.reps.slice(0, updatedSets),
@@ -254,20 +270,20 @@ export default function useTraining() {
   };
 
   // ── Weight modal ───────────────────────────────────────────────────────────
-  const handleModal = (index, flag) => {
+  const handleModal = (index: number, flag: boolean): void => {
     setShowModal(flag);
     setWeightidx(index);
   };
 
-  const handleWeightSelect = (weight) => {
+  const handleWeightSelect = (weight: number | undefined): void => {
     setSelectedWeight1((prev) => {
       const updated = [...prev];
-      updated[idx] = weight;
+      updated[idx] = weight as number;
       return updated;
     });
   };
 
-  const handleWeightSelect2 = (weight) => {
+  const handleWeightSelect2 = (weight: number): void => {
     if (selectedWeight1[idx] !== null) {
       setSelectedWeight2((prev) => {
         const updated = [...prev];
@@ -277,11 +293,12 @@ export default function useTraining() {
     }
   };
 
-  const changeWeight = (index, flag) => {
-    const totalWeight = (selectedWeight1[index] || 0) + (selectedWeight2[index] || 0);
+  const changeWeight = (index: number, flag: boolean): void => {
+    if (!currentPlan) return;
+    const totalWeight = (selectedWeight1[index] ?? 0) + (selectedWeight2[index] ?? 0);
     const updatedSetw = [...currentExercises[idxExercise].weights];
     updatedSetw[index] = totalWeight;
-    const updatedExercise = {
+    const updatedExercise: TrainingExercise = {
       ...currentExercises[idxExercise],
       weights: updatedSetw,
       reps: [...inputValue],
@@ -309,32 +326,32 @@ export default function useTraining() {
   };
 
   // ── Break timer ────────────────────────────────────────────────────────────
-  const startCounter = () => {
+  const startCounter = (): void => {
     setCounterisRunning(true);
     intervalRef.current = setInterval(() => {
       setBreakTime((prev) => prev + 1);
     }, 1000);
   };
 
-  const stopCounter = () => {
-    clearInterval(intervalRef.current);
+  const stopCounter = (): void => {
+    if (intervalRef.current !== null) clearInterval(intervalRef.current);
     setCounterisRunning(false);
   };
 
   // ── Exposed API ────────────────────────────────────────────────────────────
   return {
-    // navigation
     navigate,
-    // UI_STATE for plan data — switch on planState.type in the UI
+    // UI_STATE — switch on planState.type in the UI
     planState,
     // convenience shorthand: {} while loading/error, filled map on success
-    selectedExercise: planState.type === 'success' ? planState.data : {},
+    selectedExercise: planState.type === 'success' ? planState.data : ({} as PlanMap),
     currentExercises,
     setCurrentExercises,
     currentPlan,
     training1,
     setTraining,
     idxExercise,
+    setidx,
     inputValue,
     // view state
     selectedTrainingSite,

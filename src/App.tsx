@@ -1,9 +1,9 @@
 import './index.css';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import LoginForm from './Pages/login.jsx';
 import CreateTraining from './Pages/createtrain.jsx';
 import EditTrain from './Pages/EditTrain.jsx';
-import StartTraining from './Pages/training.jsx';
+import StartTraining from './Pages/training';
 import Profile from './Pages/profile.jsx';
 import RegisterPage from './Pages/register.jsx';
 import PasswordForget from './Pages/passwordforget.jsx';

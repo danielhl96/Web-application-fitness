@@ -1,6 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import exercise from '../Components/exercises.ts';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import { UI_STATE, SelectedExercise, WorkoutPlanMap, WorkoutPlan } from '../types.ts';
 
 export type NotificationState = {

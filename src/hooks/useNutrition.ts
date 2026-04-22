@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import { Meal, NotificationState, UI_STATE } from '../types';
 
 export default function useNutrition() {

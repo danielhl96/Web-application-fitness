@@ -3,7 +3,7 @@ import Button from '../Components/button.js';
 import Input from '../Components/input.js';
 import { useEffect, useState, useRef, JSX } from 'react';
 import Header from '../Components/Header.js';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import TemplateModal from '../Components/templatemodal.js';
 import { Exercise, User, Meal } from '../types';
 function AiCoach() {

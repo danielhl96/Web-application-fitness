@@ -1,4 +1,4 @@
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import ApexCharts from 'apexcharts';
 import { useState, useEffect, JSX } from 'react';
 import TemplatePage from '../Components/templatepage.js';

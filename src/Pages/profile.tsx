@@ -1,7 +1,7 @@
 import '../index.css';
 import Header from '../Components/Header.js';
 import { useEffect, useState } from 'react';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.js';
 import Notify from '../Components/notify.js';
 import History from '../Components/history.tsx';

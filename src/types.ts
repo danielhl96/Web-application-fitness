@@ -7,6 +7,23 @@ export type WorkoutPlan = {
     weights_template: number[];
     name: string;
   }[];
+  /** Populated by the API alongside plan_exercise_templates */
+  exercises: {
+    name: string;
+    reps: number[];
+    weights: number[];
+  }[];
+};
+
+/** Internal exercise shape used during an active training session */
+export type TrainingExercise = {
+  exercise: string;
+  plan_id: number;
+  sets: number;
+  reps: number[];
+  weights: number[];
+  previousReps: number[];
+  isFinished: boolean;
 };
 
 export type SelectedExercise = {

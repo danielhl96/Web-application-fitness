@@ -1,31 +1,35 @@
-import axios from 'axios';
-const baseURL = import.meta.env.VITE_API_URL;
+import axios, { AxiosResponse } from 'axios';
+
+const baseURL = import.meta.env.VITE_API_URL as string;
 
 const api = axios.create({
   baseURL,
-  withCredentials: true, // falls cookies verwendet werden
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
 
 let isRefreshing = false;
-let failedQueue = [];
+let failedQueue: Array<{
+  resolve: () => void;
+  reject: (err: unknown) => void;
+}> = [];
 
-const processQueue = (error) => {
+const processQueue = (error: unknown): void => {
   failedQueue.forEach(({ reject, resolve }) => (error ? reject(error) : resolve()));
   failedQueue = [];
 };
 
 api.interceptors.response.use(
-  (res) => res,
+  (res: AxiosResponse) => res,
   async (err) => {
     console.log('api interceptor caught error:', err?.response?.status, err?.config?.url);
-
     console.log('Headers:', err?.response?.headers);
+
     const original = err.config;
     if (!original) return Promise.reject(err);
 
     // ignore refresh endpoint to avoid infinite loop
-    if (original.url && original.url.endsWith('/refresh_token')) {
+    if (original.url && (original.url as string).endsWith('/refresh_token')) {
       return Promise.reject(err);
     }
 

@@ -4,7 +4,7 @@ import WorkoutCard from '../Components/workoutcard.js';
 import Notify from '../Components/notify.js';
 import { useNavigate } from 'react-router-dom';
 import { JSX, useState } from 'react';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import EmailInput from '../Components/emailinput.js';
 import PasswordInput from '../Components/passwordinput.js';
 import Button from '../Components/button.js';

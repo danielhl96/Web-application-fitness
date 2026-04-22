@@ -2,7 +2,7 @@ import '../index.css';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, JSX } from 'react';
 import Header from '../Components/HeaderLogout.js';
-import api from '../Utils/api.js';
+import api from '../Utils/api';
 import TemplatePage from '../Components/templatepage.js';
 import EmailInput from '../Components/emailinput.js';
 import PasswordInput from '../Components/passwordinput.js';
