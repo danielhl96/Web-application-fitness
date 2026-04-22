@@ -285,16 +285,19 @@ export default function useAudioRecorder(options?: {
         recorder.start(100); // collect chunks every 100ms
         setRecorderState('recording');
 
-        // ── VAD: auto-stop after 2.5 s of silence via hark ─────────────────
+        // ── VAD: auto-stop after silence via hark ──────────────────────────
+        // Tune these two constants to balance responsiveness vs. cutting off mid-sentence:
+        const VAD_THRESHOLD_DB = -50; // dB — below this hark considers it silence
+        const VAD_SILENCE_DEBOUNCE_MS = 2000; // ms of continuous silence before stopping
         const speechEvents = hark(stream, {
-          interval: 100, // ms between energy checks
-          threshold: -50, // dB — below this = silence
+          interval: 100,
+          threshold: VAD_THRESHOLD_DB,
           history: 25,
         });
         harkRef.current = speechEvents;
 
         speechEvents.on('stopped_speaking', () => {
-          // Debounce: only stop after 2.5 s of continuous silence
+          // Debounce: only stop after VAD_SILENCE_DEBOUNCE_MS of continuous silence
           if (silenceTimerRef.current !== null) return;
           silenceTimerRef.current = setTimeout(() => {
             silenceTimerRef.current = null;
@@ -307,7 +310,7 @@ export default function useAudioRecorder(options?: {
             audioContextRef.current?.close();
             audioContextRef.current = null;
             analyserRef.current = null;
-          }, 2500);
+          }, VAD_SILENCE_DEBOUNCE_MS);
         });
 
         speechEvents.on('speaking', () => {
