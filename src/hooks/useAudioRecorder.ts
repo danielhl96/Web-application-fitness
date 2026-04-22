@@ -195,7 +195,6 @@ export default function useAudioRecorder(options?: {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // Web Audio API analyser for waveform
       const AudioContextClass =
         window.AudioContext ||
         (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -224,7 +223,6 @@ export default function useAudioRecorder(options?: {
 
       socket.on(SttEvent.TRANSCRIPT, ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
-        console.log('Final transcript received:', text);
         setTranscriptLoading(false);
         setPartialTranscriptLoading(false);
         onTranscriptRef.current?.(text);
@@ -285,6 +283,13 @@ export default function useAudioRecorder(options?: {
         recorder.start(100); // collect chunks every 100ms
         setRecorderState('recording');
 
+        // Partial transcription starts here — after recorder is running — so that
+        // stt:partial is only sent when chunks actually exist on the server.
+        partialIntervalRef.current = setInterval(() => {
+          setPartialTranscriptLoading(true);
+          socketRef.current?.emit(SttEvent.PARTIAL);
+        }, 1000);
+
         // ── VAD: auto-stop after silence via hark ──────────────────────────
         // Tune these two constants to balance responsiveness vs. cutting off mid-sentence:
         const VAD_THRESHOLD_DB = -50; // dB — below this hark considers it silence
@@ -319,13 +324,10 @@ export default function useAudioRecorder(options?: {
         });
       });
 
+      // 'connect' fires once the WebSocket handshake is complete — only then is it
+      // safe to emit. We send stt:start here so the server can create the session.
       socket.on('connect', () => {
         socket.emit(SttEvent.START, { mimeType: mimeType || 'audio/webm' });
-        // Partial transcription every 1 second while recording
-        partialIntervalRef.current = setInterval(() => {
-          setPartialTranscriptLoading(true);
-          socket.emit(SttEvent.PARTIAL);
-        }, 1000);
       });
 
       /** Fired when the transport-level connection fails before the first connect */
@@ -455,7 +457,6 @@ export default function useAudioRecorder(options?: {
     recorderState,
     audioBlob,
     audioUrl,
-
     canvasRef,
     start,
     stop,
