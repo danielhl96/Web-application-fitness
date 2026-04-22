@@ -79,10 +79,6 @@ export type RecorderState = 'idle' | 'recording' | 'paused' | 'stopped';
 export interface UseAudioRecorderReturn {
   /** Current state of the recorder */
   recorderState: RecorderState;
-  /** Recorded audio as a Blob (available after stopping) */
-  audioBlob: Blob | null;
-  /** Object URL for the recorded audio (use as <audio src> ) */
-  audioUrl: string | null;
   /** Start recording */
   start: () => Promise<void>;
   /** Stop recording */
@@ -112,9 +108,6 @@ export default function useAudioRecorder(options?: {
   onTranscript?: (text: string) => void;
 }): UseAudioRecorderReturn {
   const [recorderState, setRecorderState] = useState<RecorderState>('idle');
-
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<string | null>(null);
@@ -158,7 +151,6 @@ export default function useAudioRecorder(options?: {
       stopPartialInterval();
       stopSilenceTimer();
       streamRef.current?.getTracks().forEach((t) => t.stop());
-      if (audioUrl) URL.revokeObjectURL(audioUrl);
       socketRef.current?.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -221,9 +213,9 @@ export default function useAudioRecorder(options?: {
       // socket.once: fires exactly once — guards against duplicate MediaRecorder creation
       // if the server were to emit stt:started more than once.
       socket.once(SttEvent.STARTED, () => {
-        // ── Flow Control: Recorder startet erst wenn Server-Session bestätigt ──
-        // Garantiert: stt:start wurde verarbeitet, alle folgenden Chunks haben
-        // eine gültige Session auf dem Server.
+        // ── Flow Control: Recorder starts if server session is confirmed ──
+        // Guarantees we don't start recording (and sending chunks) until the server has acknowledged the session start and is ready to receive — avoids lost chunks and wasted resources if, e.g., the server rejects the session due to auth failure. Also ensures that if the server emits stt:started more than once (e.g. due to a bug), we won't create multiple MediaRecorders or overwrite our socket event handlers, since this callback is guaranteed to run only once. We still need to handle the case where the server never emits stt:started at all (e.g. due to a network error) — that's covered by the socket 'connect_error' and 'disconnect' handlers which clean up media resources and set an error message, prompting the user to restart the recording.
+
         const recorderOptions: MediaRecorderOptions = mimeType ? { mimeType } : {};
         const recorder = new MediaRecorder(stream, recorderOptions);
         mediaRecorderRef.current = recorder;
@@ -239,12 +231,6 @@ export default function useAudioRecorder(options?: {
         };
 
         recorder.onstop = () => {
-          const blob = new Blob(chunksRef.current, {
-            type: mimeType || 'audio/webm',
-          });
-          const url = URL.createObjectURL(blob);
-          setAudioBlob(blob);
-          setAudioUrl(url);
           setRecorderState('stopped');
 
           // Wait for all pending stt:chunk sends, then signal backend to transcribe
@@ -387,21 +373,16 @@ export default function useAudioRecorder(options?: {
     socketRef.current?.disconnect();
     socketRef.current = null;
     pendingChunkSendsRef.current = [];
-    if (audioUrl) URL.revokeObjectURL(audioUrl);
     chunksRef.current = [];
     setRecorderState('idle');
-    setAudioBlob(null);
-    setAudioUrl(null);
     setError(null);
     setTranscript(null);
     setTranscriptLoading(false);
     setPartialTranscriptLoading(false);
-  }, [audioUrl, stopPartialInterval]);
+  }, [stopPartialInterval]);
 
   return {
     recorderState,
-    audioBlob,
-    audioUrl,
     start,
     stop,
     pause,
