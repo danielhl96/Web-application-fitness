@@ -146,14 +146,14 @@ Browser mic
 ### 🤖 AI Coach
 
 - Chat with GPT-4o about training, nutrition, and recovery
-- Voice input via WebSocket STT (OpenAI Whisper) with live partial transcriptions
-- VAD-based auto-stop — no button needed to end recording
 
 ### 🍕 Nutrition
 
 - Upload meal photos → GPT-4o estimates macros and calories (vision)
 - Date-based meal history (breakfast, lunch, dinner, snacks)
 - Edit estimated macros manually
+- Voice input via WebSocket STT (OpenAI Whisper) with live partial transcriptions
+- VAD-based auto-stop — no button needed to end recording
 
 ### 📈 Statistics
 
