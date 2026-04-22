@@ -320,7 +320,7 @@ export default function useAudioRecorder(options?: {
       socket.on('disconnect', (reason: string) => {
         // 'io client disconnect' means we called socket.disconnect() ourselves — ignore
         if (reason === 'io client disconnect') return;
-        setError(`STT-Verbindung getrennt (${reason}). Bitte Aufnahme neu starten.`);
+        setError(`STT-connection lost (${reason}). Please restart the recording.`);
         stopPartialInterval();
         stopSilenceTimer();
         harkRef.current?.stop();
