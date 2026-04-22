@@ -221,6 +221,12 @@ export default function useAudioRecorder(options?: {
       });
       socketRef.current = socket;
 
+      // 'connect' fires once the WebSocket handshake is complete — only then is it
+      // safe to emit. We send stt:start here so the server can create the session.
+      socket.on('connect', () => {
+        socket.emit(SttEvent.START, { mimeType: mimeType || 'audio/webm' });
+      });
+
       socket.on(SttEvent.TRANSCRIPT, ({ transcript: text }: { transcript: string }) => {
         setTranscript(text);
         setTranscriptLoading(false);
@@ -285,14 +291,20 @@ export default function useAudioRecorder(options?: {
 
         // Partial transcription starts here — after recorder is running — so that
         // stt:partial is only sent when chunks actually exist on the server.
+        // 2 s interval: each stt:partial triggers a full Whisper inference call,
+        // so firing too often (e.g. every 1 s) wastes API quota and risks
+        // race conditions between overlapping partial responses.
+        const PARTIAL_INTERVAL_MS = 2000;
         partialIntervalRef.current = setInterval(() => {
           setPartialTranscriptLoading(true);
           socketRef.current?.emit(SttEvent.PARTIAL);
-        }, 1000);
+        }, PARTIAL_INTERVAL_MS);
 
         // ── VAD: auto-stop after silence via hark ──────────────────────────
         // Tune these two constants to balance responsiveness vs. cutting off mid-sentence:
-        const VAD_THRESHOLD_DB = -50; // dB — below this hark considers it silence
+        // Threshold guide: background noise ≈ -60..-45 dB | speech ≈ -25..-10 dB
+        // -35 dB sits well above typical mic noise but safely below normal speech.
+        const VAD_THRESHOLD_DB = -35; // dB — below this hark considers it silence
         const VAD_SILENCE_DEBOUNCE_MS = 2000; // ms of continuous silence before stopping
         const speechEvents = hark(stream, {
           interval: 100,
@@ -322,12 +334,6 @@ export default function useAudioRecorder(options?: {
           // User started speaking again — cancel pending silence timer
           stopSilenceTimer();
         });
-      });
-
-      // 'connect' fires once the WebSocket handshake is complete — only then is it
-      // safe to emit. We send stt:start here so the server can create the session.
-      socket.on('connect', () => {
-        socket.emit(SttEvent.START, { mimeType: mimeType || 'audio/webm' });
       });
 
       /** Fired when the transport-level connection fails before the first connect */
@@ -440,7 +446,6 @@ export default function useAudioRecorder(options?: {
     setRecorderState('idle');
     setAudioBlob(null);
     setAudioUrl(null);
-
     setError(null);
     setTranscript(null);
     setTranscriptLoading(false);
