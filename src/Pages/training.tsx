@@ -8,6 +8,7 @@ import Notify from '../Components/notify.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
 import useTraining from '../hooks/useTraining';
 import type { TrainingExercise } from '../types';
+import loadingComponente from '../Components/loading.js';
 
 // ── Inline modal / sub-view components ───────────────────────────────────────
 // These are tightly coupled to the training UI and intentionally kept here.
@@ -418,37 +419,40 @@ function StartTraining() {
             <div className="divider divider-primary text-white font-bold mb-2">
               Select your workout
             </div>
-            <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
-              {planState.type === 'loading' ? (
-                <div className="col-span-3 flex flex-col items-center gap-3 mt-8">
-                  <span className="loading loading-dots loading-lg text-primary" />
-                  <p className="text-sm text-gray-400">Loading workouts…</p>
-                </div>
-              ) : planState.type === 'error' ? (
-                <div className="col-span-3 flex flex-col items-center gap-3 mt-8">
-                  <p className="text-red-400 text-sm">{planState.error}</p>
-                  <Button onClick={() => navigate(0)} border="#3b82f6">
-                    Retry
-                  </Button>
-                </div>
-              ) : Object.keys(selectedExercise).length > 0 ? (
-                Object.keys(selectedExercise).map((name, index) => (
-                  <WorkoutCard key={index} onClick={() => selectPlan(name)}>
-                    <h2 className="text-amber-400 font-bold mb-2">{name}</h2>
-                    <p className="text-blue-300 font-light text-sm">
-                      Exercises: {selectedExercise[name]?.length || 0}
+            {planState.type === 'loading' ? (
+              <div className="min-h-[50dvh] flex items-center justify-center flex-col">
+                {loadingComponente('Loading your workout plans...')}
+              </div>
+            ) : (
+              <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[65vh]">
+                {planState.type === 'error' ? (
+                  <div className="col-span-3 flex flex-col items-center gap-3 mt-8">
+                    <p className="text-red-400 text-sm">{planState.error}</p>
+                    <Button onClick={() => navigate(0)} border="#3b82f6">
+                      Retry
+                    </Button>
+                  </div>
+                ) : Object.keys(selectedExercise).length > 0 ? (
+                  Object.keys(selectedExercise).map((name, index) => (
+                    <WorkoutCard key={index} onClick={() => selectPlan(name)}>
+                      <h2 className="text-amber-400 font-bold mb-2">{name}</h2>
+                      <p className="text-blue-300 font-light text-sm">
+                        Exercises: {selectedExercise[name]?.length || 0}
+                      </p>
+                    </WorkoutCard>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <p className="text-white">
+                      No workout plans available. Please create one first.
                     </p>
-                  </WorkoutCard>
-                ))
-              ) : (
-                <div className="flex flex-col items-center">
-                  <p className="text-white">No workout plans available. Please create one first.</p>
-                  <Button onClick={() => navigate('/createtrain')} border="#3b82f6">
-                    Create Workout
-                  </Button>
-                </div>
-              )}
-            </div>
+                    <Button onClick={() => navigate('/createtrain')} border="#3b82f6">
+                      Create Workout
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           /* ── Active exercise view ──────────────────────────────────────── */
