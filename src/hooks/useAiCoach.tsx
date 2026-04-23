@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef, JSX } from 'react';
-import api from '../Utils/api';
-import { Exercise, User, Meal } from '../types';
+import { profileService } from '../services/profileService';
+import { mealService } from '../services/mealService';
+import { workoutService, WorkoutPlan } from '../services/workoutService';
+import { User } from '../types';
 
 export interface ChatMessage {
   message: string;
@@ -17,7 +19,7 @@ export interface AnalyseAction {
 export function useAiCoach() {
   const [question, setQuestion] = useState<string>('');
   const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const [workouts, setWorkouts] = useState<{ workouts: Exercise[]; name: string }[]>([]);
+  const [workouts, setWorkouts] = useState<WorkoutPlan[]>([]);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       message: 'Hi, im your fitness coach! How can I assist you today?',
@@ -46,10 +48,9 @@ export function useAiCoach() {
   }, []);
 
   function fetchUserProfile() {
-    api
-      .get('users/profile')
-      .then((response: { data: User }) => {
-        const profile = response.data;
+    profileService
+      .get()
+      .then((profile: User) => {
         const goalLabel =
           profile.goal === 3
             ? 'Bulk'
@@ -69,59 +70,29 @@ export function useAiCoach() {
   }
 
   function fetchWorkouts() {
-    api
-      .get('workout_plans/get_workout_plans')
-      .then((response: { data: { exercises: Exercise[]; name: string }[] }) => {
-        const workoutsData = response.data;
-        const newWorkouts = workoutsData.map((workout) => ({
-          workouts: workout.exercises,
-          name: workout.name,
-        }));
-        setWorkouts(newWorkouts);
-      });
+    workoutService.getAll().then(setWorkouts);
   }
 
   function fetchLastMeal() {
-    const date = new Date().toISOString().split('T')[0];
-
-    const mealTypes = ['breakfast', 'launch', 'dinner', 'snack'];
-    const promises = mealTypes.map((type) =>
-      api
-        .get(`meals/get_${type}`, { params: { date } })
-        .then((response: { data: Meal[] }) => ({
-          type,
-          meals: response.data,
-        }))
-        .catch(() => {
-          setIsLoading(false);
-          return { type, meals: [] };
-        })
-    );
-
-    Promise.all(promises)
-      .then((results: { type: string; meals: Meal[] }[]) => {
-        let allMealsMessage = 'My meals today: ';
-        let aiMessage = 'My meals today: ';
+    mealService
+      .getToday()
+      .then((results) => {
+        let message = 'My meals today: ';
         let hasMeals = false;
 
         results.forEach(({ type, meals }) => {
           if (meals.length > 0) {
             hasMeals = true;
             meals.forEach((meal) => {
-              const entry = `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fats}g fat). Analyze accordingly. `;
-              allMealsMessage += entry;
-              aiMessage += entry;
+              message += `${type}: ${meal.name} (${meal.calories} kcal, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fats}g fat). Analyze accordingly. `;
             });
           }
         });
 
-        if (!hasMeals) {
-          allMealsMessage = 'No meals found for today.';
-          aiMessage = 'No meals found for today.';
-        }
+        if (!hasMeals) message = 'No meals found for today.';
 
-        handleMessage(allMealsMessage, true);
-        handleOpenAIResponse(aiMessage);
+        handleMessage(message, true);
+        handleOpenAIResponse(message);
       })
       .catch((_error: unknown) => {
         handleMessage('Sorry, there was an error fetching your meals.', false);
@@ -130,14 +101,9 @@ export function useAiCoach() {
   }
 
   function handleOpenAIResponse(userMessage: string): void {
-    api
-      .post(
-        'aicoach/response',
-        { question: userMessage, history: chatHistory },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      .then((response) => {
-        const aiMessage = response.data.message;
+    workoutService
+      .getAiResponse(userMessage, chatHistory)
+      .then((aiMessage: string) => {
         handleMessage(aiMessage, false);
         setIsLoading(false);
       })

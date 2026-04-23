@@ -1,5 +1,5 @@
 import exercise from './exercises.ts';
-
+import Input from './input.tsx';
 interface ExerciseSearchDropdownProps {
   value: string;
   onChange: (value: string) => void;
@@ -19,13 +19,13 @@ export default function ExerciseSearchDropdown({
   const showDropdown = filtered.length > 0 && value.length > 0;
 
   return (
-    <div className="flex flex-col items-center space-y-2">
-      <input
+    <div className="flex flex-col justify-center items-center space-y-2">
+      <Input
+        w="w-55"
         id="input-e"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         placeholder="Add an exercise..."
-        className="input input-primary w-54 h-10 rounded-xl text-sm"
       />
       <div
         className={`h-32 overflow-y-scroll border border-gray-800 ${showDropdown ? 'block' : 'hidden'}`}
