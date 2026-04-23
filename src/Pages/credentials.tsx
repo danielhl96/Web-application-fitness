@@ -2,117 +2,42 @@ import TemplatePage from '../Components/templatepage.js';
 import Header from '../Components/Header.js';
 import WorkoutCard from '../Components/workoutcard.js';
 import Notify from '../Components/notify.js';
-import { useNavigate } from 'react-router-dom';
-import { JSX, useState } from 'react';
-import api from '../Utils/api';
+import { JSX } from 'react';
 import EmailInput from '../Components/emailinput.js';
 import PasswordInput from '../Components/passwordinput.js';
 import Button from '../Components/button.js';
 import TemplateModal from '../Components/templatemodal.js';
+import useCredentials from '../hooks/useCredentials.ts';
+
 function CredentialsPage() {
-  const [emailModal, setEmailModal] = useState<boolean>(false);
-  const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [modalDeleteAccount, setModalDeleteAccount] = useState<boolean>(false);
-  const [newEmail, setNewEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [newPassword, setNewPassword] = useState<string>('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
-  const [inputTouched, setInputTouched] = useState<boolean>(false);
-  const [notification, setNotification] = useState<{
-    title: string;
-    message: string;
-    type: 'success' | 'error';
-  } | null>(null);
-  const [errorEmailMessage, setErrorEmailMessage] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const navigate = useNavigate();
-
-  const resetData = (): void => {
-    setNewEmail('');
-    setPassword('');
-    setNewPassword('');
-    setConfirmNewPassword('');
-    setInputTouched(false);
-    setErrorEmailMessage(null);
-    setPasswordError(false);
-  };
-
-  const handleChangeEmail = (): void => {
-    api
-      .put('/users/change_email', {
-        email: newEmail,
-        password: password,
-      })
-      .then(() => {
-        setNotification({
-          title: 'Email Changed',
-          message: 'Your email has been changed successfully.',
-          type: 'success',
-        });
-        setEmailModal(false);
-        resetData();
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setNotification({
-          title: 'Error',
-          message: error?.response?.data?.message || 'There was an error changing your email.',
-          type: 'error',
-        });
-      });
-  };
-
-  const handleChangePassword = (): void => {
-    setIsLoading(true);
-    api
-      .put('/users/change_password', {
-        oldPassword: password,
-        newPassword: newPassword,
-      })
-      .then(() => {
-        setNotification({
-          title: 'Password Changed',
-          message: 'Your password has been changed successfully.',
-          type: 'success',
-        });
-        setModalPassword(false);
-        setIsLoading(false);
-        resetData();
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setNotification({
-          title: 'Error',
-          message: error?.response?.data?.message || 'There was an error changing your password.',
-          type: 'error',
-        });
-      });
-  };
-
-  const handleDeleteAccount = (): void => {
-    api
-      .delete('/users/delete_account', {
-        data: { password: password },
-      })
-      .then(() => {
-        setNotification({
-          title: 'Account Deleted',
-          message: 'Your account has been deleted successfully.',
-          type: 'success',
-        });
-
-        navigate('/login');
-      })
-      .catch((error) => {
-        setNotification({
-          title: 'Error',
-          message: error?.response?.data?.message || 'There was an error deleting your account.',
-          type: 'error',
-        });
-      });
-  };
+  const {
+    emailModal,
+    setEmailModal,
+    modalPassword,
+    setModalPassword,
+    modalDeleteAccount,
+    setModalDeleteAccount,
+    newEmail,
+    setNewEmail,
+    password,
+    setPassword,
+    newPassword,
+    setNewPassword,
+    confirmNewPassword,
+    setConfirmNewPassword,
+    inputTouched,
+    errorEmailMessage,
+    setErrorEmailMessage,
+    passwordError,
+    setPasswordError,
+    isLoading,
+    notification,
+    setNotification,
+    resetData,
+    handleChangeEmail,
+    handleChangePassword,
+    handleDeleteAccount,
+  } = useCredentials();
 
   const handleEmailModal = (): JSX.Element => {
     return (

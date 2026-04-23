@@ -39,6 +39,9 @@ export interface UseEditTrainReturn {
   handleShowModal: (workoutName: string) => void;
   handleRemoveWorkoutAPI: (workoutname: string) => void;
   handleAddExercise: (elem: string) => void;
+  handleRepsChange: (index: number, reps: number | number[]) => void;
+  handleSetsChange: (index: number, sets: number) => void;
+  handleRemoveExercise: (index: number) => void;
 }
 
 export function useEditTrain(): UseEditTrainReturn {
@@ -190,6 +193,31 @@ export function useEditTrain(): UseEditTrainReturn {
     }
   };
 
+  // ── Inline exercise mutations for the edit view ──────────────────────────
+  const handleRepsChange = (index: number, reps: number | number[]): void => {
+    setSelectedExercise((prev) => {
+      const updated = { ...prev };
+      updated[savekey] = updated[savekey].map((ex, i) => (i === index ? { ...ex, reps } : ex));
+      return updated;
+    });
+  };
+
+  const handleSetsChange = (index: number, sets: number): void => {
+    setSelectedExercise((prev) => {
+      const updated = { ...prev };
+      updated[savekey] = updated[savekey].map((ex, i) => (i === index ? { ...ex, sets } : ex));
+      return updated;
+    });
+  };
+
+  const handleRemoveExercise = (index: number): void => {
+    setSelectedExercise((prev) => {
+      const updated = { ...prev };
+      updated[savekey] = updated[savekey].filter((_, i) => i !== index);
+      return updated;
+    });
+  };
+
   return {
     showState,
     showModal,
@@ -214,5 +242,8 @@ export function useEditTrain(): UseEditTrainReturn {
     handleShowModal,
     handleRemoveWorkoutAPI,
     handleAddExercise,
+    handleRepsChange,
+    handleSetsChange,
+    handleRemoveExercise,
   };
 }

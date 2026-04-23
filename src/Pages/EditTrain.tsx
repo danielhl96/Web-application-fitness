@@ -30,13 +30,15 @@ const EditTrain = (): JSX.Element => {
     confirmationModalForDelete,
     setConfirmationModalforWorkoutDelete,
     selectedExercise,
-    setSelectedExercise,
     handleEditWorkout,
     changePosition,
     changeWorkoutNameAPI,
     handleShowModal,
     handleRemoveWorkoutAPI,
     handleAddExercise,
+    handleRepsChange,
+    handleSetsChange,
+    handleRemoveExercise,
   } = useEditTrain();
 
   function renderConfirmDeleteModal(): JSX.Element {
@@ -194,31 +196,9 @@ const EditTrain = (): JSX.Element => {
                   handleEditWorkout={handleEditWorkout}
                   handleShowModal={handleShowModal}
                   changePosition={changePosition}
-                  onRepsChange={(index, reps) =>
-                    setSelectedExercise((prev) => {
-                      const updated = { ...prev };
-                      updated[savekey] = updated[savekey].map((ex, i) =>
-                        i === index ? { ...ex, reps } : ex
-                      );
-                      return updated;
-                    })
-                  }
-                  onSetsChange={(index, sets) =>
-                    setSelectedExercise((prev) => {
-                      const updated = { ...prev };
-                      updated[savekey] = updated[savekey].map((ex, i) =>
-                        i === index ? { ...ex, sets } : ex
-                      );
-                      return updated;
-                    })
-                  }
-                  onRemoveExercise={(index) =>
-                    setSelectedExercise((prev) => {
-                      const updated = { ...prev };
-                      updated[savekey] = updated[savekey].filter((_, i) => i !== index);
-                      return updated;
-                    })
-                  }
+                  onRepsChange={handleRepsChange}
+                  onSetsChange={handleSetsChange}
+                  onRemoveExercise={handleRemoveExercise}
                 />
               </div>
             ) : showState.type === 'success' ? (
