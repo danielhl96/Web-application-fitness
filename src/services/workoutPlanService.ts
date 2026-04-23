@@ -1,5 +1,15 @@
 import api from '../Utils/api';
-import { WorkoutPlan, SelectedExercise } from '../types';
+import { WorkoutPlan, SelectedExercise, Exercise } from '../types';
+
+export interface CreateWorkoutPayload {
+  name: string;
+  exercises: {
+    name: string;
+    sets: number;
+    reps: number[];
+    weights: number[];
+  }[];
+}
 
 export interface EditWorkoutPayload {
   plan_id: number | null;
@@ -24,7 +34,23 @@ export const workoutPlanService = {
 
   delete: (planId: number | null): Promise<void> =>
     api.delete('workout_plans/delete_workout_plan', { data: { planId } }),
+
+  create: (payload: CreateWorkoutPayload): Promise<void> =>
+    api.post('workout_plans/create_workout_plan', payload),
 };
+
+/** Transforms Exercise[] from the create-form into the API payload shape. Pure function. */
+export function buildCreatePayload(name: string, exercises: Exercise[]): CreateWorkoutPayload {
+  return {
+    name,
+    exercises: exercises.map((ex) => ({
+      name: ex.name,
+      sets: ex.sets,
+      reps: Array.isArray(ex.reps) ? ex.reps : Array(ex.sets || 3).fill(ex.reps ?? 8),
+      weights: Array.isArray(ex.weights) ? ex.weights : Array(ex.sets || 3).fill(0),
+    })),
+  };
+}
 
 /** Maps raw API response to { planName: SelectedExercise[] } */
 export function mapPlansToExercises(plans: WorkoutPlan[]): Record<string, SelectedExercise[]> {

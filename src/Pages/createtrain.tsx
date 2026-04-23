@@ -1,160 +1,33 @@
 import '../index.css';
 import Header from '../Components/Header.js';
-import { JSX, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
-import exercise from '../Components/exercises.ts';
+import { JSX } from 'react';
 import TemplatePage from '../Components/templatepage.js';
 import ExerciseCard from '../Components/exercisecard.js';
 import Notify from '../Components/notify.js';
 import Input from '../Components/input.js';
 import Button from '../Components/button.js';
-import { Exercise, ExerciseTemplate, Notification } from '../types';
+import useCreateTrain from '../hooks/useCreateTrain.ts';
 function CreateTraining(): JSX.Element {
-  const navigate = useNavigate();
-  const [workoutName, setWorkoutName] = useState<string>('');
-  const [workoutNameSet, setWorkoutNameSet] = useState<boolean>(false);
-  const [notification, setNotification] = useState<Notification | null>(null);
-
-  const handleSaveTraining = async (): Promise<void> => {
-    const trainingName =
-      workoutName || (document.getElementById('training-input') as HTMLInputElement).value;
-    const selectedExercises = selectedExercise.map((exercise: Exercise) => ({
-      name: exercise.name,
-      sets: exercise.sets,
-      reps: exercise.reps,
-      weights: Array.isArray(exercise.weights)
-        ? exercise.weights
-        : Array(exercise.sets || 3).fill(0),
-    }));
-
-    await api
-      .post('workout_plans/create_workout_plan', {
-        name: trainingName,
-        exercises: selectedExercises,
-      })
-      .then(() => {
-        setMessage('Training saved successfully!');
-        setNotification({
-          title: 'Training Saved',
-          message: 'Your training has been saved successfully!',
-          type: 'success',
-        });
-
-        setWorkoutName('');
-        setWorkoutNameSet(false);
-        setSelectedExercise([]);
-      })
-      .catch(() => {
-        setMessage('Error saving training.');
-        setNotification({
-          title: 'Error',
-          message: 'There was an error saving your training.',
-          type: 'error',
-        });
-      });
-  };
-
-  useEffect(() => {
-    setExerciseExists(exercise);
-  }, []);
-
-  const [selectedExercise, setSelectedExercise] = useState<Exercise[]>([]);
-  const [addExercise, setaddExercise] = useState('');
-  const [exerciseExists, setExerciseExists] = useState<ExerciseTemplate[]>([]);
-  const [Message, setMessage] = useState('');
-
-  function changePosition(element: Exercise, direction: 'up' | 'down'): void {
-    const index = selectedExercise.findIndex((ex) => ex.name === element.name);
-    if (direction === 'up' && index > 0) {
-      const newExercises = [...selectedExercise];
-      [newExercises[index - 1], newExercises[index]] = [
-        newExercises[index],
-        newExercises[index - 1],
-      ];
-      setSelectedExercise(newExercises);
-    } else if (direction === 'down' && index < selectedExercise.length - 1) {
-      const newExercises = [...selectedExercise];
-      [newExercises[index + 1], newExercises[index]] = [
-        newExercises[index],
-        newExercises[index + 1],
-      ];
-      setSelectedExercise(newExercises);
-    }
-  }
-
-  function handleExerciseChange(e: string): void {
-    const selectedName = e;
-
-    const found = exercise.find((item) => item.name === selectedName);
-    if (found) {
-      setSelectedExercise((prev) => {
-        if (!prev.some((item) => item.name === found.name)) {
-          setNotification({
-            title: 'Exercise Added',
-            message: `${found.name} has been added to your workout.`,
-            type: 'success',
-          });
-          setaddExercise('');
-          return [
-            ...prev,
-            {
-              ...found,
-              sets: 1,
-              reps: [8],
-              weights: [0],
-              date: new Date().toISOString().split('T')[0],
-            },
-          ];
-        }
-        setNotification({
-          title: 'Exercise Exists',
-          message: `${found.name} is already in your workout.`,
-          type: 'error',
-        });
-        return prev;
-      });
-    }
-
-    setaddExercise('');
-  }
-
-  const handleRemoveExercise = (name: string) => {
-    setSelectedExercise((prev) => prev.filter((item) => item.name !== name));
-    setNotification({
-      title: 'Exercise Removed',
-      message: `${name} has been removed from your workout.`,
-      type: 'success',
-    });
-  };
-
-  const handleRepsChange = (exerciseName: string, reps: number) => {
-    setSelectedExercise((prev) =>
-      prev.map((item) =>
-        item.name === exerciseName
-          ? { ...item, reps: Array.from({ length: item.sets }, () => reps) }
-          : item
-      )
-    );
-  };
-  const handleSetsChange = (exerciseName: string, sets: number) => {
-    setSelectedExercise((prev) =>
-      prev.map((item) =>
-        item.name === exerciseName
-          ? {
-              ...item,
-              sets,
-              reps: Array.isArray(item.reps)
-                ? Array.from({ length: sets }, (_, i) => item.reps[i] || 8)
-                : Array(sets).fill(8),
-              weights: Array.isArray(item.weights)
-                ? Array.from({ length: sets }, (_, i) => item.weights[i] || 0)
-                : Array(sets).fill(0),
-            }
-          : item
-      )
-    );
-  };
+  const {
+    workoutName,
+    setWorkoutName,
+    workoutNameSet,
+    confirmWorkoutName,
+    selectedExercise,
+    addExercise,
+    setAddExercise,
+    exerciseExists,
+    notification,
+    setNotification,
+    savedSuccessfully,
+    handleSaveTraining,
+    handleExerciseChange,
+    handleRemoveExercise,
+    handleRepsChange,
+    handleSetsChange,
+    changePosition,
+    goHome,
+  } = useCreateTrain();
 
   return (
     <div>
@@ -184,7 +57,7 @@ function CreateTraining(): JSX.Element {
             />
             <Button
               disabled={workoutName === ''}
-              onClick={() => setWorkoutNameSet((prev) => !prev)}
+              onClick={confirmWorkoutName}
               border={workoutNameSet ? '#10B981' : '#3b82f6'}
             >
               {workoutNameSet ? (
@@ -226,7 +99,7 @@ function CreateTraining(): JSX.Element {
               <div className="form-control">
                 <Input
                   value={addExercise}
-                  onChange={(e) => setaddExercise(e)}
+                  onChange={(e) => setAddExercise(e)}
                   w="w-54"
                   h="h-10"
                   placeholder="Enter an exercise name"
@@ -331,8 +204,8 @@ function CreateTraining(): JSX.Element {
                 />
               </svg>
             </Button>
-            <Button onClick={() => navigate('/')} border="#ef4444">
-              {Message === 'Training saved successfully!' ? (
+            <Button onClick={goHome} border="#ef4444">
+              {savedSuccessfully ? (
                 <>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
