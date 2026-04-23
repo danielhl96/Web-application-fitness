@@ -5,17 +5,14 @@ import Header from '../Components/Header.js';
 import TemplateModal from '../Components/templatemodal.js';
 import { List, useListRef, RowComponentProps } from 'react-window';
 import useCounter from '../hooks/useCounter.ts';
-import { Action } from '../types';
-
-type NumberActionType = Extract<Action, { payload: number }>['type'];
 
 type TableProps = {
   selectedItem: number;
-  type: NumberActionType;
-  dispatch: React.Dispatch<Action>;
+  onSelect: (value: number) => void;
   string: string;
+  color: string;
 };
-function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Element {
+function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Element {
   const listRef = useListRef(null);
   // Scroll to the selected item when the component mounts
   // We use requestAnimationFrame to ensure the DOM is ready before scrolling
@@ -41,24 +38,11 @@ function Table({ selectedItem, type, dispatch, string }: TableProps): JSX.Elemen
       <div
         style={style}
         onClick={() => {
-          dispatch({ type: type, payload: rep });
-          if (type === 'SET_STARTTIME' && rep !== 0) {
-            dispatch({ type: 'SET_IS_START_MODE', payload: true });
-          }
+          onSelect(rep);
           listRef.current?.scrollToRow({ index, align: 'center', behavior: 'smooth' });
         }}
         className={`border border-gray-800 text-xs text-center cursor-pointer flex items-center justify-center ${
-          selectedItem === rep
-            ? type === 'SET_ROUNDS'
-              ? 'bg-blue-600/60 text-blue-100 shadow-lg border-blue-500'
-              : type === 'SET_STARTTIME'
-                ? 'bg-yellow-500/60 text-yellow-100 shadow-lg border-yellow-400'
-                : type === 'SET_BREAKTIME'
-                  ? 'bg-purple-600/60 text-purple-100 shadow-lg border-purple-500'
-                  : type === 'SET_ROUNDTIME'
-                    ? 'bg-green-600/60 text-green-100 shadow-lg border-green-500'
-                    : 'bg-black/15'
-            : 'bg-black/15 hover:bg-white/10'
+          selectedItem === rep ? color : 'bg-black/15 hover:bg-white/10'
         }`}
       >
         {string + rep + (string === 'Rounds: ' ? '' : 's')}
@@ -96,10 +80,13 @@ function CounterForm(): JSX.Element {
     isStopmode,
     isbreakmode,
     isStartmode,
-    dispatch,
     startCounter,
     stopCounter,
     resetCounter,
+    setRounds,
+    setRoundtime,
+    setBreaktime,
+    setStarttime,
   } = useCounter();
 
   const settingsModal = (): JSX.Element => {
@@ -111,30 +98,32 @@ function CounterForm(): JSX.Element {
             <div className="grid grid-cols-1 lg:grid-cols-2  text-xs gap-4">
               <Table
                 selectedItem={rounds}
-                type="SET_ROUNDS"
-                dispatch={dispatch}
+                onSelect={setRounds}
                 string="Rounds: "
+                color="bg-blue-600/60 text-blue-100 shadow-lg border-blue-500"
               />
 
               <Table
                 selectedItem={starttime}
-                type="SET_STARTTIME"
-                dispatch={dispatch}
+                onSelect={(v) => {
+                  setStarttime(v);
+                }}
                 string="Starttime: "
+                color="bg-yellow-500/60 text-yellow-100 shadow-lg border-yellow-400"
               />
 
               <Table
                 selectedItem={breaktime}
-                type="SET_BREAKTIME"
-                dispatch={dispatch}
+                onSelect={setBreaktime}
                 string="Breaktime: "
+                color="bg-purple-600/60 text-purple-100 shadow-lg border-purple-500"
               />
 
               <Table
                 selectedItem={roundtime}
-                type="SET_ROUNDTIME"
-                dispatch={dispatch}
+                onSelect={setRoundtime}
                 string="Roundtime: "
+                color="bg-green-600/60 text-green-100 shadow-lg border-green-500"
               />
             </div>
           </div>

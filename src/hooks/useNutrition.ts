@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
-import api from '../Utils/api';
+import { mealService } from '../services/mealService';
+import { profileService } from '../services/profileService';
+import {
+  calcCalories,
+  calcProteins,
+  calcCarbs,
+  calcFats,
+  calcProteinsGoal,
+  calcFatsGoal,
+  calcCarbsGoal,
+} from '../Utils/nutritionCalc';
 import { Meal, NotificationState, UI_STATE } from '../types';
 
 export default function useNutrition() {
@@ -41,36 +51,36 @@ export default function useNutrition() {
 
   function getProfile() {
     setLoadingProfile({ type: 'loading' });
-    api.get('users/profile').then((response) => {
+    profileService.get().then((profile) => {
       setLoadingProfile({
         type: 'success',
-        data: { calories: response.data.calories, weight: response.data.weight },
+        data: { calories: profile.calories, weight: profile.weight },
       });
     });
   }
 
   function getDinnerMeals() {
-    api
-      .get('meals/get_dinner', { params: { date: dateString } })
-      .then((response) => setDinnerMeals(response.data));
+    return mealService
+      .getMealsByTypAndDate('dinner', dateString)
+      .then((data) => setDinnerMeals(data));
   }
 
   function getLunchMeals() {
-    api
-      .get('meals/get_lunch', { params: { date: dateString } })
-      .then((response) => setLaunchMeals(response.data));
+    return mealService
+      .getMealsByTypAndDate('lunch', dateString)
+      .then((data) => setLaunchMeals(data));
   }
 
   function getBreakfastMeals() {
-    api
-      .get('meals/get_breakfast', { params: { date: dateString } })
-      .then((response) => setBreakfastMeals(response.data));
+    return mealService
+      .getMealsByTypAndDate('breakfast', dateString)
+      .then((data) => setBreakfastMeals(data));
   }
 
   function getSnackMeals() {
-    api
-      .get('meals/get_snack', { params: { date: dateString } })
-      .then((response) => setSnackMeals(response.data));
+    return mealService
+      .getMealsByTypAndDate('snack', dateString)
+      .then((data) => setSnackMeals(data));
   }
 
   async function refreshAllMeals() {
@@ -80,8 +90,8 @@ export default function useNutrition() {
   }
 
   function deleteMeal(mealId: number) {
-    api
-      .delete('meals/delete_meal', { data: { mealId } })
+    mealService
+      .deleteMeal(mealId, () => {})
       .then(() => {
         refreshAllMeals();
         setNotification({
@@ -105,13 +115,13 @@ export default function useNutrition() {
     if (!text.trim()) return;
     setLoading({ type: 'loading' });
 
-    api
-      .post('meals/analyze_food_text', { text })
-      .then((response) => {
-        setMeal(response.data);
+    mealService
+      .analyzeText(text)
+      .then((data) => {
+        setMeal(data);
         setShowMeal(true);
         setShowAudioModal(false);
-        setLoading({ type: 'success', data: response.data });
+        setLoading({ type: 'success', data });
       })
       .catch(() => {
         setLoading({ type: 'error', error: 'Failed to analyze meal from text.' });
@@ -125,21 +135,15 @@ export default function useNutrition() {
 
   function handleMeal(mealTypeArg: string, image: File | null) {
     if (!image) return;
-
-    const formData = new FormData();
-    formData.append('meal_type', mealTypeArg);
-    formData.append('image', image);
-    if (prompt) formData.append('prompt', prompt);
     setLoading({ type: 'loading' });
-    api
-      .post('meals/calculate_meal', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .then((response) => {
-        setMeal(response.data);
+
+    mealService
+      .analyzeImage(image, mealTypeArg, prompt || undefined)
+      .then((data) => {
+        setMeal(data);
         setShowFileUpload(false);
         setShowMeal(true);
-        setLoading({ type: 'success', data: response.data });
+        setLoading({ type: 'success', data });
         resetPrompt();
       })
       .catch(() => {
@@ -156,13 +160,14 @@ export default function useNutrition() {
 
   function handleMealSave() {
     if (!meal) return;
-    api
-      .post('meals/create_meal', {
+    const factor = 1 + calorieFactor / 100;
+    mealService
+      .create({
         name: meal.name,
-        calories: meal.calories * (1 + calorieFactor / 100),
-        protein: meal.protein * (1 + calorieFactor / 100),
-        carbs: meal.carbs * (1 + calorieFactor / 100),
-        fats: meal.fats * (1 + calorieFactor / 100),
+        calories: meal.calories * factor,
+        protein: meal.protein * factor,
+        carbs: meal.carbs * factor,
+        fats: meal.fats * factor,
         mealtype,
         date: dateString,
       })
@@ -182,14 +187,15 @@ export default function useNutrition() {
 
   function handleEditMealSave() {
     if (!meal) return;
-    api
-      .put('meals/edit_meal', {
+    const factor = 1 + calorieFactor / 100;
+    mealService
+      .edit({
         mealId: meal.id,
         name: meal.name,
-        calories: meal.calories * (1 + calorieFactor / 100),
-        protein: meal.protein * (1 + calorieFactor / 100),
-        carbs: meal.carbs * (1 + calorieFactor / 100),
-        fats: meal.fats * (1 + calorieFactor / 100),
+        calories: meal.calories * factor,
+        protein: meal.protein * factor,
+        carbs: meal.carbs * factor,
+        fats: meal.fats * factor,
       })
       .then(() => {
         setNotification({
@@ -204,40 +210,8 @@ export default function useNutrition() {
       .catch((error) => console.error('Error editing meal:', error));
   }
 
-  // ── Berechnungen ──────────────────────────────────────────────
-  function sumField(meals: Meal[], field: keyof Meal): number {
-    return meals.reduce((acc, m) => acc + (m[field] as number), 0);
-  }
-
-  function calculateCalories() {
-    return [...dinnerMeals, ...launchMeals, ...breakfastMeals, ...snackMeals].reduce(
-      (acc, m) => acc + m.calories,
-      0
-    );
-  }
-  function calculateProteins() {
-    return sumField([...dinnerMeals, ...launchMeals, ...breakfastMeals, ...snackMeals], 'protein');
-  }
-  function calculateCarbs() {
-    return sumField([...dinnerMeals, ...launchMeals, ...breakfastMeals, ...snackMeals], 'carbs');
-  }
-  function calculateFats() {
-    return sumField([...dinnerMeals, ...launchMeals, ...breakfastMeals, ...snackMeals], 'fats');
-  }
-
-  function calculateProteinsGoal(): number {
-    return loadingProfile.type === 'success' ? loadingProfile.data.weight * 2.0 : 0;
-  }
-  function calculateFatsGoal(): number {
-    return loadingProfile.type === 'success' ? loadingProfile.data.weight * 1.0 : 0;
-  }
-  function calculateCarbsGoal(): number {
-    return loadingProfile.type === 'success'
-      ? (loadingProfile.data.calories -
-          (loadingProfile.data.weight * 2.0 * 4 + loadingProfile.data.weight * 1.0 * 9)) /
-          4
-      : 0;
-  }
+  // ── Berechnungen via nutritionCalc.ts ────────────────────────
+  const allMeals = [...dinnerMeals, ...launchMeals, ...breakfastMeals, ...snackMeals];
 
   return {
     // Date
@@ -288,12 +262,12 @@ export default function useNutrition() {
     handleMealSave,
     handleEditMealSave,
     // Berechnungen
-    calculateCalories,
-    calculateProteins,
-    calculateCarbs,
-    calculateFats,
-    calculateProteinsGoal,
-    calculateFatsGoal,
-    calculateCarbsGoal,
+    calculateCalories: () => calcCalories(allMeals),
+    calculateProteins: () => calcProteins(allMeals),
+    calculateCarbs: () => calcCarbs(allMeals),
+    calculateFats: () => calcFats(allMeals),
+    calculateProteinsGoal: () => calcProteinsGoal(loadingProfile),
+    calculateFatsGoal: () => calcFatsGoal(loadingProfile),
+    calculateCarbsGoal: () => calcCarbsGoal(loadingProfile),
   };
 }

@@ -1,6 +1,10 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import exercise from '../Components/exercises.ts';
-import api from '../Utils/api';
+import {
+  workoutPlanService,
+  mapPlansToExercises,
+  buildEditPayload,
+} from '../services/workoutPlanService';
 import { UI_STATE, SelectedExercise, WorkoutPlanMap, WorkoutPlan } from '../types.ts';
 
 export type NotificationState = {
@@ -52,33 +56,16 @@ export function useEditTrain(): UseEditTrainReturn {
 
   // ── Fetch workout plans whenever requestId changes ─────────────────────────
   useEffect(() => {
-    api
-      .get('/workout_plans/get_workout_plans')
-      .then((response: { data: WorkoutPlan[] }) => {
-        setState({ type: 'success', data: response.data });
-      })
-      .catch((error: Error) => {
-        setState({ type: 'error', error: error.message });
-      });
+    workoutPlanService
+      .getAll()
+      .then((data) => setState({ type: 'success', data }))
+      .catch((error: Error) => setState({ type: 'error', error: error.message }));
   }, [requestId]);
-
-  // ── Map API response → { planName: SelectedExercise[] } ───────────────────
-  const mapPlans = (plans: WorkoutPlan[]): WorkoutPlanMap =>
-    plans.reduce<WorkoutPlanMap>((acc, plan) => {
-      acc[plan.name] = plan.plan_exercise_templates.map((ex) => ({
-        exercise: ex.name,
-        reps: ex.reps_template,
-        sets: ex.sets,
-        weights: ex.weights_template,
-        plan_id: plan.id,
-      }));
-      return acc;
-    }, {});
 
   // ── Sync selectedExercise whenever backend data changes ───────────────────
   useEffect(() => {
     if (showState.type === 'success' && showState.data.length > 0) {
-      setSelectedExercise(mapPlans(showState.data));
+      setSelectedExercise(mapPlansToExercises(showState.data));
     } else {
       setSelectedExercise({});
     }
@@ -86,27 +73,10 @@ export function useEditTrain(): UseEditTrainReturn {
 
   // ── Persist edited workout plan to backend ────────────────────────────────
   function handleEditWorkout(): void {
-    const payload = {
-      plan_id: selectedExercise[savekey][0]?.plan_id ?? null,
-      exercises: selectedExercise[savekey]?.map(
-        ({ exercise: name, reps, sets, weights, plan_id }) => {
-          const setsInt = Array.isArray(sets)
-            ? (sets as number[]).length
-            : Math.round(Number(sets));
-          console.log(selectedExercise[savekey], name, reps, sets, weights);
-          return {
-            name,
-            reps: Array.isArray(reps) ? reps : Array(setsInt).fill(reps),
-            sets: setsInt,
-            weights: weights ?? Array(setsInt).fill(0),
-            plan_id: plan_id ?? null,
-          };
-        }
-      ),
-    };
+    const payload = buildEditPayload(selectedExercise[savekey]);
 
-    api
-      .put('/workout_plans/edit_workout_plan', payload)
+    workoutPlanService
+      .edit(payload)
       .then(() => {
         setNotification({
           title: 'Workout Updated',
@@ -142,10 +112,7 @@ export function useEditTrain(): UseEditTrainReturn {
   // ── Rename a workout plan via API ─────────────────────────────────────────
   async function changeWorkoutNameAPI(): Promise<void> {
     try {
-      await api.put('/workout_plans/change_workout_plan_name', {
-        planId: selectedExercise[savekey][0]?.plan_id,
-        newName: workoutName,
-      });
+      await workoutPlanService.rename(selectedExercise[savekey][0]?.plan_id, workoutName);
       setNotification({
         title: 'Workout Name Changed',
         message: 'Your workout name has been changed successfully.',
@@ -180,10 +147,8 @@ export function useEditTrain(): UseEditTrainReturn {
 
   // ── Delete a workout plan via API, then update local state ────────────────
   const handleRemoveWorkoutAPI = (workoutname: string): void => {
-    api
-      .delete('workout_plans/delete_workout_plan', {
-        data: { planId: selectedExercise[workoutname][0]?.plan_id },
-      })
+    workoutPlanService
+      .delete(selectedExercise[workoutname][0]?.plan_id)
       .then(() => {
         handleRemoveWorkout(workoutname);
         setConfirmationModalforWorkoutDelete(false);
