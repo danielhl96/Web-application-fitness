@@ -31,6 +31,7 @@ function buildControls(
       show: (s) => s === 'idle',
       onClick: start,
       border: '#3b82f6',
+      extraClass: 'btn btn-outline px-4 py-2 rounded-xl text-xs',
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -52,7 +52,7 @@ export default function useTraining() {
   const [counterisRunning, setCounterisRunning] = useState<boolean>(false);
 
   const [selectedWeight1, setSelectedWeight1] = useState<number[]>([3]);
-  const [selectedWeight2, setSelectedWeight2] = useState<number[]>([3]);
+
   const [idx, setWeightidx] = useState<number>(0);
 
   const [notification, setNotification] = useState<Notification | null>(null);
@@ -84,37 +84,6 @@ export default function useTraining() {
   }, [training1]);
 
   // ── Scroll weight picker to pre-selected values when modal opens ───────────
-  useEffect(() => {
-    if (showModal && scrollRef.current && training1 != null) {
-      let wholePart = Math.floor(training1.weights[idx]);
-      setSelectedWeight1((prev) => {
-        const updated = [...prev];
-        updated[idx] = wholePart;
-        return updated;
-      });
-      if (isNaN(wholePart)) wholePart = 0;
-      const row = scrollRef.current.querySelector<HTMLTableRowElement>(
-        `tr[data-weight="${wholePart}"]`
-      );
-      row?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [showModal, idx]);
-
-  useEffect(() => {
-    if (showModal && scrollRef2.current && training1 != null) {
-      let decimalPart = training1.weights[idx] % 1;
-      setSelectedWeight2((prev) => {
-        const updated = [...prev];
-        updated[idx] = decimalPart;
-        return updated;
-      });
-      if (isNaN(decimalPart)) decimalPart = 0;
-      const row = scrollRef2.current.querySelector<HTMLTableRowElement>(
-        `tr[data-weight2="${decimalPart}"]`
-      );
-      row?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [showModal, idx]);
 
   // ── API: save exercise ─────────────────────────────────────────────────────
   const postData = (updatedCurrent: TrainingExercise): void => {
@@ -283,19 +252,9 @@ export default function useTraining() {
     });
   };
 
-  const handleWeightSelect2 = (weight: number): void => {
-    if (selectedWeight1[idx] !== null) {
-      setSelectedWeight2((prev) => {
-        const updated = [...prev];
-        updated[idx] = weight;
-        return updated;
-      });
-    }
-  };
-
   const changeWeight = (index: number, flag: boolean): void => {
     if (!currentPlan) return;
-    const totalWeight = (selectedWeight1[index] ?? 0) + (selectedWeight2[index] ?? 0);
+    const totalWeight = selectedWeight1[index] ?? 0;
     const updatedSetw = [...currentExercises[idxExercise].weights];
     updatedSetw[index] = totalWeight;
     const updatedExercise: TrainingExercise = {
@@ -373,7 +332,7 @@ export default function useTraining() {
     setNotification,
     // weight picker
     selectedWeight1,
-    selectedWeight2,
+
     idx,
     scrollRef,
     scrollRef2,
@@ -386,7 +345,7 @@ export default function useTraining() {
     handleReduceSets,
     handleModal,
     handleWeightSelect,
-    handleWeightSelect2,
+
     changeWeight,
     startCounter,
     stopCounter,

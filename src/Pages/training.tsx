@@ -7,6 +7,8 @@ import Button from '../Components/button.jsx';
 import Notify from '../Components/notify.jsx';
 import TemplateModal from '../Components/templatemodal.jsx';
 import useTraining from '../hooks/useTraining';
+import Table from '../Components/Table.tsx';
+
 import type { TrainingExercise } from '../types';
 import loadingComponente from '../Components/loading.js';
 
@@ -53,22 +55,19 @@ interface WeightModalProps {
   scrollRef: RefObject<HTMLDivElement | null>;
   scrollRef2: RefObject<HTMLDivElement | null>;
   selectedWeight1: number[];
-  selectedWeight2: number[];
+
   idx: number;
   handleWeightSelect: (weight: number) => void;
-  handleWeightSelect2: (weight: number) => void;
+
   changeWeight: (index: number, flag: boolean) => void;
   onClose: () => void;
 }
 
 function WeightModal({
   scrollRef,
-  scrollRef2,
   selectedWeight1,
-  selectedWeight2,
   idx,
   handleWeightSelect,
-  handleWeightSelect2,
   changeWeight,
   onClose,
 }: WeightModalProps) {
@@ -76,85 +75,15 @@ function WeightModal({
     <TemplateModal>
       <div>
         <div className="flex flex-row justify-center items-center text-xs">
-          {/* Whole kg picker */}
-          <div ref={scrollRef} className="h-24 overflow-y-scroll border border-gray-800">
-            <table className="min-w-2 border-collapse">
-              <tbody>
-                {Array.from({ length: 1000 }, (_, i) => i).map((weight) => (
-                  <tr
-                    key={weight}
-                    data-weight={weight}
-                    onClick={(e) => {
-                      handleWeightSelect(weight);
-                      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }}
-                  >
-                    <td
-                      className="border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg"
-                      style={{
-                        background:
-                          selectedWeight1[idx] === weight
-                            ? 'rgba(37,99,235,0.45)'
-                            : 'rgba(0,0,0,0.2)',
-                        boxShadow:
-                          selectedWeight1[idx] === weight
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 8px 32px 0 rgba(0,0,0,0.1)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        color: selectedWeight1[idx] === weight ? '#e0eaff' : '',
-                      }}
-                    >
-                      {weight} kg
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Whole kg picker (virtualized) */}
+          <div ref={scrollRef}>
+            <Table
+              selectedItem={selectedWeight1[idx] ?? 0}
+              onSelect={handleWeightSelect}
+              string="Weight: "
+              color="bg-blue-500"
+            />
           </div>
-
-          {/* Decimal picker (0.25 steps) */}
-          <div ref={scrollRef2} className="h-24 overflow-y-scroll border border-gray-800">
-            <table className="min-w-2 border-collapse">
-              <tbody>
-                {Array.from({ length: 8 }, (_, i) => i * 0.25).map((weight) => (
-                  <tr
-                    key={weight}
-                    data-weight2={weight}
-                    onClick={(e) => {
-                      handleWeightSelect2(weight);
-                      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }}
-                  >
-                    <td
-                      className={`border border-gray-800 p-2 text-center rounded-md backdrop-blur-lg ${
-                        selectedWeight1[idx] === null
-                          ? 'opacity-50 cursor-not-allowed'
-                          : 'cursor-pointer'
-                      }`}
-                      style={{
-                        background:
-                          selectedWeight2[idx] === weight
-                            ? 'rgba(37,99,235,0.45)'
-                            : 'rgba(0,0,0,0.2)',
-                        boxShadow:
-                          selectedWeight2[idx] === weight
-                            ? '0 4px 24px 0 rgba(37,99,235,0.25)'
-                            : '0 8px 32px 0 rgba(0,0,0,0.1)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        color: selectedWeight2[idx] === weight ? '#e0eaff' : '',
-                      }}
-                    >
-                      {weight} kg
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="divider divider-primary">
-          {(selectedWeight1[idx] ?? 0) + (selectedWeight2[idx] ?? 0)} kg
         </div>
 
         <div className="modal-action justify-center">
@@ -334,7 +263,7 @@ function StartTraining() {
     notification,
     setNotification,
     selectedWeight1,
-    selectedWeight2,
+
     idx,
     scrollRef,
     scrollRef2,
@@ -346,7 +275,7 @@ function StartTraining() {
     handleReduceSets,
     handleModal,
     handleWeightSelect,
-    handleWeightSelect2,
+
     changeWeight,
     startCounter,
     stopCounter,
@@ -371,11 +300,9 @@ function StartTraining() {
         <WeightModal
           scrollRef={scrollRef}
           scrollRef2={scrollRef2}
-          selectedWeight1={selectedWeight1}
-          selectedWeight2={selectedWeight2}
+          selectedWeight1={training1 ? training1.weights : [0]}
           idx={idx}
           handleWeightSelect={handleWeightSelect}
-          handleWeightSelect2={handleWeightSelect2}
           changeWeight={changeWeight}
           onClose={() => setShowModal(false)}
         />

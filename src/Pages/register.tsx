@@ -6,6 +6,7 @@ import TemplatePage from '../Components/templatepage.js';
 import EmailInput from '../Components/emailinput.js';
 import PasswordInput from '../Components/passwordinput.js';
 import Button from '../Components/button.js';
+import { userService } from '../services/userService.ts';
 function RegisterPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
@@ -18,11 +19,8 @@ function RegisterPage() {
 
   const handleRegister = (): void => {
     setIsLoading(true);
-    api
-      .post('/auth/register', {
-        email,
-        password,
-      })
+    userService
+      .register(email, password)
       .then(() => {
         setMessage('Registration successful! You can now log in.');
         setSuccesRegister(true);
