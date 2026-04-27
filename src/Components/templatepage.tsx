@@ -61,21 +61,13 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
       <div className="min-h-[100dvh] bg-gradient-to-b from-gray-900 to-black flex flex-col items-center px-1 py-3">
         {/* vertikale Zentrierung */}
         <div className="flex flex-col items-center sm:items-center  w-full pt-16 pb-8">
-          <div className="w-full lg:h-full h-[80dvh] max-h-[100dvh] lg:w-auto max-w-sm sm:max-w-md lg:max-w-4xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg animate-fade-in">
+          <div className="w-full lg:h-full h-[80dvh] max-h-[100dvh] lg:w-auto max-w-sm sm:max-w-md lg:max-w-4xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
             {children}
           </div>
           {!dockDisabled ? (
             <div
-              className="dock h-16 w-full max-w-4xl overflow-y-hidden text-neutral-content overflow-x-auto mt-6 sm:hidden relative rounded-2xl border border-white/10 shadow-xl backdrop-blur-md"
-              style={{
-                maxWidth: 400,
-                width: '100%',
-                background:
-                  'linear-gradient(120deg, rgba(10,10,15,0.85) 0%, rgba(20,20,30,0.92) 100%)',
-                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.18), 0 1px 4px 0 rgba(0,0,0,0.12) inset',
-                WebkitBackdropFilter: 'blur(2px)',
-                backdropFilter: 'blur(2px)',
-              }}
+              className="dock bg-neutral h-16 w-full max-w-4xl rounded-xl overflow-y-hidden text-neutral-content overflow-x-auto mt-6 sm:hidden"
+              style={{ maxWidth: 400, width: '100%' }}
               ref={dockRef}
             >
               <button
@@ -260,15 +252,3 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
 }
 
 export default TemplatePage;
-
-// Tailwind Fade-In Animation
-// Füge in tailwind.config.js unter 'extend.animation' und 'extend.keyframes' hinzu:
-// animation: {
-//   'fade-in': 'fadeIn 0.7s cubic-bezier(0.4, 0, 0.2, 1) both',
-// },
-// keyframes: {
-//   fadeIn: {
-//     '0%': { opacity: 0 },
-//     '100%': { opacity: 1 },
-//   },
-// },
