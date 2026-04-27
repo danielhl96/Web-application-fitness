@@ -2,7 +2,7 @@ import hark from 'hark';
 
 // Tune these constants to balance responsiveness vs. cutting off mid-sentence.
 // Threshold guide: background noise ≈ -60..-45 dB | speech ≈ -25..-10 dB
-const DEFAULT_THRESHOLD_DB = -35; // dB — below this hark considers it silence
+const DEFAULT_THRESHOLD_DB = -45; // dB — below this hark considers it silence
 const DEFAULT_SILENCE_DEBOUNCE_MS = 2000; // ms of continuous silence before onSilence fires
 
 export interface VADCallbacks {

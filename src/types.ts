@@ -134,6 +134,20 @@ export type ProfileFormErrors = {
   bfp: boolean;
 };
 
+export type ExerciseEntry = {
+  date: string;
+  weights: number[];
+  reps: number[];
+};
+
+export type ExerciseData = {
+  exercise_name: string;
+  entries: ExerciseEntry[];
+  date: string[];
+  max_weight: number;
+  min_weight: number;
+};
+
 export type Action =
   | {
       type:

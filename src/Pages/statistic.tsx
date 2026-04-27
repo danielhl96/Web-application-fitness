@@ -1,49 +1,22 @@
 import api from '../Utils/api';
 import ApexCharts from 'apexcharts';
-import { useState, useEffect, JSX } from 'react';
+import { useEffect, JSX } from 'react';
 import TemplatePage from '../Components/templatepage.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
-import { UI_STATE } from '../types';
 import loadingComponente from '../Components/loading.js';
-type ExerciseEntry = {
-  date: string;
-  weights: number[];
-  reps: number[];
-};
-
-type ExerciseData = {
-  exercise_name: string;
-  entries: ExerciseEntry[];
-  date: string[];
-  max_weight: number;
-  min_weight: number;
-};
-
-function calculateProgress(item: ExerciseData): number {
-  let progress = 0;
-  if (item.entries && item.entries.length >= 2) {
-    const first = item.entries[0];
-    const last = item.entries[item.entries.length - 1];
-    const firstWeight =
-      first.weights && first.weights.length > 0 ? first.weights.reduce((a, b) => a + b, 0) : 0;
-    const lastWeight =
-      last.weights && last.weights.length > 0 ? last.weights.reduce((a, b) => a + b, 0) : 0;
-    const firstReps =
-      first.reps && first.reps.length > 0 ? first.reps.reduce((a, b) => a + b, 0) : 0;
-    const lastReps = last.reps && last.reps.length > 0 ? last.reps.reduce((a, b) => a + b, 0) : 0;
-    if (firstWeight > 0 && firstReps > 0) {
-      progress =
-        ((lastWeight * lastReps - firstWeight * firstReps) / (firstWeight * firstReps)) * 100;
-    }
-  }
-  return progress;
-}
+import { useStatistic } from '../hooks/useStatistic.js';
+import { ExerciseData } from '../types.js';
 
 function Statistic(): JSX.Element {
-  const [showOverview, setShowOverview] = useState<boolean>(true);
-  const [selectedExercise, setSelectedExercise] = useState<ExerciseData | null>(null);
-  const [statistics, setStatistics] = useState<UI_STATE<Record<string, any>>>({ type: 'loading' });
+  const {
+    showOverview,
+    setShowOverview,
+    selectedExercise,
+    setSelectedExercise,
+    statistics,
+    calculateProgress,
+  } = useStatistic();
 
   function ExerciseCards(): JSX.Element {
     return (
@@ -271,22 +244,6 @@ function Statistic(): JSX.Element {
 
     return null;
   }
-
-  useEffect(() => {
-    api
-      .get('/statistics/exercise_statistics')
-      .then((response: { data: Record<string, ExerciseEntry[]> }) => {
-        const transformed = Object.entries(response.data).map(([exercise_name, entries]) => ({
-          exercise_name,
-          entries,
-          date: entries.map((e) => new Date(e.date).toLocaleDateString()),
-          max_weight: Math.max(...entries.flatMap((e) => e.weights)),
-          min_weight: Math.min(...entries.flatMap((e) => e.weights)),
-        }));
-
-        setStatistics({ type: 'success', data: transformed });
-      });
-  }, []);
 
   return (
     <div>
