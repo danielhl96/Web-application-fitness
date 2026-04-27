@@ -3,7 +3,17 @@ import daisyui from 'daisyui';
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'fade-in': 'fadeIn 4.0s cubic-bezier(0.4, 0, 0.2, 1) both',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
+    },
   },
   plugins: [daisyui],
   daisyui: {
