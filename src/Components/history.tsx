@@ -1,5 +1,5 @@
 import Button from './button';
-import { JSX, useEffect } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
 import { UserHistory } from '../types';
 
@@ -31,12 +31,16 @@ function ChartRenderer({
   bodyvalue: UserHistory[];
   type: string;
 }): JSX.Element {
+  const chartRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!bodyvalue) return;
-    console.log(bodyvalue);
+    console.log('ChartRenderer mount:', { bodyvalue, type, chartRef: chartRef.current });
+    if (!bodyvalue || !chartRef.current) {
+      console.warn('ChartRenderer: Keine Daten oder kein ref!');
+      return;
+    }
     const dates = bodyvalue.map((e) => e.date.slice(0, 10));
-    console.log(dates);
     const values = bodyvalue.map((e) => e[type]);
+    console.log('ChartRenderer: Daten für Chart', { dates, values });
 
     const options = {
       series: [
@@ -82,13 +86,14 @@ function ChartRenderer({
       },
     };
 
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
+    const chart = new ApexCharts(chartRef.current, options);
     chart.render();
+    console.log('ApexCharts initialisiert:', chart);
 
     return () => chart.destroy();
   }, [bodyvalue, type]);
 
-  return <></>;
+  return <div ref={chartRef} />;
 }
 
 export default function History({
@@ -98,10 +103,10 @@ export default function History({
   setShowTrend,
 }: HistoryProps): JSX.Element {
   return (
-    <div className="">
-      <div id="chart"></div>
-
-      <ChartRenderer bodyvalue={bodyvalue} type={selectedBodyValue} />
+    <>
+      <div className="flex flex-col items-center space-y-4">
+        <ChartRenderer bodyvalue={bodyvalue} type={selectedBodyValue} />
+      </div>
       <div className="divider divider-primary"></div>
       <div className="flex flex-row space-x-2 ">
         <select
@@ -133,6 +138,6 @@ export default function History({
           Close{' '}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

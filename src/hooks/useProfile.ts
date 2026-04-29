@@ -48,6 +48,7 @@ export function useProfile() {
 
   const get_history = (): void => {
     profileService.getHistory().then((data: UserHistory[]) => {
+      console.log('Fetched user history:', data);
       setBodyvalue(data);
     });
   };
