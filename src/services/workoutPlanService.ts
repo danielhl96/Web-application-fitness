@@ -1,4 +1,5 @@
-import api from '../Utils/api';
+import { IHttpClient } from '../interfaces/IHttpClient';
+import { httpClient } from '../Utils/api';
 import { WorkoutPlan, SelectedExercise, Exercise } from '../types';
 
 export interface CreateWorkoutPayload {
@@ -22,22 +23,32 @@ export interface EditWorkoutPayload {
   }[];
 }
 
-export const workoutPlanService = {
-  getAll: (): Promise<WorkoutPlan[]> =>
-    api.get<WorkoutPlan[]>('/workout_plans/get_workout_plans').then((res) => res.data),
+class WorkoutPlanService {
+  constructor(private httpClient: IHttpClient) {}
 
-  edit: (payload: EditWorkoutPayload): Promise<void> =>
-    api.put('/workout_plans/edit_workout_plan', payload),
+  async getAll(): Promise<WorkoutPlan[]> {
+    const response = await this.httpClient.get<WorkoutPlan[]>('/workout_plans/get_workout_plans');
+    return response.data;
+  }
 
-  rename: (planId: number | null, newName: string): Promise<void> =>
-    api.put('/workout_plans/change_workout_plan_name', { planId, newName }),
+  async edit(payload: EditWorkoutPayload): Promise<void> {
+    await this.httpClient.put('/workout_plans/edit_workout_plan', payload);
+  }
 
-  delete: (planId: number | null): Promise<void> =>
-    api.delete('workout_plans/delete_workout_plan', { data: { planId } }),
+  async rename(planId: number | null, newName: string): Promise<void> {
+    await this.httpClient.put('/workout_plans/change_workout_plan_name', { planId, newName });
+  }
 
-  create: (payload: CreateWorkoutPayload): Promise<void> =>
-    api.post('workout_plans/create_workout_plan', payload),
-};
+  async delete(planId: number | null): Promise<void> {
+    await this.httpClient.delete('workout_plans/delete_workout_plan', { params: { planId } });
+  }
+
+  async create(payload: CreateWorkoutPayload): Promise<void> {
+    await this.httpClient.post('workout_plans/create_workout_plan', payload);
+  }
+}
+
+export const workoutPlanService = new WorkoutPlanService(httpClient);
 
 /** Transforms Exercise[] from the create-form into the API payload shape. Pure function. */
 export function buildCreatePayload(name: string, exercises: Exercise[]): CreateWorkoutPayload {

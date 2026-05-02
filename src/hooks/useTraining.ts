@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
+import { trainingService } from '../services/trainingService';
 import type { WorkoutPlan, TrainingExercise, Notification, UI_STATE } from '../types';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -65,10 +65,10 @@ export default function useTraining() {
   // ── Fetch workout plans on mount ───────────────────────────────────────────
   useEffect(() => {
     setPlanState({ type: 'loading' });
-    api
-      .get<WorkoutPlan[]>('workout_plans/get_workout_plans')
+    trainingService
+      .getWorkoutPlans()
       .then((response) => {
-        const mapped = response.data?.length > 0 ? mapPlans(response.data) : {};
+        const mapped = response?.length > 0 ? mapPlans(response) : {};
         setPlanState({ type: 'success', data: mapped });
       })
       .catch((err: Error) => {
@@ -88,8 +88,8 @@ export default function useTraining() {
   // ── API: save exercise ─────────────────────────────────────────────────────
   const postData = (updatedCurrent: TrainingExercise): void => {
     if (!training1) return;
-    api
-      .post('workout_plans/create_exercise', {
+    trainingService
+      .saveExercise({
         workout_plan_id: updatedCurrent.plan_id,
         name: updatedCurrent.exercise,
         sets: updatedCurrent.sets,

@@ -1,4 +1,5 @@
-import api from '../Utils/api';
+import { IHttpClient } from '../interfaces/IHttpClient';
+import { httpClient } from '../Utils/api';
 import { Exercise } from '../types';
 import { ChatMessage } from '../hooks/useAiCoach';
 
@@ -7,16 +8,24 @@ export interface WorkoutPlan {
   workouts: Exercise[];
 }
 
-export const workoutService = {
-  getAll: (): Promise<WorkoutPlan[]> =>
-    api
-      .get<{ name: string; exercises: Exercise[] }[]>('workout_plans/get_workout_plans')
-      .then((res) => res.data.map((w) => ({ name: w.name, workouts: w.exercises }))),
+class WorkoutService {
+  constructor(private httpClient: IHttpClient) {}
 
-  getAiResponse: (question: string, history: ChatMessage[]): Promise<string> =>
-    api
-      .post<{
-        message: string;
-      }>('aicoach/response', { question, history }, { headers: { 'Content-Type': 'application/json' } })
-      .then((res) => res.data.message),
-};
+  async getAll(): Promise<WorkoutPlan[]> {
+    const response = await this.httpClient.get<{ name: string; exercises: Exercise[] }[]>(
+      'workout_plans/get_workout_plans'
+    );
+    return response.data.map((w) => ({ name: w.name, workouts: w.exercises }));
+  }
+
+  async getAiResponse(question: string, history: ChatMessage[]): Promise<string> {
+    const response = await this.httpClient.post<{ message: string }>(
+      'aicoach/response',
+      { question, history },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    return response.data.message;
+  }
+}
+
+export const workoutService = new WorkoutService(httpClient);

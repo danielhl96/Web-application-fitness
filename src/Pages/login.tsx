@@ -2,7 +2,7 @@ import '../index.css';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, JSX } from 'react';
 import Header from '../Components/HeaderLogout.js';
-import api from '../Utils/api';
+import { authService } from '../services/authService';
 import TemplatePage from '../Components/templatepage.js';
 import EmailInput from '../Components/emailinput.js';
 import PasswordInput from '../Components/passwordinput.js';
@@ -27,10 +27,7 @@ function LoginForm(): JSX.Element {
   async function handleLogin(): Promise<void> {
     setIsLoading(true);
     try {
-      await api.post('/auth/login', {
-        email,
-        password,
-      });
+      await authService.login(email, password);
       setIsLoading(false);
       navigate('/');
     } catch (error) {

@@ -586,7 +586,7 @@ function Nutrition() {
               <div className="flex flex-col items-center w-full">
                 {loadingMeals.type === 'loading' ? (
                   <div className="flex justify-center items-center w-full h-10">
-                    {loadingComponente('Loading meals...')}
+                    {loadingComponente('')}
                   </div>
                 ) : (
                   meals.map((meal, index) => (

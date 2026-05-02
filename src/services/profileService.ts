@@ -1,10 +1,17 @@
 import EditProfile from '../Components/editprofile';
-import api from '../Utils/api';
+import { IHttpClient } from '../interfaces/IHttpClient';
+import { httpClient } from '../Utils/api';
 import { User, UserHistory } from '../types';
 
-export const profileService = {
-  get: (): Promise<User> => api.get<User>('users/profile').then((res) => res.data),
-  EditProfile: (data: {
+class ProfileService {
+  constructor(private httpClient: IHttpClient) {}
+
+  async get(): Promise<User> {
+    const response = await this.httpClient.get<User>('users/profile');
+    return response.data;
+  }
+
+  async EditProfile(data: {
     bmi: number;
     height: number;
     weight: number;
@@ -16,7 +23,15 @@ export const profileService = {
     age: number;
     calories: number;
     activity_level: string;
-  }): Promise<{ message: string }> => api.put('users/edit_profile', data).then((res) => res.data),
-  getHistory: (): Promise<UserHistory[]> =>
-    api.get<UserHistory[]>('users/history').then((res) => res.data),
-};
+  }): Promise<{ message: string }> {
+    const response = await this.httpClient.put('users/edit_profile', data);
+    return response.data;
+  }
+
+  async getHistory(): Promise<UserHistory[]> {
+    const response = await this.httpClient.get<UserHistory[]>('users/history');
+    return response.data;
+  }
+}
+
+export const profileService = new ProfileService(httpClient);

@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { AxiosHttpClient } from '../clients/AxiosHttpClient';
 
 const baseURL = import.meta.env.VITE_API_URL as string;
 
@@ -63,4 +64,8 @@ api.interceptors.response.use(
   }
 );
 
+// Export the axios instance for backward compatibility
 export default api;
+
+// Export the HttpClient abstraction for new services (DIP)
+export const httpClient = new AxiosHttpClient(api);

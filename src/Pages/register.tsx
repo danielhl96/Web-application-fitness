@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
 import Header from '../Components/HeaderLogout.js';
 import TemplatePage from '../Components/templatepage.js';
 import EmailInput from '../Components/emailinput.js';

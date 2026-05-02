@@ -1,4 +1,5 @@
-import api from '../Utils/api';
+import { IHttpClient } from '../interfaces/IHttpClient';
+import { httpClient } from '../Utils/api';
 import { Meal } from '../types';
 
 const MEAL_TYPES = ['breakfast', 'launch', 'dinner', 'snack'] as const;
@@ -27,54 +28,71 @@ export interface EditMealPayload {
   fats: number;
 }
 
-export const mealService = {
-  getToday: (): Promise<MealResult[]> => {
+class MealService {
+  constructor(private httpClient: IHttpClient) {}
+
+  async getToday(): Promise<MealResult[]> {
     const date = new Date().toISOString().split('T')[0];
-    const promises = MEAL_TYPES.map((type) =>
-      api
-        .get<Meal[]>(`meals/get_${type}`, { params: { date } })
-        .then((res) => ({ type, meals: res.data }))
-        .catch(() => ({ type, meals: [] as Meal[] }))
-    );
+    const promises = MEAL_TYPES.map(async (type) => {
+      try {
+        const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, {
+          params: { date },
+        });
+        return { type, meals: response.data };
+      } catch {
+        return { type, meals: [] as Meal[] };
+      }
+    });
     return Promise.all(promises);
-  },
+  }
 
-  getMealsByDate: (date: string): Promise<MealResult[]> => {
-    const promises = MEAL_TYPES.map((type) =>
-      api
-        .get<Meal[]>(`meals/get_${type}`, { params: { date } })
-        .then((res) => ({ type, meals: res.data }))
-        .catch(() => ({ type, meals: [] as Meal[] }))
-    );
+  async getMealsByDate(date: string): Promise<MealResult[]> {
+    const promises = MEAL_TYPES.map(async (type) => {
+      try {
+        const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, {
+          params: { date },
+        });
+        return { type, meals: response.data };
+      } catch {
+        return { type, meals: [] as Meal[] };
+      }
+    });
     return Promise.all(promises);
-  },
+  }
 
-  getMealsByTypAndDate: (type: string, date: string): Promise<Meal[]> =>
-    api.get<Meal[]>(`meals/get_${type}`, { params: { date } }).then((res) => res.data),
+  async getMealsByTypAndDate(type: string, date: string): Promise<Meal[]> {
+    const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, { params: { date } });
+    return response.data;
+  }
 
-  deleteMeal: (mealId: number, setMessage: (message: string) => void): Promise<void> =>
-    api.delete('meals/delete_meal', { data: { mealId } }).then((res) => {
-      setMessage(res.data.message);
-    }),
+  async deleteMeal(mealId: number, setMessage: (message: string) => void): Promise<void> {
+    const response = await this.httpClient.delete('meals/delete_meal', { params: { mealId } });
+    setMessage(response.data.message);
+  }
 
-  create: (payload: CreateMealPayload): Promise<void> =>
-    api.post('meals/create_meal', payload).then(() => {}),
+  async create(payload: CreateMealPayload): Promise<void> {
+    await this.httpClient.post('meals/create_meal', payload);
+  }
 
-  edit: (payload: EditMealPayload): Promise<void> =>
-    api.put('meals/edit_meal', payload).then(() => {}),
+  async edit(payload: EditMealPayload): Promise<void> {
+    await this.httpClient.put('meals/edit_meal', payload);
+  }
 
-  analyzeText: (text: string): Promise<Meal> =>
-    api.post<Meal>('meals/analyze_food_text', { text }).then((res) => res.data),
+  async analyzeText(text: string): Promise<Meal> {
+    const response = await this.httpClient.post<Meal>('meals/analyze_food_text', { text });
+    return response.data;
+  }
 
-  analyzeImage: (image: File, mealType: string, prompt?: string): Promise<Meal> => {
+  async analyzeImage(image: File, mealType: string, prompt?: string): Promise<Meal> {
     const formData = new FormData();
     formData.append('meal_type', mealType);
     formData.append('image', image);
     if (prompt) formData.append('prompt', prompt);
-    return api
-      .post<Meal>('meals/calculate_meal', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      .then((res) => res.data);
-  },
-};
+    const response = await this.httpClient.post<Meal>('meals/calculate_meal', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  }
+}
+
+export const mealService = new MealService(httpClient);

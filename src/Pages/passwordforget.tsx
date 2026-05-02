@@ -1,6 +1,6 @@
 import { useState, useEffect, JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../Utils/api';
+import { authService } from '../services/authService';
 import Header from '../Components/HeaderLogout.js';
 import TemplatePage from '../Components/templatepage.js';
 import EmailInput from '../Components/emailinput.js';
@@ -47,8 +47,8 @@ function PasswordForget() {
 
   const handleCode = (): void => {
     setIsLoading(true);
-    api
-      .post('/auth/password_forget', { email })
+    authService
+      .requestPasswordReset(email)
       .then(() => {
         setMessage(<div className="text-green-500">Check your email for the security code.</div>);
         setRequireCode(true);
@@ -64,14 +64,10 @@ function PasswordForget() {
 
   const checkCode = (): void => {
     setIsLoading(true);
-    api
-      .post('/auth/password_reset', {
-        email: email,
-        newPassword: password,
-        safetycode: securityCode,
-      })
+    authService
+      .resetPassword(email, password, securityCode)
       .then((response) => {
-        setMessage(<div className="text-green-500">{response.data.message}</div>);
+        setMessage(<div className="text-green-500">{response.message}</div>);
         setIsLoading(false);
 
         setSuccessfully(false);

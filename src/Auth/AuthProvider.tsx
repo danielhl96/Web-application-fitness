@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useRef, JSX } from 'react';
-import api from '../Utils/api';
+import { authService } from '../services/authService';
 type AuthContextType = {
   isAuth: boolean;
   loading: boolean;
@@ -23,13 +23,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     isCheckingRef.current = true;
     try {
       console.log('Checking authentication...');
-      await api.get('/auth/check_auth');
+      await authService.checkAuth();
       setIsAuth(true);
     } catch (err) {
       console.log('Auth check failed, trying to refresh token...', err);
       try {
-        await api.post('/auth/refresh_token', {});
-        await api.get('/auth/check_auth');
+        await authService.refreshToken();
+        await authService.checkAuth();
         setIsAuth(true);
       } catch {
         setIsAuth(false);
