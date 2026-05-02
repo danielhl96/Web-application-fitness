@@ -46,7 +46,11 @@ export function useStatistic() {
         type: 'success',
       });
     } catch (error) {
-      console.error('Failed to delete exercise:', error);
+      setNotification({
+        title: 'Deletion Failed',
+        message: 'An error occurred while trying to delete the exercise entry.',
+        type: 'error',
+      });
     }
   }
 
