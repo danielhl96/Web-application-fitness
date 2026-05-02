@@ -1,12 +1,14 @@
 import ApexCharts from 'apexcharts';
 import { useEffect, useState, JSX } from 'react';
 import TemplatePage from '../Components/templatepage.js';
+import TemplateModal from '../Components/templatemodal.js';
 import Button from '../Components/button.js';
 import Header from '../Components/Header.js';
 import loadingComponente from '../Components/loading.js';
 import Input from '../Components/input.js';
 import { useStatistic } from '../hooks/useStatistic.js';
 import { ExerciseData } from '../types.js';
+import Notify from '../Components/notify.js';
 
 function Statistic(): JSX.Element {
   const {
@@ -16,9 +18,14 @@ function Statistic(): JSX.Element {
     setSelectedExercise,
     statistics,
     calculateProgress,
+    deleteExerciseEntry,
+    notification,
+    setNotification,
   } = useStatistic();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState<number | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const filteredData =
     statistics.type === 'success'
@@ -33,6 +40,18 @@ function Statistic(): JSX.Element {
       <TemplatePage>
         <div className="flex flex-col items-center justify-center w-full">
           <div className="divider divider-primary text-white font-bold mb-4">Your statistics</div>
+
+          {notification && (
+            <Notify
+              title={notification.title}
+              message={notification.message}
+              duration={1500}
+              key={notification.message + notification.title + Date.now()}
+              type={notification.type}
+              // Notify handles its own visibility, but we clear notification after duration to allow re-showing
+              onClose={() => setNotification(null)}
+            />
+          )}
 
           {showOverview && statistics.type === 'success' ? (
             <>
@@ -126,7 +145,15 @@ function Statistic(): JSX.Element {
             <div className="flex flex-col w-full">
               <div id="chart" className="w-full"></div>
               <div className="divider my-4"></div>
-              {selectedExercise && <ChartRenderer exercise={selectedExercise} />}
+              {selectedExercise && (
+                <ChartRenderer
+                  exercise={selectedExercise}
+                  onSelectEntry={(index) => {
+                    setSelectedEntryIndex(index);
+                    setShowDeleteModal(true);
+                  }}
+                />
+              )}
               <div className="flex flex-row justify-between w-full">
                 <Button onClick={() => setShowOverview(true)} border="#ef4444">
                   <svg
@@ -220,12 +247,56 @@ function Statistic(): JSX.Element {
             </div>
           )}
         </div>
+
+        {/* Delete confirmation modal */}
+        {showDeleteModal && selectedEntryIndex !== null && selectedExercise && (
+          <TemplateModal border="2px solid #ef4444">
+            <h3 className="text-white text-lg font-bold mb-4">Delete Exercise Entry</h3>
+            <p className="text-gray-300 mb-2">
+              Delete entry from {selectedExercise.date[selectedEntryIndex]}
+            </p>
+            <p className="text-gray-400 text-sm mb-6">
+              Weight: {selectedExercise.entries[selectedEntryIndex].weights.join(', ')} kg
+              <br />
+              Reps: {selectedExercise.entries[selectedEntryIndex].reps.join(', ')}
+            </p>
+            <div className="flex space-x-2 justify-end">
+              <Button
+                onClick={() => {
+                  if (selectedEntryIndex !== null) {
+                    deleteExerciseEntry(selectedExercise.entries[selectedEntryIndex].id);
+                    setShowDeleteModal(false);
+                    setSelectedEntryIndex(null);
+                  }
+                }}
+                border="#ef4444"
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedEntryIndex(null);
+                }}
+                border="#3b82f6"
+              >
+                Cancel
+              </Button>
+            </div>
+          </TemplateModal>
+        )}
       </TemplatePage>
     </div>
   );
 }
 
-function ChartRenderer({ exercise }: { exercise: ExerciseData }): JSX.Element {
+function ChartRenderer({
+  exercise,
+  onSelectEntry,
+}: {
+  exercise: ExerciseData;
+  onSelectEntry: (index: number) => void;
+}): JSX.Element {
   useEffect(() => {
     if (!exercise) return;
 
@@ -246,9 +317,26 @@ function ChartRenderer({ exercise }: { exercise: ExerciseData }): JSX.Element {
         zoom: { enabled: false },
         toolbar: { show: false },
         menubar: { show: false },
+        events: {
+          dataPointSelection: function (event: any, chartContext: any, config: any) {
+            onSelectEntry(config.dataPointIndex);
+          },
+          markerClick: function (event: any, chartContext: any, { dataPointIndex }: any) {
+            onSelectEntry(dataPointIndex);
+          },
+        },
       },
       dataLabels: { enabled: false },
       stroke: { curve: 'smooth' },
+      markers: {
+        size: 5,
+        colors: ['#3b82f6'],
+        strokeColors: '#fff',
+        strokeWidth: 2,
+        hover: {
+          size: 7,
+        },
+      },
       title: {
         text: `Progress for ${exercise.exercise_name}`,
         align: 'left',
@@ -277,7 +365,7 @@ function ChartRenderer({ exercise }: { exercise: ExerciseData }): JSX.Element {
           const repsArray = exercise.entries[dataPointIndex].reps;
           const date = dates[dataPointIndex];
           const repsDisplay = repsArray.join(', ');
-          return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${date}</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Weight: </span><span class="apexcharts-tooltip-text-y-value">${weight} kg</span></div><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Reps: </span><span class="apexcharts-tooltip-text-y-value">${repsDisplay}</span></div></div></div>`;
+          return `<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${date}</div><div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;"><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Weight: </span><span class="apexcharts-tooltip-text-y-value">${weight} kg</span></div><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Reps: </span><span class="apexcharts-tooltip-text-y-value">${repsDisplay}</span></div><div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #444;"><span style="color: #ef4444; font-size: 11px; cursor: pointer;">Click data point to delete</span></div></div></div>`;
         },
       },
     };

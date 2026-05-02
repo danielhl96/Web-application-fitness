@@ -31,6 +31,10 @@ class WorkoutPlanService {
     return response.data;
   }
 
+  async deleteExercise(exerciseId: number): Promise<void> {
+    await this.httpClient.delete(`/workout_plans/exercises/${exerciseId}`);
+  }
+
   async edit(payload: EditWorkoutPayload): Promise<void> {
     const { plan_id, exercises } = payload;
     await this.httpClient.put(`/workout_plans/${plan_id}`, { exercises });

@@ -148,4 +148,13 @@ export class WorkoutPlansService {
 
     return { message: 'Exercises added to workout plan successfully' };
   }
+
+  async deleteExercise(exerciseId: number) {
+    await this.prisma.exercises.delete({
+      where: {
+        id: exerciseId,
+      },
+    });
+    return { message: 'Exercise deleted successfully' };
+  }
 }

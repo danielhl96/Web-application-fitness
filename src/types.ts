@@ -138,6 +138,7 @@ export type ExerciseEntry = {
   date: string;
   weights: number[];
   reps: number[];
+  id: number;
 };
 
 export type ExerciseData = {
@@ -146,6 +147,7 @@ export type ExerciseData = {
   date: string[];
   max_weight: number;
   min_weight: number;
+  id: number;
 };
 
 export type Action =

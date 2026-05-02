@@ -8,11 +8,14 @@ export class StatisticsService {
   async getUserStatistics(
     userId: number
   ): Promise<
-    Record<string, { name: string; date: Date; sets: number; reps: number[]; weights: number[] }[]>
+    Record<
+      string,
+      { name: string; date: Date; sets: number; reps: number[]; weights: number[]; id: number }[]
+    >
   > {
     const list: Record<
       string,
-      { name: string; date: Date; sets: number; reps: number[]; weights: number[] }[]
+      { name: string; date: Date; sets: number; reps: number[]; weights: number[]; id: number }[]
     > = {};
     const exercises = await this.prisma.exercises.findMany({
       where: { user_id: userId },
@@ -30,6 +33,7 @@ export class StatisticsService {
         sets: exercise.sets,
         reps: exercise.reps,
         weights: exercise.weights,
+        id: exercise.id,
       });
     }
     return list;

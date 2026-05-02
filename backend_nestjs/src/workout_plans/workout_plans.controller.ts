@@ -76,4 +76,10 @@ export class WorkoutPlansController {
       req.user.id
     );
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('exercises/:exerciseId')
+  async deleteExercise(@Param('exerciseId') exerciseId: string) {
+    await this.workoutPlansService.deleteExercise(Number(exerciseId));
+  }
 }
