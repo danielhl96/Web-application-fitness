@@ -6,12 +6,12 @@ class UserService {
   constructor(private httpClient: IHttpClient) {}
 
   async changeEmail(email: string, password: string): Promise<{ message: string }> {
-    const response = await this.httpClient.put('users/change_email', { email, password });
+    const response = await this.httpClient.patch('users/profile/email', { email, password });
     return response.data;
   }
 
   async changePassword(oldPassword: string, newPassword: string): Promise<{ message: string }> {
-    const response = await this.httpClient.put('users/change_password', {
+    const response = await this.httpClient.put('users/password', {
       oldPassword,
       newPassword,
     });
@@ -19,7 +19,7 @@ class UserService {
   }
 
   async deleteProfile(password: string): Promise<{ message: string }> {
-    const response = await this.httpClient.delete('users/delete_account', { params: { password } });
+    const response = await this.httpClient.delete('users', { params: { password } });
     return response.data;
   }
 

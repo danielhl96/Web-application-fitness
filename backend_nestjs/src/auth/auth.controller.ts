@@ -41,13 +41,13 @@ export class AuthController {
     return { message: 'Logged in successfully' };
   }
 
-  @Post('password_forget')
+  @Post('password-reset-requests')
   async passwordForget(@Body() body: { email: string }) {
     await this.authService.passwordForget(body.email);
     return { message: 'Password reset email sent' };
   }
 
-  @Post('password_reset')
+  @Post('password')
   async passwordReset(@Body() body: { safetycode: string; newPassword: string; email: string }) {
     await this.authService.passwordReset(body.safetycode, body.newPassword, body.email);
     return { message: 'Password reset successfully' };

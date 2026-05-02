@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Put,
+  Patch,
   Delete,
   Inject,
   UseGuards,
@@ -32,7 +33,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('edit_profile')
+  @Patch('profile')
   async updateProfile(@Req() req: { user: User }, @Body() data: UpdateProfileDto) {
     await Promise.all([
       this.usersService.update(req.user.id, data),
@@ -47,18 +48,18 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('change_email')
+  @Patch('profile/email')
   async changeEmail(@Req() req: { user: User }, @Body() body: EmailChangeDto) {
     return this.usersService.changeEmail(req.user.id, body.email);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('change_password')
+  @Put('password')
   async changePassword(@Req() req: { user: User }, @Body() body: PasswordChangeDto) {
     return this.usersService.changePassword(req.user.id, body.oldPassword, body.newPassword);
   }
   @UseGuards(JwtAuthGuard)
-  @Delete('delete_account')
+  @Delete()
   async deleteAccount(@Req() req: { user: User }, @Body() body: DeleteProfileDto) {
     await this.usersService.remove(req.user.id);
   }

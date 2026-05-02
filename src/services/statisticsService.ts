@@ -11,7 +11,7 @@ class StatisticsService {
   constructor(private httpClient: IHttpClient) {}
 
   async getStatistics(date: string): Promise<any> {
-    const response = await this.httpClient.get('/statistics/exercise_statistics', {
+    const response = await this.httpClient.get('/statistics/exercises', {
       params: { date },
     });
     return response.data;

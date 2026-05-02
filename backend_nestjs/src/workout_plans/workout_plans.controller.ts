@@ -4,6 +4,8 @@ import {
   Post,
   Body,
   Put,
+  Patch,
+  Param,
   Delete,
   Inject,
   UseGuards,
@@ -27,38 +29,51 @@ export class WorkoutPlansController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('get_workout_plans')
+  @Get()
   async getWorkoutPlans(@Req() req: { user: User }) {
     const workout_plans = await this.workoutPlansService.getWorkoutPlans(req.user.id);
     if (!workout_plans) throw new NotFoundException('No workout plans found for this user');
     return workout_plans;
   }
   @UseGuards(JwtAuthGuard)
-  @Put('edit_workout_plan')
-  async editWorkoutPlan(@Body() body: EditWorkoutPlanDto) {
-    console.log('Received request to edit workout plan with body:', body);
-    return this.workoutPlansService.editWorkoutPlan(body);
+  @Put(':planId')
+  async editWorkoutPlan(
+    @Param('planId') planId: string,
+    @Body() body: Omit<EditWorkoutPlanDto, 'plan_id'>
+  ) {
+    console.log('Received request to edit workout plan with planId:', planId, 'body:', body);
+    return this.workoutPlansService.editWorkoutPlan({ ...body, plan_id: Number(planId) });
   }
   @UseGuards(JwtAuthGuard)
-  @Put('change_workout_plan_name')
-  async changeWorkoutPlanName(@Body() body: ChangeWorkoutPlanNameDto) {
-    return this.workoutPlansService.changeWorkoutPlanName(body.planId, body.newName);
+  @Patch(':planId/name')
+  async changeWorkoutPlanName(
+    @Param('planId') planId: string,
+    @Body() body: Omit<ChangeWorkoutPlanNameDto, 'planId'>
+  ) {
+    return this.workoutPlansService.changeWorkoutPlanName(Number(planId), body.newName);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('create_workout_plan')
+  @Post()
   async createWorkoutPlan(@Req() req: { user: User }, @Body() body: CreateWorkoutPlanDto) {
     await this.workoutPlansService.createWorkoutPlan(body, req.user.id);
   }
   @UseGuards(JwtAuthGuard)
   @HttpCode(204)
-  @Delete('delete_workout_plan')
-  async deleteWorkoutPlan(@Body() body: DeleteWorkoutPlanDto) {
-    await this.workoutPlansService.deleteWorkoutPlan(body.planId);
+  @Delete(':planId')
+  async deleteWorkoutPlan(@Param('planId') planId: string) {
+    await this.workoutPlansService.deleteWorkoutPlan(Number(planId));
   }
   @UseGuards(JwtAuthGuard)
-  @Post('create_exercise')
-  async createExercises(@Body() body: CreateExerciseDto, @Req() req: { user: User }) {
-    await this.workoutPlansService.createExercises(body, req.user.id);
+  @Post(':planId/exercises')
+  async createExercises(
+    @Param('planId') planId: string,
+    @Body() body: Omit<CreateExerciseDto, 'workout_plan_id'>,
+    @Req() req: { user: User }
+  ) {
+    await this.workoutPlansService.createExercises(
+      { ...body, workout_plan_id: Number(planId) },
+      req.user.id
+    );
   }
 }

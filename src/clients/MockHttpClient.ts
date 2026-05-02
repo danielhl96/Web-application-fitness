@@ -47,7 +47,7 @@ export class MockHttpClient implements IHttpClient {
     return this.createResponse<T>(url);
   }
 
-  async delete<T = any>(url: string, config?: RequestConfig): Promise<HttpResponse<T>> {
+  async delete<T = any>(url: string, data?: any, config?: RequestConfig): Promise<HttpResponse<T>> {
     return this.createResponse<T>(url);
   }
 

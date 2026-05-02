@@ -26,7 +26,7 @@ class AuthService {
   }
 
   async requestPasswordReset(email: string): Promise<void> {
-    await this.httpClient.post('/auth/password_forget', { email });
+    await this.httpClient.post('/auth/password-reset-requests', { email });
   }
 
   async resetPassword(
@@ -34,7 +34,7 @@ class AuthService {
     newPassword: string,
     safetycode: string
   ): Promise<{ message: string }> {
-    const response = await this.httpClient.post('/auth/password_reset', {
+    const response = await this.httpClient.post('/auth/password', {
       email,
       newPassword,
       safetycode,

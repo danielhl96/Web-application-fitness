@@ -27,24 +27,25 @@ class WorkoutPlanService {
   constructor(private httpClient: IHttpClient) {}
 
   async getAll(): Promise<WorkoutPlan[]> {
-    const response = await this.httpClient.get<WorkoutPlan[]>('/workout_plans/get_workout_plans');
+    const response = await this.httpClient.get<WorkoutPlan[]>('/workout_plans');
     return response.data;
   }
 
   async edit(payload: EditWorkoutPayload): Promise<void> {
-    await this.httpClient.put('/workout_plans/edit_workout_plan', payload);
+    const { plan_id, exercises } = payload;
+    await this.httpClient.put(`/workout_plans/${plan_id}`, { exercises });
   }
 
   async rename(planId: number | null, newName: string): Promise<void> {
-    await this.httpClient.put('/workout_plans/change_workout_plan_name', { planId, newName });
+    await this.httpClient.patch(`/workout_plans/${planId}/name`, { newName });
   }
 
   async delete(planId: number | null): Promise<void> {
-    await this.httpClient.delete('workout_plans/delete_workout_plan', { params: { planId } });
+    await this.httpClient.delete(`workout_plans/${planId}`);
   }
 
   async create(payload: CreateWorkoutPayload): Promise<void> {
-    await this.httpClient.post('workout_plans/create_workout_plan', payload);
+    await this.httpClient.post('workout_plans', payload);
   }
 }
 

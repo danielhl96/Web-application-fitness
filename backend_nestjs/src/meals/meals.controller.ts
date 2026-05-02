@@ -10,8 +10,10 @@ import {
   Query,
   Delete,
   Put,
+  Param,
   UseInterceptors,
   UploadedFile,
+  NotFoundException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateMealDto, EditMealDto } from './dto/meals_dto';
@@ -23,7 +25,7 @@ export class MealsController {
   constructor(private readonly mealsService: MealsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('create_meal')
+  @Post()
   async createMeal(@Req() req: { user: User }, @Body() createMealDto: any) {
     return this.mealsService.createMeal(req.user.id, createMealDto);
   }
@@ -42,35 +44,39 @@ export class MealsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('delete_meal')
-  async deleteMeal(@Req() req: { user: User }, @Body() body: { mealId: number }) {
-    return this.mealsService.deleteMeal(req.user.id, body.mealId);
+  @Delete(':mealId')
+  async deleteMeal(@Req() req: { user: User }, @Param('mealId') mealId: string) {
+    return this.mealsService.deleteMeal(req.user.id, Number(mealId));
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('edit_meal')
-  async editMeal(@Req() req: { user: User }, @Body() body: EditMealDto) {
-    return this.mealsService.editMeal(body, req.user.id);
+  @Put(':mealId')
+  async editMeal(
+    @Req() req: { user: User },
+    @Param('mealId') mealId: string,
+    @Body() body: Omit<EditMealDto, 'mealId'>
+  ) {
+    return this.mealsService.editMeal({ ...body, mealId: Number(mealId) }, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('get_breakfast')
-  async getBreakfast(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getBreakfast(req.user.id, date);
-  }
-  @UseGuards(JwtAuthGuard)
-  @Get('get_lunch')
-  async getLunch(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getLunch(req.user.id, date);
-  }
-  @UseGuards(JwtAuthGuard)
-  @Get('get_dinner')
-  async getDinner(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getDinner(req.user.id, date);
-  }
-  @UseGuards(JwtAuthGuard)
-  @Get('get_snack')
-  async getSnack(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getSnack(req.user.id, date);
+  @Get()
+  async getMeals(
+    @Req() req: { user: User },
+    @Query('type') type: string,
+    @Query('date') date?: string
+  ) {
+    switch (type) {
+      case 'breakfast':
+        return this.mealsService.getBreakfast(req.user.id, date);
+      case 'lunch':
+        return this.mealsService.getLunch(req.user.id, date);
+      case 'dinner':
+        return this.mealsService.getDinner(req.user.id, date);
+      case 'snack':
+        return this.mealsService.getSnack(req.user.id, date);
+      default:
+        throw new NotFoundException('Invalid meal type');
+    }
   }
 }

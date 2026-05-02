@@ -24,7 +24,7 @@ class ProfileService {
     calories: number;
     activity_level: string;
   }): Promise<{ message: string }> {
-    const response = await this.httpClient.put('users/edit_profile', data);
+    const response = await this.httpClient.patch('users/profile', data);
     return response.data;
   }
 

@@ -35,8 +35,8 @@ class MealService {
     const date = new Date().toISOString().split('T')[0];
     const promises = MEAL_TYPES.map(async (type) => {
       try {
-        const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, {
-          params: { date },
+        const response = await this.httpClient.get<Meal[]>('meals', {
+          params: { type, date },
         });
         return { type, meals: response.data };
       } catch {
@@ -49,8 +49,8 @@ class MealService {
   async getMealsByDate(date: string): Promise<MealResult[]> {
     const promises = MEAL_TYPES.map(async (type) => {
       try {
-        const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, {
-          params: { date },
+        const response = await this.httpClient.get<Meal[]>('meals', {
+          params: { type, date },
         });
         return { type, meals: response.data };
       } catch {
@@ -61,21 +61,22 @@ class MealService {
   }
 
   async getMealsByTypAndDate(type: string, date: string): Promise<Meal[]> {
-    const response = await this.httpClient.get<Meal[]>(`meals/get_${type}`, { params: { date } });
+    const response = await this.httpClient.get<Meal[]>('meals', { params: { type, date } });
     return response.data;
   }
 
   async deleteMeal(mealId: number, setMessage: (message: string) => void): Promise<void> {
-    const response = await this.httpClient.delete('meals/delete_meal', { params: { mealId } });
+    const response = await this.httpClient.delete(`meals/${mealId}`);
     setMessage(response.data.message);
   }
 
   async create(payload: CreateMealPayload): Promise<void> {
-    await this.httpClient.post('meals/create_meal', payload);
+    await this.httpClient.post('meals', payload);
   }
 
   async edit(payload: EditMealPayload): Promise<void> {
-    await this.httpClient.put('meals/edit_meal', payload);
+    const { mealId, ...data } = payload;
+    await this.httpClient.put(`meals/${mealId}`, data);
   }
 
   async analyzeText(text: string): Promise<Meal> {

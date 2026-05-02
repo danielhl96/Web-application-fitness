@@ -23,7 +23,7 @@ export class StatisticsController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('exercise_statistics')
+  @Get('exercises')
   async getUserStatistics(
     @Req() req: { user: { id: number } }
   ): Promise<
