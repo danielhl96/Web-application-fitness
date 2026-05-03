@@ -23,8 +23,20 @@ export interface EditWorkoutPayload {
   }[];
 }
 
+export interface CreateExcercisePayload {
+  workout_plan_id: number | null;
+  name: string;
+  sets: number;
+  reps: number[];
+  weights: number[];
+}
+
 class WorkoutPlanService {
   constructor(private httpClient: IHttpClient) {}
+
+  async saveExercise(payload: CreateExcercisePayload): Promise<void> {
+    await this.httpClient.post(`workout_plans/${payload.workout_plan_id}/exercises`, payload);
+  }
 
   async getAll(): Promise<WorkoutPlan[]> {
     const response = await this.httpClient.get<WorkoutPlan[]>('/workout_plans');
