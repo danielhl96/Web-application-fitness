@@ -1,7 +1,7 @@
-import { IHttpClient } from '../interfaces/IHttpClient';
-import { httpClient } from '../Utils/api';
+import { IHttpClient } from '../shared/interfaces/IHttpClient';
+import { httpClient } from '../shared/Utils/api';
 import { Exercise } from '../types';
-import { ChatMessage } from '../hooks/useAiCoach';
+import { ChatMessage } from '../features/aicoach/useAiCoach';
 
 export interface WorkoutPlan {
   name: string;

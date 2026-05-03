@@ -1,6 +1,6 @@
-import EditProfile from '../Components/editprofile';
-import { IHttpClient } from '../interfaces/IHttpClient';
-import { httpClient } from '../Utils/api';
+import EditProfile from '../features/profile/editprofile';
+import { IHttpClient } from '../shared/interfaces/IHttpClient';
+import { httpClient } from '../shared/Utils/api';
 import { User, UserHistory } from '../types';
 
 class ProfileService {

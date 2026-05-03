@@ -1,23 +1,23 @@
 import './index.css';
 import { Routes, Route } from 'react-router-dom';
-import LoginForm from './Pages/login.jsx';
-import CreateTraining from './Pages/createtrain.jsx';
-import EditTrain from './Pages/EditTrain.jsx';
-import StartTraining from './Pages/training';
-import Profile from './Pages/profile.jsx';
-import RegisterPage from './Pages/register.jsx';
-import PasswordForget from './Pages/passwordforget.jsx';
-import Counter from './Pages/counter.tsx';
+import LoginForm from './features/auth/login.js';
+import CreateTraining from './features/createworkout/createtrain.js';
+import EditTrain from './features/editworkout/EditTrain.js';
+import StartTraining from './features/training/training.tsx';
+import Profile from './features/profile/profile.js';
+import RegisterPage from './features/auth/register.js';
+import PasswordForget from './features/auth/passwordforget.js';
+import Counter from './features/timer/counter.tsx';
 import ProtectedRoute from './Auth/ProtectedRoute.jsx';
 import PrivacyPolicy from './Pages/privacypolicy.jsx';
 import Impressum from './Pages/imprint.jsx';
 import AttributionPage from './Pages/attributionpage.jsx';
 import { AuthProvider } from './Auth/AuthProvider.jsx';
-import Statistic from './Pages/statistic.jsx';
-import CredentialsPage from './Pages/credentials.jsx';
-import Nutrition from './Pages/nutrition.jsx';
+import Statistic from './features/statistics/statistic.js';
+import CredentialsPage from './features/credentials/credentials.js';
+import Nutrition from './features/meal/nutrition.js';
 import Home from './Pages/home.jsx';
-import AiCoach from './Pages/aicoach.jsx';
+import AiCoach from './features/aicoach/aicoach.js';
 
 //Routes with ProtectedRoute to protect routes for the application
 function App() {

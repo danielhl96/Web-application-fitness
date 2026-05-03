@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useRef, JSX } from 'react';
-import { authService } from '../services/authService';
+import { authService } from '../features/auth/authService';
 type AuthContextType = {
   isAuth: boolean;
   loading: boolean;

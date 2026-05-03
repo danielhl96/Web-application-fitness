@@ -1,6 +1,6 @@
 import '../index.css';
-import TemplatePage from '../Components/templatepage.js';
-import Header from '../Components/HeaderLogout.js';
+import TemplatePage from '../shared/Components/templatepage.js';
+import Header from '../features/header/HeaderLogout.js';
 import { JSX } from 'react';
 function PrivacyPolicy(): JSX.Element {
   return (

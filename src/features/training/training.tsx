@@ -1,16 +1,16 @@
 import '../index.css';
 import type { RefObject } from 'react';
-import Header from '../shared/Components/Header.js';
-import TemplatePage from '../shared/Components/templatepage.js';
-import WorkoutCard from '../shared/Components/workoutcard.js';
-import Button from '../shared/Components/button.js';
-import Notify from '../shared/Components/notify.js';
-import TemplateModal from '../shared/Components/templatemodal.js';
-import useTraining from '../hooks/useTraining';
-import Table from '../shared/Components/Table.tsx';
+import Header from '../header/Header.js';
+import TemplatePage from '../../shared/Components/templatepage.js';
+import WorkoutCard from '../../shared/Components/workoutcard.js';
+import Button from '../../shared/Components/button.js';
+import Notify from '../../shared/Components/notify.js';
+import TemplateModal from '../../shared/Components/templatemodal.js';
+import useTraining from './useTraining.ts';
+import Table from '../../shared/Components/Table.tsx';
 
-import type { TrainingExercise } from '../types';
-import loadingComponente from '../shared/Components/loading.js';
+import type { TrainingExercise } from '../../types.ts';
+import loadingComponente from '../../shared/Components/loading.js';
 
 // ── Inline modal / sub-view components ───────────────────────────────────────
 // These are tightly coupled to the training UI and intentionally kept here.

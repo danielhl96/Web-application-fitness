@@ -1,5 +1,5 @@
-import { IHttpClient } from '../interfaces/IHttpClient';
-import { httpClient } from '../Utils/api';
+import { IHttpClient } from '../shared/interfaces/IHttpClient';
+import { httpClient } from '../shared/Utils/api';
 import { User } from '../types';
 
 class UserService {

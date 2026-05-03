@@ -1,14 +1,14 @@
 import ApexCharts from 'apexcharts';
 import { useEffect, useState, JSX } from 'react';
-import TemplatePage from '../shared/Components/templatepage.js';
-import TemplateModal from '../shared/Components/templatemodal.js';
-import Button from '../shared/Components/button.js';
-import Header from '../features/header/Header.tsx';
-import loadingComponente from '../shared/Components/loading.js';
-import Input from '../shared/Components/input.js';
+import TemplatePage from '../../shared/Components/templatepage.js';
+import TemplateModal from '../../shared/Components/templatemodal.js';
+import Button from '../../shared/Components/button.js';
+import Header from '../header/Header.js';
+import loadingComponente from '../../shared/Components/loading.js';
+import Input from '../../shared/Components/input.js';
 import { useStatistic } from './useStatistic.js';
-import { ExerciseData } from '../types.js';
-import Notify from '../shared/Components/notify.js';
+import { ExerciseData } from '../../types.js';
+import Notify from '../../shared/Components/notify.js';
 
 function Statistic(): JSX.Element {
   const {
