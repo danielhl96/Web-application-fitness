@@ -6,16 +6,15 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 
-
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
-    
+
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'secret',
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: '3h',
         issuer: 'fitness-app',
         audience: 'fitness-users',
       },

@@ -103,6 +103,12 @@ export class AuthService {
   }
 
   async register(data: { email: string; password: string }): Promise<User> {
+    const existingUser = await this.prisma.users.findUnique({
+      where: { email: data.email.toLowerCase() },
+    });
+    if (existingUser) {
+      throw new UnauthorizedException('Email already in use');
+    }
     const hashedPassword = await argon2.hash(data.password);
     const user = await this.prisma.users.create({
       data: { ...data, email: data.email.toLowerCase(), password: hashedPassword },
