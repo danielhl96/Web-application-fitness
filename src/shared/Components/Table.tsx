@@ -41,7 +41,13 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
           isSelected ? color : 'bg-black/15 hover:bg-white/10'
         }`}
       >
-        {string ? (string == 'Weight: ' ? `${value} kg` : `${value} reps`) : value}
+        {string
+          ? string == 'Weight: '
+            ? `${value} kg`
+            : string == 'Reps: '
+              ? `${value} Reps`
+              : `${value} Sets`
+          : value}
       </div>
     );
   };
@@ -54,7 +60,7 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
       rowComponent={Row}
       rowProps={{ step: 1 }}
       defaultHeight={80}
-      className="h-20 lg:h-40 w-30 rounded-xl bg-gray-700/15 shadow-md"
+      className="h-20 lg:h-40 w-20 rounded-xl bg-gray-700/15 shadow-md"
       style={{ scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
     />
   );

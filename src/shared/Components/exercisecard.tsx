@@ -1,7 +1,7 @@
 import React, { JSX } from 'react';
 import '../../index.css';
 import { useState, useRef, useEffect } from 'react';
-
+import Table from './Table.tsx';
 type ExerciseCardProps = {
   ExerciseName: string;
   Description: string;
@@ -142,47 +142,21 @@ function ExerciseCard({
           <>
             <div className="flex flex-row space-x-4 p-2">
               <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
-                <table id="sets-table" className="min-w-2 border-collapse">
-                  <tbody>
-                    {Array.from({ length: 25 }, (_, i) => i + 1).map((set, index) => (
-                      <tr key={index} data-set={set} className={'bg-gray-700'}>
-                        <td
-                          ref={selectedSets === set ? selectedSetRef : null}
-                          onClick={(e) => handleSets(set, e.currentTarget)}
-                          className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
-                            selectedSets === set
-                              ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
-                              : 'bg-black/15'
-                          } `}
-                        >
-                          {'Sets: ' + set}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Table
+                  selectedItem={selectedSets}
+                  onSelect={(sets) => handleSets(sets, null)}
+                  string="Sets: "
+                  color="bg-blue-500"
+                />
               </div>
 
               <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
-                <table id="reps-table" className="min-w-2 border-collapse">
-                  <tbody>
-                    {Array.from({ length: 25 }, (_, i) => i + 1).map((rep, index) => (
-                      <tr key={index} data-rep={rep} className={'bg-gray-700'}>
-                        <td
-                          ref={selectedReps === rep ? selectedRepRef : null}
-                          onClick={(e) => handleReps(rep, e.currentTarget)}
-                          className={`border border-gray-800 p-2 text-center cursor-pointer rounded-md backdrop-blur-lg ${
-                            selectedReps === rep
-                              ? 'bg-blue-600/45 text-blue-100 shadow-lg border-blue-600'
-                              : 'bg-black/15'
-                          } `}
-                        >
-                          {'Reps: ' + rep}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Table
+                  selectedItem={selectedReps}
+                  onSelect={(reps) => handleReps(reps, null)}
+                  string="Reps: "
+                  color="bg-blue-500"
+                />
               </div>
             </div>
             <div className="flex flex-row justify-center items-center space-x-2 mb-6 ">
