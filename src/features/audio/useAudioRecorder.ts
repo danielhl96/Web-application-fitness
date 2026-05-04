@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { createSttSocket, SttEvent } from '../../services/sttSocketService';
-import type { SttSocket } from '../../services/sttSocketService';
-import { startVAD } from '../../services/vadService';
-import type { VADHandle } from '../../services/vadService';
+import { createSttSocket, SttEvent } from './sttSocketService';
+import type { SttSocket } from './sttSocketService';
+import { startVAD } from './vadService';
+import type { VADHandle } from './vadService';
 
 // Re-export for consumers that import SttEvent from this module
-export { SttEvent } from '../../services/sttSocketService';
+export { SttEvent } from './sttSocketService';
 
 const SUPPORTED_MIME_TYPES = [
   'audio/webm;codecs=opus',

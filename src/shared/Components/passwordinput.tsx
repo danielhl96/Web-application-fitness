@@ -1,6 +1,6 @@
 import { useState, useEffect, JSX } from 'react';
 import { EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
-import '../index.css';
+import '../../index.css';
 
 type PasswordInputProps = {
   value: string;

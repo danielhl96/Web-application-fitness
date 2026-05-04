@@ -1,7 +1,7 @@
 import Button from '../../shared/Components/button';
 import Input from '../../shared/Components/input';
 import { JSX } from 'react';
-import HealthMetrics from '../../shared/Components/HealthMetrics';
+import HealthMetrics from './HealthMetrics';
 
 type EditProfileProps = {
   age: number;

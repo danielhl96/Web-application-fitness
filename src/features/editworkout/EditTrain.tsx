@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 import { JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../header/Header.tsx';

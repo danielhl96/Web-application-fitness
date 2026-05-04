@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 import type { RefObject } from 'react';
 import Header from '../header/Header.js';
 import TemplatePage from '../../shared/Components/templatepage.js';

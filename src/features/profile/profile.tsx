@@ -1,9 +1,9 @@
-import '../index.css';
+import '../../index.css';
 import Header from '../header/Header.js';
 
 import TemplatePage from '../../shared/Components/templatepage.js';
 import Notify from '../../shared/Components/notify.js';
-import History from '../../shared/Components/history.tsx';
+import History from './history.tsx';
 import EditProfile from './editprofile.tsx';
 import ViewProfile from './viewprofile.tsx';
 import loadingComponente from '../../shared/Components/loading.tsx';

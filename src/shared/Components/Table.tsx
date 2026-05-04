@@ -49,7 +49,7 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
   return (
     <List
       listRef={listRef}
-      rowCount={600}
+      rowCount={10000}
       rowHeight={50}
       rowComponent={Row}
       rowProps={{ step: 1 }}

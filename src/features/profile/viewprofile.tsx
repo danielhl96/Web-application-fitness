@@ -13,7 +13,7 @@ import {
   getBfpColor,
   getGoalLabel,
   getActivityColor,
-} from '../../shared/Components/HealthMetrics';
+} from './HealthMetrics';
 
 const activityLevels: Record<string, string> = {
   '1.2': 'Not active',

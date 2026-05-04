@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, JSX } from 'react';
 import Header from '../header/HeaderLogout.js';

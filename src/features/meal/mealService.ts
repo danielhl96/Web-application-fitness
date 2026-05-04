@@ -2,7 +2,7 @@ import { IHttpClient } from '../../shared/interfaces/IHttpClient';
 import { httpClient } from '../../shared/Utils/api';
 import { Meal } from '../../types';
 
-const MEAL_TYPES = ['breakfast', 'launch', 'dinner', 'snack'] as const;
+const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
 
 export interface MealResult {
   type: string;

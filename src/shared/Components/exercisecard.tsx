@@ -1,5 +1,5 @@
 import React, { JSX } from 'react';
-import '../index.css';
+import '../../index.css';
 import { useState, useRef, useEffect } from 'react';
 
 type ExerciseCardProps = {

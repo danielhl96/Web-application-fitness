@@ -23,16 +23,6 @@ class UserService {
     return response.data;
   }
 
-  async register(email: string, password: string): Promise<{ message: string }> {
-    const response = await this.httpClient.post('auth/register', { email, password });
-    return response.data;
-  }
-
-  async login(email: string, password: string): Promise<{ token: string }> {
-    const response = await this.httpClient.post('auth/login', { email, password });
-    return response.data;
-  }
-
   async getProfile(): Promise<User> {
     const response = await this.httpClient.get<User>('users/profile');
     return response.data;

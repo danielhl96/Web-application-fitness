@@ -43,7 +43,7 @@ export type User = {
   gender: string;
   waist: number;
   hip: number;
-  goal: number;
+  goal: string;
   calories: number;
   activity_level: string;
   bmi: number;

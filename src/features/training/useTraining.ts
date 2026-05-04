@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { workoutPlanService } from '../../services/workoutPlanService';
 import type { WorkoutPlan, TrainingExercise, Notification, UI_STATE } from '../../types';
-import { workoutService } from '../../services/workoutService';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

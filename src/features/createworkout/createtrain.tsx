@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 import Header from '../header/Header.js';
 import { JSX } from 'react';
 import TemplatePage from '../../shared/Components/templatepage.js';
@@ -46,7 +46,7 @@ function CreateTraining(): JSX.Element {
         <div className="divider divider-primary text-white font-bold mb-2 ">
           Create your workout
         </div>
-        <div className="flex flex-col items-center  space-y-2">
+        <div className="flex flex-col items-center max-h-120 space-y-2">
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
             <Input
@@ -108,9 +108,11 @@ function CreateTraining(): JSX.Element {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-center justify-center min-h-0">
+        <div className="flex flex-col items-center justify-center max-h-100">
           <div className="divider divider-primary text-white font-bold mb-2">
-            {selectedExercise.length > 0 ? 'Your selected exercises' : ''}
+            {selectedExercise.length > 0 && addExercise.length === 0
+              ? 'Your selected exercises'
+              : ''}
           </div>
           {/* Render selected exercises */}
           {workoutNameSet ? (
@@ -118,8 +120,8 @@ function CreateTraining(): JSX.Element {
               <div
                 className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-80 gap-0 items-center pt-2 overflow-y-auto max-md:h-auto`}
               >
-                {selectedExercise.length > 0 ? (
-                  selectedExercise.map((exercise, index) => (
+                {selectedExercise.length > 0 && addExercise.length === 0 ? (
+                  selectedExercise.map((exercise) => (
                     <ExerciseCard
                       ismaximized={true}
                       ExerciseName={exercise.name}
@@ -134,9 +136,9 @@ function CreateTraining(): JSX.Element {
                       changePosition={(direction) => changePosition(exercise, direction)}
                     />
                   ))
-                ) : (
+                ) : selectedExercise.length === 0 && addExercise.length === 0 ? (
                   <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
-                )}
+                ) : null}
               </div>
             </div>
           ) : null}

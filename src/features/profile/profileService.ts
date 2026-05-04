@@ -1,7 +1,7 @@
-import EditProfile from '../features/profile/editprofile';
-import { IHttpClient } from '../shared/interfaces/IHttpClient';
-import { httpClient } from '../shared/Utils/api';
-import { User, UserHistory } from '../types';
+import EditProfile from './editprofile';
+import { IHttpClient } from '../../shared/interfaces/IHttpClient';
+import { httpClient } from '../../shared/Utils/api';
+import { User, UserHistory } from '../../types';
 
 class ProfileService {
   constructor(private httpClient: IHttpClient) {}

@@ -1,7 +1,7 @@
 import { JSX, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
-import loadingComponente from '../shared/Components/loading';
+import loadingComponente from '../../shared/Components/loading';
 
 type ProtectedRouteProps = {
   children: React.ReactNode;

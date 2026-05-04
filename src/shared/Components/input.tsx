@@ -1,5 +1,5 @@
 import { useState, useEffect, JSX } from 'react';
-import '../index.css';
+import '../../index.css';
 type InputProps = {
   value: string;
   onChange: (value: string) => void;

@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef, JSX } from 'react';
-import { profileService } from '../../services/profileService';
+import { profileService } from '../profile/profileService';
 import { mealService } from '../meal/mealService';
-import { workoutService, WorkoutPlan } from '../../services/workoutService';
-import { User } from '../../types';
+import { workoutPlanService } from '../../services/workoutPlanService';
+import { aiService } from './aiService';
+import { User, WorkoutPlan } from '../../types';
 
 export interface ChatMessage {
   message: string;
@@ -51,12 +52,13 @@ export function useAiCoach() {
     profileService
       .get()
       .then((profile: User) => {
+        console.log('Fetched user profile:', profile);
         const goalLabel =
-          profile.goal === 3
+          profile.goal === '3'
             ? 'Bulk'
-            : profile.goal === 2
+            : profile.goal === '2'
               ? 'Maintain weight'
-              : profile.goal === 1
+              : profile.goal === '1'
                 ? 'Loss weight'
                 : '';
         const profileMsg = `I have the following profile data: Age: ${profile.age}, Weight: ${profile.weight}kg, Height: ${profile.height}cm, Gender: ${profile.gender} and Waist circumference: ${profile.waist}cm and Hip circumference: ${profile.hip}cm and Fitness goal: ${goalLabel}. Please consider this information to analyse.`;
@@ -70,7 +72,9 @@ export function useAiCoach() {
   }
 
   function fetchWorkouts() {
-    workoutService.getAll().then(setWorkouts);
+    workoutPlanService.getAll().then((workoutPlans) => {
+      setWorkouts(workoutPlans);
+    });
   }
 
   function fetchLastMeal() {
@@ -101,7 +105,7 @@ export function useAiCoach() {
   }
 
   function handleOpenAIResponse(userMessage: string): void {
-    workoutService
+    aiService
       .getAiResponse(userMessage, chatHistory)
       .then((aiMessage: string) => {
         handleMessage(aiMessage, false);
@@ -169,8 +173,12 @@ export function useAiCoach() {
   function handleWorkoutSelect(workoutName: string) {
     const selectedWorkout = workouts.find((w) => w.name === workoutName);
     if (selectedWorkout) {
-      const workoutMessage = `I have the following workout plan: ${selectedWorkout.name} with exercises: ${selectedWorkout.workouts
-        .map((ex) => `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps}, Weight: ${ex.weights}kg`)
+      const exercises = selectedWorkout.plan_exercise_templates;
+      const workoutMessage = `I have the following workout plan: ${selectedWorkout.name} with exercises: ${exercises
+        .map(
+          (ex) =>
+            `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps_template.join(',')}, Weights: ${ex.weights_template.join(',')}kg`
+        )
         .join('; ')}. Please consider this information to analyse.`;
       handleMessage(workoutMessage, true);
       handleOpenAIResponse(workoutMessage);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { mealService } from './mealService';
-import { profileService } from '../../services/profileService';
+import { profileService } from '../profile/profileService';
 import {
   calcCalories,
   calcProteins,

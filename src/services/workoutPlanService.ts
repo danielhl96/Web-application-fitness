@@ -40,6 +40,7 @@ class WorkoutPlanService {
 
   async getAll(): Promise<WorkoutPlan[]> {
     const response = await this.httpClient.get<WorkoutPlan[]>('/workout_plans');
+    console.log('Fetched workout plans:', response.data);
     return response.data;
   }
 

@@ -1,4 +1,4 @@
-import { profileService } from '../../services/profileService.ts';
+import { profileService } from './profileService.ts';
 import { useEffect, useState } from 'react';
 import {
   UI_STATE,

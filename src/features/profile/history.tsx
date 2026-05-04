@@ -1,4 +1,4 @@
-import Button from './button';
+import Button from '../../shared/Components/button';
 import { JSX, useEffect, useRef } from 'react';
 import ApexCharts from 'apexcharts';
 import { UserHistory } from '../../types';
