@@ -93,7 +93,7 @@ function ExerciseCard({
   return (
     <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-4">
       <div
-        className={`card w-full ${maximized ? 'h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:h-[35dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
+        className={`card w-full ${maximized ? 'min-h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:min-h-[35dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
       >
         <div className="card-body items-center text-center">
           {isMobile ? (
@@ -159,7 +159,7 @@ function ExerciseCard({
                 />
               </div>
             </div>
-            <div className="flex flex-row justify-center items-center space-x-2 mb-6 ">
+            <div className="flex flex-row justify-center items-center space-x-2 mb-2">
               <button
                 className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-red-500 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
                 onClick={() => handleRemoveExercise()}
