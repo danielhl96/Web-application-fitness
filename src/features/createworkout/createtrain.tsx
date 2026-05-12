@@ -1,6 +1,6 @@
 import '../../index.css';
 import Header from '../header/Header.js';
-import { JSX } from 'react';
+import { JSX, useRef, useEffect } from 'react';
 import TemplatePage from '../../shared/Components/templatepage.js';
 import ExerciseCard from '../../shared/Components/exercisecard.js';
 import Notify from '../../shared/Components/notify.js';
@@ -29,6 +29,14 @@ function CreateTraining(): JSX.Element {
     changePosition,
     goHome,
   } = useCreateTrain();
+
+  const lastExerciseRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (lastExerciseRef.current && selectedExercise.length > 0) {
+      lastExerciseRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [selectedExercise.length]);
 
   return (
     <div>
@@ -108,7 +116,7 @@ function CreateTraining(): JSX.Element {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-center justify-center max-h-100">
+        <div className="flex flex-col items-center justify-center max-h-85">
           <div className="divider divider-primary text-white font-bold mb-2">
             {selectedExercise.length > 0 && addExercise.length === 0
               ? 'Your selected exercises'
@@ -121,20 +129,25 @@ function CreateTraining(): JSX.Element {
                 className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-80 gap-0 items-center pt-2 overflow-y-auto max-md:h-auto`}
               >
                 {selectedExercise.length > 0 && addExercise.length === 0 ? (
-                  selectedExercise.map((exercise) => (
-                    <ExerciseCard
-                      ismaximized={true}
-                      ExerciseName={exercise.name}
-                      Description={exercise.description}
-                      ExerciseImage={exercise.img}
-                      reps={exercise.reps}
-                      sets={exercise.sets}
-                      // Callback for Prop passed
-                      onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
-                      onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
-                      handleRemoveExercise={() => handleRemoveExercise(exercise.name)}
-                      changePosition={(direction) => changePosition(exercise, direction)}
-                    />
+                  selectedExercise.map((exercise, index) => (
+                    <div
+                      key={exercise.name}
+                      ref={index === selectedExercise.length - 1 ? lastExerciseRef : null}
+                    >
+                      <ExerciseCard
+                        ismaximized={true}
+                        ExerciseName={exercise.name}
+                        Description={exercise.description}
+                        ExerciseImage={exercise.img}
+                        reps={exercise.reps}
+                        sets={exercise.sets}
+                        // Callback for Prop passed
+                        onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
+                        onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
+                        handleRemoveExercise={() => handleRemoveExercise(exercise.name)}
+                        changePosition={(direction) => changePosition(exercise, direction)}
+                      />
+                    </div>
                   ))
                 ) : selectedExercise.length === 0 && addExercise.length === 0 ? (
                   <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
@@ -142,7 +155,7 @@ function CreateTraining(): JSX.Element {
               </div>
             </div>
           ) : null}
-          <div className="flex flex-row items-center gap-4 mt-4">
+          <div className="flex flex-row items-center gap-4 mt-4 mb-4">
             <Button
               disabled={
                 workoutName === '' || selectedExercise.length === 0 || workoutNameSet === false
