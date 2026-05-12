@@ -156,7 +156,7 @@ function CreateTraining(): JSX.Element {
               </div>
             </div>
           ) : null}
-          <div className="flex flex-row items-center gap-4 mt-4 mb-4">
+          <div className="flex flex-row items-center gap-4 mt-2 mb-0">
             <Button
               isLoading={isLoading}
               disabled={
