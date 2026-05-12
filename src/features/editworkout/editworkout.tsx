@@ -2,7 +2,7 @@ import Button from '../../shared/Components/button.tsx';
 import ExerciseCard from '../../shared/Components/exercisecard.tsx';
 import exercise from '../../shared/Components/exercises.ts';
 import ExerciseSearchDropdown from '../../shared/Components/ExerciseSearchDropdown.tsx';
-import { JSX } from 'react';
+import { JSX, useRef, useEffect } from 'react';
 import { SelectedExercise, WorkoutPlanMap } from '../../types.ts';
 
 interface EditWorkoutPageProps {
@@ -34,6 +34,23 @@ function EditWorkoutPage({
 }: EditWorkoutPageProps): JSX.Element {
   const currentExercises: SelectedExercise[] = selectedExercise[savekey] ?? [];
   const excludeNames = currentExercises.map((ex) => ex.exercise);
+  const lastExerciseRef = useRef<HTMLDivElement>(null);
+  const previousLengthRef = useRef<number>(currentExercises.length);
+
+  useEffect(() => {
+    // Nur scrollen wenn die Länge zunimmt (neue Übung hinzugefügt)
+    if (
+      lastExerciseRef.current &&
+      currentExercises.length > previousLengthRef.current &&
+      currentExercises.length > 0
+    ) {
+      lastExerciseRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+    previousLengthRef.current = currentExercises.length;
+  }, [currentExercises.length]);
 
   return (
     <div>
@@ -50,19 +67,23 @@ function EditWorkoutPage({
           className={`${currentExercises.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} items-center gap-2 justify-center w-full overflow-y-auto py-2 lg:w-auto max-h-90 lg:max-h-[65vh]`}
         >
           {currentExercises.map((ex, index) => (
-            <ExerciseCard
+            <div
               key={ex.exercise + '-' + index}
-              ismaximized={index === currentExercises.length - 1}
-              ExerciseName={ex.exercise}
-              Description={exercise.find((item) => item.name === ex.exercise)?.description}
-              ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
-              onRepsChange={(reps) => onRepsChange(index, reps)}
-              onSetsChange={(sets) => onSetsChange(index, sets)}
-              handleRemoveExercise={() => onRemoveExercise(index)}
-              changePosition={(direction) => changePosition(ex, direction)}
-              reps={Array.isArray(ex.reps) ? ex.reps[0] : ex.reps}
-              sets={ex.sets}
-            />
+              ref={index === currentExercises.length - 1 ? lastExerciseRef : null}
+            >
+              <ExerciseCard
+                ismaximized={index === currentExercises.length - 1}
+                ExerciseName={ex.exercise}
+                Description={exercise.find((item) => item.name === ex.exercise)?.description}
+                ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
+                onRepsChange={(reps) => onRepsChange(index, reps)}
+                onSetsChange={(sets) => onSetsChange(index, sets)}
+                handleRemoveExercise={() => onRemoveExercise(index)}
+                changePosition={(direction) => changePosition(ex, direction)}
+                reps={Array.isArray(ex.reps) ? ex.reps[0] : ex.reps}
+                sets={ex.sets}
+              />
+            </div>
           ))}
         </div>
         <div className="divider divider-primary"></div>
