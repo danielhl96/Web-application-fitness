@@ -17,6 +17,7 @@ const EditTrain = (): JSX.Element => {
   const {
     showState,
     showModal,
+    isLoading,
     showEditWorkoutNameModal,
     setShowEditWorkoutNameModal,
     savekey,
@@ -199,6 +200,7 @@ const EditTrain = (): JSX.Element => {
                   onRepsChange={handleRepsChange}
                   onSetsChange={handleSetsChange}
                   onRemoveExercise={handleRemoveExercise}
+                  isLoading={isLoading}
                 />
               </div>
             ) : showState.type === 'success' ? (

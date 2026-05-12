@@ -17,6 +17,7 @@ interface EditWorkoutPageProps {
   onRepsChange: (index: number, reps: number) => void;
   onSetsChange: (index: number, sets: number) => void;
   onRemoveExercise: (index: number) => void;
+  isLoading: boolean;
 }
 
 function EditWorkoutPage({
@@ -31,6 +32,7 @@ function EditWorkoutPage({
   onRepsChange,
   onSetsChange,
   onRemoveExercise,
+  isLoading,
 }: EditWorkoutPageProps): JSX.Element {
   const currentExercises: SelectedExercise[] = selectedExercise[savekey] ?? [];
   const excludeNames = currentExercises.map((ex) => ex.exercise);
@@ -89,6 +91,7 @@ function EditWorkoutPage({
         <div className="divider divider-primary"></div>
         <div className="flex flex-row gap-2">
           <Button
+            isLoading={isLoading}
             onClick={handleEditWorkout}
             border="#08ad4dff"
             disabled={currentExercises.length === 0}

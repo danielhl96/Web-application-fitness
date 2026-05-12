@@ -15,6 +15,7 @@ export default function useCreateTrain() {
   const [exerciseExists, setExerciseExists] = useState<ExerciseTemplate[]>([]);
   const [notification, setNotification] = useState<Notification | null>(null);
   const [savedSuccessfully, setSavedSuccessfully] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setExerciseExists(exercise);
@@ -24,17 +25,20 @@ export default function useCreateTrain() {
 
   const handleSaveTraining = async (): Promise<void> => {
     try {
+      setIsLoading(true);
       await workoutPlanService.create(buildCreatePayload(workoutName, selectedExercise));
       setNotification({
         title: 'Training Saved',
         message: 'Your training has been saved successfully!',
         type: 'success',
       });
+      setIsLoading(false);
       setSavedSuccessfully(true);
       setWorkoutName('');
       setWorkoutNameSet(false);
       setSelectedExercise([]);
     } catch {
+      setIsLoading(false);
       setNotification({
         title: 'Error',
         message: 'There was an error saving your training.',
@@ -152,5 +156,6 @@ export default function useCreateTrain() {
     handleSetsChange,
     changePosition,
     goHome,
+    isLoading,
   };
 }

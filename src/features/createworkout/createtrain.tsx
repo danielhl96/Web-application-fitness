@@ -28,6 +28,7 @@ function CreateTraining(): JSX.Element {
     handleSetsChange,
     changePosition,
     goHome,
+    isLoading,
   } = useCreateTrain();
 
   const lastExerciseRef = useRef<HTMLDivElement>(null);
@@ -157,6 +158,7 @@ function CreateTraining(): JSX.Element {
           ) : null}
           <div className="flex flex-row items-center gap-4 mt-4 mb-4">
             <Button
+              isLoading={isLoading}
               disabled={
                 workoutName === '' || selectedExercise.length === 0 || workoutNameSet === false
               }

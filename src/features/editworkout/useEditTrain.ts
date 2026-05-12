@@ -17,6 +17,7 @@ export interface UseEditTrainReturn {
   // ── State ──────────────────────────────────────────────────────────────────
   showState: UI_STATE<WorkoutPlan[]>;
   showModal: boolean;
+  isLoading: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   showEditWorkoutNameModal: boolean;
   setShowEditWorkoutNameModal: Dispatch<SetStateAction<boolean>>;
@@ -50,6 +51,7 @@ export function useEditTrain(): UseEditTrainReturn {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showEditWorkoutNameModal, setShowEditWorkoutNameModal] = useState<boolean>(false);
   const [savekey, setSaveKey] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [addExercise, setAddExercise] = useState<string>('');
   const [workoutName, setWorkoutName] = useState<string>('');
   const [notification, setNotification] = useState<NotificationState>(null);
@@ -77,7 +79,7 @@ export function useEditTrain(): UseEditTrainReturn {
   // ── Persist edited workout plan to backend ────────────────────────────────
   function handleEditWorkout(): void {
     const payload = buildEditPayload(selectedExercise[savekey]);
-
+    setIsLoading(true);
     workoutPlanService
       .edit(payload)
       .then(() => {
@@ -88,6 +90,7 @@ export function useEditTrain(): UseEditTrainReturn {
         });
         setRequestId((prev) => prev + 1);
         setShowModal(false);
+        setIsLoading(false);
       })
       .catch(() => {
         setNotification({
@@ -95,6 +98,7 @@ export function useEditTrain(): UseEditTrainReturn {
           message: 'There was an error updating your workout plan.',
           type: 'error',
         });
+        setIsLoading(false);
       });
   }
 
@@ -245,5 +249,6 @@ export function useEditTrain(): UseEditTrainReturn {
     handleRepsChange,
     handleSetsChange,
     handleRemoveExercise,
+    isLoading,
   };
 }
