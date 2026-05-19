@@ -91,7 +91,7 @@ function ExerciseCard({
   }, []);
 
   return (
-    <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-4">
+    <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-0">
       <div
         className={`card w-full ${maximized ? 'min-h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:min-h-[35dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
       >
@@ -136,12 +136,12 @@ function ExerciseCard({
             <img src={ExerciseImage} alt={ExerciseName} className="rounded-md invert" />
           </figure>
 
-          {maximized && <p className="text-xs text-slate-200 mb-2">{Description}</p>}
+          {maximized && <p className="text-xs text-slate-200">{Description}</p>}
         </div>
         {maximized && (
           <>
-            <div className="flex flex-row space-x-4 p-2">
-              <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
+            <div className="flex flex-row space-x-2 p-3">
+              <div className="h-15 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
                 <Table
                   selectedItem={selectedSets}
                   onSelect={(sets) => handleSets(sets, null)}
@@ -150,7 +150,7 @@ function ExerciseCard({
                 />
               </div>
 
-              <div className="h-20 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
+              <div className="h-15 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
                 <Table
                   selectedItem={selectedReps}
                   onSelect={(reps) => handleReps(reps, null)}

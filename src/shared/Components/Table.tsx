@@ -60,7 +60,7 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
       rowComponent={Row}
       rowProps={{ step: 1 }}
       defaultHeight={80}
-      className="h-20 lg:h-40 w-20 rounded-xl bg-gray-700/15 shadow-md"
+      className="h-10 lg:h-40 w-20 rounded-xl bg-gray-700/15 shadow-md"
       style={{ scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
     />
   );

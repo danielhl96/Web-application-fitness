@@ -127,7 +127,7 @@ function CreateTraining(): JSX.Element {
           {workoutNameSet ? (
             <div className={'items-center justify-center'}>
               <div
-                className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-80 gap-0 items-center pt-2 overflow-y-auto max-md:h-auto`}
+                className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-65 gap-0 items-center pt-1 overflow-y-auto max-md:h-auto`}
               >
                 {selectedExercise.length > 0 && addExercise.length === 0 ? (
                   selectedExercise.map((exercise, index) => (
