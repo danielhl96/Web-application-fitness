@@ -91,9 +91,9 @@ function ExerciseCard({
   }, []);
 
   return (
-    <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center mb-0">
+    <div className="w-60 max-w-xs sm:max-w-sm md:max-w-md flex flex-col items-center">
       <div
-        className={`card w-full ${maximized ? 'min-h-[40dvh]' : 'h-[18dvh]'} ${maximized ? 'sm:min-h-[35dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
+        className={`card w-full ${maximized ? 'min-h-[35dvh]' : 'h-[18dvh]'} ${maximized ? 'lg:min-h-[10dvh] sm:min-h-[25dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
       >
         <div className="card-body items-center text-center">
           {isMobile ? (
