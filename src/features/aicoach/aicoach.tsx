@@ -61,7 +61,7 @@ function AiCoach() {
               onChange={(e) => handleWorkoutSelect(e.target.value)}
             >
               <option disabled selected>
-                Analyse Workouts
+                Workouts
               </option>
               {workouts.map((workout, index) => (
                 <option key={index} value={workout.name}>

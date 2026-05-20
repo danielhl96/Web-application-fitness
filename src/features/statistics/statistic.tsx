@@ -38,7 +38,7 @@ function Statistic(): JSX.Element {
     <div>
       <Header />
       <TemplatePage>
-        <div className="flex flex-col items-center justify-center w-full">
+        <div className="flex flex-col items-center justify-center">
           <div className="divider divider-primary text-white font-bold mb-4">Your statistics</div>
 
           {notification && (

@@ -20,10 +20,7 @@ function RepsEstimationPanel({
   ];
 
   return (
-    <div
-      className="card w-full mt-2 lg:w-full h-[20dvh] bg-gradient-to-b from-gray-900 to-black border shadow-xl mb-5 rounded-xl backdrop-blur-lg"
-      style={{ border: '1px solid rgba(255,255,255,0.18)' }}
-    >
+    <div className="card w-full mt-2 lg:w-full h-[18dvh] bg-gradient-to-b from-gray-900 to-black border shadow-xl mb-5 rounded-xl backdrop-blur-lg border border-white/20">
       <button className="absolute top-2 right-2 text-xs text-blue-300 underline" onClick={onClose}>
         Hide Info
       </button>

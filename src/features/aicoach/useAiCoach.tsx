@@ -121,7 +121,7 @@ export function useAiCoach() {
   // To add a new action, add an entry here — no changes to the JSX needed (OCP).
   const analyseActions: AnalyseAction[] = [
     {
-      label: 'Analyse',
+      label: '',
       w: 'w-35',
       icon: (
         <img
@@ -138,7 +138,7 @@ export function useAiCoach() {
       },
     },
     {
-      label: 'Analyse',
+      label: '',
       w: 'w-32',
       icon: (
         <svg

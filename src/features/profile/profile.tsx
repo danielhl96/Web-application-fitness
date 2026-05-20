@@ -117,7 +117,7 @@ function Profile() {
               <span className="text-red-400">Error loading user data</span>
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center h-[60vh]">
+            <div className="flex flex-col justify-center items-center h-[60vh] w-full">
               {loadingComponente('Loading profile...')}
             </div>
           ))
