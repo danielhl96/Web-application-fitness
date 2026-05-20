@@ -160,7 +160,7 @@ const EditTrain = (): JSX.Element => {
         {showEditWorkoutNameModal && renderRenameModal()}
         {confirmationModalForDelete && renderConfirmDeleteModal()}
 
-        <div className="flex flex-col items-center justify-center min-h-0">
+        <div className="flex flex-col items-center justify-center">
           <div className="divider divider-primary text-white font-bold mb-2">
             <div className="flex flex-row items-center justify-center">
               {showModal ? savekey : 'Edit your workout plans'}
@@ -185,50 +185,52 @@ const EditTrain = (): JSX.Element => {
             </div>
           </div>
 
-          <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[70dvh]">
-            {showModal ? (
-              <div>
-                <EditWorkoutPage
-                  addExercise={addExercise}
-                  setAddExercise={setAddExercise}
-                  selectedExercise={selectedExercise}
-                  savekey={savekey}
-                  handleAddExercise={handleAddExercise}
-                  handleEditWorkout={handleEditWorkout}
-                  handleShowModal={handleShowModal}
-                  changePosition={changePosition}
-                  onRepsChange={handleRepsChange}
-                  onSetsChange={handleSetsChange}
-                  onRemoveExercise={handleRemoveExercise}
-                  isLoading={isLoading}
-                />
-              </div>
-            ) : showState.type === 'success' ? (
-              Object.keys(selectedExercise).map((workout, index) => (
-                <Workouts
-                  exercise={workout}
-                  key={index}
-                  handleShowModal={handleShowModal}
-                  onDelete={(key) => {
-                    setConfirmationModalforWorkoutDelete(true);
-                    setSaveKey(key);
-                  }}
-                  selectedExercise={selectedExercise}
-                />
-              ))
-            ) : showState.type === 'error' ? (
-              <>
-                <p className="text-white">No workout plans available. Please create one first.</p>
-                <Button border="#ef4444" onClick={() => navigate('/createtrain')}>
-                  Create Workout
-                </Button>
-              </>
-            ) : (
-              <div className="min-h-[50dvh] flex items-center justify-center flex-col">
-                {loadingComponente('Loading your workout plans')}
-              </div>
-            )}
-          </div>
+          {showState.type === 'loading' ? (
+            <div className="flex items-center justify-center min-h-[50dvh] w-auto">
+              {loadingComponente('Loading your workout plans')}
+            </div>
+          ) : (
+            <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl justify-center flex grid lg:grid-cols-3 gap-4 items-center pt-2 overflow-y-auto max-h-[70dvh]">
+              {showModal ? (
+                <div>
+                  <EditWorkoutPage
+                    addExercise={addExercise}
+                    setAddExercise={setAddExercise}
+                    selectedExercise={selectedExercise}
+                    savekey={savekey}
+                    handleAddExercise={handleAddExercise}
+                    handleEditWorkout={handleEditWorkout}
+                    handleShowModal={handleShowModal}
+                    changePosition={changePosition}
+                    onRepsChange={handleRepsChange}
+                    onSetsChange={handleSetsChange}
+                    onRemoveExercise={handleRemoveExercise}
+                    isLoading={isLoading}
+                  />
+                </div>
+              ) : showState.type === 'success' ? (
+                Object.keys(selectedExercise).map((workout, index) => (
+                  <Workouts
+                    exercise={workout}
+                    key={index}
+                    handleShowModal={handleShowModal}
+                    onDelete={(key) => {
+                      setConfirmationModalforWorkoutDelete(true);
+                      setSaveKey(key);
+                    }}
+                    selectedExercise={selectedExercise}
+                  />
+                ))
+              ) : showState.type === 'error' ? (
+                <>
+                  <p className="text-white">No workout plans available. Please create one first.</p>
+                  <Button border="#ef4444" onClick={() => navigate('/createtrain')}>
+                    Create Workout
+                  </Button>
+                </>
+              ) : null}
+            </div>
+          )}
         </div>
       </TemplatePage>
     </div>

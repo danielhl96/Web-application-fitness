@@ -141,7 +141,7 @@ function ExerciseCard({
         {maximized && (
           <>
             <div className="flex flex-row space-x-2 p-3">
-              <div className="h-15 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
+              <div className="h-15 overflow-y-scroll rounded-lg bg-black/5 flex items-center justify-center">
                 <Table
                   selectedItem={selectedSets}
                   onSelect={(sets) => handleSets(sets, null)}
@@ -150,7 +150,7 @@ function ExerciseCard({
                 />
               </div>
 
-              <div className="h-15 overflow-y-scroll border border-gray-800 rounded-xl backdrop-blur-lg bg-black/15 shadow-md border-[1px] border-black/20">
+              <div className="h-15 overflow-y-scroll rounded-lg bg-black/5 flex items-center justify-center">
                 <Table
                   selectedItem={selectedReps}
                   onSelect={(reps) => handleReps(reps, null)}
