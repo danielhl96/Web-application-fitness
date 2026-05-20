@@ -85,7 +85,7 @@ function Statistic(): JSX.Element {
                   <span className="text-gray-400">No exercise found</span>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-2 w-full items-center mt-4 text-xs overflow-y-auto overflow-x-hidden max-h-115">
+                <div className="grid grid-cols-1 lg:grid-cols-3 lg:space-y-2 lg:space-x-2  items-center mt-4 text-xs overflow-y-auto overflow-x-hidden max-h-115">
                   {filteredData.map((item, index) => (
                     <div
                       key={index}
