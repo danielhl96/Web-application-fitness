@@ -73,6 +73,7 @@ export function useAiCoach() {
 
   function fetchWorkouts() {
     workoutPlanService.getAll().then((workoutPlans) => {
+      console.log('Fetched workout plans:', workoutPlans);
       setWorkouts(workoutPlans);
     });
   }
@@ -173,13 +174,15 @@ export function useAiCoach() {
   function handleWorkoutSelect(workoutName: string) {
     const selectedWorkout = workouts.find((w) => w.name === workoutName);
     if (selectedWorkout) {
-      const exercises = selectedWorkout.plan_exercise_templates;
+      const exercises = selectedWorkout.exercises;
       const workoutMessage = `I have the following workout plan: ${selectedWorkout.name} with exercises: ${exercises
         .map(
           (ex) =>
-            `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps_template.join(',')}, Weights: ${ex.weights_template.join(',')}kg`
+            `${ex.name} - Sets: ${ex.sets}, Reps: ${ex.reps.join(',')}, Weights: ${ex.weights.join(',')}kg`
         )
-        .join('; ')}. Please consider this information to analyse.`;
+        .join(
+          '; '
+        )}. Please consider this information to analyse the actual state and provide feedback.`;
       handleMessage(workoutMessage, true);
       handleOpenAIResponse(workoutMessage);
       setIsLoading(true);

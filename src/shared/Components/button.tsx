@@ -20,7 +20,7 @@ const Button = ({
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`relative overflow-hidden text-xs ${w ?? ''} px-4 py-2 rounded-2xl border border-white/30 shadow-xl backdrop-blur-md bg-white/10 text-white flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:bg-white/20 focus:ring-2 focus:ring-blue-400 ${
+      className={`relative overflow-hidden text-xs ${w ?? ''} px-4 py-2 rounded-2xl border border-white/30 shadow-xl backdrop-blur-md bg-white/10 text-white flex items-center gap-2 focus:ring-2 focus:ring-blue-400 ${
         disabled ? 'opacity-60 cursor-not-allowed' : ''
       }`}
       style={border && !disabled ? { border: `1.5px solid ${border}` } : undefined}

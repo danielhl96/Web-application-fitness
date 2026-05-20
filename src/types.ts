@@ -1,6 +1,7 @@
 export type WorkoutPlan = {
   name: string;
   id: number;
+
   plan_exercise_templates: {
     reps_template: number[];
     sets: number;
@@ -12,6 +13,7 @@ export type WorkoutPlan = {
     name: string;
     reps: number[];
     weights: number[];
+    sets: number;
   }[];
 };
 

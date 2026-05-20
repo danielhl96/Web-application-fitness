@@ -1,11 +1,9 @@
 import '../../index.css';
-import type { RefObject } from 'react';
 import Header from '../header/Header.js';
 import TemplatePage from '../../shared/Components/templatepage.js';
 import WorkoutCard from '../../shared/Components/workoutcard.js';
 import Button from '../../shared/Components/button.js';
 import Notify from '../../shared/Components/notify.js';
-import TemplateModal from '../../shared/Components/templatemodal.js';
 import useTraining from './useTraining.ts';
 import WeightModal from './WeightModal.tsx';
 import LastTrainingModal from './LastTrainingModal.tsx';
@@ -13,6 +11,7 @@ import BreakTimeModal from './BreakTimeModal.tsx';
 import type { TrainingExercise } from '../../types.ts';
 import loadingComponente from '../../shared/Components/loading.js';
 import ExerciseListModal from './ExerciseListModal.tsx';
+import RepsEstimationPanel from './RepsEstimationPanel.tsx';
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -138,9 +137,6 @@ function StartTraining() {
                 {planState.type === 'error' ? (
                   <div className="col-span-3 flex flex-col items-center gap-3 mt-8">
                     <p className="text-red-400 text-sm">{planState.error}</p>
-                    <Button onClick={() => navigate(0)} border="#3b82f6">
-                      Retry
-                    </Button>
                   </div>
                 ) : Object.keys(selectedExercise).length > 0 ? (
                   Object.keys(selectedExercise).map((name, index) => (
@@ -222,7 +218,7 @@ function StartTraining() {
               <div className="divider divider-primary text-amber-400">{training1.exercise}</div>
 
               {/* Sets list */}
-              <div className="overflow-y-auto max-h-40 space-y-4 mb-4">
+              <div className="overflow-y-auto overflow-x-hidden max-h-50 space-y-4 mb-4">
                 {Array.from({ length: training1.sets }).map((_, index) => (
                   <div key={index} className="flex flex-col items-center justify-center">
                     <div className="flex flex-row space-x-2">
@@ -363,43 +359,11 @@ function StartTraining() {
 
               {/* RM estimation panel */}
               {showRepsInfo && (
-                <div
-                  className="card w-full mt-2 mb-2 lg:w-full h-[20dvh] bg-gradient-to-b from-gray-900 to-black border shadow-xl rounded-xl backdrop-blur-lg"
-                  style={{ border: '1px solid rgba(255,255,255,0.18)' }}
-                >
-                  <button
-                    className="absolute top-2 right-2 text-xs text-blue-300 underline"
-                    onClick={() => setShowRepsInfo(false)}
-                  >
-                    Hide Info
-                  </button>
-                  <h2 className="text-amber-400 text-center text-sm mb-2 font-bold">
-                    Reps Estimation
-                  </h2>
-                  <div className="grid grid-cols-1 gap-1 text-xs px-1">
-                    {(
-                      [
-                        ['RM: 1', 1],
-                        ['RM: 3-4', 0.9],
-                        ['RM: 5-6', 0.85],
-                        ['RM: 8-10', 0.8],
-                        ['RM: 12-15', 0.7],
-                      ] as [string, number][]
-                    ).map(([label, factor]) => (
-                      <div key={label} className="flex justify-between">
-                        <span>{label}</span>
-                        <span className="font-mono text-blue-300">
-                          {(
-                            training1.weights[0] *
-                            (1 + training1.previousReps[0] / 30) *
-                            factor
-                          ).toFixed(1)}{' '}
-                          kg
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <RepsEstimationPanel
+                  weight={training1.weights[0]}
+                  previousReps={training1.previousReps[0]}
+                  onClose={() => setShowRepsInfo(false)}
+                />
               )}
 
               {/* Bottom navigation bar */}
