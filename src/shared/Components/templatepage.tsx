@@ -60,8 +60,8 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
       `}</style>
       <div className="min-h-[100dvh] bg-gradient-to-b from-gray-900 min-w-[100dvw] to-black flex flex-col items-center px-1 py-3">
         {/* vertikale Zentrierung */}
-        <div className="flex flex-col items-center sm:items-center w-full pt-16 pb-8">
-          <div className="lg:h-full h-[80dvh] max-h-[100dvh] lg:w-auto min-w-[320px] max-w-sm sm:max-w-md lg:max-w-6xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
+        <div className="flex flex-col items-center sm:items-center  w-full pt-16 pb-8">
+          <div className="w-full lg:h-full h-[80dvh] max-h-[100dvh] lg:w-auto max-w-sm sm:max-w-md lg:max-w-4xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
             {children}
           </div>
           {!dockDisabled ? (
