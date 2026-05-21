@@ -5,7 +5,8 @@ import TemplatePage from '../../shared/Components/templatepage.js';
 import EmailInput from '../../shared/Components/emailinput.js';
 import PasswordInput from '../../shared/Components/passwordinput.js';
 import Button from '../../shared/Components/button.js';
-import { userService } from '../../services/userService.ts';
+import { authService } from './authService.js';
+
 function RegisterPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
@@ -18,7 +19,7 @@ function RegisterPage() {
 
   const handleRegister = (): void => {
     setIsLoading(true);
-    userService
+    authService
       .register(email, password)
       .then(() => {
         setMessage('Registration successful! You can now log in.');
@@ -36,6 +37,7 @@ function RegisterPage() {
   };
 
   const handlePasswordChange = (value: string): void => {
+    console.log(succesRegister);
     setPassword(value);
   };
 
@@ -120,7 +122,7 @@ function RegisterPage() {
             disabled={
               !checkEmail(email) ||
               passwordError ||
-              checkConfirmPassword(confirmPassword, password) ||
+              !checkConfirmPassword(confirmPassword, password) ||
               email.length === 0 ||
               password.length === 0 ||
               confirmPassword.length === 0 ||
