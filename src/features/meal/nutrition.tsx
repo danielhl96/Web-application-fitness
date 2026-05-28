@@ -269,30 +269,34 @@ function Nutrition() {
     return (
       <div>
         <TemplateModal>
+          <div className="flex justify-end mb-4 w-20  ml-30">
+            <button
+              onClick={() => setShowAudioModal(false)}
+              className="text-white/50 hover:text-white transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
           {loading.type === 'loading' ? (
             <div className="flex flex-col items-center gap-3 py-4">
               {loadingComponente('Recording is finished. Just Analyzing...')}
             </div>
           ) : (
-            <div className="flex flex-row ">
-              <AudioRecorder onTranscript={handleMealFromText} />
-              <Button border="#ef4444" onClick={() => setShowAudioModal(false)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </Button>
-            </div>
+            <AudioRecorder onTranscript={handleMealFromText} />
           )}
         </TemplateModal>
       </div>
