@@ -50,7 +50,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Patch('profile/email')
   async changeEmail(@Req() req: { user: User }, @Body() body: EmailChangeDto) {
-    return this.usersService.changeEmail(req.user.id, body.email);
+    return this.usersService.changeEmail(req.user.id, body.email, body.password);
   }
 
   @UseGuards(JwtAuthGuard)

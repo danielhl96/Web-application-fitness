@@ -37,7 +37,18 @@ export class UsersService {
     return this.prisma.users.update({ where: { id }, data });
   }
 
-  async changeEmail(id: number, email: string) {
+  async changeEmail(id: number, email: string, password: string) {
+    const userFromDb = await this.prisma.users.findUnique({
+      where: { id },
+      select: { password: true },
+    });
+
+    if (!userFromDb) throw new NotFoundException('User not found');
+
+    if (!(await argon2.verify(userFromDb.password, password))) {
+      throw new UnauthorizedException('Password is incorrect');
+    }
+
     await this.prisma.users.update({ where: { id }, data: { email } });
     return { message: 'Email updated successfully' };
   }

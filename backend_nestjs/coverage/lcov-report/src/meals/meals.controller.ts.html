@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -139,7 +139,13 @@
 <a name='L74'></a><a href='#L74'>74</a>
 <a name='L75'></a><a href='#L75'>75</a>
 <a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,16 +165,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,6 +186,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -215,6 +222,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { MealsSer<span class="cstat-no" title="statement not covered" >vice } from './meals.service'<span class="fstat-no" title="function not covered" >;</span></span>
 import {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span>
@@ -227,20 +239,22 @@ import {<span class="cstat-no" title="statement not covered" ><span class="cstat
   Query,
   Delete,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span>
   Pu<span class="cstat-no" title="statement not covered" >t,<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span>
-  UseInterceptors,
+  Param,
+<span class="cstat-no" title="statement not covered" >  UseInterceptors,</span>
 <span class="cstat-no" title="statement not covered" >  UploadedFile,</span>
-<span class="cstat-no" title="statement not covered" >} from '@nestjs/common';</span>
-import { FileInterceptor <span class="cstat-no" title="statement not covered" >} from '@nestjs/platform-express';</span>
-import { CreateMealDto, <span class="cstat-no" title="statement not covered" >EditMealDto } from './dto/m</span>eals_dto';
-import { User } f<span class="cstat-no" title="statement not covered" >rom 'src/types';</span>
-import { MulterFile } from <span class="cstat-no" title="statement not covered" >'src/openai';</span>
+  NotFoundException,<span class="cstat-no" title="statement not covered" ></span>
+} from '@nestjs/common';<span class="cstat-no" title="statement not covered" ></span>
+import { FileInte<span class="cstat-no" title="statement not covered" >rceptor } from '@nestjs/pl</span>atform-express';
+import { CreateMealDto, Edi<span class="cstat-no" title="statement not covered" >tMealDto } from './dto/meals_dto';</span>
+import { User } from '<span class="cstat-no" title="statement not covered" >src/types';</span>
+impo<span class="fstat-no" title="function not covered" >rt</span> { MulterFile } from 'src/openai';
 <span class="cstat-no" title="statement not covered" ></span>
-@Controller('meals')<span class="cstat-no" title="statement not covered" ></span>
+@Controller('meals')
 expo<span class="fstat-no" title="function not covered" >rt</span> class MealsController {
-  constr<span class="cstat-no" title="statement not covered" >uctor(private readonly mealsServic</span>e: MealsService) {}
+  constr<span class="cstat-no" title="statement not covered" >uctor(private readonly mealsService: MealsService) {}</span>
 &nbsp;
   @U<span class="fstat-no" title="function not covered" >se</span>Guards(JwtAuthGuard)
-  @Post(<span class="cstat-no" title="statement not covered" >'create_meal')</span>
+  @Post(<span class="cstat-no" title="statement not covered" >)</span>
   async createMeal(@Req() req: { user: User }, @Body() createMealDto: any) {
 <span class="fstat-no" title="function not covered" >    re</span>turn this.mealsService.createMeal(req.user.id, createMealDto);
   }<span class="cstat-no" title="statement not covered" ></span>
@@ -254,43 +268,47 @@ expo<span class="fstat-no" title="function not covered" >rt</span> class MealsCo
 <span class="fstat-no" title="function not covered" ></span>
   @UseGu<span class="cstat-no" title="statement not covered" >ards(JwtAuthGuard)</span>
   @Post('analyze_food_text')
-  as<span class="fstat-no" title="function not covered" >yn</span>c analyzeFoodText(@Body('text') text: string) {
-    retu<span class="cstat-no" title="statement not covered" >rn this.mealsService.analyzeFoodText(text);</span>
-  }
-<span class="fstat-no" title="function not covered" ></span>
-  @UseGu<span class="cstat-no" title="statement not covered" >ards(JwtAuthGuard)</span>
-  @Delete('delete_meal')
-  as<span class="fstat-no" title="function not covered" >yn</span>c deleteMeal(@Req() req: { user: User }, @Body() body: { mealId: number }) {
-    retu<span class="cstat-no" title="statement not covered" >rn this.mealsService.deleteMeal(req.user.id, body.mealI</span>d);
-  }
-<span class="fstat-no" title="function not covered" ></span>
-  @UseGu<span class="cstat-no" title="statement not covered" >ards(JwtAuthGuard)</span>
-  @Put('edit_meal')
-  async editMeal(@Req() req: { user: User }, @Body() body: EditMealDto) {
-<span class="cstat-no" title="statement not covered" >    return this.mealsService.editMeal(body,</span> req.user.id);
-<span class="cstat-no" title="statement not covered" >  }</span>
+  async analyzeF<span class="cstat-no" title="statement not covered" >oodText(@Body('text') text: string) {</span>
+    return this.mealsService.analyzeFoodText(text);
+  }<span class="cstat-no" title="statement not covered" ></span>
+&nbsp;
+  @UseGuards(Jwt<span class="cstat-no" title="statement not covered" >AuthGuard)</span>
+  @Delete(':mealId')
+  async deleteMe<span class="cstat-no" title="statement not covered" >al(@Req() req: { user: User }, @Param('mealId') mealId</span>: string) {
+    return this.mealsService.deleteMeal(req.user.id, Number(mealId));
+  }<span class="cstat-no" title="statement not covered" ></span>
 &nbsp;
   @UseGuards(JwtAuthGuard)
-  @Get('get_breakfast')
-  async getBreakfast(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getBreakfast(req.user.id, date);
+  @Put(':mealId')
+<span class="cstat-no" title="statement not covered" >  async editMeal(</span>
+<span class="cstat-no" title="statement not covered" >    @Req() req: { user: User },</span>
+    @Param('mealId') mealId: string,
+    @Body() body: Omit&lt;EditMealDto, 'mealId'&gt;
+  ) {
+    return this.mealsService.editMeal({ ...body, mealId: Number(mealId) }, req.user.id);
   }
+&nbsp;
   @UseGuards(JwtAuthGuard)
-  @Get('get_lunch')
-<span class="cstat-no" title="statement not covered" >  async getLunch(@Req() req: { user: User }, @Query('date') date?: string) {</span>
-    return this.mealsService.getLunch(req.user.id, date);
+  @Get()
+<span class="cstat-no" title="statement not covered" >  async getMeals(</span>
+    @Req() req: { user: User },
+    @Query('type') type: string,
+    @Query('date') date?: string
+  ) {
+    switch (type) {
+      case 'breakfast':
+        return this.mealsService.getBreakfast(req.user.id, date);
+      case 'lunch':
+        return this.mealsService.getLunch(req.user.id, date);
+<span class="cstat-no" title="statement not covered" >      case 'dinner':</span>
+        return this.mealsService.getDinner(req.user.id, date);
+      case 'snack':
+        return this.mealsService.getSnack(req.user.id, date);
+      default:
+        throw new NotFoundException('Invalid meal type');
+    }
   }
-  @UseGuards(JwtAuthGuard)
-  @Get('get_dinner')
-  async getDinner(@Req() req: { user: User }, @Query('date') date?: string) {
-    return this.mealsService.getDinner(req.user.id, date);
-  }
-  @UseGuards(JwtAuthGuard)
-  @Get('get_snack')
-<span class="cstat-no" title="statement not covered" >  async getSnack(@Req() req: { user: User }, @Query('date') date?: string) {</span>
-    return this.mealsService.getSnack(req.user.id, date);
-  }
-}
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -298,7 +316,7 @@ expo<span class="fstat-no" title="function not covered" >rt</span> class MealsCo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-22T13:32:58.425Z
+                at 2026-05-28T12:28:31.233Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

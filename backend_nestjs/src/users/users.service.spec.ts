@@ -39,7 +39,7 @@ describe('UsersService', () => {
 
   describe('findOne', () => {
     it('should return user data when user exists', async () => {
-      const mockUser = { id: 1, email: 'test@test.de', height: 180 };
+      const mockUser = { id: 1, email: 'test@test.de', height: 180, password: 'hashed-password' };
       prismaMock.users.findUnique.mockResolvedValue(mockUser);
 
       const result = await service.findOne(1);
@@ -57,9 +57,11 @@ describe('UsersService', () => {
 
   describe('changeEmail', () => {
     it('should update email and return success message', async () => {
+      prismaMock.users.findUnique.mockResolvedValue({ password: 'hashed-password' });
+      (argon2.verify as jest.Mock).mockResolvedValue(true);
       prismaMock.users.update.mockResolvedValue({});
 
-      const result = await service.changeEmail(1, 'new@test.de');
+      const result = await service.changeEmail(1, 'new@test.de', 'hashed-password');
 
       expect(prismaMock.users.update).toHaveBeenCalledWith({
         where: { id: 1 },
