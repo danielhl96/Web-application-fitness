@@ -67,13 +67,13 @@ export function useProfile() {
           hwr: data.waist / data.hip,
           hip: data.hip,
           waist: data.waist,
-          goal: data.goal,
+          goal: Number(data.goal),
           bfp: data.bfp,
           gender: data.gender,
           age: data.age,
           calories: data.calories,
           activity: data.activity_level,
-          bri: 0,
+          bri: 364.2 - 365.5 * Math.sqrt(1 - Math.pow(data.waist / Math.PI / data.height, 2)),
         });
       })
       .catch((error) => {
