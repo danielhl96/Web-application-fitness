@@ -7,13 +7,6 @@ import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { CreateMealDto, EditMealDto } from './dto/meals_dto';
 
-// ── OpenAI Mock – prevents missing API key error on import ────────────────────
-
-jest.mock('src/openai', () => ({
-  analyzeImage: jest.fn(),
-  analyzeFoodText: jest.fn(),
-}));
-
 // ── Mocks ──────────────────────────────────────────────────────────────────────
 
 const mockMeal = { id: 1, user_id: 1, name: 'Oatmeal', calories: 300 };

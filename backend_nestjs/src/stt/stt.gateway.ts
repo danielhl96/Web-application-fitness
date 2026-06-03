@@ -7,10 +7,10 @@ import {
   ConnectedSocket,
   MessageBody,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import * as jwt from 'jsonwebtoken';
-import { speechToText } from '../openai';
+import { OpenaiService } from '../openai/openai.service';
 
 interface SessionMeta {
   mimeType: string;
@@ -31,6 +31,8 @@ export class SttGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private readonly logger = new Logger(SttGateway.name);
+
+  constructor(private readonly openaiService: OpenaiService) {}
   /** Per-socket audio session state */
   private sessions = new Map<string, SessionMeta>();
 
@@ -97,7 +99,7 @@ export class SttGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.logger.log(
         `[STT] Partial transcription: ${audioBuffer.byteLength} bytes for ${client.id}`
       );
-      const transcript = await speechToText(audioBuffer, session.mimeType);
+      const transcript = await this.openaiService.speechToText(audioBuffer, session.mimeType);
       client.emit('stt:partial_transcript', { transcript });
     } catch (err) {
       // Silently ignore partial errors — session continues
@@ -120,7 +122,7 @@ export class SttGateway implements OnGatewayConnection, OnGatewayDisconnect {
     try {
       const audioBuffer = Buffer.concat(session.chunks);
       this.logger.log(`[STT] Transcribing ${audioBuffer.byteLength} bytes for client ${client.id}`);
-      const transcript = await speechToText(audioBuffer, session.mimeType);
+      const transcript = await this.openaiService.speechToText(audioBuffer, session.mimeType);
       client.emit('stt:transcript', { transcript });
       this.logger.log(`[STT] Transcript delivered to client ${client.id}`);
     } catch (err) {

@@ -18,7 +18,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateMealDto, EditMealDto } from './dto/meals_dto';
 import { User } from 'src/types';
-import { MulterFile } from 'src/openai';
+import { MulterFile } from 'src/openai/openai.service';
 
 @Controller('meals')
 export class MealsController {

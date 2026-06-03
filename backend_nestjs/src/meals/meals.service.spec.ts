@@ -1,14 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MealsService } from './meals.service';
+import { OpenaiService } from 'src/openai/openai.service';
 
 // ── OpenAI Mock ───────────────────────────────────────────────────────────────
 
-jest.mock('src/openai', () => ({
+const openaiMock = {
   analyzeFoodImage: jest.fn(),
   analyzeFoodText: jest.fn(),
-}));
-
-import { analyzeFoodImage, analyzeFoodText } from 'src/openai';
+};
 
 // ── Prisma Mock ───────────────────────────────────────────────────────────────
 
@@ -28,7 +27,11 @@ describe('MealsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MealsService, { provide: 'PRISMA_USER', useValue: prismaMock }],
+      providers: [
+        MealsService,
+        { provide: 'PRISMA_USER', useValue: prismaMock },
+        { provide: OpenaiService, useValue: openaiMock },
+      ],
     }).compile();
 
     service = module.get<MealsService>(MealsService);
@@ -172,17 +175,17 @@ describe('MealsService', () => {
   describe('calculateMeal', () => {
     it('should return analyzed meal data from image', async () => {
       const aiResult = { name: 'Pasta', calories: 500, carbs: 80, protein: 20, fats: 10 };
-      (analyzeFoodImage as jest.Mock).mockResolvedValue(aiResult);
+      (openaiMock.analyzeFoodImage as jest.Mock).mockResolvedValue(aiResult);
       const mockImage = { buffer: Buffer.from(''), mimetype: 'image/jpeg' } as any;
 
       const result = await service.calculateMeal(mockImage, 'What is this?');
 
-      expect(analyzeFoodImage).toHaveBeenCalledWith('What is this?', mockImage);
+      expect(openaiMock.analyzeFoodImage).toHaveBeenCalledWith('What is this?', mockImage);
       expect(result).toEqual({ message: 'Meal calculated successfully', ...aiResult });
     });
 
     it('should throw if AI returns null', async () => {
-      (analyzeFoodImage as jest.Mock).mockResolvedValue(null);
+      (openaiMock.analyzeFoodImage as jest.Mock).mockResolvedValue(null);
 
       await expect(service.calculateMeal({} as any)).rejects.toThrow('Could not analyze the meal');
     });
@@ -193,16 +196,16 @@ describe('MealsService', () => {
   describe('analyzeFoodText', () => {
     it('should return analyzed meal data from text', async () => {
       const aiResult = { name: 'Apple', calories: 80, carbs: 20, protein: 0, fats: 0 };
-      (analyzeFoodText as jest.Mock).mockResolvedValue(aiResult);
+      (openaiMock.analyzeFoodText as jest.Mock).mockResolvedValue(aiResult);
 
       const result = await service.analyzeFoodText('one apple');
 
-      expect(analyzeFoodText).toHaveBeenCalledWith('one apple');
+      expect(openaiMock.analyzeFoodText).toHaveBeenCalledWith('one apple');
       expect(result).toEqual({ message: 'Meal analyzed successfully', ...aiResult });
     });
 
     it('should throw if AI returns null', async () => {
-      (analyzeFoodText as jest.Mock).mockResolvedValue(null);
+      (openaiMock.analyzeFoodText as jest.Mock).mockResolvedValue(null);
 
       await expect(service.analyzeFoodText('unknown food')).rejects.toThrow(
         'Could not analyze the meal'

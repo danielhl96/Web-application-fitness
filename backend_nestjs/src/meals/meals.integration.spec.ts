@@ -7,9 +7,11 @@ import { MealsService } from './meals.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { prismaUser } from '../prisma/prisma.client';
 
+import { OpenaiService } from '../openai/openai.service';
+
 // ── OpenAI Mock – no real API key needed ─────────────────────────────────────
 
-jest.mock('src/openai', () => ({
+const openaiMock = {
   analyzeFoodImage: jest.fn().mockResolvedValue({
     name: 'Test Food',
     calories: 300,
@@ -24,7 +26,7 @@ jest.mock('src/openai', () => ({
     protein: 0,
     fats: 0,
   }),
-}));
+};
 
 // ── Fake JWT Guard – injects real user from env ───────────────────────────────
 
@@ -49,7 +51,11 @@ describe('Meals Integration Tests (real DB)', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MealsController],
-      providers: [MealsService, { provide: 'PRISMA_USER', useValue: prismaUser }],
+      providers: [
+        MealsService,
+        { provide: 'PRISMA_USER', useValue: prismaUser },
+        { provide: OpenaiService, useValue: openaiMock },
+      ],
     })
       .overrideGuard(JwtAuthGuard)
       .useValue(MockJwtAuthGuard)

@@ -1,10 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateMealDto, EditMealDto } from './dto/meals_dto';
-import { analyzeFoodImage, analyzeFoodText, MulterFile } from 'src/openai';
+import { OpenaiService, MulterFile } from 'src/openai/openai.service';
 @Injectable()
 export class MealsService {
-  constructor(@Inject('PRISMA_USER') private prismaUser: PrismaClient) {}
+  constructor(
+    @Inject('PRISMA_USER') private prismaUser: PrismaClient,
+    private readonly openaiService: OpenaiService
+  ) {}
 
   private today(): Date {
     const d = new Date();
@@ -54,7 +57,7 @@ export class MealsService {
   }
 
   async calculateMeal(imageFile: MulterFile, prompt?: string) {
-    const result = await analyzeFoodImage(prompt, imageFile);
+    const result = await this.openaiService.analyzeFoodImage(prompt, imageFile);
     if (!result) {
       throw new Error(
         'Could not analyze the meal. Please try again with a clearer image or more detailed prompt.'
@@ -72,7 +75,7 @@ export class MealsService {
   }
 
   async analyzeFoodText(text: string) {
-    const result = await analyzeFoodText(text);
+    const result = await this.openaiService.analyzeFoodText(text);
     if (!result) {
       throw new Error('Could not analyze the meal. Please try again with a clearer description.');
     }
