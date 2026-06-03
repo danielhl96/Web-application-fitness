@@ -67,7 +67,15 @@ describe('Meals Integration Tests (real DB)', () => {
   });
 
   afterAll(async () => {
-    // Clean up all meals created during tests
+    // Delete meals created via HTTP POST (identified by name prefix)
+    await prismaUser.meals.deleteMany({
+      where: {
+        user_id: parseInt(process.env.REAL_USER_ID),
+        name: { startsWith: 'Integration Test' },
+      },
+    });
+
+    // Delete meals created directly via Prisma
     if (createdMealIds.length > 0) {
       await prismaUser.meals.deleteMany({
         where: { id: { in: createdMealIds } },
