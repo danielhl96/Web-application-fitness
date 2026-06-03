@@ -86,10 +86,4 @@ export class AuthController {
     res.clearCookie('jwt');
     return { message: 'Logged out' };
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  getProfile(@Req() req: { user: User }) {
-    return req.user;
-  }
 }

@@ -26,7 +26,7 @@ export class MealsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createMeal(@Req() req: { user: User }, @Body() createMealDto: any) {
+  async createMeal(@Req() req: { user: User }, @Body() createMealDto: CreateMealDto) {
     return this.mealsService.createMeal(req.user.id, createMealDto);
   }
 
