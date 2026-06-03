@@ -3,7 +3,7 @@ import { IHttpClient } from '../../shared/interfaces/IHttpClient';
 import { httpClient } from '../../shared/Utils/api';
 import { User, UserHistory } from '../../types';
 
-class ProfileService {
+export class ProfileService {
   constructor(private httpClient: IHttpClient) {}
 
   async get(): Promise<User> {

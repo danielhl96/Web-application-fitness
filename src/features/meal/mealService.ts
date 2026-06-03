@@ -28,7 +28,7 @@ export interface EditMealPayload {
   fats: number;
 }
 
-class MealService {
+export class MealService {
   constructor(private httpClient: IHttpClient) {}
 
   async getToday(): Promise<MealResult[]> {

@@ -2,7 +2,7 @@ import { httpClient } from '../../shared/Utils/api';
 import { IHttpClient } from '../../shared/interfaces/IHttpClient';
 import { ChatMessage } from './useAiCoach';
 
-class AiService {
+export class AiService {
   constructor(private httpClient: IHttpClient) {}
 
   async getAiResponse(question: string, history: ChatMessage[]): Promise<string> {

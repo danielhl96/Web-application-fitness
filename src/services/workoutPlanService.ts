@@ -31,7 +31,7 @@ export interface CreateExcercisePayload {
   weights: number[];
 }
 
-class WorkoutPlanService {
+export class WorkoutPlanService {
   constructor(private httpClient: IHttpClient) {}
 
   async saveExercise(payload: CreateExcercisePayload): Promise<void> {

@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef, JSX } from 'react';
-import { profileService } from '../profile/profileService';
-import { mealService } from '../meal/mealService';
-import { workoutPlanService } from '../../services/workoutPlanService';
-import { aiService } from './aiService';
+import { profileService, ProfileService } from '../profile/profileService';
+import { mealService, MealService } from '../meal/mealService';
+import { workoutPlanService, WorkoutPlanService } from '../../services/workoutPlanService';
+import { aiService, AiService } from './aiService';
 import { User, WorkoutPlan } from '../../types';
 
 export interface ChatMessage {
@@ -17,7 +17,22 @@ export interface AnalyseAction {
   onTrigger: () => void;
 }
 
-export function useAiCoach() {
+export interface AiCoachDeps {
+  workoutPlanService: Pick<WorkoutPlanService, 'getAll'>;
+  profileService: Pick<ProfileService, 'get'>;
+  mealService: Pick<MealService, 'getToday'>;
+  aiService: Pick<AiService, 'getAiResponse'>;
+}
+
+const defaultDeps: AiCoachDeps = {
+  workoutPlanService,
+  profileService,
+  mealService,
+  aiService,
+};
+
+export function useAiCoach(deps: AiCoachDeps = defaultDeps) {
+  const { workoutPlanService: wp, profileService: ps, mealService: ms, aiService: ai } = deps;
   const [question, setQuestion] = useState<string>('');
   const refs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const [workouts, setWorkouts] = useState<WorkoutPlan[]>([]);
@@ -49,8 +64,7 @@ export function useAiCoach() {
   }, []);
 
   function fetchUserProfile() {
-    profileService
-      .get()
+    ps.get()
       .then((profile: User) => {
         console.log('Fetched user profile:', profile);
         const goalLabel =
@@ -72,15 +86,14 @@ export function useAiCoach() {
   }
 
   function fetchWorkouts() {
-    workoutPlanService.getAll().then((workoutPlans) => {
+    wp.getAll().then((workoutPlans) => {
       console.log('Fetched workout plans:', workoutPlans);
       setWorkouts(workoutPlans);
     });
   }
 
   function fetchLastMeal() {
-    mealService
-      .getToday()
+    ms.getToday()
       .then((results) => {
         let message = 'My meals today: ';
         let hasMeals = false;
@@ -106,8 +119,7 @@ export function useAiCoach() {
   }
 
   function handleOpenAIResponse(userMessage: string): void {
-    aiService
-      .getAiResponse(userMessage, chatHistory)
+    ai.getAiResponse(userMessage, chatHistory)
       .then((aiMessage: string) => {
         handleMessage(aiMessage, false);
         setIsLoading(false);
