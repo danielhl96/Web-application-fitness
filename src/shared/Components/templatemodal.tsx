@@ -8,7 +8,7 @@ function TemplateModal({ children, border }: TemplateModalProps): JSX.Element {
   return (
     <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
       <div
-        className="modal-box  bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
+        className="modal-box w-full bg-gradient-to-b from-gray-900 to-black shadow-xl rounded-xl h-auto max-h-130"
         style={{
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',

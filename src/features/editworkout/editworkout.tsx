@@ -4,6 +4,17 @@ import exercise from '../../shared/Components/exercises.ts';
 import ExerciseSearchDropdown from '../../shared/Components/ExerciseSearchDropdown.tsx';
 import { JSX, useRef, useEffect } from 'react';
 import { SelectedExercise, WorkoutPlanMap } from '../../types.ts';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import { SortableContext, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface EditWorkoutPageProps {
   addExercise: string;
@@ -14,10 +25,34 @@ interface EditWorkoutPageProps {
   handleEditWorkout: () => void;
   handleShowModal: (exercise: string) => void;
   changePosition: (element: SelectedExercise, direction: 'up' | 'down') => void;
+  reorderExercise: (fromIndex: number, toIndex: number) => void;
   onRepsChange: (index: number, reps: number) => void;
   onSetsChange: (index: number, sets: number) => void;
   onRemoveExercise: (index: number) => void;
   isLoading: boolean;
+}
+
+// ── Sortable wrapper for each ExerciseCard ─────────────────────────────────
+
+function SortableExerciseCard({ id, children }: { id: string; children: JSX.Element }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'grab',
+      }}
+      {...attributes}
+      {...listeners}
+    >
+      {children}
+    </div>
+  );
 }
 
 function EditWorkoutPage({
@@ -29,6 +64,7 @@ function EditWorkoutPage({
   handleEditWorkout,
   handleShowModal,
   changePosition,
+  reorderExercise,
   onRepsChange,
   onSetsChange,
   onRemoveExercise,
@@ -39,25 +75,34 @@ function EditWorkoutPage({
   const lastExerciseRef = useRef<HTMLDivElement>(null);
   const previousLengthRef = useRef<number>(currentExercises.length);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } })
+  );
+
   useEffect(() => {
-    // Nur scrollen wenn die Länge zunimmt (neue Übung hinzugefügt)
     if (
       lastExerciseRef.current &&
       currentExercises.length > previousLengthRef.current &&
       currentExercises.length > 0
     ) {
-      lastExerciseRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+      lastExerciseRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     previousLengthRef.current = currentExercises.length;
   }, [currentExercises.length]);
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const fromIndex = currentExercises.findIndex((ex, i) => `${ex.exercise}-${i}` === active.id);
+    const toIndex = currentExercises.findIndex((ex, i) => `${ex.exercise}-${i}` === over.id);
+    if (fromIndex !== -1 && toIndex !== -1) reorderExercise(fromIndex, toIndex);
+  }
+
   return (
     <div>
       <div className="flex flex-col h-130 lg:h-130 lg:w-200 items-center justify-center pt-4 pb-8">
-        <div className="flex flex-col w-70 h-auto md:w-80 space-y-2 items-center ">
+        <div className="flex flex-col w-70 h-auto md:w-80 space-y-2 items-center">
           <ExerciseSearchDropdown
             value={addExercise}
             onChange={setAddExercise}
@@ -65,29 +110,40 @@ function EditWorkoutPage({
             onSelect={handleAddExercise}
           />
         </div>
-        <div
-          className={`${currentExercises.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} items-center gap-2 justify-center w-full overflow-y-auto py-2 lg:w-auto max-h-90 lg:max-h-[65vh]`}
-        >
-          {currentExercises.map((ex, index) => (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={currentExercises.map((ex, i) => `${ex.exercise}-${i}`)}
+            strategy={rectSortingStrategy}
+          >
             <div
-              key={ex.exercise + '-' + index}
-              ref={index === currentExercises.length - 1 ? lastExerciseRef : null}
+              className={`${currentExercises.length > 1 ? 'flex grid lg:grid-cols-3' : 'flex grid grid-cols-1'} items-center gap-2 justify-center overflow-y-auto py-2 lg:w-auto lg:max-h-[65vh]`}
             >
-              <ExerciseCard
-                ismaximized={index === currentExercises.length - 1}
-                ExerciseName={ex.exercise}
-                Description={exercise.find((item) => item.name === ex.exercise)?.description}
-                ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
-                onRepsChange={(reps) => onRepsChange(index, reps)}
-                onSetsChange={(sets) => onSetsChange(index, sets)}
-                handleRemoveExercise={() => onRemoveExercise(index)}
-                changePosition={(direction) => changePosition(ex, direction)}
-                reps={Array.isArray(ex.reps) ? ex.reps[0] : ex.reps}
-                sets={ex.sets}
-              />
+              {currentExercises.map((ex, index) => {
+                const id = `${ex.exercise}-${index}`;
+                return (
+                  <SortableExerciseCard key={id} id={id}>
+                    <div ref={index === currentExercises.length - 1 ? lastExerciseRef : null}>
+                      <ExerciseCard
+                        ismaximized={index === currentExercises.length - 1}
+                        ExerciseName={ex.exercise}
+                        Description={
+                          exercise.find((item) => item.name === ex.exercise)?.description
+                        }
+                        ExerciseImage={exercise.find((item) => item.name === ex.exercise)?.img}
+                        onRepsChange={(reps) => onRepsChange(index, reps)}
+                        onSetsChange={(sets) => onSetsChange(index, sets)}
+                        handleRemoveExercise={() => onRemoveExercise(index)}
+                        changePosition={(direction) => changePosition(ex, direction)}
+                        reps={Array.isArray(ex.reps) ? ex.reps[0] : ex.reps}
+                        sets={ex.sets}
+                      />
+                    </div>
+                  </SortableExerciseCard>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          </SortableContext>
+        </DndContext>
         <div className="divider divider-primary"></div>
         <div className="flex flex-row gap-2">
           <Button

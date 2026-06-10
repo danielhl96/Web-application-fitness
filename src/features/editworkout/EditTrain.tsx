@@ -33,6 +33,7 @@ const EditTrain = (): JSX.Element => {
     selectedExercise,
     handleEditWorkout,
     changePosition,
+    reorderExercise,
     changeWorkoutNameAPI,
     handleShowModal,
     handleRemoveWorkoutAPI,
@@ -202,6 +203,7 @@ const EditTrain = (): JSX.Element => {
                     handleEditWorkout={handleEditWorkout}
                     handleShowModal={handleShowModal}
                     changePosition={changePosition}
+                    reorderExercise={reorderExercise}
                     onRepsChange={handleRepsChange}
                     onSetsChange={handleSetsChange}
                     onRemoveExercise={handleRemoveExercise}

@@ -36,6 +36,7 @@ export interface UseEditTrainReturn {
   // ── Actions ────────────────────────────────────────────────────────────────
   handleEditWorkout: () => void;
   changePosition: (element: SelectedExercise, direction: 'up' | 'down') => void;
+  reorderExercise: (fromIndex: number, toIndex: number) => void;
   changeWorkoutNameAPI: () => Promise<void>;
   handleShowModal: (workoutName: string) => void;
   handleRemoveWorkoutAPI: (workoutname: string) => void;
@@ -114,6 +115,14 @@ export function useEditTrain(): UseEditTrainReturn {
       [exercises[index + 1], exercises[index]] = [exercises[index], exercises[index + 1]];
       setSelectedExercise({ ...selectedExercise, [savekey]: exercises });
     }
+  }
+
+  // ── Reorder exercises via drag & drop ────────────────────────────────────
+  function reorderExercise(fromIndex: number, toIndex: number): void {
+    const exercises = [...selectedExercise[savekey]];
+    const [moved] = exercises.splice(fromIndex, 1);
+    exercises.splice(toIndex, 0, moved);
+    setSelectedExercise({ ...selectedExercise, [savekey]: exercises });
   }
 
   // ── Rename a workout plan via API ─────────────────────────────────────────
@@ -242,6 +251,7 @@ export function useEditTrain(): UseEditTrainReturn {
     setSelectedExercise,
     handleEditWorkout,
     changePosition,
+    reorderExercise,
     changeWorkoutNameAPI,
     handleShowModal,
     handleRemoveWorkoutAPI,

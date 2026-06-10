@@ -2,6 +2,7 @@ import React, { JSX } from 'react';
 import '../../index.css';
 import { useState, useRef, useEffect } from 'react';
 import Table from './Table.tsx';
+import Button from './button.tsx';
 type ExerciseCardProps = {
   ExerciseName: string;
   Description: string;
@@ -160,10 +161,7 @@ function ExerciseCard({
               </div>
             </div>
             <div className="flex flex-row justify-center items-center space-x-2 mb-2">
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-red-500 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-500/30 hover:scale-105 focus:ring-2 focus:ring-red-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
-                onClick={() => handleRemoveExercise()}
-              >
+              <Button border="#ef4444" onClick={() => handleRemoveExercise()}>
                 {/* Mülltonne Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -179,12 +177,9 @@ function ExerciseCard({
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-              </button>
+              </Button>
 
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
-                onClick={() => changePosition('up')}
-              >
+              <Button border="#3b82f6" onClick={() => changePosition('up')}>
                 {/* Up Arrow Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -200,11 +195,8 @@ function ExerciseCard({
                     d="M5 15l7-7 7 7"
                   />
                 </svg>
-              </button>
-              <button
-                className="btn btn-outline btn-primary shadow-lg backdrop-blur-md border border-blue-400 text-white px-3 py-2 rounded-xl transition-all duration-200 hover:bg-blue-500/30 hover:scale-105 focus:ring-2 focus:ring-blue-400 flex items-center gap-1 text-base sm:text-lg md:text-xl min-w-[40px] min-h-[40px]"
-                onClick={() => changePosition('down')}
-              >
+              </Button>
+              <Button border="#3b82f6" onClick={() => changePosition('down')}>
                 {/* Down Arrow Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +212,7 @@ function ExerciseCard({
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </>
         )}
