@@ -131,6 +131,13 @@ export default function useCreateTrain() {
     }
   };
 
+  const reorderExercise = (fromIndex: number, toIndex: number): void => {
+    const next = [...selectedExercise];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setSelectedExercise(next);
+  };
+
   const confirmWorkoutName = (): void => setWorkoutNameSet((prev) => !prev);
 
   const goHome = (): void => {
@@ -155,6 +162,7 @@ export default function useCreateTrain() {
     handleRepsChange,
     handleSetsChange,
     changePosition,
+    reorderExercise,
     goHome,
     isLoading,
   };

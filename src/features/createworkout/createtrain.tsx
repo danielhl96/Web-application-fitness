@@ -8,6 +8,38 @@ import Input from '../../shared/Components/input.js';
 import Button from '../../shared/Components/button.js';
 import ExerciseSearchDropdown from '../../shared/Components/ExerciseSearchDropdown.tsx';
 import useCreateTrain from './useCreateTrain.ts';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import { SortableContext, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+function SortableExerciseCard({ id, children }: { id: string; children: JSX.Element }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'grab',
+      }}
+      {...attributes}
+      {...listeners}
+    >
+      {children}
+    </div>
+  );
+}
 function CreateTraining(): JSX.Element {
   const {
     workoutName,
@@ -27,9 +59,23 @@ function CreateTraining(): JSX.Element {
     handleRepsChange,
     handleSetsChange,
     changePosition,
+    reorderExercise,
     goHome,
     isLoading,
   } = useCreateTrain();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } })
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const fromIndex = selectedExercise.findIndex((ex) => ex.name === active.id);
+    const toIndex = selectedExercise.findIndex((ex) => ex.name === over.id);
+    if (fromIndex !== -1 && toIndex !== -1) reorderExercise(fromIndex, toIndex);
+  }
 
   const lastExerciseRef = useRef<HTMLDivElement>(null);
 
@@ -130,26 +176,35 @@ function CreateTraining(): JSX.Element {
                 className={`${selectedExercise.length > 1 ? 'flex grid lg:grid-cols-3 ' : 'flex grid grid-cols-1'} w-full lg:w-200 max-h-65 gap-1 mb-2 items-center pt-1 overflow-y-auto max-md:h-auto`}
               >
                 {selectedExercise.length > 0 && addExercise.length === 0 ? (
-                  selectedExercise.map((exercise, index) => (
-                    <div
-                      key={exercise.name}
-                      ref={index === selectedExercise.length - 1 ? lastExerciseRef : null}
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={selectedExercise.map((ex) => ex.name)}
+                      strategy={rectSortingStrategy}
                     >
-                      <ExerciseCard
-                        ismaximized={true}
-                        ExerciseName={exercise.name}
-                        Description={exercise.description}
-                        ExerciseImage={exercise.img}
-                        reps={exercise.reps}
-                        sets={exercise.sets}
-                        // Callback for Prop passed
-                        onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
-                        onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
-                        handleRemoveExercise={() => handleRemoveExercise(exercise.name)}
-                        changePosition={(direction) => changePosition(exercise, direction)}
-                      />
-                    </div>
-                  ))
+                      {selectedExercise.map((exercise, index) => (
+                        <SortableExerciseCard key={exercise.name} id={exercise.name}>
+                          <div ref={index === selectedExercise.length - 1 ? lastExerciseRef : null}>
+                            <ExerciseCard
+                              ismaximized={true}
+                              ExerciseName={exercise.name}
+                              Description={exercise.description}
+                              ExerciseImage={exercise.img}
+                              reps={exercise.reps}
+                              sets={exercise.sets}
+                              onRepsChange={(reps) => handleRepsChange(exercise.name, reps)}
+                              onSetsChange={(sets) => handleSetsChange(exercise.name, sets)}
+                              handleRemoveExercise={() => handleRemoveExercise(exercise.name)}
+                              changePosition={(direction) => changePosition(exercise, direction)}
+                            />
+                          </div>
+                        </SortableExerciseCard>
+                      ))}
+                    </SortableContext>
+                  </DndContext>
                 ) : selectedExercise.length === 0 && addExercise.length === 0 ? (
                   <p className="text-slate-400 flex justify-center">No exercises selected yet.</p>
                 ) : null}
