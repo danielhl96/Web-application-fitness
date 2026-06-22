@@ -302,6 +302,45 @@ VITE_API_URL=http://localhost:3000
 
 ---
 
+## 📸 Screenshots v1.3 (iPhone 11 Pro)s
+
+<table>
+<tr>
+    <td><img src="screenshots/login1.3.png" width="300" alt="Login Page"></td>
+    <td><img src="screenshots/register1.3.png" width="300" alt="Register Page"></td>
+    <td><img src="screenshots/passwordforget1.3.png" width="300" alt="Password Page"></td>
+</tr>
+<tr>
+   <td><img src="screenshots/home1.3.png" width="300" alt="Dashboard"></td>
+    <td><img src="screenshots/editworkoutcards1.3.png" width="300" alt="Edit Workouts"></td>
+     <td><img src="screenshots/editworkoutmax1.3.png" width="300" alt="Edit Workouts"></td>
+    <td><img src="screenshots/editworkout1.3.png" width="300" alt="Edit Workout"></td>
+</tr>
+<tr>
+    <td><img src="screenshots/selectworkout1.3.png" width="300" alt="Select Workout"></td>
+    <td><img src="screenshots/workout1.3.png" width="300" alt="Workout"></td>
+     <td><img src="screenshots/workout1.3rm.png" width="300" alt="Workout"></td>
+</tr>
+<tr>
+    <td><img src="screenshots/nutrition1.3.png" width="300" alt="Nutrition"></td>
+    <td><img src="screenshots/mealdate.1.3.png" width="300" alt="Nutrition Date"></td>
+    <td><img src="screenshots/mealedit.png" width="300" alt="Meal Edit"></td>
+    <td><img src="screenshots/meal1.3select.png" width="300" alt="Meal Upload"></td>
+</tr>
+<tr>
+    <td><img src="screenshots/profile1.3.png" width="300" alt="Profile"></td>
+    <td><img src="screenshots/profileedit1.3.png" width="300" alt="Profile Edit"></td>
+    <td><img src="screenshots/stopwatch1.3.png" width="300" alt="Stopwatch"></td>
+     <td><img src="screenshots/stopwatchsettings1.3.png" width="300" alt="Stopwatch"></td>
+    <td><img src="screenshots/stat1.3.png" width="300" alt="Statistics"></td>
+    <td><img src="screenshots/diagram1.3.png" width="300" alt="Diagram"></td>
+</tr>
+<tr>
+    <td><img src="screenshots/cred1.3.png" width="300" alt="Credentials"></td>
+
+</tr>
+</table>
+
 ## 📸 Screenshots v1.2 (iPhone 11 Pro)
 
 <table>
