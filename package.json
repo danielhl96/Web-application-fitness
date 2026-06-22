@@ -8,6 +8,8 @@
     "build": "vite build",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -69,6 +71,7 @@
     "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "^10.4.21",
     "baseline-browser-mapping": "^2.10.10",
+    "cypress": "^15.17.0",
     "daisyui": "^5.0.27",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",

@@ -15,6 +15,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps): JSX.Element {
         {loadingComponente('Loading...')}
       </div>
     );
+
   if (!isAuth) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }

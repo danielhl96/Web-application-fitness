@@ -29,8 +29,20 @@ api.interceptors.response.use(
     const original = err.config;
     if (!original) return Promise.reject(err);
 
+    const requestUrl = String(original.url || '');
+    const skipRefreshForAuthEndpoints = [
+      '/auth/login',
+      '/auth/register',
+      '/auth/password-reset-requests',
+      '/auth/password',
+    ].some((path) => requestUrl.endsWith(path));
+
+    if (skipRefreshForAuthEndpoints) {
+      return Promise.reject(err);
+    }
+
     // ignore refresh endpoint to avoid infinite loop
-    if (original.url && (original.url as string).endsWith('/refresh_token')) {
+    if (requestUrl.endsWith('/refresh_token')) {
       return Promise.reject(err);
     }
 

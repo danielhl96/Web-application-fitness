@@ -65,7 +65,9 @@ function LoginForm(): JSX.Element {
               errorMessage={''}
             />
           </div>
-          <h1 className="text-red-500 text-sm ">{message}</h1>
+          <h1 data-cy="error-message" className="text-red-500 text-sm ">
+            {message}
+          </h1>
 
           <Button
             isLoading={isLoading}

@@ -32,9 +32,19 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
-    command: sh -c "npx prisma generate && npm run dev"
+      - USER_DATABASE_URL=postgresql://testuser:testpassword@testdb:5432/fitness_test?sslmode=disable
+    command: sh -c "npx prisma generate && npx prisma db push && npm run dev"
     depends_on:
       - redis
+
+  testdb:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: fitness_test
+    ports:
+      - '5432:5432'
 
   redis:
     image: redis:7-alpine

@@ -38,7 +38,7 @@ function EmailInput({
       <input
         placeholder="E-Mail"
         disabled={disabled}
-        type="text"
+        type="email"
         className="w-full pl-9 pr-4 py-2 rounded-xl border border-blue-400 bg-white/10
       text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400
       placeholder:text-blue-200"

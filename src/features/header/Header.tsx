@@ -183,7 +183,11 @@ function Header(): JSX.Element {
               </Link>
             ))}
 
-            <button className="btn btn-ghost text-white md:ml-4" onClick={handleLogout}>
+            <button
+              data-cy="logout-btn"
+              className="btn btn-ghost text-white md:ml-4"
+              onClick={handleLogout}
+            >
               <svg className="h-6 w-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
