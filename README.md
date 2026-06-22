@@ -7,23 +7,9 @@ Live demo: **https://frontend.web-fitness-app.de**
 Guest credentials:
 
 ```
-Email:    gast@gast.de
-Password: q!w7w'nF9Gb+d_j
+Email:    test@test.de
+Password: Test1234@
 ```
-
----
-
-## 🆕 Recent Changes (June 2026)
-
-- Backend OpenAI integration was refactored into a dedicated NestJS module: `openai/openai.module.ts` + `openai/openai.service.ts`
-- Comprehensive backend tests added for `meals` and `workout_plans` (unit + integration)
-- Frontend test setup added with Vitest + Testing Library
-- Cypress E2E setup added (auth flow tests, custom `cy.login()` command, env-driven credentials)
-- Drag & drop exercise reordering added in create/edit workout using `@dnd-kit`
-- `ExerciseCard` behavior improved: desktop inline content, mobile modal view with improved backdrop handling
-- NestJS Docker stack updated to use dedicated `testdb` and automatic Prisma schema sync on startup
-
----
 
 ---
 
@@ -66,11 +52,40 @@ src/
 └── services/                # Feature-agnostic API services
 ```
 
+**Frontend architecture in detail:**
+
+1. **Feature-first structure**
+
+- Each business domain lives in `src/features/*` (auth, training, meal, aicoach, profile, ...)
+- UI, hooks, and service code stay close together to reduce cross-folder coupling
+
+2. **Container + hook pattern**
+
+- Route components (`training.tsx`, `nutrition.tsx`, `aicoach.tsx`, ...) mostly compose UI
+- Business logic lives in hooks (`useTraining`, `useNutrition`, `useAiCoach`, `useProfile`)
+
+3. **Shared design system layer**
+
+- Generic UI primitives are in `src/shared/Components`
+- Feature screens compose these primitives and pass behavior via props
+- Repeated UX (modals, cards, input controls, toasts, loaders) is centralized
+
+4. **Network/auth flow**
+
+- `shared/Utils/api.ts` configures Axios with cookies + interceptors
+- On protected-request `401`, refresh flow retries original request
+- Public auth endpoints (`/auth/login`, `/auth/register`, password reset routes) intentionally skip refresh to avoid forced reloads
+
+5. **Interaction architecture**
+
+- Drag & drop ordering in create/edit workout is implemented via `@dnd-kit`
+- Voice/STT flow is split across `useAudioRecorder`, socket service, and presentation components (`RecorderControls`, `TranscriptBox`)
+
 **Key frontend patterns:**
 
-- Pages are pure UI — all state and side effects live in custom hooks (`useTraining`, `useNutrition`, …)
-- `UI_STATE<T>` discriminated union (`loading | success | error`) replaces separate loading flags
-- Typed with TypeScript (`strict: false` during migration, tightened over time)
+- Pages are UI-focused; side effects and domain state stay in hooks
+- Shared components are stateless where possible and controlled via props
+- TypeScript is used across features and services for safer refactors
 - Axios interceptor handles silent JWT refresh (401 → `/auth/refresh_token` → retry)
 
 ### Backend (NestJS)
@@ -207,16 +222,33 @@ Browser mic
 
 ## 🧱 Component Library
 
-| Component                      | Purpose                                              |
-| ------------------------------ | ---------------------------------------------------- |
-| `Button`                       | Styled action button with customisable border colour |
-| `WorkoutCard`                  | Workout plan selection card                          |
-| `ExerciseCard`                 | Exercise display with icon                           |
-| `TemplatePage`                 | Consistent page layout wrapper                       |
-| `TemplateModal`                | Backdrop modal wrapper                               |
-| `Notify`                       | Success / error toast with configurable duration     |
-| `Header` / `HeaderLogout`      | Navigation bar variants                              |
-| `EmailInput` / `PasswordInput` | Validated input primitives                           |
+| Component                 | Purpose                                                           |
+| ------------------------- | ----------------------------------------------------------------- |
+| `Button`                  | Styled action button with loading/disabled states                 |
+| `Input`                   | Base text input primitive                                         |
+| `EmailInput`              | Email input with validation and error handling                    |
+| `PasswordInput`           | Password input with visibility toggle and strength validation     |
+| `TemplatePage`            | Shared page shell/layout with mobile dock and orientation overlay |
+| `TemplateModal`           | Backdrop modal wrapper with dismiss handling                      |
+| `Notify`                  | Success/error toast with configurable duration                    |
+| `Loading`                 | Reusable loading indicator                                        |
+| `WorkoutCard`             | Workout plan selection/overview card                              |
+| `ExerciseCard`            | Exercise card (desktop inline + mobile modal behavior)            |
+| `ExerciseSearchDropdown`  | Search + select exercises in workout forms                        |
+| `Table`                   | Reusable tabular data rendering                                   |
+| `ProfileCard`             | Profile summary card container                                    |
+| `HumanSilhouette`         | Body/measurement visual helper                                    |
+| `Header` / `HeaderLogout` | Navigation bars for authenticated and auth pages                  |
+| `AudioRecorder`           | Voice recording wrapper component                                 |
+| `RecorderControls`        | Start/stop controls for audio capture                             |
+| `TranscriptBox`           | Live/final speech transcript display                              |
+| `ChatBubble`              | Message bubble for AI coach chat UI                               |
+| `BreakTimeModal`          | Rest timer modal during workouts                                  |
+| `WeightModal`             | Weight input modal during training                                |
+| `ExerciseListModal`       | Exercise list modal during active workout                         |
+| `LastTrainingModal`       | Last-session reference modal for progression                      |
+| `RepsEstimationPanel`     | 1RM/reps estimation helper panel                                  |
+| `HealthMetrics`           | Profile metrics section (BMI/body stats)                          |
 
 ---
 
