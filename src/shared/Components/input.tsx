@@ -9,6 +9,7 @@ type InputProps = {
   onDisable?: boolean;
   id?: string;
   onBlur?: () => void;
+  'data-cy'?: string;
 };
 
 function Input({
@@ -20,10 +21,12 @@ function Input({
   onDisable,
   id,
   onBlur,
+  'data-cy': dataCy,
 }: InputProps): JSX.Element {
   return (
     <div className="input-group">
       <input
+        data-cy={dataCy}
         placeholder={placeholder}
         disabled={onDisable}
         type="text"

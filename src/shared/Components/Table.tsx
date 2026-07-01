@@ -6,8 +6,15 @@ type TableProps = {
   onSelect: (value: number) => void;
   string: string;
   color: string;
+  'data-cy'?: string;
 };
-function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Element {
+function Table({
+  selectedItem,
+  onSelect,
+  string,
+  color,
+  'data-cy': dataCyValue,
+}: TableProps): JSX.Element {
   const listRef = useListRef(null);
   const [optimisticValue, setOptimisticValue] = React.useState<number | null>(null);
 
@@ -31,6 +38,7 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
       optimisticValue !== null ? optimisticValue === value : selectedItem === value;
     return (
       <div
+        data-cy={`${string} ${value}`}
         style={style}
         onClick={() => {
           setOptimisticValue(value);
@@ -62,6 +70,8 @@ function Table({ selectedItem, onSelect, string, color }: TableProps): JSX.Eleme
       defaultHeight={80}
       className="h-15 lg:h-25 w-20 rounded-xl bg-gray-700/15 shadow-md"
       style={{ scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}
+      aria-label={dataCyValue}
+      data-cy={dataCyValue}
     />
   );
 }

@@ -14,6 +14,9 @@ type ExerciseCardProps = {
   reps?: number | number[];
   sets?: number;
   ismaximized?: boolean;
+  'data-cy-reps'?: string;
+  'data-cy-sets'?: string;
+  'data-cy-exercise-delete-button'?: string;
 };
 
 function ExerciseCard({
@@ -27,6 +30,9 @@ function ExerciseCard({
   reps,
   sets,
   ismaximized,
+  'data-cy-reps': dataCyReps,
+  'data-cy-sets': dataCySets,
+  'data-cy-exercise-delete-button': dataCyExerciseDeleteButton,
 }: ExerciseCardProps): JSX.Element {
   const [selectedSets, setSelectedSets] = useState(sets || null);
   const [maximized, setMaximized] = useState(ismaximized || false);
@@ -92,7 +98,10 @@ function ExerciseCard({
   }, []);
 
   return (
-    <div className="w-60 sm:max-w-sm md:max-w-md flex flex-col items-center">
+    <div
+      className="w-60 sm:max-w-sm md:max-w-md flex flex-col items-center"
+      data-cy={`exercise-card-${ExerciseName}`}
+    >
       <div
         className={`card w-full ${maximized ? 'min-h-[35dvh]' : 'h-[18dvh]'} ${maximized ? 'lg:min-h-[10dvh] sm:min-h-[25dvh]' : 'sm:h-[20dvh]'} bg-black/20 border border-blue-500 shadow-xl rounded-xl flex flex-col items-center backdrop-blur-lg border-[1px] border-white/20`}
       >
@@ -144,6 +153,7 @@ function ExerciseCard({
             <div className="flex flex-row space-x-2 p-3">
               <div className="h-15 overflow-y-scroll rounded-lg bg-black/5 flex items-center justify-center">
                 <Table
+                  data-cy={dataCySets}
                   selectedItem={selectedSets}
                   onSelect={(sets) => handleSets(sets, null)}
                   string="Sets: "
@@ -153,6 +163,7 @@ function ExerciseCard({
 
               <div className="h-15 overflow-y-scroll rounded-lg bg-black/5 flex items-center justify-center">
                 <Table
+                  data-cy={dataCyReps}
                   selectedItem={selectedReps}
                   onSelect={(reps) => handleReps(reps, null)}
                   string="Reps: "
@@ -161,7 +172,11 @@ function ExerciseCard({
               </div>
             </div>
             <div className="flex flex-row justify-center items-center space-x-2 mb-2">
-              <Button border="#ef4444" onClick={() => handleRemoveExercise()}>
+              <Button
+                data-cy={dataCyExerciseDeleteButton}
+                border="#ef4444"
+                onClick={() => handleRemoveExercise()}
+              >
                 {/* Mülltonne Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

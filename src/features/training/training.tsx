@@ -80,6 +80,7 @@ function StartTraining() {
 
       {showModal && (
         <WeightModal
+          data-cy={`weight-modal-${idx}`}
           scrollRef={scrollRef}
           scrollRef2={scrollRef2}
           selectedWeight1={training1 ? training1.weights : [0]}
@@ -140,7 +141,11 @@ function StartTraining() {
                   </div>
                 ) : Object.keys(selectedExercise).length > 0 ? (
                   Object.keys(selectedExercise).map((name, index) => (
-                    <WorkoutCard key={index} onClick={() => selectPlan(name)}>
+                    <WorkoutCard
+                      data-cy={`workout-card-${name}`}
+                      key={index}
+                      onClick={() => selectPlan(name)}
+                    >
                       <h2 className="text-amber-400 font-bold mb-2">{name}</h2>
                       <p className="text-blue-300 font-light text-sm">
                         Exercises: {selectedExercise[name]?.length || 0}
@@ -225,6 +230,7 @@ function StartTraining() {
                       {/* Reps select */}
                       <span className="relative">
                         <select
+                          data-cy={`reps-select-${index + 1}`}
                           disabled={training1.isFinished}
                           id={'input' + (index + 1)}
                           className="w-28 h-10 px-11 py-0 rounded-xl border border-blue-400 bg-white/10 text-white shadow-lg backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -272,6 +278,7 @@ function StartTraining() {
 
                       {/* Weight button */}
                       <Button
+                        data-cy={`weight-button-${index}`}
                         disabled={training1.isFinished}
                         onClick={() => handleModal(index, true)}
                         border={training1.isFinished ? '#3b82f6' : '#ffea00ff'}
@@ -295,6 +302,7 @@ function StartTraining() {
               {/* Set +/- and break controls */}
               <div className="flex space-x-2 items-center justify-center">
                 <Button
+                  data-cy="sets-minus"
                   disabled={training1.isFinished}
                   onClick={handleReduceSets}
                   border="#ef4444ff"
@@ -314,7 +322,12 @@ function StartTraining() {
                     />
                   </svg>
                 </Button>
-                <Button disabled={training1.isFinished} onClick={handleAddSets} border="#3b82f6">
+                <Button
+                  data-cy="sets-plus"
+                  disabled={training1.isFinished}
+                  onClick={handleAddSets}
+                  border="#3b82f6"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 mr-1"
@@ -350,7 +363,11 @@ function StartTraining() {
                     />
                   </svg>
                 </Button>
-                <Button onClick={() => setLastTrainingModal(true)} border="#3b82f6">
+                <Button
+                  data-cy="exercise-last"
+                  onClick={() => setLastTrainingModal(true)}
+                  border="#3b82f6"
+                >
                   Last
                 </Button>
               </div>
@@ -384,7 +401,12 @@ function StartTraining() {
                     />
                   </svg>
                 </Button>
-                <Button disabled={idxExercise === 0} onClick={handleExerciseBack} border="#3b82f6">
+                <Button
+                  data-cy="exercise-back"
+                  disabled={idxExercise === 0}
+                  onClick={handleExerciseBack}
+                  border="#3b82f6"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 transform scale-x-[-1]"
@@ -400,7 +422,7 @@ function StartTraining() {
                     />
                   </svg>
                 </Button>
-                <Button onClick={handleExercise} border="#3b82f6">
+                <Button data-cy="exercise-next" onClick={handleExercise} border="#3b82f6">
                   {Object.keys(currentExercises).every(
                     (ex) => currentExercises[Number(ex)].isFinished
                   ) ? (
@@ -435,7 +457,11 @@ function StartTraining() {
                     </svg>
                   )}
                 </Button>
-                <Button onClick={() => setExerciseList(true)} border="#3b82f6">
+                <Button
+                  data-cy="exercise-list"
+                  onClick={() => setExerciseList(true)}
+                  border="#3b82f6"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -451,7 +477,11 @@ function StartTraining() {
                     />
                   </svg>
                 </Button>
-                <Button border="#3b82f6" onClick={() => setShowRepsInfo(!showRepsInfo)}>
+                <Button
+                  data-cy="exercise-rm"
+                  border="#3b82f6"
+                  onClick={() => setShowRepsInfo(!showRepsInfo)}
+                >
                   RM
                 </Button>
               </div>

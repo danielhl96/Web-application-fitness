@@ -5,6 +5,7 @@ interface ExerciseSearchDropdownProps {
   onChange: (value: string) => void;
   excludeNames: string[];
   onSelect: (exerciseName: string) => void;
+  'data-cy'?: string;
 }
 
 export default function ExerciseSearchDropdown({
@@ -12,6 +13,7 @@ export default function ExerciseSearchDropdown({
   onChange,
   excludeNames,
   onSelect,
+  'data-cy': dataCy,
 }: ExerciseSearchDropdownProps) {
   const filtered = exercise.filter(
     (ex) => ex.name.toLowerCase().includes(value.toLowerCase()) && !excludeNames.includes(ex.name)
@@ -26,6 +28,7 @@ export default function ExerciseSearchDropdown({
         value={value}
         onChange={onChange}
         placeholder="Add an exercise..."
+        data-cy={dataCy}
       />
       <div
         className={`h-32 overflow-y-scroll border border-gray-800 ${showDropdown ? 'block' : 'hidden'}`}
@@ -36,6 +39,7 @@ export default function ExerciseSearchDropdown({
             className="flex flex-col items-center cursor-pointer max-h-auto overflow-y-auto"
           >
             <div
+              data-cy={`exercise-item-${item.name}`}
               onClick={() => onSelect(item.name)}
               className="card w-65 sm:w-40 md:w-60 border border-blue-500 shadow-xl rounded-xl backdrop-blur-lg flex flex-col items-center mb-2"
               style={{

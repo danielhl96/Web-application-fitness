@@ -91,10 +91,11 @@ function CreateTraining(): JSX.Element {
       <TemplatePage>
         {notification && (
           <Notify
+            data-cy="notify"
             title={notification.title}
             message={notification.message}
             type={notification.type}
-            duration={1500}
+            duration={2000}
             onClose={() => setNotification(null)}
           />
         )}
@@ -105,6 +106,7 @@ function CreateTraining(): JSX.Element {
           <h1 className="text-slate-400">Your workout need an name:</h1>
           <div className="flex flex-row">
             <Input
+              data-cy="training-input"
               value={workoutName}
               onDisable={workoutNameSet}
               placeholder="Workout name"
@@ -115,6 +117,7 @@ function CreateTraining(): JSX.Element {
               disabled={workoutName === ''}
               onClick={confirmWorkoutName}
               border={workoutNameSet ? '#10B981' : '#3b82f6'}
+              data-cy="confirm-workout-name-button"
             >
               {workoutNameSet ? (
                 <svg
@@ -154,6 +157,7 @@ function CreateTraining(): JSX.Element {
               <h1 className="text-slate-400">Search your exercise:</h1>
               <div className="form-control">
                 <ExerciseSearchDropdown
+                  data-cy="exercise-input"
                   value={addExercise}
                   onChange={(value) => setAddExercise(value)}
                   excludeNames={selectedExercise.map((ex) => ex.name)}
@@ -189,6 +193,9 @@ function CreateTraining(): JSX.Element {
                         <SortableExerciseCard key={exercise.name} id={exercise.name}>
                           <div ref={index === selectedExercise.length - 1 ? lastExerciseRef : null}>
                             <ExerciseCard
+                              data-cy-reps={`reps-${exercise.name}`}
+                              data-cy-sets={`sets-${exercise.name}`}
+                              data-cy-exercise-delete-button={`delete-${exercise.name}`}
                               ismaximized={true}
                               ExerciseName={exercise.name}
                               Description={exercise.description}
@@ -213,6 +220,7 @@ function CreateTraining(): JSX.Element {
           ) : null}
           <div className="flex flex-row items-center gap-4 mt-2 mb-0">
             <Button
+              data-cy="save-training-button"
               isLoading={isLoading}
               disabled={
                 workoutName === '' || selectedExercise.length === 0 || workoutNameSet === false

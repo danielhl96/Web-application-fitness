@@ -6,9 +6,17 @@ type NotifyProps = {
   type: 'success' | 'error';
   duration: number;
   onClose?: () => void;
+  'data-cy'?: string;
 };
 
-function Notify({ title, message, type, duration, onClose }: NotifyProps): JSX.Element | null {
+function Notify({
+  title,
+  message,
+  type,
+  duration,
+  onClose,
+  'data-cy': dataCy,
+}: NotifyProps): JSX.Element | null {
   const [visible, setVisible] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,6 +32,7 @@ function Notify({ title, message, type, duration, onClose }: NotifyProps): JSX.E
   return (
     <div className="modal modal-open modal-bottom sm:modal-middle items-center justify-center">
       <div
+        data-cy={dataCy}
         className={`modal-box modal-sm border border-blue-500 shadow-xl rounded-xl p-2`}
         style={{
           width: '16rem',

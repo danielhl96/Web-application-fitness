@@ -13,6 +13,7 @@ interface WeightModalProps {
 
   changeWeight: (index: number, flag: boolean) => void;
   onClose: () => void;
+  'data-cy'?: string;
 }
 
 export default function WeightModal({
@@ -22,14 +23,16 @@ export default function WeightModal({
   handleWeightSelect,
   changeWeight,
   onClose,
+  'data-cy': dataCy,
 }: WeightModalProps) {
   return (
     <TemplateModal>
       <div>
         <div className="flex flex-row justify-center items-center text-xs">
           {/* Whole kg picker (virtualized) */}
-          <div ref={scrollRef}>
+          <div ref={scrollRef} data-cy={dataCy}>
             <Table
+              data-cy={`weight-table-${idx}`}
               selectedItem={selectedWeight1[idx] ?? 0}
               onSelect={handleWeightSelect}
               string="Weight: "
@@ -39,7 +42,11 @@ export default function WeightModal({
         </div>
 
         <div className="modal-action justify-center">
-          <Button border="#08ad4dff" onClick={() => changeWeight(idx, false)}>
+          <Button
+            data-cy="weight-button"
+            border="#08ad4dff"
+            onClick={() => changeWeight(idx, false)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

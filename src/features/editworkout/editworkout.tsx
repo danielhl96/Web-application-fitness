@@ -104,6 +104,7 @@ function EditWorkoutPage({
       <div className="flex flex-col h-130 lg:h-130 lg:w-200 items-center justify-center pt-4 pb-8">
         <div className="flex flex-col w-70 h-auto md:w-80 space-y-2 items-center">
           <ExerciseSearchDropdown
+            data-cy="exercise-search-dropdown"
             value={addExercise}
             onChange={setAddExercise}
             excludeNames={excludeNames}
@@ -124,6 +125,9 @@ function EditWorkoutPage({
                   <SortableExerciseCard key={id} id={id}>
                     <div ref={index === currentExercises.length - 1 ? lastExerciseRef : null}>
                       <ExerciseCard
+                        data-cy-reps={`reps-${ex.exercise}`}
+                        data-cy-sets={`sets-${ex.exercise}`}
+                        data-cy-exercise-delete-button={`delete-${ex.exercise}`}
                         ismaximized={index === currentExercises.length - 1}
                         ExerciseName={ex.exercise}
                         Description={
@@ -151,6 +155,7 @@ function EditWorkoutPage({
             onClick={handleEditWorkout}
             border="#08ad4dff"
             disabled={currentExercises.length === 0}
+            data-cy="save-training-button"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +172,11 @@ function EditWorkoutPage({
               />
             </svg>
           </Button>
-          <Button onClick={() => handleShowModal('')} border="#ef4444">
+          <Button
+            data-cy="cancel-training-button"
+            onClick={() => handleShowModal('')}
+            border="#ef4444"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

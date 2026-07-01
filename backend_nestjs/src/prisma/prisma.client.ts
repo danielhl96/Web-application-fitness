@@ -23,3 +23,5 @@ export const prismaUser = new PrismaClient({
   adapter: userAdapter,
   log: ['query'],
 });
+
+export type PrismaUserClient = typeof prismaUser;

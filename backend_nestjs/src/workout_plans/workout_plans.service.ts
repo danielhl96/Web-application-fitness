@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { ExerciseTemplate } from '../types';
+import { ConflictException } from '@nestjs/common';
 import { CreateExerciseDto, CreateWorkoutPlanDto } from './dto/workout_plans_dto';
 
 @Injectable()
@@ -77,7 +78,21 @@ export class WorkoutPlansService {
   }
   async createWorkoutPlan(body: CreateWorkoutPlanDto, userId: number) {
     const { name, exercises } = body;
-    const workoutPlan = await this.prisma.workout_plans.create({
+
+    await this.prisma.workout_plans
+      .findFirst({
+        where: {
+          user_id: userId,
+          name: name,
+        },
+      })
+      .then((existingPlan) => {
+        if (existingPlan) {
+          throw new ConflictException('Workout plan with this name already exists for this user');
+        }
+      });
+
+    await this.prisma.workout_plans.create({
       data: {
         name,
         user_id: userId,

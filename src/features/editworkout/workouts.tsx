@@ -8,6 +8,7 @@ interface ActionButton {
   icon: ReactNode;
   border: string;
   onClick: () => void;
+  'data-cy'?: string;
 }
 
 export default function Workouts({
@@ -21,11 +22,13 @@ export default function Workouts({
   /** Atomare Delete-Aktion — koordiniert setConfirmationModal + setSaveKey im Elternteil */
   onDelete: (key: string) => void;
   selectedExercise: WorkoutPlanMap;
+  dataCyExerciseDeleteButton?: string;
 }): JSX.Element {
   const actionButtons: ActionButton[] = [
     {
       border: '#3b82f6',
       onClick: () => handleShowModal(exercise),
+      'data-cy': `edit-${exercise}`,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -46,6 +49,7 @@ export default function Workouts({
     {
       border: '#ef4444',
       onClick: () => onDelete(exercise),
+      'data-cy': `delete-${exercise}`,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +75,7 @@ export default function Workouts({
         <h2 className="text-amber-400 font-bold mb-2">{exercise}</h2>
         <div className="flex flex-row justify-center items-center gap-4 mt-2">
           {actionButtons.map((btn, i) => (
-            <Button key={i} onClick={btn.onClick} border={btn.border}>
+            <Button data-cy={btn['data-cy']} key={i} onClick={btn.onClick} border={btn.border}>
               {btn.icon}
             </Button>
           ))}

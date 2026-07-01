@@ -6,6 +6,9 @@ datasource db {
   provider = "postgresql"
 }
 
+
+
+
 model exercises {
   id              Int            @id @default(autoincrement())
   user_id         Int
@@ -70,10 +73,27 @@ model users {
   bmi                  Float?
   calories             Int?
   locked               Boolean                @default(false)
+  cardio               cardio[]
   exercises            exercises[]
   history_body_metrics history_body_metrics[]
   meals                meals[]
   workout_plans        workout_plans[]
+}
+
+model cardio {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  date            DateTime @db.Date
+  duration_min    Float
+  distance_km     Float
+  avg_bpm         Int
+  max_bpm         Int?
+  pace_min_per_km Float
+  power_w         Int?
+  cadence_spm     Int?
+  calories        Int?
+  notes           String?  @db.Text
+  users           users    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model workout_plans {
@@ -84,3 +104,5 @@ model workout_plans {
   plan_exercise_templates plan_exercise_templates[]
   users                   users                     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+

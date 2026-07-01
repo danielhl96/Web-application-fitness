@@ -18,6 +18,7 @@ import CredentialsPage from './features/credentials/credentials.js';
 import Nutrition from './features/meal/nutrition.js';
 import Home from './Pages/home.jsx';
 import AiCoach from './features/aicoach/aicoach.js';
+import CardioPage from './features/cardio/cardio.js';
 
 //Routes with ProtectedRoute to protect routes for the application
 function App() {
@@ -127,6 +128,16 @@ function App() {
             <AuthProvider>
               <ProtectedRoute>
                 <AiCoach />
+              </ProtectedRoute>
+            </AuthProvider>
+          }
+        />
+        <Route
+          path="/cardio"
+          element={
+            <AuthProvider>
+              <ProtectedRoute>
+                <CardioPage />
               </ProtectedRoute>
             </AuthProvider>
           }

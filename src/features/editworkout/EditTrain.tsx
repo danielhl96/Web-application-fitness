@@ -50,7 +50,11 @@ const EditTrain = (): JSX.Element => {
           <h3 className="font-bold text-lg text-amber-50 mb-4">Delete Workout Plan</h3>
           <p className="text-amber-50 mb-4">Are you sure you want to delete this workout plan?</p>
           <div className="modal-action">
-            <Button onClick={() => handleRemoveWorkoutAPI(savekey)} border="#ef4444">
+            <Button
+              data-cy="delete-workout-button"
+              onClick={() => handleRemoveWorkoutAPI(savekey)}
+              border="#ef4444"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -66,7 +70,11 @@ const EditTrain = (): JSX.Element => {
                 />
               </svg>
             </Button>
-            <Button onClick={() => setConfirmationModalforWorkoutDelete(false)} border="#3b82f6">
+            <Button
+              data-cy="cancel-delete-workout-button"
+              onClick={() => setConfirmationModalforWorkoutDelete(false)}
+              border="#3b82f6"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -150,9 +158,10 @@ const EditTrain = (): JSX.Element => {
       <TemplatePage>
         {notification && (
           <Notify
+            data-cy="notify"
             title={notification.title}
             message={notification.message}
-            duration={1500}
+            duration={3000}
             key={notification.message + notification.title + Date.now()}
             type={notification.type}
             onClose={() => setNotification(null)}

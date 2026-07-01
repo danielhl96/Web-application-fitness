@@ -152,6 +152,34 @@ export type ExerciseData = {
   id: number;
 };
 
+// ── Cardio ────────────────────────────────────────────────────────────────────
+
+export type CardioSession = {
+  id: string;
+  date: string; // ISO date YYYY-MM-DD
+  duration_min: number; // total duration in minutes
+  distance_km: number; // distance in km
+  avg_bpm: number; // average heart rate
+  max_bpm: number; // max heart rate
+  pace_min_per_km?: number; // pace in decimal min/km (auto-calculated)
+  power_w: number; // running power in watts
+  cadence_spm: number; // cadence in steps per minute
+  calories: number; // kcal burned
+  notes: string; // optional notes
+};
+
+export type CardioFormValues = {
+  date: string;
+  durationMin: string;
+  distanceKm: string;
+  avgBpm: string;
+  maxBpm: string;
+  powerW: string;
+  cadenceSpm: string;
+  calories: string;
+  notes: string;
+};
+
 export type Action =
   | {
       type:
