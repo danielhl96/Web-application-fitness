@@ -2,9 +2,18 @@ import { IHttpClient } from '../../shared/interfaces/IHttpClient';
 import { httpClient } from '../../shared/Utils/api';
 import { CardioSession } from '../../types';
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-const STORAGE_KEY = 'cardio_sessions';
+// Payload shape matching the backend DTO (camelCase)
+export type CardioCreatePayload = {
+  date: string;
+  durationMin: number;
+  distanceKm: number;
+  avgBpm: number;
+  maxBpm?: number;
+  powerW?: number;
+  cadenceSpm?: number;
+  calories?: number;
+  notes?: string;
+};
 
 // ── Service ───────────────────────────────────────────────────────────────────
 
@@ -17,19 +26,16 @@ export class CardioService {
     return response.data;
   }
 
-  async createCardioWorkout(workoutData: Omit<CardioSession, 'id'>): Promise<void> {
-    this.httpClient.post('/cardio', workoutData);
+  async createCardioWorkout(workoutData: CardioCreatePayload): Promise<void> {
+    await this.httpClient.post('/cardio', workoutData);
   }
 
-  async updateCardioWorkout(
-    workoutId: number,
-    workoutData: Omit<CardioSession, 'id'>
-  ): Promise<void> {
-    this.httpClient.patch(`/cardio/${workoutId}`, workoutData);
+  async updateCardioWorkout(workoutId: number, workoutData: CardioCreatePayload): Promise<void> {
+    await this.httpClient.patch(`/cardio/${workoutId}`, workoutData);
   }
 
   async deleteCardioWorkout(workoutId: number): Promise<void> {
-    this.httpClient.delete(`/cardio/${workoutId}`);
+    await this.httpClient.delete(`/cardio/${workoutId}`);
   }
 }
 

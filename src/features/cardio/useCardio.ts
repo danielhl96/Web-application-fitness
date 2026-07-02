@@ -41,10 +41,12 @@ export default function useCardio() {
   const [activeView, setActiveView] = useState<CardioView>('log');
   const [selectedSession, setSelectedSession] = useState<CardioSession | null>(null);
   const [notification, setNotification] = useState<NotificationState>(null);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   // ── Load sessions from localStorage on mount ───────────────────────────────
   useEffect(() => {
     cardioService.getCardioWorkouts().then((data) => setSessions(data));
+    console.log('Cardio sessions loaded:', sessions);
   }, []);
 
   // ── Derived: live pace preview ─────────────────────────────────────────────
@@ -54,9 +56,12 @@ export default function useCardio() {
 
   function handleChange(field: keyof CardioFormValues, value: string): void {
     setFormValues((prev) => ({ ...prev, [field]: value }));
+    formValues.date && formValues.durationMin && formValues.distanceKm && formValues.avgBpm
+      ? setButtonDisabled(false)
+      : setButtonDisabled(true);
   }
 
-  function handleSubmit(): void {
+  async function handleSubmit(): Promise<void> {
     const { date, durationMin, distanceKm, avgBpm } = formValues;
 
     if (!date || !durationMin || !distanceKm || !avgBpm) {
@@ -80,18 +85,20 @@ export default function useCardio() {
       return;
     }
 
-    const saved = cardioService.createCardioWorkout({
+    await cardioService.createCardioWorkout({
       date,
-      duration_min: dur,
-      distance_km: dist,
-      avg_bpm: parseNum(avgBpm),
-      max_bpm: parseNum(formValues.maxBpm),
-      power_w: parseNum(formValues.powerW),
-      cadence_spm: parseNum(formValues.cadenceSpm),
-      calories: parseNum(formValues.calories),
-      notes: formValues.notes.trim(),
+      durationMin: dur,
+      distanceKm: dist,
+      avgBpm: parseNum(avgBpm),
+      maxBpm: parseNum(formValues.maxBpm) || undefined,
+      powerW: parseNum(formValues.powerW) || undefined,
+      cadenceSpm: parseNum(formValues.cadenceSpm) || undefined,
+      calories: parseNum(formValues.calories) || undefined,
+      notes: formValues.notes.trim() || undefined,
     });
 
+    const updated = await cardioService.getCardioWorkouts();
+    setSessions(updated);
     setFormValues({ ...EMPTY_FORM, date: new Date().toISOString().split('T')[0] });
     setNotification({
       title: 'Run Saved',
@@ -123,6 +130,7 @@ export default function useCardio() {
     selectedSession,
     notification,
     previewPace,
+    buttonDisabled,
     // Setters
     setActiveView,
     setNotification,

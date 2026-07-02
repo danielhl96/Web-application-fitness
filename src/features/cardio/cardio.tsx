@@ -1,5 +1,5 @@
 import '../../index.css';
-import { act, JSX } from 'react';
+import { JSX } from 'react';
 import Header from '../header/Header';
 import TemplatePage from '../../shared/Components/templatepage';
 import Button from '../../shared/Components/button';
@@ -118,6 +118,7 @@ function CardioPage(): JSX.Element {
     selectedSession,
     notification,
     previewPace,
+    buttonDisabled,
     setActiveView,
     setNotification,
     handleChange,
@@ -389,7 +390,7 @@ function CardioPage(): JSX.Element {
 
         {activeView === 'log' && (
           <div className="flex flex-row justify-center gap-2">
-            <Button onClick={handleSubmit} border="#08ad4dff">
+            <Button disabled={buttonDisabled} onClick={handleSubmit} border="#08ad4dff">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -406,7 +407,7 @@ function CardioPage(): JSX.Element {
               </svg>
             </Button>
 
-            <Button onClick={() => null} border="red">
+            <Button onClick={() => navigate('/')} border="red">
               Close
             </Button>
           </div>
