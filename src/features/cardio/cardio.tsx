@@ -1,5 +1,5 @@
 import '../../index.css';
-import { JSX } from 'react';
+import { act, JSX } from 'react';
 import Header from '../header/Header';
 import TemplatePage from '../../shared/Components/templatepage';
 import Button from '../../shared/Components/button';
@@ -125,6 +125,7 @@ function CardioPage(): JSX.Element {
     handleDelete,
     handleSelectSession,
     handleCloseDetail,
+    navigate,
   } = useCardio();
 
   return (
@@ -233,7 +234,7 @@ function CardioPage(): JSX.Element {
 
           {/* ── Log Run Form ───────────────────────────────────────────────── */}
           {activeView === 'log' && (
-            <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh] pr-1">
+            <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden max-h-[50dvh] ">
               <div className="grid grid-cols-2 gap-3">
                 {/* Date – full width */}
                 <div className="flex flex-col gap-1 col-span-2">
@@ -242,7 +243,7 @@ function CardioPage(): JSX.Element {
                     type="date"
                     value={formValues.date}
                     onChange={(e) => handleChange('date', e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-75 px-4 py-2 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                     style={{
                       background: 'rgba(30, 41, 59, 0.25)',
                       boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -359,29 +360,6 @@ function CardioPage(): JSX.Element {
               </div>
 
               <p className="text-slate-500 text-xs">* Required fields</p>
-
-              <div className="flex flex-row justify-center gap-2">
-                <Button onClick={handleSubmit} border="#08ad4dff">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </Button>
-
-                <Button onClick={null} border="red">
-                  Close
-                </Button>
-              </div>
             </div>
           )}
 
@@ -408,6 +386,31 @@ function CardioPage(): JSX.Element {
             </div>
           )}
         </div>
+
+        {activeView === 'log' && (
+          <div className="flex flex-row justify-center gap-2">
+            <Button onClick={handleSubmit} border="#08ad4dff">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </Button>
+
+            <Button onClick={() => null} border="red">
+              Close
+            </Button>
+          </div>
+        )}
       </TemplatePage>
     </div>
   );

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { cardioService } from './cardioService';
 import type { CardioSession, CardioFormValues, NotificationState } from '../../types';
 
+import { useNavigate } from 'react-router-dom';
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export type CardioView = 'log' | 'history';
@@ -33,6 +35,7 @@ export function calcPace(durationMin: number, distanceKm: number): number {
 // ── Hook ──────────────────────────────────────────────────────────────────────
 
 export default function useCardio() {
+  const navigate = useNavigate();
   const [sessions, setSessions] = useState<CardioSession[]>([]);
   const [formValues, setFormValues] = useState<CardioFormValues>(EMPTY_FORM);
   const [activeView, setActiveView] = useState<CardioView>('log');
@@ -129,5 +132,6 @@ export default function useCardio() {
     handleDelete,
     handleSelectSession,
     handleCloseDetail,
+    navigate, // Expose navigate for external use
   };
 }
