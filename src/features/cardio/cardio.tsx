@@ -76,7 +76,7 @@ function CardioPage(): JSX.Element {
               <div className="grid grid-cols-2 gap-3">
                 {/* Date – full width */}
                 <div className="flex flex-col gap-1 col-span-2">
-                  <label className="text-slate-300 text-xs font-mono">Date *</label>
+                  <label className="text-slate-300 text-xs font-mono">Date </label>
                   <input
                     type="date"
                     value={formValues.date}
@@ -95,7 +95,7 @@ function CardioPage(): JSX.Element {
 
                 {/* Duration */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Duration (min) *</label>
+                  <label className="text-slate-300 text-xs font-mono">Duration (min) </label>
                   <Input
                     value={formValues.durationMin}
                     onChange={(v) => handleChange('durationMin', v)}
@@ -106,7 +106,7 @@ function CardioPage(): JSX.Element {
 
                 {/* Distance */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Distance (km) *</label>
+                  <label className="text-slate-300 text-xs font-mono">Distance (km) </label>
                   <Input
                     value={formValues.distanceKm}
                     onChange={(v) => handleChange('distanceKm', v)}
@@ -132,7 +132,7 @@ function CardioPage(): JSX.Element {
 
                 {/* Avg BPM */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Avg BPM *</label>
+                  <label className="text-slate-300 text-xs font-mono">Avg BPM </label>
                   <Input
                     value={formValues.avgBpm}
                     onChange={(v) => handleChange('avgBpm', v)}
@@ -196,8 +196,6 @@ function CardioPage(): JSX.Element {
                   />
                 </div>
               </div>
-
-              <p className="text-slate-500 text-xs">* Required fields</p>
             </div>
           ) : null}
 
