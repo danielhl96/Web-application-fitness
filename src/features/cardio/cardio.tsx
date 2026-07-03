@@ -56,10 +56,13 @@ function CardioHistoryCard({
   session,
   onSelect,
   onDelete,
+  onEdit,
 }: {
   session: CardioSession;
   onSelect: () => void;
   onDelete: () => void;
+  onEdit: () => void;
+  setActiveView?: (view: 'log' | 'history' | 'edit') => void;
 }): JSX.Element {
   return (
     <div
@@ -95,14 +98,20 @@ function CardioHistoryCard({
         )}
       </button>
 
+      {/* Edit and Delete button */}
+      <div className="flex justify-end mt-3 pt-2 border-t border-white/10">
+        <Button
+          onClick={() => {
+            onEdit();
+          }}
+        >
+          ✎ Edit
+        </Button>
+      </div>
+
       {/* Delete button */}
       <div className="flex justify-end mt-3 pt-2 border-t border-white/10">
-        <button
-          onClick={onDelete}
-          className="text-red-400 text-xs hover:text-red-300 transition-colors px-1"
-        >
-          ✕ Delete
-        </button>
+        <Button onClick={onDelete}>✕ Delete</Button>
       </div>
     </div>
   );
@@ -123,8 +132,10 @@ function CardioPage(): JSX.Element {
     setNotification,
     handleChange,
     handleSubmit,
+    handleSubmitEdit,
     handleDelete,
     handleSelectSession,
+    handleStartEdit,
     handleCloseDetail,
     navigate,
   } = useCardio();
@@ -145,8 +156,8 @@ function CardioPage(): JSX.Element {
         />
       )}
 
-      {/* Detail modal – shown when a history entry is selected */}
-      {selectedSession && (
+      {/* Detail modal – shown when a history entry is selected, but not in edit mode */}
+      {selectedSession && activeView !== 'edit' && (
         <TemplateModal border="1.5px solid rgba(59, 130, 246, 0.4)">
           <div className="p-2 flex flex-col gap-3">
             {/* Modal header */}
@@ -234,7 +245,7 @@ function CardioPage(): JSX.Element {
           </div>
 
           {/* ── Log Run Form ───────────────────────────────────────────────── */}
-          {activeView === 'log' && (
+          {activeView === 'log' || activeView === 'edit' ? (
             <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden max-h-[50dvh] ">
               <div className="grid grid-cols-2 gap-3">
                 {/* Date – full width */}
@@ -362,7 +373,7 @@ function CardioPage(): JSX.Element {
 
               <p className="text-slate-500 text-xs">* Required fields</p>
             </div>
-          )}
+          ) : null}
 
           {/* ── History View ───────────────────────────────────────────────── */}
           {activeView === 'history' && (
@@ -381,12 +392,44 @@ function CardioPage(): JSX.Element {
                     session={session}
                     onSelect={() => handleSelectSession(session)}
                     onDelete={() => handleDelete(session.id)}
+                    onEdit={() => handleStartEdit(session)}
                   />
                 ))
               )}
             </div>
           )}
         </div>
+
+        {activeView === 'edit' && (
+          <div className="flex flex-row justify-center gap-2">
+            <Button
+              disabled={buttonDisabled || !selectedSession}
+              onClick={() => {
+                if (selectedSession) handleSubmitEdit(Number(selectedSession.id));
+              }}
+              border="#08ad4dff"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </Button>
+
+            <Button onClick={() => setActiveView('history')} border="red">
+              Close
+            </Button>
+          </div>
+        )}
 
         {activeView === 'log' && (
           <div className="flex flex-row justify-center gap-2">
@@ -407,7 +450,7 @@ function CardioPage(): JSX.Element {
               </svg>
             </Button>
 
-            <Button onClick={() => navigate('/')} border="red">
+            <Button onClick={() => setActiveView('history')} border="red">
               Close
             </Button>
           </div>

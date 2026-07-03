@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export type CardioView = 'log' | 'history';
+export type CardioView = 'log' | 'history' | 'edit';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -41,12 +41,20 @@ export default function useCardio() {
   const [activeView, setActiveView] = useState<CardioView>('log');
   const [selectedSession, setSelectedSession] = useState<CardioSession | null>(null);
   const [notification, setNotification] = useState<NotificationState>(null);
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  const buttonDisabled = !(
+    formValues.date &&
+    formValues.durationMin &&
+    formValues.distanceKm &&
+    formValues.avgBpm
+  );
 
   // ── Load sessions from localStorage on mount ───────────────────────────────
   useEffect(() => {
-    cardioService.getCardioWorkouts().then((data) => setSessions(data));
-    console.log('Cardio sessions loaded:', sessions);
+    cardioService.getCardioWorkouts().then((data) => {
+      setSessions(data);
+      console.log('Cardio sessions loaded:', data);
+    });
   }, []);
 
   // ── Derived: live pace preview ─────────────────────────────────────────────
@@ -56,9 +64,6 @@ export default function useCardio() {
 
   function handleChange(field: keyof CardioFormValues, value: string): void {
     setFormValues((prev) => ({ ...prev, [field]: value }));
-    formValues.date && formValues.durationMin && formValues.distanceKm && formValues.avgBpm
-      ? setButtonDisabled(false)
-      : setButtonDisabled(true);
   }
 
   async function handleSubmit(): Promise<void> {
@@ -108,6 +113,55 @@ export default function useCardio() {
     setActiveView('history');
   }
 
+  async function handleSubmitEdit(id: number): Promise<void> {
+    const { date, durationMin, distanceKm, avgBpm } = formValues;
+
+    if (!date || !durationMin || !distanceKm || !avgBpm) {
+      setNotification({
+        title: 'Validation Error',
+        message: 'Date, duration, distance, and avg. BPM are required.',
+        type: 'error',
+      });
+      return;
+    }
+
+    const dur = parseNum(durationMin);
+    const dist = parseNum(distanceKm);
+
+    if (dur <= 0 || dist <= 0) {
+      setNotification({
+        title: 'Validation Error',
+        message: 'Duration and distance must be greater than 0.',
+        type: 'error',
+      });
+      return;
+    }
+
+    console.log('Submitting edit for workout ID:', id, 'with data:', formValues);
+
+    await cardioService.updateCardioWorkout(id, {
+      date,
+      durationMin: dur,
+      distanceKm: dist,
+      avgBpm: parseNum(avgBpm),
+      maxBpm: parseNum(formValues.maxBpm) || undefined,
+      powerW: parseNum(formValues.powerW) || undefined,
+      cadenceSpm: parseNum(formValues.cadenceSpm) || undefined,
+      calories: parseNum(formValues.calories) || undefined,
+      notes: formValues.notes.trim() || undefined,
+    });
+
+    const updated = await cardioService.getCardioWorkouts();
+    setSessions(updated);
+    console.log('Cardio sessions updated:', updated);
+    setFormValues({ ...EMPTY_FORM, date: new Date().toISOString().split('T')[0] });
+    setNotification({
+      title: 'Run Edited',
+      message: 'Your cardio session has been edited.',
+      type: 'success',
+    });
+  }
+
   function handleDelete(id: string): void {
     cardioService.deleteCardioWorkout(parseInt(id, 10));
     setSelectedSession(null);
@@ -116,6 +170,23 @@ export default function useCardio() {
 
   function handleSelectSession(session: CardioSession): void {
     setSelectedSession(session);
+  }
+
+  function handleStartEdit(session: CardioSession): void {
+    setSelectedSession(session);
+    setFormValues({
+      date: session.date ? session.date.split('T')[0] : new Date().toISOString().split('T')[0],
+      durationMin: String(session.duration_min ?? ''),
+      distanceKm: String(session.distance_km ?? ''),
+      avgBpm: String(session.avg_bpm ?? ''),
+      maxBpm: session.max_bpm ? String(session.max_bpm) : '',
+      powerW: session.power_w ? String(session.power_w) : '',
+      cadenceSpm: session.cadence_spm ? String(session.cadence_spm) : '',
+      calories: session.calories ? String(session.calories) : '',
+      notes: session.notes ?? '',
+    });
+
+    setActiveView('edit');
   }
 
   function handleCloseDetail(): void {
@@ -137,8 +208,10 @@ export default function useCardio() {
     // Handlers
     handleChange,
     handleSubmit,
+    handleSubmitEdit,
     handleDelete,
     handleSelectSession,
+    handleStartEdit,
     handleCloseDetail,
     navigate, // Expose navigate for external use
   };
