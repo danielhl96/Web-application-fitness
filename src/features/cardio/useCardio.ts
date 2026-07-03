@@ -162,10 +162,17 @@ export default function useCardio() {
     });
   }
 
-  function handleDelete(id: string): void {
-    cardioService.deleteCardioWorkout(parseInt(id, 10));
-    setSelectedSession(null);
-    setNotification({ title: 'Deleted', message: 'Session removed.', type: 'success' });
+  async function handleDelete(id: string): Promise<void> {
+    try {
+      await cardioService.deleteCardioWorkout(parseInt(id, 10));
+      const updated = await cardioService.getCardioWorkouts();
+      setSessions(updated);
+      setSelectedSession(null);
+      setNotification({ title: 'Deleted', message: 'Session removed.', type: 'success' });
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      setNotification({ title: 'Error', message: 'Failed to delete session.', type: 'error' });
+    }
   }
 
   function handleSelectSession(session: CardioSession): void {
