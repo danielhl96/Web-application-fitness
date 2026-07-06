@@ -8,6 +8,8 @@ import Notify from '../../shared/Components/notify';
 import useCardio from './useCardio';
 import CardioHistoryCard from './CardioHistoryCard';
 import { formatPace } from './helper';
+import loadingComponente from '../../shared/Components/loading';
+import { LogRunForm } from './LogRunForm';
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -19,14 +21,15 @@ function CardioPage(): JSX.Element {
     selectedSession,
     notification,
     previewPace,
+    isLoading,
     buttonDisabled,
+    uiState,
     setActiveView,
     setNotification,
     handleChange,
     handleSubmit,
     handleSubmitEdit,
     handleDelete,
-    handleSelectSession,
     handleStartEdit,
     handleCloseDetail,
     navigate,
@@ -72,135 +75,17 @@ function CardioPage(): JSX.Element {
 
           {/* ── Log Run Form ───────────────────────────────────────────────── */}
           {activeView === 'log' || activeView === 'edit' ? (
-            <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden max-h-[50dvh] ">
-              <div className="grid grid-cols-2 gap-3">
-                {/* Date – full width */}
-                <div className="flex flex-col gap-1 col-span-2">
-                  <label className="text-slate-300 text-xs font-mono">Date </label>
-                  <input
-                    type="date"
-                    value={formValues.date}
-                    onChange={(e) => handleChange('date', e.target.value)}
-                    className="w-75 px-4 py-2 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
-                      border: '1.5px solid rgba(59, 130, 246, 0.25)',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                      colorScheme: 'dark',
-                    }}
-                  />
-                </div>
-
-                {/* Duration */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Duration (min) </label>
-                  <Input
-                    value={formValues.durationMin}
-                    onChange={(v) => handleChange('durationMin', v)}
-                    placeholder="e.g. 35"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Distance */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Distance (km) </label>
-                  <Input
-                    value={formValues.distanceKm}
-                    onChange={(v) => handleChange('distanceKm', v)}
-                    placeholder="e.g. 5.0"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Pace – auto-calculated, read-only, full width */}
-                <div className="flex flex-col gap-1 col-span-2">
-                  <label className="text-slate-300 text-xs font-mono">Pace (auto-calculated)</label>
-                  <div
-                    className="px-4 py-2 rounded-xl text-blue-300 text-sm font-mono"
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.25)',
-                      border: '1.5px solid rgba(59, 130, 246, 0.25)',
-                      backdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    {previewPace > 0 ? formatPace(previewPace) : '– (enter duration & distance)'}
-                  </div>
-                </div>
-
-                {/* Avg BPM */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Avg BPM </label>
-                  <Input
-                    value={formValues.avgBpm}
-                    onChange={(v) => handleChange('avgBpm', v)}
-                    placeholder="e.g. 155"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Max BPM */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Max BPM</label>
-                  <Input
-                    value={formValues.maxBpm}
-                    onChange={(v) => handleChange('maxBpm', v)}
-                    placeholder="e.g. 178"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Power */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Power (W)</label>
-                  <Input
-                    value={formValues.powerW}
-                    onChange={(v) => handleChange('powerW', v)}
-                    placeholder="e.g. 220"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Cadence */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-slate-300 text-xs font-mono">Cadence (spm)</label>
-                  <Input
-                    value={formValues.cadenceSpm}
-                    onChange={(v) => handleChange('cadenceSpm', v)}
-                    placeholder="e.g. 175"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Calories – full width */}
-                <div className="flex flex-col gap-1 col-span-2">
-                  <label className="text-slate-300 text-xs font-mono">Calories (kcal)</label>
-                  <Input
-                    value={formValues.calories}
-                    onChange={(v) => handleChange('calories', v)}
-                    placeholder="e.g. 420"
-                    w="w-full"
-                  />
-                </div>
-
-                {/* Notes – full width */}
-                <div className="flex flex-col gap-1 col-span-2">
-                  <label className="text-slate-300 text-xs font-mono">Notes</label>
-                  <Input
-                    value={formValues.notes}
-                    onChange={(v) => handleChange('notes', v)}
-                    placeholder="Easy run, felt good..."
-                    w="w-full"
-                  />
-                </div>
-              </div>
-            </div>
+            <>
+              <LogRunForm
+                formValues={formValues}
+                handleChange={handleChange}
+                previewPace={previewPace}
+              />
+            </>
           ) : null}
 
           {/* ── History View ───────────────────────────────────────────────── */}
-          {activeView === 'history' && (
+          {activeView === 'history' && uiState.type === 'success' && (
             <div className="flex flex-col gap-3 overflow-y-auto max-h-[60vh] pr-1">
               {sessions.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 gap-3">
@@ -214,7 +99,7 @@ function CardioPage(): JSX.Element {
                   <CardioHistoryCard
                     key={session.id}
                     session={session}
-                    onSelect={() => handleSelectSession(session)}
+                    isLoading={isLoading}
                     onDelete={() => handleDelete(session.id)}
                     onEdit={() => handleStartEdit(session)}
                   />
@@ -222,11 +107,15 @@ function CardioPage(): JSX.Element {
               )}
             </div>
           )}
+          {activeView === 'history' && uiState.type === 'loading' && (
+            <>{loadingComponente('Loading cardio sessions...')}</>
+          )}
         </div>
 
         {activeView === 'edit' && (
           <div className="flex flex-row justify-center gap-2">
             <Button
+              isLoading={isLoading}
               disabled={buttonDisabled || !selectedSession}
               onClick={() => {
                 if (selectedSession) handleSubmitEdit(Number(selectedSession.id));
@@ -263,7 +152,12 @@ function CardioPage(): JSX.Element {
 
         {activeView === 'log' && (
           <div className="flex flex-row justify-center gap-2">
-            <Button disabled={buttonDisabled} onClick={handleSubmit} border="#08ad4dff">
+            <Button
+              isLoading={isLoading}
+              disabled={buttonDisabled}
+              onClick={handleSubmit}
+              border="#08ad4dff"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

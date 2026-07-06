@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { cardioService } from './cardioService';
 import type { CardioSession, CardioFormValues, NotificationState } from '../../types';
-
+import type { UI_STATE } from '../../types';
 import { useNavigate } from 'react-router-dom';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -41,6 +41,10 @@ export default function useCardio() {
   const [activeView, setActiveView] = useState<CardioView>('log');
   const [selectedSession, setSelectedSession] = useState<CardioSession | null>(null);
   const [notification, setNotification] = useState<NotificationState>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [uiState, setUiState] = useState<UI_STATE<CardioSession[]>>({
+    type: 'loading',
+  });
 
   const buttonDisabled = !(
     formValues.date &&
@@ -53,6 +57,7 @@ export default function useCardio() {
   useEffect(() => {
     cardioService.getCardioWorkouts().then((data) => {
       setSessions(data);
+      setUiState({ type: 'success', data });
       console.log('Cardio sessions loaded:', data);
     });
   }, []);
@@ -67,6 +72,7 @@ export default function useCardio() {
   }
 
   async function handleSubmit(): Promise<void> {
+    setIsLoading(true);
     const { date, durationMin, distanceKm, avgBpm } = formValues;
 
     if (!date || !durationMin || !distanceKm || !avgBpm) {
@@ -111,9 +117,11 @@ export default function useCardio() {
       type: 'success',
     });
     setActiveView('history');
+    setIsLoading(false);
   }
 
   async function handleSubmitEdit(id: number): Promise<void> {
+    setIsLoading(true);
     const { date, durationMin, distanceKm, avgBpm } = formValues;
 
     if (!date || !durationMin || !distanceKm || !avgBpm) {
@@ -160,9 +168,11 @@ export default function useCardio() {
       message: 'Your cardio session has been edited.',
       type: 'success',
     });
+    setIsLoading(false);
   }
 
   async function handleDelete(id: string): Promise<void> {
+    setIsLoading(true);
     try {
       await cardioService.deleteCardioWorkout(parseInt(id, 10));
       const updated = await cardioService.getCardioWorkouts();
@@ -173,6 +183,7 @@ export default function useCardio() {
       console.error('Error deleting session:', error);
       setNotification({ title: 'Error', message: 'Failed to delete session.', type: 'error' });
     }
+    setIsLoading(false);
   }
 
   function handleSelectSession(session: CardioSession): void {
@@ -209,6 +220,8 @@ export default function useCardio() {
     notification,
     previewPace,
     buttonDisabled,
+    isLoading,
+    uiState,
     // Setters
     setActiveView,
     setNotification,

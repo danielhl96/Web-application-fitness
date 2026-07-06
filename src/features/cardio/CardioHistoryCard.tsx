@@ -6,12 +6,12 @@ import { formatDate, formatDuration, formatPace } from './helper';
 import { useState } from 'react';
 export function CardioHistoryCard({
   session,
-  onSelect,
+  isLoading,
   onDelete,
   onEdit,
 }: {
   session: CardioSession;
-  onSelect: () => void;
+  isLoading: boolean;
   onDelete: () => void;
   onEdit: () => void;
   setActiveView?: (view: 'log' | 'history' | 'edit') => void;
@@ -85,6 +85,7 @@ export function CardioHistoryCard({
       {/* Edit and Delete button */}
       <div className="flex justify-end  pt-2 gap-2 border-t border-white/10">
         <Button
+          isLoading={isLoading}
           border="#3b82f6"
           onClick={() => {
             onEdit();
