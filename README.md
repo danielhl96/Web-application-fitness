@@ -169,6 +169,12 @@ Browser mic
 - Previous session data shown per exercise for progressive overload reference
 - 1RM estimation panel
 
+### 🏃 Cardio
+
+- Log and edit running sessions with full metric support
+- Tracks duration, distance, pace (auto-calculated), average & max heart rate, power, cadence, calories, and notes
+- Session history with detail view and inline editing
+
 ### 🤖 AI Coach
 
 - Chat with GPT-4o about training, nutrition, and recovery
@@ -320,6 +326,11 @@ VITE_API_URL=http://localhost:3000
     <td><img src="screenshots/selectworkout1.3.png" width="300" alt="Select Workout"></td>
     <td><img src="screenshots/workout1.3.png" width="300" alt="Workout"></td>
      <td><img src="screenshots/workout1.3rm.png" width="300" alt="Workout"></td>
+</tr>
+
+<tr>
+<td><img src="screenshots/cardioinput.png" width="300" alt="Select Workout"></td>
+<td><img src="screenshots/cardiohistory.png" width="300" alt="Select Workout"></td>
 </tr>
 <tr>
     <td><img src="screenshots/nutrition1.3.png" width="300" alt="Nutrition"></td>
