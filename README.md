@@ -48,7 +48,7 @@ src/
 │   └── ...
 ├── shared/
 │   ├── Components/          # Reusable UI components
-│   └── Utils/api.ts         # Axios instance + refresh interceptor
+│   └── Utils/api.ts         # Axios instance with cookie-based auth
 └── services/                # Feature-agnostic API services
 ```
 
@@ -72,9 +72,9 @@ src/
 
 4. **Network/auth flow**
 
-- `shared/Utils/api.ts` configures Axios with cookies + interceptors
-- On protected-request `401`, refresh flow retries original request
-- Public auth endpoints (`/auth/login`, `/auth/register`, password reset routes) intentionally skip refresh to avoid forced reloads
+- `shared/Utils/api.ts` configures Axios with cookies
+- On `401`, the user is redirected to login — no silent refresh
+- Public auth endpoints (`/auth/login`, `/auth/register`, password reset routes) bypass the auth guard
 
 5. **Interaction architecture**
 
@@ -86,7 +86,7 @@ src/
 - Pages are UI-focused; side effects and domain state stay in hooks
 - Shared components are stateless where possible and controlled via props
 - TypeScript is used across features and services for safer refactors
-- Axios interceptor handles silent JWT refresh (401 → `/auth/refresh_token` → retry)
+- Axios interceptor redirects to login on `401` (token expired)
 
 ### Backend (NestJS)
 
@@ -94,7 +94,7 @@ src/
 backend_nestjs/src/
 ├── app.module.ts            # Root module
 ├── main.ts                  # Bootstrap: CORS, Helmet, compression, rate-limit, socket.io
-├── auth/                    # JWT strategy, guards, login/register/refresh endpoints
+├── auth/                    # JWT strategy, guards, login/register endpoints
 ├── users/                   # User profile, credentials management
 ├── workout_plans/           # CRUD for plans, exercises, training logs
 ├── meals/                   # Nutrition management (CRUD + OpenAI image analysis)
@@ -141,13 +141,13 @@ Browser mic
 
 - Email + password registration with strength validation
 - JWT (HS256) in HttpOnly Secure Cookie — claims: `sub`, `iss`, `aud`, `exp`, `iat`, `nbf`, `jti`
-- Short-lived access token + refresh token rotation
+- Token expires after a fixed duration; re-login required on expiry
 
 ### Security
 
 - Password hashing: **argon2** with salting
 - Logout: `jti` written to Redis with TTL = remaining token lifetime
-- Silent refresh: Axios interceptor catches 401, calls `/auth/refresh_token`, retries original request
+- Expired tokens result in `401` — user is redirected to login
 - All routes protected via `JwtAuthGuard`; WebSocket namespace via `WsJwtGuard`
 
 ### Account Management

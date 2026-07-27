@@ -3,12 +3,10 @@ import { authService } from './authService';
 type AuthContextType = {
   isAuth: boolean;
   loading: boolean;
-  refresh: () => Promise<void>;
 };
 export const AuthContext = createContext<AuthContextType>({
   isAuth: false,
   loading: true,
-  refresh: async () => {},
 });
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -28,7 +26,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     } catch (err) {
       console.log('Auth check failed, trying to refresh token...', err);
       try {
-        await authService.refreshToken();
         await authService.checkAuth();
         setIsAuth(true);
       } catch {
@@ -44,9 +41,5 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     checkAuth();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ isAuth, loading, refresh: checkAuth }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ isAuth, loading }}>{children}</AuthContext.Provider>;
 }
