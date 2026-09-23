@@ -173,6 +173,11 @@ const exercise = [
     description: 'An exercise to train the inner thigh muscles',
     img: './adductormaschine.png',
   },
+   {
+    name: 'Wide-grip Seated Row ',
+    description: 'An exercise to train the upper back',
+    img: './seatedrow.png',
+  },
 ];
 
 export default exercise;
