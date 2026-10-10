@@ -36,7 +36,7 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
-      - USER_DATABASE_URL=postgresql://testuser:testpassword@testdb:5432/fitness_test?sslmode=disable
+      - USER_DATABASE_URL=${USER_DATABASE_URL}
       # Comma-separated list of allowed origins (app subdomain) for CORS + socket.io
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
     command: sh -c "npx prisma generate && npx prisma db push && npm run dev"
@@ -45,12 +45,12 @@ services:
     networks:
       - web
 
-  testdb:
+  proddb:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: testuser
-      POSTGRES_PASSWORD: testpassword
-      POSTGRES_DB: fitness_test
+      POSTGRES_USER: proddbuser
+      POSTGRES_PASSWORD: proddbpassword
+      POSTGRES_DB: fitness_prod
     ports:
       - '5432:5432'
     networks:
