@@ -75,13 +75,20 @@ export default defineConfig({
   ],
   server: {
     host: true,
+    port: 5173,
     strictPort: true,
+
+    allowedHosts: ['frontend.web-fitness-app.de'],
+
     watch: {
       ignored: [/\.git\//, /node_modules\//, /dist\//, /dev-dist\//],
     },
+
     hmr: {
-      host: 'localhost',
-      clientPort: 5173,
+      // HMR über die öffentliche Domain und HTTPS
+      protocol: 'wss',
+      host: 'frontend.web-fitness-app.de',
+      clientPort: 443,
     },
   },
 });
