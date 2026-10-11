@@ -48,7 +48,7 @@ services:
   proddb:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: proddbuser
+      POSTGRES_USER: web_fitness_app_user
       POSTGRES_PASSWORD: proddbpassword
       POSTGRES_DB: fitness_prod
     ports:
