@@ -53,7 +53,9 @@ export interface SttSocketCallbacks {
  * Returns the connected socket — the caller is responsible for calling socket.disconnect().
  */
 export function createSttSocket(mimeType: string, callbacks: SttSocketCallbacks): SttSocket {
-  const socket: SttSocket = io(`${WS_URL}/stt`, {
+  const socket: SttSocket = io(WS_URL, {
+    // <-- Nur die Basis-URL (z.B. https://example.com)
+    path: '/stt', // <-- Hier den Pfad definieren
     withCredentials: true,
     transports: ['websocket'],
     // No auto-reconnect: a broken STT stream cannot be resumed mid-session.

@@ -18,7 +18,8 @@ interface SessionMeta {
 }
 
 @WebSocketGateway({
-  namespace: 'stt',
+  path: '/stt',
+  transports: ['websocket'],
   cors: {
     origin: (process.env.ALLOWED_ORIGINS || 'http://localhost:5173')
       .split(',')
