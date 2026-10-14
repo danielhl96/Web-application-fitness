@@ -36,6 +36,7 @@ export const SttEvent = {
 const WS_URL =
   (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL ||
   'http://localhost:3000';
+const baseWsUrl = WS_URL.replace(/\/api\/?\(/, '').replace(/\/\)/, '');
 
 export interface SttSocketCallbacks {
   /** Server confirmed session — safe to start MediaRecorder */
@@ -53,7 +54,8 @@ export interface SttSocketCallbacks {
  * Returns the connected socket — the caller is responsible for calling socket.disconnect().
  */
 export function createSttSocket(mimeType: string, callbacks: SttSocketCallbacks): SttSocket {
-  const socket: SttSocket = io(WS_URL, {
+  const socket: SttSocket = io(`${baseWsUrl}`, {
+    path: '/stt',
     withCredentials: true,
     transports: ['websocket'],
     // No auto-reconnect: a broken STT stream cannot be resumed mid-session.
