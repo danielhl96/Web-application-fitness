@@ -65,20 +65,22 @@ export default defineConfig({
         scope: '/',
         icons: [
           {
-            src: './squats.png',
+            src: '/squats.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any',
           },
           {
-            src: './squats.png',
+            src: '/squats.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any maskable',
           },
           {
-            src: './squats.png',
+            src: '/squats.png',
             sizes: '180x180',
             type: 'image/png',
-            purpose: 'apple-touch-icon',
+            purpose: 'any',
           },
         ],
       },
