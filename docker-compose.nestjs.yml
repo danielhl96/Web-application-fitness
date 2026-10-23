@@ -7,7 +7,7 @@ services:
         # Vite bakes this in at build time — must be the public API subdomain
         - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
     ports:
-      - '5173:80'
+      - '5173:5173'
     depends_on:
       - backend
     networks:
@@ -58,7 +58,7 @@ services:
 
   # Cloudflare Tunnel — exposes frontend/backend via subdomains without opening ports.
   # Configure the tunnel's public hostnames in the Cloudflare Zero Trust dashboard:
-  #   app.example.com  -> http://frontend:80
+  #   app.example.com  -> http://frontend:5173
   #   api.example.com  -> http://backend:3000
   # Then set CLOUDFLARE_TUNNEL_TOKEN in your .env file.
   cloudflared:
