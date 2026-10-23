@@ -3,17 +3,11 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    env_file:
-      - .env
-    environment:
-      # Public URL of the backend (api subdomain), consumed by Vite at build/runtime
-      - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
-    volumes:
-      - ./:/app
-      - /app/node_modules
+      args:
+        # Vite bakes this in at build time — must be the public API subdomain
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
     ports:
-      - '5173:5173'
-    command: npm run dev -- --host
+      - '5173:80'
     depends_on:
       - backend
     networks:
@@ -64,7 +58,7 @@ services:
 
   # Cloudflare Tunnel — exposes frontend/backend via subdomains without opening ports.
   # Configure the tunnel's public hostnames in the Cloudflare Zero Trust dashboard:
-  #   app.example.com  -> http://frontend:5173
+  #   app.example.com  -> http://frontend:80
   #   api.example.com  -> http://backend:3000
   # Then set CLOUDFLARE_TUNNEL_TOKEN in your .env file.
   cloudflared:

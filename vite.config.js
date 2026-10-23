@@ -27,10 +27,11 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'offline.html'],
-      devOptions: { enabled: false },
+      devOptions: { enabled: true },
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
+        cleanupOutdatedCaches: true,
         navigateFallback: '/offline.html',
         globPatterns: ['**/*.{js,css,html,png,svg,ico,json}'],
         runtimeCaching: [
