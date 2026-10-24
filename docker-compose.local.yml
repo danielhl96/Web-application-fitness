@@ -1,0 +1,67 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.frontend.dev
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:3000}
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./:/app
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - web
+
+  backend:
+    build:
+      context: ./backend_nestjs
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - USER_DATABASE_URL=${USER_DATABASE_URL:-postgresql://web_fitness_app_user:proddbpassword@proddb:5432/fitness_prod?schema=public}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:5173}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+    command: sh -c "npx prisma generate && npx prisma db push && npm run dev"
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend_nestjs/src:/app/src
+      - ./backend_nestjs/package.json:/app/package.json
+      - ./backend_nestjs/tsconfig.json:/app/tsconfig.json
+      - ./backend_nestjs/prisma:/app/prisma
+      - /app/node_modules
+    depends_on:
+      - proddb
+      - redis
+    networks:
+      - web
+
+  proddb:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: web_fitness_app_user
+      POSTGRES_PASSWORD: proddbpassword
+      POSTGRES_DB: fitness_prod
+    ports:
+      - '5432:5432'
+    networks:
+      - web
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    networks:
+      - web
+
+volumes:
+  frontend_node_modules:
+
+networks:
+  web:
+    driver: bridge

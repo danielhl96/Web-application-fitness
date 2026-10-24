@@ -194,6 +194,31 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
 
   return (
     <>
+      {/* Nicht-Mobile-Sperre: Hinweis für größere Displays */}
+      <div
+        className="fixed inset-0 z-[10000] hidden flex-col items-center justify-center bg-gray-950 text-white px-6 text-center"
+        id="non-mobile-overlay"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-16 h-16 mb-4 text-blue-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M12 18h.01M7 4h10a1 1 0 011 1v14a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"
+          />
+        </svg>
+        <h2 className="text-2xl font-bold mb-2">Mobile only</h2>
+        <p className="text-base text-gray-300 max-w-md">
+          This application is designed for mobile devices. Please use a smartphone.
+        </p>
+      </div>
+
       {/* iOS Landscape-Sperre: CSS-Overlay */}
       <div
         className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gray-950 text-white"
@@ -218,6 +243,10 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
         <p className="text-sm text-gray-400 mt-1">This app is optimized for portrait mode.</p>
       </div>
       <style>{`
+        @media (min-width: 641px) {
+          #non-mobile-overlay { display: flex !important; }
+        }
+
         @media (orientation: landscape) and (max-width: 1024px) {
           #landscape-overlay { display: flex !important; }
         }
@@ -225,7 +254,7 @@ function TemplatePage({ children, dockDisabled }: TemplatePageProps): JSX.Elemen
       <div className="min-h-[100dvh] bg-gradient-to-b from-gray-900 min-w-[100dvw] to-black flex flex-col items-center px-1 py-3">
         {/* vertikale Zentrierung */}
         <div className="flex flex-col items-center sm:items-center  w-full pt-16 pb-8">
-          <div className="w-full lg:h-full h-[80dvh] max-h-[100dvh] min-w-[320px] lg:w-auto max-w-sm sm:max-w-md lg:max-w-4xl space-y-6 rounded-xl bg-black/20 border border-white/20 p-6 sm:p-8 shadow-xl backdrop-blur-lg">
+          <div className="w-full lg:h-full h-[80dvh] max-h-[100dvh] min-w-[320px] lg:w-auto max-w-sm sm:max-w-md lg:max-w-4xl space-y-6  p-6 sm:p-8 shadow-xl backdrop-blur-lg">
             {children}
           </div>
           {!dockDisabled ? (

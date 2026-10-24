@@ -55,17 +55,30 @@ export default function useCardio() {
 
   // ── Load sessions from localStorage on mount ───────────────────────────────
   useEffect(() => {
+    let isMounted = true;
+
     cardioService
       .getCardioWorkouts()
       .then((data: CardioSession[]) => {
+        if (!isMounted) return;
         setSessions(data);
-        setUiState({ type: 'success', data });
-        console.log('Cardio sessions loaded:', data);
+
+        // small delay so loading UI is visible
+        setTimeout(() => {
+          if (!isMounted) return;
+          setUiState({ type: 'success', data });
+          console.log('Cardio sessions loaded:', data);
+        }, 600);
       })
       .catch((error: Error) => {
+        if (!isMounted) return;
         console.error('Error loading cardio sessions:', error);
         setUiState({ type: 'error', error: error.message });
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // ── Derived: live pace preview ─────────────────────────────────────────────
