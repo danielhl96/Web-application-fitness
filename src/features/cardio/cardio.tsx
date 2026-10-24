@@ -3,11 +3,10 @@ import { JSX } from 'react';
 import Header from '../header/Header';
 import TemplatePage from '../../shared/Components/templatepage';
 import Button from '../../shared/Components/button';
-import Input from '../../shared/Components/input';
 import Notify from '../../shared/Components/notify';
 import useCardio from './useCardio';
 import CardioHistoryCard from './CardioHistoryCard';
-import { formatPace } from './helper';
+
 import loadingComponente from '../../shared/Components/loading';
 import { LogRunForm } from './LogRunForm';
 
@@ -110,6 +109,12 @@ function CardioPage(): JSX.Element {
           )}
           {activeView === 'history' && uiState.type === 'loading' && (
             <>{loadingComponente('Loading cardio sessions...')}</>
+          )}
+
+          {activeView === 'history' && uiState.type === 'error' && (
+            <div className="flex flex-col items-center justify-center py-12 gap-3">
+              <p className="text-red-500 text-sm">Error loading cardio sessions.</p>
+            </div>
           )}
         </div>
 
