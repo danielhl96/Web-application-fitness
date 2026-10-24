@@ -1,5 +1,6 @@
 services:
   frontend:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -14,6 +15,7 @@ services:
       - web
 
   backend:
+    restart: unless-stopped
     build:
       context: ./backend_nestjs
       dockerfile: Dockerfile
@@ -39,6 +41,7 @@ services:
       - web
 
   proddb:
+    restart: unless-stopped
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: web_fitness_app_user
@@ -50,6 +53,7 @@ services:
       - web
 
   redis:
+    restart: unless-stopped
     image: redis:7-alpine
     ports:
       - '6379:6379'
