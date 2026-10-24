@@ -26,6 +26,7 @@ Password: Test1234@
 | **Real-time**                 | WebSocket (socket.io) — STT streaming               |
 | **AI**                        | OpenAI Whisper (STT), GPT-4o (AI Coach & Nutrition) |
 | **Containerisation**          | Docker + Docker Compose                             |
+| **Hosting**                   | Self-hosted on Raspberry Pi via Cloudflare Tunnel   |
 | **PWA**                       | Vite PWA Plugin (installable, offline shell)        |
 
 ---
@@ -305,6 +306,144 @@ VITE_API_URL=http://localhost:3000
 ```
 
 > Note: In the NestJS compose stack, backend startup runs Prisma schema sync automatically (`prisma db push`).
+
+---
+
+## 🌐 Static Serving with Nginx
+
+The frontend is **not** served by the Vite dev server in production. Instead, the React app is compiled to static assets and served by **Nginx** inside a minimal container.
+
+### Why a static build + Nginx?
+
+A Single Page Application is, after the build, just a set of static files (`index.html`, hashed JS/CSS bundles, images, the service worker). These don't need a running Node.js process — they only need to be delivered efficiently. Nginx is the industry-standard choice for this because it is tiny, fast, battle-tested, and gives fine-grained control over caching and routing headers.
+
+Running `npm run dev` in production is an anti-pattern: the Vite dev server transpiles modules on the fly, serves them unbundled (`/src/main.tsx`, `/@vite/client`), and never produces the real PWA artifacts (`sw.js`, precache manifest) — those only exist after `vite build`.
+
+### Multi-stage Docker build
+
+The [Dockerfile](Dockerfile) uses a two-stage build to keep the final image small (no Node.js or source in the runtime image):
+
+```dockerfile
+# 1) Build stage — compile the app with Vite
+FROM node:20-alpine AS build
+WORKDIR /app
+ARG VITE_API_URL              # Vite bakes env vars in at BUILD time
+ENV VITE_API_URL=$VITE_API_URL
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build             # -> /app/dist (static assets)
+
+# 2) Serve stage — tiny Nginx image with only the built assets
+FROM nginx:alpine AS serve
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY src/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 5173
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+> **Important:** `VITE_API_URL` is baked in at **build time**, not runtime. If the API URL changes, the frontend image must be **rebuilt** (`--build`), not just restarted.
+
+### Nginx configuration
+
+The config in [src/nginx.conf](src/nginx.conf) handles three concerns specific to a PWA-enabled SPA:
+
+```nginx
+server {
+  listen 5173;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # 1) SPA fallback — client-side routing (React Router)
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  # 2) Service worker & manifest must never be stale-cached
+  location = /sw.js {
+    add_header Cache-Control "no-cache, no-store, must-revalidate";
+    expires off;
+  }
+  location = /manifest.webmanifest {
+    types { } default_type "application/manifest+json";
+    add_header Cache-Control "no-cache";
+  }
+
+  # 3) Hashed build assets — cache aggressively (filename changes on update)
+  location /assets/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+  }
+}
+```
+
+**Why these rules matter in practice:**
+
+1. **SPA fallback** — Routes like `/cardio` or `/login` have no matching file on disk. Without `try_files … /index.html`, a page reload on a sub-route would return a 404. The fallback always serves `index.html` so React Router can resolve the route on the client.
+2. **No-cache for `sw.js` / manifest** — If the service worker is cached, the browser keeps running an outdated version and precaches stale pages (a common PWA pitfall). Forcing revalidation guarantees users pick up new deployments immediately.
+3. **Immutable caching for `/assets/`** — Vite fingerprints bundle filenames with a content hash. Because a changed file gets a new name, the old one can be cached for a year safely — maximising cache hits and minimising bandwidth.
+
+### Port & reverse proxy
+
+Nginx listens on **5173** so the existing Cloudflare Tunnel ingress rule (`app.* -> http://frontend:5173`) resolves without dashboard changes. In production, TLS termination and public routing are handled by **Cloudflare Tunnel** (see the `cloudflared` service in the compose file) — Nginx only serves plain HTTP on the internal Docker network.
+
+---
+
+## ☁️ Deployment — Self-hosted on a Raspberry Pi via Cloudflare Tunnel
+
+The application is **self-hosted on a Raspberry Pi** at home and made publicly reachable through a **Cloudflare Tunnel** — no cloud provider, no public IP, and no open inbound ports on the router.
+
+### Why this approach?
+
+- **Zero exposed ports** — The Raspberry Pi has **no port forwarding** and no inbound firewall holes. The `cloudflared` daemon opens an **outbound** connection to Cloudflare's edge, and all traffic flows back through that established tunnel. This dramatically reduces the attack surface.
+- **Free global reach + TLS** — Cloudflare terminates HTTPS at the edge and serves valid certificates for the subdomains automatically. No manual Let's Encrypt setup, no dynamic-DNS juggling for a changing home IP.
+- **Full control & zero cost** — Running the whole stack (frontend, NestJS backend, PostgreSQL, Redis) locally on ARM hardware avoids recurring hosting fees and keeps data on-premise.
+
+### How it works
+
+```
+  Browser
+     │  https://frontend.web-fitness-app.de     (app subdomain)
+     │  https://api.web-fitness-app.de          (api subdomain)
+     ▼
+┌──────────────────────┐
+│  Cloudflare Edge      │  TLS termination + routing
+└──────────┬───────────┘
+           │  outbound tunnel (initiated from the Pi)
+           ▼
+┌───────────────────────────── Raspberry Pi (Docker Compose) ─────────────────────────────┐
+│   cloudflared ──► frontend (Nginx :5173)  ──► static React/PWA build                      │
+│              └──► backend  (NestJS :3000)  ──► PostgreSQL + Redis                          │
+└───────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+A single named tunnel exposes **two public hostnames**, configured in the Cloudflare Zero Trust dashboard:
+
+| Public hostname               | Internal service       |
+| ----------------------------- | ---------------------- |
+| `frontend.web-fitness-app.de` | `http://frontend:5173` |
+| `api.web-fitness-app.de`      | `http://backend:3000`  |
+
+The `cloudflared` container only needs the tunnel token:
+
+```yaml
+cloudflared:
+  image: cloudflare/cloudflared:latest
+  restart: unless-stopped
+  command: tunnel --no-autoupdate run
+  environment:
+    - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+```
+
+### Deploying / updating on the Pi
+
+```bash
+# On the Raspberry Pi
+git pull
+docker compose -f docker-compose.nestjs.yml up -d --build
+```
+
+> **Note:** `VITE_API_URL` must point to the public API subdomain (`https://api.web-fitness-app.de`) and is baked in at **build time** — changing it requires rebuilding the frontend image.
 
 ---
 
