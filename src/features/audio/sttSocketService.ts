@@ -32,11 +32,12 @@ export const SttEvent = {
   ERROR: 'stt:error',
 } as const satisfies Record<string, keyof SttServerToClientEvents | keyof SttClientToServerEvents>;
 
-// DIP: URL comes from env, not hardcoded in the hook
 const WS_URL =
   (import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL ||
   'http://localhost:3000';
-const baseWsUrl = WS_URL.replace(/\/api\/?\(/, '').replace(/\/\)/, '');
+
+// Entfernt sicher "/api" oder "/api/" am Ende der URL
+const baseWsUrl = WS_URL.replace(/\/api\/?$/, '');
 
 export interface SttSocketCallbacks {
   /** Server confirmed session — safe to start MediaRecorder */
