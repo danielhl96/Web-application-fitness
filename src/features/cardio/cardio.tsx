@@ -65,7 +65,7 @@ function CardioPage(): JSX.Element {
                 Log Run
               </Button>
               <Button
-                isLoading={isLoading}
+                isLoading={uiState.type === 'loading'}
                 onClick={() => setActiveView('history')}
                 border={activeView === 'history' ? '#3b82f6' : 'rgba(255,255,255,0.2)'}
               >
