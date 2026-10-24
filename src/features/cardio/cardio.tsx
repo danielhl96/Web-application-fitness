@@ -68,7 +68,7 @@ function CardioPage(): JSX.Element {
                 onClick={() => setActiveView('history')}
                 border={activeView === 'history' ? '#3b82f6' : 'rgba(255,255,255,0.2)'}
               >
-                History ({sessions.length || uiState.type === 'error' ? 'Error' : 0} )
+                History ({sessions.length} )
               </Button>
             </div>
           </div>
