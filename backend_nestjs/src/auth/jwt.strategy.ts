@@ -25,8 +25,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: JwtPayload): Promise<User> {
     const token = req?.cookies?.jwt;
     if (token) {
-      const blacklisted = await redisClient.get(`blacklist_${token}`);
-      if (blacklisted) throw new UnauthorizedException('Token has been invalidated');
+      try {
+        const blacklisted = await redisClient.get(`blacklist_${token}`);
+        if (blacklisted) throw new UnauthorizedException('Token has been invalidated');
+      } catch (error) {
+        if (error instanceof UnauthorizedException) {
+          throw error;
+        }
+        throw new UnauthorizedException('Error checking token blacklist');
+      }
     }
     return { id: payload.sub, email: payload.email };
   }
