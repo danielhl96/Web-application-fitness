@@ -4,6 +4,11 @@ const exercise = [
     description: 'An exercise to train the chest, shoulder, and triceps',
     img: './benchpress.png',
   },
+{
+    name: 'Chin-Up',
+    description: 'An exercise to train the back and biceps',
+    img: './pullup.png',
+  },
   {
     name: 'Shoulderpress',
     description: 'An exercise to train the shoulder and triceps',
